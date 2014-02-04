@@ -1,7 +1,7 @@
 h1 = figure(1); clf;
 
-Xpos = 1:101;
-Ypos = 1:101;
+Xpos = 1:0.1:10;
+Ypos = 1:0.1:10;
 heading=sin(Xpos/30);
 N = length(Xpos);
 Nskip = 20;
@@ -24,5 +24,4 @@ for i = 1:Nskip:length(Xpos)
 
     ship(Xpos(i),Ypos(i),heading(i),'r');
     ship(Xpos(i)+30,Ypos(i),heading(i),'y');
-
 end
