@@ -13,17 +13,19 @@ Båd skal sejle ordentligt sejl:
 	Knapafbryder i stedet for klemmerækken
 
 
+Sæt noget latex igang, så dokumentation kan ske løbende
 
 
+Senere todo, når båden virker ordentligt:
 
 Byg en båd mere
-	Sørg for hw
+	Undersøg manglende hw og bestil det manglende
 
 Undersøg mere RTK GPS
 
-Få styr på LLI sw og HLI
+Få styr på LLI sw og HLI sw
 
-Bestem os for hvad for noget formation vi vil lave, læs papers igennem
+Bestem os for hvad for noget formation vi vil lave, læs papers igennem (formation eller individuelle paths)
 
 Lidt bedre dokumentation (Users Manual?)
 
@@ -31,7 +33,3 @@ Lidt bedre dokumentation (Users Manual?)
 
 
 
-
-
-Test og find ud af at bruge git
-tester lige lidt mere
