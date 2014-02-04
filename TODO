@@ -1,16 +1,17 @@
 Overordnet mål:
 Formationskontrol med mindst to aauships
 	- To måder: indivuduelle paths eller formation
+	- Det skal funke til sommer!
 
-Båd skal sejle ordentligt sejl:
+Båd skal sejle ordentligt:
 	Software:
-		- GPS
 		- GRS
 		- HLI
 		- LLI
 	Hardware:
-	Basal redningsføringsdokumentation
-	Knapafbryder i stedet for klemmerækken
+	Basal ledningsføringsdokumentation (bruger manual!?!)
+	Knapafbryder i stedet for klemmerækken (praktisk ting)
+	Forsøg at oplade overafladte batterier
 
 
 Sæt noget latex igang, så dokumentation kan ske løbende
@@ -19,17 +20,14 @@ Sæt noget latex igang, så dokumentation kan ske løbende
 Senere todo, når båden virker ordentligt:
 
 Byg en båd mere
-	Undersøg manglende hw og bestil det manglende
+	Undersøg manglende hw
+	Bestil det manglende
 
-Undersøg mere RTK GPS
+Undersøg mere RTK GPS, det vi har nu er ikke testet vældigt godt under
+bevægelse.
 
 Få styr på LLI sw og HLI sw
 
 Bestem os for hvad for noget formation vi vil lave, læs papers igennem (formation eller individuelle paths)
 
 Lidt bedre dokumentation (Users Manual?)
-
-
-
-
-
