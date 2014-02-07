@@ -12,7 +12,8 @@ FIGS_DIA=
 
 # Alle SVG-filer
 #FIGS_SVG=illustrations/cover.svg
-FIGS_SVG=fig/harness.svg
+FIGS_SVG=fig/harness.svg \
+				 fig/mechanical.svg
 
 # Alle EPS-filer (PS-illustrationer angivet i linien nedenunder)
 #FIGS_EPS= \

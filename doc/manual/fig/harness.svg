@@ -52,13 +52,13 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="433.06686"
-     inkscape:cy="167.98269"
+     inkscape:zoom="0.42284986"
+     inkscape:cx="498.70962"
+     inkscape:cy="189.53888"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1436"
+     inkscape:window-width="716"
      inkscape:window-height="861"
      inkscape:window-x="0"
      inkscape:window-y="18"
@@ -92,121 +92,5 @@
        id="image3046"
        height="300"
        width="1000" />
-    <text
-       xml:space="preserve"
-       style="font-size:20.30941582px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
-       x="512.2583"
-       y="504.25665"
-       id="text2985"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan2987"
-         x="512.2583"
-         y="504.25665"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Robofan Free;-inkscape-font-specification:Robofan Free">Single Beam Echo Sounder</tspan></text>
-    <text
-       sodipodi:linespacing="125%"
-       id="text2989"
-       y="853.76941"
-       x="824.39539"
-       style="font-size:20.30941582px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
-       xml:space="preserve"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Robofan Free;-inkscape-font-specification:Robofan Free"
-         y="853.76941"
-         x="824.39539"
-         id="tspan2991"
-         sodipodi:role="line">6x 14.8V 3600mAh LiPo Batteries</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:20.30941582px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
-       x="309.21756"
-       y="847.7085"
-       id="text2993"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan2995"
-         x="309.21756"
-         y="847.7085"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Robofan Free;-inkscape-font-specification:Robofan Free">Dual Propellers Systems</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:20.30941582px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
-       x="243.55763"
-       y="499.20587"
-       id="text3001"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan3003"
-         x="243.55763"
-         y="499.20587"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Robofan Free;-inkscape-font-specification:Robofan Free">Fancy Aft Finn</tspan></text>
-    <text
-       sodipodi:linespacing="125%"
-       id="text3005"
-       y="498.19571"
-       x="790.05017"
-       style="font-size:20.30941582px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
-       xml:space="preserve"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Robofan Free;-inkscape-font-specification:Robofan Free"
-         y="498.19571"
-         x="790.05017"
-         id="tspan3007"
-         sodipodi:role="line">Side Thrusters</tspan></text>
-    <path
-       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
-       d="M 581.84786,-32.340187 386.88842,146.45682"
-       id="path3009"
-       inkscape:connector-curvature="0"
-       transform="translate(129.28572,525.2193)"
-       sodipodi:nodetypes="cc" />
-    <path
-       sodipodi:nodetypes="cc"
-       inkscape:connector-curvature="0"
-       id="path4591"
-       d="M 638.40259,505.00094 588.90512,670.66596"
-       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
-       d="m 349.49896,815.11778 134.3503,-96.97464"
-       id="path4593"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
-    <path
-       sodipodi:nodetypes="cc"
-       inkscape:connector-curvature="0"
-       id="path4595"
-       d="M 740.428,816.12793 691.94068,695.91978"
-       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)" />
-    <path
-       sodipodi:nodetypes="cc"
-       inkscape:connector-curvature="0"
-       id="path4597"
-       d="m 167.6715,494.89942 13.13199,122.22846"
-       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)" />
-    <path
-       sodipodi:nodetypes="cc"
-       inkscape:connector-curvature="0"
-       id="path4599"
-       d="M 349.49896,815.11778 483.84926,641.37155"
-       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
-       d="m 740.428,816.12793 81.82236,-119.198"
-       id="path4601"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
-       d="M 740.428,816.12793 381.82385,695.91978"
-       id="path4603"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
-    <path
-       sodipodi:nodetypes="cc"
-       transform="translate(129.28572,525.2193)"
-       inkscape:connector-curvature="0"
-       id="path4605"
-       d="M 581.84786,-32.340187 799.03066,146.45682"
-       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)" />
   </g>
 </svg>
