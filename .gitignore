@@ -15,3 +15,15 @@
 *.out
 *.pdf
 *.toc
+
+# Hardware files
+*.bak
+*.dcm
+*.ps
+*.000
+*.bak
+*.bck
+*.kicad_pcb-bak
+*.bak
+*.fped
+*.fpd
