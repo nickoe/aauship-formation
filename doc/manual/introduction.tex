@@ -56,3 +56,17 @@ design. I.e. what happens with the formation when one ship faults in a
 blackout. Should the rest of the formation stop, should the formation
 still follow this drifting ship or should the mission simply terminate
 when it is discovered that a ship has blackout.
+
+In the initialization phase it is also relevant to consider how the
+ships should avoid each other id they are on the wrong side of each
+other.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{fig/cornoring}
+	\caption{Two ships initializing and following the path offset
+		equally on each side, ships are constrained to sailing parallel
+		and heading the same as path when projected onto the path. Blue
+	dot is start of path. Fully drawn splines is initializing phase.}
+	\label{fig:carnoring}
+\end{figure}

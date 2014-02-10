@@ -12,6 +12,8 @@ Stykliste
 2 Bulgin kapper til ladestik (skal ikke bruge flere)
 4 RC Servo motorer
 2 Sæt store propeller, puls en løs
+1 Sæt mellem propeller  45mm
+1 Sæt minature propeller 30mm
 4 Graupner 7237 ESC
 2 Graupner InLine 750 motorer
 1 Aksel
@@ -19,11 +21,12 @@ Stykliste
 14 G3.5 polarized housing par
 1 par bullet stik pinne (Graupner best nr. 2969 og 2970)
 
-Bestillingsliste
-================
-X batterier? Måske kan vi nøjes med dem der er.
+Bestillingsliste til to både mere
+=================================
+6 batterier Part No: P4403740
 X G3.5 kontakt (2970)
 X G3.5 kontakt (2969)
-0 G3.5 polarized housing pair (2969K) (med mindre vi vil skifte konnektor ud på batterier)
-1 aksel
-2 koblinger
+0 G3.5 polarized housing pair (2969K) (med mindre vi vil skifte konnektor ud på batterier) (svære at samle, skulle vi vælge en anden XT60?)
+3 akseler
+4 koblinger (skulle vi skaffe fra rs i stedet?, den der var skaffet passer ikke på aksel, er lidt for stor, ikke testet på motor)
+2 eller 4 Bil relæer
