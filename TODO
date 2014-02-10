@@ -1,36 +1,34 @@
+TODO listen over alle at-gøre-lister
+====================================
+
 Overordnet mål:
 Formationskontrol med mindst to aauships
 	- To måder: indivuduelle paths eller formation
 	- Det skal funke til sommer!
+	- Bestem os for hvad for noget formation vi vil lave, læs papers igennem (formation eller individuelle paths)
 
-Båd skal sejle ordentligt:
-	Software:
-		- GRS
-		- HLI
-		- LLI
-	Hardware:
-	Basal ledningsføringsdokumentation (bruger manual!?!)
-	Knapafbryder i stedet for klemmerækken (praktisk ting)
-	Forsøg at oplade overafladte batterier
+* Vi skal have defineret vores fremgangsmåde og begynde at spille MATLAB
 
+For at få en funkende båd er der en række praktiske gøremål, der
+berører:	
 
-Sæt noget latex igang, så dokumentation kan ske løbende
+* Software
+	- GRS
+	- HLI
+	- LLI
+*	Hardware
+	- Knapafbryder i stedet for klemmerækken (praktisk ting)
+	- Forsøg at oplade overafladte batterier (OK)
+	- Byg to både mere
+		. Bestil manglende dele
+		. Sæt delene sammen
+* Dokumentation
+	- Basal ledningsføringsdokumentation [nickoe]
+	- Sæt noget latex igang, så dokumentation kan ske løbende (OK)
+	- Ledingsnet
+	- Batterihåndtering
+	- Hold grabberne væk hvis du er en spasser
 
-
-Senere todo, når båden virker ordentligt:
-
-Byg en båd mere
-	Undersøg manglende hw
-	Bestil det manglende
-
-Undersøg mere RTK GPS, det vi har nu er ikke testet vældigt godt under
-bevægelse.
-
-Få styr på LLI sw og HLI sw
-
-Bestem os for hvad for noget formation vi vil lave, læs papers igennem (formation eller individuelle paths)
-
-Lidt bedre dokumentation (Users Manual?)
-	Batterihåndtering
-	Ledingsnet
-	Hold grabberne væk hvis du er en spasser
+Senere todo, når båden er sejl klar:
+* Undersøg mere RTK GPS, det vi har nu er ikke testet vældigt godt under bevægelse.
+* Få styr på LLI sw og HLI sw
