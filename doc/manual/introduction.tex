@@ -23,3 +23,36 @@ those that want to play with those.
 		Modified version of graphic from \citep{12gr730}.}
 	\label{fig:vessel-block-overview}
 \end{figure}
+
+\section{Important things}
+When doing formation control it si important to figure out what one
+want to achieve, and depending on the strategy and the formation type
+som things are to be considered as requirements regarding how the
+formation should work. We are considering lawnmower patterns in this
+discussion. In this work two ships are considered for simplicity, but
+it should be extensible to n ships.
+
+When starting the mission, the ships may start at positions that
+is not in the desired formation, it is important that the ships are in
+formation when they start tracking the desired track. Therefor some
+attention must be given on how to make the ships initialise this
+formation. An approach is the make the ships sail individually to the
+start positions with a speed that makes them hit their start points at
+the same point in time. If one reaches its start point much earlier
+than the other it must stop, which is not good because it can then
+drift out of position again. This basically mean that there is a
+tracking phase and an nitializion phase. The start heading should of
+course align with the path at that point.
+
+Another issue that is to be considered is to ensure that no ship at
+any point in time reaches a minimum speed that is necessary for the
+ship to not drift out of formation. This could be a problem in corners
+of the formation is a stiff construction, where the inner most ship
+has to move slower to accommodate the shorter distance on an inner
+circle arc.
+
+Faults like blackout on a ship could also be considered in the control
+design. I.e. what happens with the formation when one ship faults in a
+blackout. Should the rest of the formation stop, should the formation
+still follow this drifting ship or should the mission simply terminate
+when it is discovered that a ship has blackout.
