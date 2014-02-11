@@ -15,6 +15,7 @@
 *.out
 *.pdf
 *.toc
+*.eps
 
 # Hardware files
 *.bak
@@ -28,3 +29,12 @@
 *.fped
 *.fpd
 autosave-*.kicad_pcb
+
+# Software files
+*.hex
+*.elf
+*.lst
+*.sym
+
+# Media files
+*.avi
