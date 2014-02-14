@@ -32,3 +32,5 @@ berører:
 Senere todo, når båden er sejl klar:
 * Undersøg mere RTK GPS, det vi har nu er ikke testet vældigt godt under bevægelse.
 * Få styr på LLI sw og HLI sw
+* Mere SW
+	- Implementer software til battery monitoren
