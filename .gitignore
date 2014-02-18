@@ -28,7 +28,8 @@
 *.bak
 *.fped
 *.fpd
-autosave-*.kicad_pcb
+*autosave-*.kicad_pcb
+log.txt
 
 # Software files
 *.hex
