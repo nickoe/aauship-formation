@@ -5,10 +5,10 @@ h1 = figure(1); clf;
 % Ypos = 1:0.1:10;
 % heading=sin(Xpos/30);
 % N = length(Xpos);
-N = 399;
+N = 3990;
 Nskip = 20;
 %heading=sin(1:0.01:N/100);
-heading = ones(1,N)*pi/2;
+heading = ones(1,N)*pi/2+pi/4;
 
 set(gca,'nextplot','replacechildren');
 set(gcf,'Renderer','zbuffer');
@@ -47,19 +47,19 @@ for i = 1:Nskip:N
     end
     output(i+1) = Kp*error(i) + Ki*integral(i) + Kd*derivative(i);
         
-    figure(1)
+%     figure(1)
 %     axis equal
 %     xlim([x(4,i)-50 x(4,i)+50])
 %     ylim([x(5,i)-50 x(5,i)+50])
     
-    ship(x(4,i),x(5,i),rad2pipi(x(6,i)),'r');
+%     ship(x(4,i),x(5,i),rad2pipi(x(6,i)),'r');
 
 end
-%     figure(2)
-%     subplot(2,1,1)
-%     plot(error)
-%     subplot(2,1,2)
-%     plot(output)
+    figure(2)
+    subplot(2,1,1)
+    plot(error)
+    subplot(2,1,2)
+    plot(output)
 
 
 
