@@ -39,3 +39,6 @@ log.txt
 
 # Media files
 *.avi
+
+# MATLAB
+slprj/
