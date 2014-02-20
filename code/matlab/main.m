@@ -1,14 +1,14 @@
 clear all; clf;
 
 Nskip=1;
-N = 3990;
+N = 3900;
 % headingdesired=sin(1:0.01:N/100);
 headingdesired = ones(1,N)*pi/2+pi/4;
 
 %x = [ u v r x y psi delta ]'
 x = zeros(7,N);
 xdot = zeros(7,N);
-x(6,1) = (pi/4)*0;
+x(6,1) = (pi/4)*1; % skal lige afgrænses til intervalled 0 til 2*pi
 U = zeros(1,N);
 error = zeros(1,N);
 integral = zeros(1,N);
@@ -17,16 +17,22 @@ Kp = 0.4;
 Ki = 10;
 Kd = 0;
 rudderangle = zeros(1,N);
+n = 1;
 
-start = [0, 0];
-stop = [1000, 1000];
+start = [1000, 10000];
+stop = [-10000,10000];
+track = [0,0; 10000,10000; 10000,20000];
 
 % Main loop
 for i = 1:Nskip:N
 
     [xdot(:,i), U(i)] = mariner(x(:,i), rudderangle(i), 5); % SHIP
     
-    headingdesired(i) = wp_gen(start,stop,x(4:5,i)',U(i)); % WP Gen
+    [headingdesired(i), wp_reached] = wp_gen1(track(n,:),track(n+1,:),x(4:5,i)'); % WP Gen
+    
+    if (wp_reached == 1)
+        n = n+1;
+    end
 
     x(:,i+1)=xdot(:,i)+x(:,i); % Integration to positions
     
@@ -40,5 +46,10 @@ end
 
 figure(1)
 % ship(x(4,:),x(5,:),rad2pipi(x(6,:)),'r');
-plot(x(5,:),x(4,:),'r.',[start(2),stop(2)]',[start(1),stop(1)]','b-o');
+% plot(x(5,:),x(4,:),'r.',[start(2),stop(2)]',[start(1),stop(1)]','b-o');
+plot(x(5,:),x(4,:),'r.',track(:,2),track(:,1),'b-o');
+
+ylabel('Northing [m]')
+
+xlabel('Easting [m]')
 axis equal

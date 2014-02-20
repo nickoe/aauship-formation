@@ -1,56 +1,38 @@
-function [ heading ] = wp_gen( wps, wpe, now, speed)
-%WP_GEN Waypoint Generator
-%   This calculates new sub-waypoints and headings there to 
+function[heading, wp_reached] = wp_gen1(wps,wpe,now)
+%% wp_gen Waypoint Generator
+P_c = [now 0]; % [x y angle]
+wp_r = 1000; % Waypoint Radius
+wp_reached = 0; % Waypoint not reached
+v_i_len = 600; % length of intermediate vector
+n = 1;
 
-    vessel = [now 0]; % [x y angle]
-    wp_radius = 10;
-    intermediate_length = 1;
-    n = 1;
+%% Initial calculations
+% track = [wps;wpe];
 
-% %     h = figure(1);
-% %     hold on
-% %     axis equal
+%% Track-frame projected point
+v_i = (wpe-wps)/norm(wpe-wps)*v_i_len; % Intermediate vector
+P_i = [P_c(1)+v_i(1) P_c(2)+v_i(2)]; % Intermediate projected parallel point
 
+%% Calculate projected point onto the track
+A = P_i - wps;
+B = wpe - wps;
+r_p = ((dot(A,B))/((norm(B)^2)))*B; % Projection of vector on vector
+P_p = r_p + wps;
 
-    %% Begnning of calculations
-% %     plot(vessel(1),vessel(2),'r*') % Initial point of vessel
-    p_pos = vessel;
-    vessel_p = p_pos(1:2);
+%% The vessels predicted position
+v_d = P_p - P_c(1:2);
+v_ref = v_d/norm(v_d); % normaliserer
+v_ref = v_ref * v_i_len;
+% P_ref = v_ref + now;
 
-    % Put the vessels position in a the first point of the track to make
-    % the vessel reach the first waypoint in the track.
-%     track = [p_pos(1:2);track];
-    track = [wps;wpe];
+%% Calculate if waypoint is reached
+dist = sqrt((P_c(1)-wpe(1))^2+(P_c(2)-wpe(2))^2);
+if dist < wp_r
+    wp_reached = 1;
+end
 
-    %% Track frame projected point
-    intermediate_vector = (track(n+1,:)-track(n,:))/norm(track(n+1,:)-track(n,:))*intermediate_length;
-    vessel = p_pos;
-    vessel_p = [vessel(1)+intermediate_vector(1) vessel(2)+intermediate_vector(2)]; % Intermediate forward parallel to track projection vessel point
-% %     plot(vessel_p(1),vessel_p(2),'g*') % Plot of intermediate point
-
-    %% Calculate the projected point onto the track
-    A = vessel_p-track(n,:);
-    B = track(n+1,:)-track(n,:);
-    P = ((dot(A,B))/((norm(B)^2)))*B; % Projection of vector on vector
-    P = P + track(n,:);
-% %     plot(P(1),P(2),'k*')
-
-    %% The vessels predicted position
-    p_pos = P - vessel(1:2);
-    p_pos = p_pos/norm(p_pos);% Normalize vector
-    p_pos = p_pos*speed+vessel(1:2); % Simulate speed
-% %     plot(p_pos(1),p_pos(2),'rx')
-    % vesselp(1,1,1,1,1)
-
-    %% Calculate if waypoint is reached
-%     dist = sqrt((p_pos(1)-track(n+1,1))^2+(p_pos(2)-track(n+1,2))^2);
-%     if dist < wp_radius
-%         disp('hej')
-%     end
-    
-%     A = vessel;  % Das schiff
-%     B = p_pos;   % Das punkt
-%     heading = 2*pi-asin( (B(2)-A(2)) / sqrt( (B(1)-A(1))^2 + (B(2)-A(2))^2) );
-    heading = 2*pi-asin( (p_pos(1)-vessel(1)) / sqrt( (p_pos(1)-vessel(1))^2 + (p_pos(2)-vessel(2))^2) );
+%% Calculate heading
+% heading = 2*pi-asin(( P_ref(1)-P_c(1) ) / sqrt( (P_ref(1)-P_c(1))  ^2 + (P_ref(2)-P_c(2))^2 ));
+heading = atan2(v_ref(2),v_ref(1));
 
 end
