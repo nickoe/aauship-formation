@@ -1,7 +1,7 @@
 function[heading, wp_reached] = wp_gen1(wps,wpe,now)
 %% wp_gen Waypoint Generator
 P_c = [now 0]; % [x y angle]
-wp_r = 1000; % Waypoint Radius
+wp_r = 900; % Waypoint Radius
 wp_reached = 0; % Waypoint not reached
 v_i_len = 600; % length of intermediate vector
 n = 1;
