@@ -14,13 +14,13 @@ Opgavelisten
 * Få 'mariner.m' til at reagere på input OK
 * Få mariner til at følge en path OK
 * Heading autopilot til mariner OK
-* Få autopiloten ind i sin egen funktion i steder for kode i main.m
+* Få autopiloten ind i sin egen funktion i stedet for kode i main.m
 * Få flere mariner'ere til at følge en path
 * Opdater mariner.m til at være AAUSHIP (modellering) [se chap 2 og 3 i fossen]
 * Implementer path-follower på AAUSHIP (python)
 * Tilføj flere AAUSHIPSs til flåden (praktisk ting)
 * Få dem til at danne formation (group coordination task)
-* Få formationen til at følge en path (formation mission task
+* Få formationen til at følge en path (formation mission task)
 
 
 Andre ting der skal kigges på i ny og næ
