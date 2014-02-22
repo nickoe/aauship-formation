@@ -32,7 +32,7 @@ berører:
 	- GRS
 	- HLI
 	- LLI
-*	Hardware
+* Hardware
 	- Knapafbryder i stedet for klemmerækken (praktisk ting)
 	- Byg to både mere
 		. Bestil manglende dele
