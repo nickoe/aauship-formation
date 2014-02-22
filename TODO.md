@@ -10,7 +10,7 @@ Formationskontrol med mindst to aauships
 
 Opgavelisten
 ------------
-* Generer en path (NEDPRIOTERET) [Brug manuelle arrays med paths for nu]
+* Generer en path (NEDPRIORITERET) [Brug manuelle arrays med paths for nu]
 * Få 'mariner.m' til at reagere på input OK
 * Få mariner til at følge en path OK
 * Heading autopilot til mariner OK
