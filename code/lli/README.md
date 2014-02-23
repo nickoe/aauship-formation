@@ -25,10 +25,17 @@ Program (upload) with the ISP:
 Source files
 ------------
 `lli.c` is the main file
+
 `faps_parse.{c,h}` recieve data 
+
 `faps_process.{c,h}` handle data and command logic
+
 `config.h` is the configuration file for the device
+
 `adis16405.{c,h}` is functions to work with the IMU
+
 `pwm.{c,h}` is functions to set the PWM outputs
+
 `uart.{c,h}` is the derivative work by David A. Mellis from the original Peter Fleury UART library under GPL. http://beaststwo.org/avr-uart/index.shtml
+
 `spi.{c,h}` is from Pascal Stang's avrlib, no license is specified, seems like public domain. http://www.procyonengineering.com/embedded/avr/avrlib/
