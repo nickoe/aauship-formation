@@ -11,5 +11,6 @@ Source files and other files
 ----------------------------
 `42-aauship.rules` is udev rules that ensures that consitent device
 names is assigned for the USB devides such as the second GPS,
-echosounder, LLI, and radio interface. (the radio interface is used on
-the GRS to communicate with the LLI directly, not on the ship)
+echosounder, LLI, and radio interface. It is to be copied into
+`/etc/udev/rules.d`. (The radio interface is used on the GRS to
+communicate with the LLI directly, not on the ship.)
