@@ -9,6 +9,8 @@ function [ xdot ] = aauship( x, tau )
 %   
 %   See the MSS toolbox supply.m for implementation example. The matrices M
 %   and D has to be determined.
+%
+%   See Property 3.1, chap 7.5+
 
 end
 
