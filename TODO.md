@@ -16,7 +16,7 @@ Opgavelisten
 * Heading autopilot til mariner OK
 * Få autopiloten ind i sin egen funktion i stedet for kode i main.m
 * Få flere mariner'ere til at følge en path
-* Opdater mariner.m til at være AAUSHIP (modellering) [se chap 2 og 3 i fossen]
+* Opdater mariner.m til at være AAUSHIP (modellering) [se chap 2 og 3 i fossen] OK
 * Implementer path-follower på AAUSHIP (python)
 * Tilføj flere AAUSHIPSs til flåden (praktisk ting)
 * Få dem til at danne formation (group coordination task)
