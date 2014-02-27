@@ -14,3 +14,15 @@ names is assigned for the USB devides such as the second GPS,
 echosounder, LLI, and radio interface. It is to be copied into
 `/etc/udev/rules.d`. (The radio interface is used on the GRS to
 communicate with the LLI directly, not on the ship.)
+
+In the `python` dir
+-------------------
+`lli-tester.py` is a script to run standalone to show some info from
+the LLI and that it works.
+
+`packetparser.py`
+
+`packetHandler.py`
+
+`gpsfunctions.py`
+
