@@ -15,7 +15,8 @@ Opgavelisten
 * Få mariner til at følge en path OK
 * Heading autopilot til mariner OK
 * Få autopiloten ind i sin egen funktion i stedet for kode i main.m
-* Få flere mariner'ere til at følge en path
+* Heading autopilot til Twin Propeller Ship aauship.m
+* Få flere mariner'ere til at følge en path OK
 * Opdater mariner.m til at være AAUSHIP (modellering) [se chap 2 og 3 i fossen] OK
 * Implementer path-follower på AAUSHIP (python)
 * Tilføj flere AAUSHIPSs til flåden (praktisk ting)
