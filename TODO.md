@@ -49,3 +49,23 @@ Senere todo, når båden er sejlklar
 * Få styr på LLI sw og HLI sw
 * Mere SW
 	- Implementer software til battery monitoren
+
+
+
+Milestones:
+
+- ROS inlejret program på båden der kører
+- Autonom styring af båden:
+	- Simuleging
+	- Hardware: Gps, andet?
+- Gruooekoordineringsopgave
+- Formationsfølgeropgave
+- Avoidance opgave
+- Litteratur resheach
+	- Undersøgelse af formationsparadigmer
+- Fuld dynamisk model af båden incl. forstyrrelser
+- Udvidelse af flåden
+- Implementering
+	- Gruppe
+	- Formation
+	- Avoidance
