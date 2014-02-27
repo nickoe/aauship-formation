@@ -53,8 +53,8 @@ Senere todo, når båden er sejlklar
 
 
 
-Milestones
-----------
+Milepæle
+--------
 
 - ROS inlejret program på båden der kører
 - Autonom styring af båden:
@@ -62,7 +62,7 @@ Milestones
 	- Hardware: Gps, andet?
 - Gruppekoordineringsopgave
 - Formationsfølgeropgave
-- Avoidance opgave
+- Eventuel undvigelsesopgave
 - Litteratur research
 	- Undersøgelse af formationsparadigmer
 - Fuld dynamisk model af båden incl. forstyrrelser
@@ -70,19 +70,30 @@ Milestones
 - Implementering
 	- Gruppe
 	- Formation
-	- Avoidance
+	- Eventuel undvigelse
 
 Opdeling af milepæle:
+Datoer i () er til, og ikke med. Der er ikke lagt vægt på så meget til næste semester.
 	Dette semester:
-		Litteratur research
-		Undersøg formatinsparadigmer
-		Få enden ROS eller noget selvlavet op at køre på båden
-		Fuld dynamisk model af båden incl. forstyrrelser
-		Simulering af autonom styring af båden
-		Undersøg gruppekoordineringsopgave
-		Undersøg formationsfølgeropgave
+		- (Nu - Slut) Litteratur research
+		- (Uge 11) Undersøg formationsparadigmer
+			Dette er mest en "opvarmning" til at skulle lave formationskontrol. Der skal undersøges hvad det kræver at lave formationskontrol.
+		- (Uge 13) Få enten ROS eller noget selvlavet op at køre på båden
+			Systemet på den eksisterende båd skal fungere, så den kan sejle simpelt inden vi indkluderer noget formationskontrol til den. Dermed skal næste punkt også laves. Hvis ROS kan implementeres som et overordnet system og opbygningen i noder kan laves vil dette være fordelagtigt, da andre moduler allerede er under udarbejdning. Derfor er det sådan set kun _infrastruktur_ af ROS. Dette skal også dokumenteres.
+		- (Uge 14) Deltest af simpel stifølger til båden
+			Dette er bare for at teste det simpleste system og funktioner.
+		- (Uge 18) Dynamisk model af båden incl. forstyrrelser
+			En ordentlig model af båden vil være godt, da vi dermed kan styre den mere præcist. Vi regner med at bruge metoden fra _Fossen_, og derfor skal vi have bestemt nogle hydrodynamiske koefficienter ud fra enten nogle nye tests eller dem Lunde og Brian lavede sidste semester.
+		- (Uge 22) Simulering af autonom styring af båden med den nye model
+			Når modelleringen er færdig skal båden simuleres i matlab. Måske kan vi også undersøge Gazebo.
+		- (Uge 23) Test af automon styring til båden
+			Når alle forgående punkter er opfyldt skal det modelbaserede til båden implementeres. Herunder angår autonom styring og basal stifølger, skal dette testes. Dette skal skal som det sidste i den første halvdel af projektet.
+		- (Nu - Uge 23) Undersøg gruppekoordineringsopgave
+			Vidensopbygning til næste del af projektet.
+		- (Nu - Uge 23) Undersøg formationsfølgeropgave
+			Vidensopbygning til næste del af projektet.
 
 	Næste semester:
-		Få alt hardware op at køre, incl en båd mere
-		Lav og implementer gruppekoordineringsopgave, formationsfølgeropgave og avoidanceopgave
-		Få begge både til at sejle i gruppe og hold formation i en given path.
+		- () Få alt hardware op at køre, her tænkes mest på en båd mere
+		- () Lav og implementer gruppekoordineringsopgave, formationsfølgeropgave og eventuel undvigelsesopgave
+		- () Få begge både til at sejle i gruppe og hold formation i en given path.
