@@ -53,7 +53,8 @@ Senere todo, når båden er sejlklar
 
 
 
-Milestones:
+Milestones
+----------
 
 - ROS inlejret program på båden der kører
 - Autonom styring af båden:
@@ -74,7 +75,7 @@ Milestones:
 Opdeling af milepæle:
 	Dette semester:
 		Litteratur research
-			Undersøg formatinsparadigmer
+		Undersøg formatinsparadigmer
 		Få enden ROS eller noget selvlavet op at køre på båden
 		Fuld dynamisk model af båden incl. forstyrrelser
 		Simulering af autonom styring af båden
