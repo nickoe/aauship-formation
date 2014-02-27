@@ -59,10 +59,10 @@ Milestones:
 - Autonom styring af båden:
 	- Simuleging
 	- Hardware: Gps, andet?
-- Gruooekoordineringsopgave
+- Gruppekoordineringsopgave
 - Formationsfølgeropgave
 - Avoidance opgave
-- Litteratur resheach
+- Litteratur research
 	- Undersøgelse af formationsparadigmer
 - Fuld dynamisk model af båden incl. forstyrrelser
 - Udvidelse af flåden
@@ -70,3 +70,18 @@ Milestones:
 	- Gruppe
 	- Formation
 	- Avoidance
+
+Opdeling af milepæle:
+	Dette semester:
+		Litteratur research
+			Undersøg formatinsparadigmer
+		Få enden ROS eller noget selvlavet op at køre på båden
+		Fuld dynamisk model af båden incl. forstyrrelser
+		Simulering af autonom styring af båden
+		Undersøg gruppekoordineringsopgave
+		Undersøg formationsfølgeropgave
+
+	Næste semester:
+		Få alt hardware op at køre, incl en båd mere
+		Lav og implementer gruppekoordineringsopgave, formationsfølgeropgave og avoidanceopgave
+		Få begge både til at sejle i gruppe og hold formation i en given path.
