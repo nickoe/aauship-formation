@@ -30,10 +30,10 @@ extern uint8_t rmc_idx;
 /**
  * Blinkenlights
  */
-#define LED1 PL0
-#define LED2 PL1
-#define LED3 PL2
-#define LED4 PL3
+#define LED1 PL0 // Radio RX indicator
+#define LED2 PL1 // Radio TX indicator
+#define LED3 PL2 // GPS message indicator
+#define LED4 PL3 // IMU indicator
 
 
 /**
