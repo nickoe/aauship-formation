@@ -123,6 +123,7 @@ void adis_recalibrate_gyros( void );
 void adis_output( unsigned char );
 float data_read(int data_type);
 
+void adis_soft_reset(void);
 void adis_reset_factory(void);
 uint8_t is_adis16405( void );
 int adis_burst_read( adis16_t *data );

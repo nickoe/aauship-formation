@@ -90,6 +90,15 @@ int32_t adis_get_xacc( void ) {
 	return temperature;
 }
 
+/**
+ * Software reset
+ *
+ * Stops the sensor operation and runs the device through its start-up
+ * sequence.
+ */
+void adis_soft_reset( void ) {
+	spiTransferWord(0xBE80);
+}
 
 /**
  * Restoring sensors to factory calibration

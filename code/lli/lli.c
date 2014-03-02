@@ -76,6 +76,7 @@ int main (void)
 	PORTL = 0xff; // Turn off all LEDS as initial state
   DDRL = (1<<LED1) | (1<<LED2) | (1<<LED3) | (1<<LED4); // Set pins for LED as output
 
+	/* Initialize peripherals */
 	pwm_init();
 	spiInit();
 
@@ -91,8 +92,9 @@ int main (void)
   /* Now enable interrupt, since UART library is interrupt controlled */
   sei();
 
-	spiTransferWord(0xBE80); // ADSI software reset
+	adis_soft_reset();
 
+	/* Speed up the comms from the GPS */
 	_delay_ms(500); // Wait for GPS to initialize
 	/* Set GPS to a faster baud and update UART speed */
 	//uart3_puts("$PMTK251,115200*1F");
