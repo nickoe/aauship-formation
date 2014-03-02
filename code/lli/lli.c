@@ -96,16 +96,9 @@ int main (void)
 
 	/* Speed up the comms from the GPS */
 	_delay_ms(500); // Wait for GPS to initialize
-	/* Set GPS to a faster baud and update UART speed */
-	//uart3_puts("$PMTK251,115200*1F");
 	uart3_puts("$PMTK251,57600*2C\r\n");
-	//uart3_puts("$PMTK251,38400*27");
-	//uart3_puts("$PMTK251,0*28");
-	_delay_ms(500);
-	//	uart3_init( UART_BAUD_SELECT(115200,F_CPU) );
+	_delay_ms(500); // Wait for GPS to change baud rate
 	uart3_init( UART_BAUD_SELECT(57600,F_CPU) );
-	//uart3_init( UART_BAUD_SELECT(38400,F_CPU) );
-	/* 115200 seems to be a little bit unstable, at least testing via radio*/
 
 	adis_reset_factory();
 	adis_set_sample_rate();
