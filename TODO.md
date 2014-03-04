@@ -77,13 +77,17 @@ Datoer i () er til, og ikke med. Der er ikke lagt vægt på så meget til næste
 # Dette semester
 - (Nu - Slut) Litteratur research
 - (Uge 11) Undersøg formationsparadigmer
-	Dette er mest en "opvarmning" til at skulle lave formationskontrol. Der skal undersøges hvad det kræver at lave formationskontrol.
+	Dette er mest en "opvarmning" til at skulle lave formationskontrol.
+	Der skal undersøges hvad det kræver at lave
+	formationskontrol. Indledning
 - (Uge 13) Få enten ROS eller noget selvlavet op at køre på båden
 	Systemet på den eksisterende båd skal fungere, så den kan sejle simpelt inden vi indkluderer noget formationskontrol til den. Dermed skal næste punkt også laves. Hvis ROS kan implementeres som et overordnet system og opbygningen i noder kan laves vil dette være fordelagtigt, da andre moduler allerede er under udarbejdning. Derfor er det sådan set kun _infrastruktur_ af ROS. Dette skal også dokumenteres.
-- (Uge 14) Deltest af simpel stifølger til båden
+- (Uge 14) Deltest af båden, manuel kontrol
 	Dette er bare for at teste det simpleste system og funktioner.
 - (Uge 18) Dynamisk model af båden incl. forstyrrelser
 	En ordentlig model af båden vil være godt, da vi dermed kan styre den mere præcist. Vi regner med at bruge metoden fra _Fossen_, og derfor skal vi have bestemt nogle hydrodynamiske koefficienter ud fra enten nogle nye tests eller dem Lunde og Brian lavede sidste semester.
+- (Uge 20) Simpel estimator/determinering
+	Det at få nogle states som vi kan bruge til at sejle med
 - (Uge 22) Simulering af autonom styring af båden med den nye model
 	Når modelleringen er færdig skal båden simuleres i matlab. Måske kan vi også undersøge Gazebo.
 - (Uge 23) Test af automon styring til båden
