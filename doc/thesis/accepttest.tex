@@ -1,0 +1,64 @@
+\chapter{Acceptance test}
+\head{Throughout the project, one problem in particular has halted the process of getting the product finished, this being the lacking reliability of the \ac{RTK}-\ac{GPS} precision, this have hindered an ``on location'' test, instead the tests from section~\vref{sc:accepttest} will be simulated, instead of running on a real lake.}
+
+
+\section{Acceptance testing simulations}
+The tests have been conducted using \MATLAB.
+
+\newcounter{atest3_2}
+\stepcounter{atest3_2}\subsection*{Test \arabic{atest3_2}: The vessel must navigate along a straight line:}
+The vessel is programmed to navigate along a 20 metre straight route, during the movement along the route the vessel will be subjected to wind at varying angles at speeds up to 5 m/s, throughout the test the vessel must keep a velocity in accordance with the requirement specification. The test will be conducted five times, to make sure sufficient wind angles and speeds have been covered.
+
+
+\subsection{Test simulation}
+Shown on figure \vref{fig:ss_mimo_out} are two simulations showing the controllers designed using respectively the classical pole-zero placement and the state space approach. The simulations show how the controllers handle varying reference values for heading and velocity. This reflects how the vessel would react in a real world scenario, only the reference signals have been simplified to make the graphs easier to understand.
+
+Both controllers work, though the state space controller gives the best result, and would therefore be the one used on the vessel.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{illustrations/ss_mimo_out}
+   \caption{Simulations showing speed - and angle controller working. Designed by pole-zero placement - versus state space method. Both controllers sees 0.01 \% noise on the feedback signal, relative to the maximum value of the reference signal.}
+ \label{fig:ss_mimo_out}
+\end{figure}
+
+\subsection{Test result}
+As it is seen on figure \vref{fig:ss_mimo_out} the simulated outputs of the controllers clearly converges to the reference signals, both regarding speed and heading, thus the test is considered passed.
+
+
+\stepcounter{atest3_2}
+\subsection*{Test \arabic{atest3_2}: The vessel must navigate using an absolute positioning system:}
+Two reference points are set up, where the absolute position is known. The vessel is placed at the first point, while logging it's position, and then at the second point while logging it's positions.
+
+\subsection{Test simulation}
+Since the \ac{RTK} \ac{GPS} system has not worked as reliably as expected, an actual acceptance test has not been conducted with the \ac{GPS} receivers on the vessel, however the \ac{RTK} \ac{GPS} system has unambiguously been shown to be able to produce reliable results in appendix \vref{ch:rtk_validation}.
+
+\subsection{Test result}
+The test is not passed since the \ac{RTK} \ac{GPS} system was not successfully tested on the vessel, even though good results have previously been shown.
+
+\stepcounter{atest3_2}
+\subsection*{Test \arabic{atest3_2}: The vessel must report it's position to ground station:}
+The vessel is programmed to continuously send out data, and the ground station is set to receive mode. The vessel is moved away from the ground station to a distance of 1000 m.
+
+\subsection{Test}
+The communication have been implemented through a 3G modem, that have been successfully tested on several occasions.
+
+\subsection{Test result}
+The test is considered passed, since the 3G modem makes the vessel able to communicate with the ground station whenever it is in an area with 3G coverage, regardless of the distance to the ground station.
+
+\section{Result overview}
+The following table is the result of the acceptance test described in previous subsections.
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{Test \#} & \textbf{Summary} & \textbf{Result}\\
+\midrule
+Test 1 & Navigation &Success\\
+Test 2 & Positioning & Failure\\
+Test 3 & Communication & Success\\
+\bottomrule
+\end{tabular}
+\caption{Acceptance test overview}
+\label{tab:accept}
+\end{table}

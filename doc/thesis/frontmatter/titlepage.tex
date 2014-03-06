@@ -1,0 +1,96 @@
+% Dette er LaTeX-versionen af titelbladet for tek-nat-basis-rapporter
+% 2004 efterår Filen kræver: Universitetets logo: aau-logo.png (for
+% LaTeX) eller aau-logo.ps (for LaTeX) Synopsis: En fil ved navn
+% synopsis.tex
+
+% Udarbejdet af: Hans Høttel (hans@cs.auc.dk) 21. maj 2003 Rettet af
+% Morten Christophersen (mortench@tnb.aau.dk) 30. nov 2004(ændret til
+% nyt design 2004 efteår) Modificeret af Nick Østergaard
+% (noeste90@student.aau.dk) 28. sep 2009
+
+\thispagestyle{empty}
+\begin{flushleft}
+%\begin{nopagebreak}
+  {\samepage 
+    \begin{tabular}{r}
+     \fbox{ \parbox{\textwidth}{
+       \raisebox{20mm}{\hspace{3cm}\includegraphics[width=3.35cm]{frontmatter/AAU_LAT_CIRCLE_blue_rgb}}
+        \hfill \parbox{7cm}{
+          \begin{tabular}{l}
+            {\textsf{\small \textbf{Institute of Electronic Systems}}}\\
+            {\textsf{\small \textbf{Control Engineering}}} \\
+            {\textsf{\small Fredrik Bajers vej 7}} \\
+            {\textsf{\small 9220 Aalborg \O st}} \\
+            {\textsf{\small Phone 99 40 86 00}} \\
+            %{\textsf{\small Fax 98 13 63 93}} \\
+            {\textsf{\small http://es.aau.dk}}
+          \end{tabular}}}}
+      \\
+    \end{tabular}
+
+\begin{tabular}{cc}
+\parbox{7cm}{
+%\begin{description}
+
+%\end{description}
+\parbox{7cm}{
+	\begin{list}{}{\leftmargin=0.5em}
+	\item [\textbf{Title:}] \tightlist
+	\item Formation Control for Unmanned Surface Vehicles for Surveying Purposes
+	\item [\textbf{Theme:}]
+	\item Master’s thesis
+	\end{list}
+
+	\begin{description}
+	\item[Projectperiod:] \tightlist
+	\item 2014
+	\end{description}
+	%  \hspace{4cm}
+	\begin{description}
+	\item[Projectgroup:] \tightlist
+	\item 1034
+	%  \hspace{4cm}
+	\end{description}
+
+	\begin{description}
+	\item[Participants:] \tightlist
+	\item Nick \O stergaard 
+	\item Jeppe Dam
+	\end{description} 
+	\begin{description}
+	\item[Supervisor:] \tightlist
+	\item Jesper Abildgaard Larsen
+	\end{description}
+	}
+	\begin{description}
+	\item[Number of printed copies:] ??
+	\item[Number of pages:] \arabic{lastsheet} 
+	\item[Appendices:] ?? + 1 CD
+	\item[Finished on:] \today
+	\end{description}
+	\vfill 
+} &
+\parbox{7cm}{
+  \vspace{.15cm}
+  \hfill 
+  \begin{tabular}{l}
+  {\textbf{Synopsis:}}\bigskip \\
+  \fbox{
+    \parbox{6.5cm}{\bigskip
+     {\vfill{\small \input{frontmatter/synopsis}
+     \bigskip}}
+     }}
+   \end{tabular}}
+\end{tabular}}
+%\\ \\
+
+\strut \vfill
+%\noindent{\footnotesize\textsf{\emph{Rapportens indhold er frit tilgængeligt, men offentliggørelse må kun ske efter aftale med forfatterne.}}}
+%\end{nopagebreak}
+\includegraphics[width=1.35cm]{frontmatter/ca-logo.pdf}
+\end{flushleft}
+
+%Rapporten skal afleveres til følgende:
+%1 stk. til hovedvejlederen (afleveres til studiesekretæren)
+%1 stk. til censor (afleveres til studiesekretæren)
+%1 stk. til hver studerende i gruppen
