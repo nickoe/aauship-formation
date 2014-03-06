@@ -16,7 +16,8 @@ FIGS_SVG=fig/harness.svg \
 				 fig/mechanical.svg \
 				 fig/vessel-block-overview.svg \
 				 fig/cornoring.svg \
-				 fig/sld.svg
+				 fig/sld.svg \
+				 fig/diffforms.svg
 
 # Alle EPS-filer (PS-illustrationer angivet i linien nedenunder)
 #FIGS_EPS= \
