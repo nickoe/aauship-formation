@@ -36,7 +36,7 @@ Part No: xxxxxxxx er bstillingsnummr hos cornwallmodelboats.co.uk
 X XT60 i stedet for bullet (bestil hos f.eks. hobbykking)
 6 batterier Part No: P4403740
 3 akseler Part No: I-SB05/300
-2 Motorer
+2 Motorer (måske Graupner 460Z, men måske kun een hos cornwallmodelboats)
 2 Bovpropeller
 4 koblinger (skulle vi skaffe fra rs i stedet?, den der var skaffet passer ikke på aksel, er lidt for stor, ikke testet på motor)
 2 eller 4 Bil relæer
