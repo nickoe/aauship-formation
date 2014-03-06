@@ -1,9 +1,9 @@
 \thispagestyle{empty}
+\newgeometry{right=2cm}
 \noindent
 \begin{minipage}[l]{0.50\textwidth}
 	\centering
 	\includegraphics[width=3.35cm]{frontmatter/AAU_LAT_CIRCLE_blue_rgb}
-	\includegraphics[width=1.35cm]{frontmatter/ca-logo.pdf}
 \end{minipage}
 \begin{minipage}[r]{0.50\textwidth}
 
@@ -59,27 +59,22 @@
 	\item[Appendices:] ?? + 1 CD
 	\item[Finished on:] \today
 	\end{description}
-
-
 \end{minipage}
 \hfill
 \begin{minipage}[r]{0.50\textwidth}
-
-
-  \hfill
-
-  {\textbf{Synopsis:}}\bigskip \\
-  \fbox{
-    \parbox[c]{\textwidth-0.5em}{
-\bigskip
-     {\vfill{\small \input{frontmatter/synopsis}
-     \bigskip}}
-     }}
-
+	{\textbf{Synopsis:}} \\
+	\fbox{\parbox[c]{\textwidth-0.5em}{
+	\bigskip
+	{\vfill{\small \input{frontmatter/synopsis}
+	\bigskip}}
+    }}
 \end{minipage}
 %}
-
-
+\vfill
+\begin{center}
+	\includegraphics[width=1.35cm]{frontmatter/ca-logo.pdf}
+\end{center}
+\restoregeometry
 
 %Rapporten skal afleveres til følgende:
 %1 stk. til hovedvejlederen (afleveres til studiesekretæren)
