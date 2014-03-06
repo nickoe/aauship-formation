@@ -1,10 +1,11 @@
-function[heading, wp_reached] = wp_gen1(wps,wpe,now)
-%% wp_gen Waypoint Generator
+function[heading, wp_reached] = wp_gen(wps,wpe,now)
+%%WP_GEN Waypoint Generator
+%   This calculates reference points for the path follower
+
 P_c = [now 0]; % [x y angle]
 wp_r = 900; % Waypoint Radius
 wp_reached = 0; % Waypoint not reached
 v_i_len = 600; % length of intermediate vector
-n = 1;
 
 %% Initial calculations
 % track = [wps;wpe];
