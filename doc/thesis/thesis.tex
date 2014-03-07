@@ -45,12 +45,21 @@
 %%%%%%% Maybe we should have an overview of the system here
 \cleardoublepage
 \tableofcontents
-\input{frontmatter/acronyms}
+\input{../manual/acronyms}
 
 \mainmatter
+\descpart{Introduction}{In this part is the motivation for the project stated and the previous work within the subject will be summed up.}
+\chapter{Introduction}
+\head{Formation control in general is concerned with simultaneous control of dynamic systems. These systems is often referred to as agents where the objective of these is to maintain a static reference to a specified object. This object could be another agent witch then would be referred to as the leader. The other agents objective will then be to stay in the relative position to the leader within a static formation.}
+\input{introduction}
+\input{formcontrol}
+
 \descpart{Preliminary analysis}{%
 This is da stuff that is roolin'.}
-\input{formcontrol}
+
+\descpart{Control Design}{}
+
+\descpart{Simulation}{}
 
 \cleardoublepage
 \descpart{Appendix}{%
