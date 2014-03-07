@@ -28,15 +28,19 @@ Stykliste
 
 Bestillingsliste til to både mere
 =================================
-Part No: xxxxxxxx er bstillingsnummr hos cornwallmodelboats.co.uk
+Part No: xxxxxxxx er bestillingsnummer hos cornwallmodelboats.co.uk
 
 0 G3.5 kontakt (2970) Part No: G2970
 0 G3.5 kontakt (2969) Part No: G2969
 0 G3.5 polarized housing pair (2969K) Part No: G2969.K (med mindre vi vil skifte konnektor ud på batterier) (svære at samle, skulle vi vælge en anden XT60?)
-X XT60 i stedet for bullet (bestil hos f.eks. hobbykking)
-6 batterier Part No: P4403740
-3 akseler Part No: I-SB05/300
-2 Motorer (måske Graupner 460Z, men måske kun een hos cornwallmodelboats)
-2 Bovpropeller
+
 4 koblinger (skulle vi skaffe fra rs i stedet?, den der var skaffet passer ikke på aksel, er lidt for stor, ikke testet på motor)
 2 eller 4 Bil relæer
+
+3 batterier Part No: P4403740
+3 akseler Part No: I-SB05/300
+2 Bovpropeller  Part No: RAB108-01 (14/16mm x154mm) ELLER Part No: RAB108-02 (16/19mm x154mm)
+
+6x5pcs (30 par) XT60 hobbyking.com  PRODUCT ID: 601Bx5 
+
+2 Motorer (måske Graupner 460Z 18.4V, men måske kun een hos cornwallmodelboats) http://www.conrad.com/ce/en/product/269860/Compact-460z-148-V-Graupner
