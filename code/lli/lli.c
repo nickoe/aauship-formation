@@ -47,7 +47,8 @@ int main (void)
 	char buffer[MAX_MSG_SIZE];
 	char buffer2[MAX_MSG_SIZE];
 	char buffer3[MAX_MSG_SIZE];
-	int  idx = 0, idx2 = -1, idx3 = -1;
+	int  idx = -1, idx2 = -1, idx3 = -1;
+	int	 len = 0;
 	int	 len2 = 0;
 	int	 len3 = 0;
 	char meas_buffer[TX_BUFF_SIZE];
@@ -156,6 +157,40 @@ int main (void)
 			PORTL ^= (1<<LED4);
 		}
 
+
+
+		/* Reading from LLI */
+		if ( c & UART_NO_DATA ) {} else // Data available
+		{ //if data is $, set a flag, read next byte, set that value as the length, read while incrementing index until length reached, parse
+//uart_putc(c2);
+			if (idx == 0) { // We should buffer a packet
+				len = c+5; // Set length
+			}
+
+			if ( (idx < len) && (idx >= 0)) { // We are buffering
+				buffer[idx] = c;
+				idx++;
+
+				if (idx == len) { // We now have a full packet
+
+					if (parse(&rfmsg, buffer)) {
+						PORTL ^= (1<<LED1);
+						process(&rfmsg);
+					}
+
+					idx = -1; // Set flag in new packet mode
+
+					#ifdef DEBUG
+					//puts_msg(&rfmsg);
+					#endif
+				}
+			}
+
+			if (c == '$') { // We have a possible message comming
+//				PORTL ^= (1<<LED4);
+				idx = 0; // Set "flag"
+			}
+		}
 
 		/* Reading from radio */
 		if ( c2 & UART_NO_DATA ) {} else // Data available
