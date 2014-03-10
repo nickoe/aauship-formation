@@ -37,10 +37,10 @@ int process(msg_t *msg)
 					grs_send(package(0, 0x00, 0x06, 0),0); // PONG
 					break;
 				case 9:
-                    memcpy(buildinfo,buildtime,sizeof(buildtime)-1);
-                    for (i = sizeof(buildtime); i < sizeof(buildinfo); i++) {
-	                    buildinfo[i-1] = gitcommit[i-sizeof(buildtime)];
-                    }
+          memcpy(buildinfo,buildtime,sizeof(buildtime)-1);
+          for (i = sizeof(buildtime); i < sizeof(buildinfo); i++) {
+	          buildinfo[i-1] = gitcommit[i-sizeof(buildtime)];
+          }
 					grs_send(package(sizeof(buildinfo), 0x00, 0x09, buildinfo),sizeof(buildinfo));
 					break;
 			}
