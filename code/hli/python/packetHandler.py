@@ -10,6 +10,8 @@ import struct
 running = True;
 STARTCHAR = ord('$')
 
+# Serial Dummy Class
+# This is used when developing without hardware in the loop
 class seriald:
 
     class Serial:
@@ -62,12 +64,13 @@ class seriald:
         def inWaiting(self):
             return 1
 
+# Class for managing the packets from the LLI
 class packetHandler(threading.Thread):
     
     def __init__(self,serialport,speed,time,queue,inclog):
         self.connection = serial.Serial(serialport,speed,timeout=time)    #Serial Connection
-        print self.connection
-        print self.connection.inWaiting()
+        #print self.connection
+        #print self.connection.inWaiting()
         self.inclog = inclog
         self.myNewdata = []                #Array for storing new packets
         self.q = queue                    #Queue to share data between threads
@@ -111,7 +114,7 @@ class packetHandler(threading.Thread):
         #print "running thread"
         #print self.connection.isOpen() 
         while self.connection.isOpen():    
-            #print "Reading"
+            #print "Reading ", time.time()
             try:
                 checkchar = self.connection.read(1)
                 self.inclog.write(checkchar)
@@ -130,9 +133,9 @@ class packetHandler(threading.Thread):
                         packetforqueue = self.preparePacket(res[1])
                         self.q.put(packetforqueue)
                     else:
-                        print '\033[1m'
+                        print '\033[1m' # White terminal color
                         print res
-                        print '\033[0m'
+                        print '\033[0m' # Reset terminal color
                 elif checkchar == '':
                     endpacket = {'DevID': chr(255) , 'MsgID': 0,'Data': 0, 'Time': time.time()}
                     self.q.put(endpacket)
@@ -143,9 +146,9 @@ class packetHandler(threading.Thread):
                 pass
         running = False
         return
-            
+
     def close(self):
-        print str(self.errorcount)
+        print "Error count:", str(self.errorcount)
         self.connection.close()    #Close connection
         
     def setMotor(self,n1,n2):
@@ -193,7 +196,10 @@ class packetHandler(threading.Thread):
         for i in range(length):
             packet.append(dat[i]) #The data is then appended.
         return packet
-        
+
+    ## The funciton to send the packet
+    #
+    #  This sends the assembled packet on the serial connection
     def sendPacket(self,packet):
         #Checksum = self.generateCheckSum(packet)
         Checksum = self.CheckSum(packet)    #First, the checksum of the packet is generated
@@ -217,6 +223,7 @@ class packetHandler(threading.Thread):
             pass
         '''
         self.connection.write(chr(STARTCHAR)) #The startChar is written
+
         for i in range(len(packet)):    #The byte are then written individually
             try:
                 self.connection.write(chr(packet[i]))
@@ -288,6 +295,7 @@ class packetHandler(threading.Thread):
         success = False
         packet = []
         length=1
+
         try:
             length = len(array)
             for j in range(length):
@@ -295,6 +303,7 @@ class packetHandler(threading.Thread):
         except:
             packet.append(array)
             extrabits = 4
+
         for i in range((ord(packet[0])-length+5)):
             tempc = self.connection.read(1)
             self.inclog.write(tempc)
@@ -313,10 +322,12 @@ class packetHandler(threading.Thread):
             packet.append(tempc)
             #print packet
         check = self.packetCheck(packet)
+
         if ord(packet[0]) != 12:
             pass
             #print str(ord(packet[0])) + "\t",
             #print str(check) + " \t " + str(packet)
+
         if(check):
             #print "EEEEEEEENS!"
             #    print "True: " + str(packet)
@@ -347,7 +358,6 @@ class packetHandler(threading.Thread):
                 return self.parser(packet)
             except:
                 return [False,packet]
-
                 pass
 
     

@@ -64,6 +64,9 @@ Part No: xxxxxxxx er bestillingsnummer hos cornwallmodelboats.co.uk
 3 batterier Part No: P4403740
 3 akseler Part No: I-SB05/300
 2 Bovpropeller  Part No: RAB108-01 (14/16mm x154mm) ELLER Part No: RAB108-02 (16/19mm x154mm)
+1 Part No: 545045 45mm M5 Threaded 4 Blade L/H Brass Propeller
+1 Part No: 545046 45mm M5 Threaded 4 Blade R/H Brass Propeller
+4x2 (8 stk) G3.5 kontakt (2969) Part No: G2969
 
 6x5pcs (30 par) XT60 hobbyking.com  PRODUCT ID: 601Bx5 
 

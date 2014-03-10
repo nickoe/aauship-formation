@@ -8,6 +8,8 @@ import os
 from math import pi
 import serial
 
+import struct
+
 
 '''LOGGING FOR BOTH'''
 receivinglog = open("meas/received.txt",'w')
@@ -18,17 +20,13 @@ inclog = open("meas/inclog.txt",'w')
 echolog = open("meas/echolog.txt",'w')
 gps2log = open("meas/gps2log.txt",'wb')
 
-Y = numpy.array([0,2.5574,0.5683,-16.3120,-40.7704]) #Easting
-X = numpy.array([0,-18.3388,-36.7722,-53.9444,-54.2330]) #Northing
-
-WPC = numpy.array([X,Y])
 
 qu = Queue.Queue()
 kalqueue = Queue.Queue()
 to = 0.1665
 #receiver = packetHandler.packetHandler("/dev/tty.SLAB_USBtoUART",38400,0.02,qu,inclog)
 # Using the udev rules file 42-aauship.rules 
-receiver = packetHandler.packetHandler("/dev/lli",115200,0.02,qu,inclog)
+receiver = packetHandler.packetHandler("/dev/lli",115200,0.02,qu,inclog) # This runs its own thread
 #echorcv = serial.Serial("/dev/echosounder",4800,timeout=0.04)
 #gps2rcv = serial.Serial("/dev/gps2",115200,timeout=0.04)
 
@@ -40,12 +38,8 @@ parser = packetparser.packetParser(acclog,gpslog,measuredstates,receivinglog,plo
 bla = True
 timeout = 1000
 p = receiver.constructPacket("",0,9)
-print "Packet:" ,
-print p
-#time.sleep(2)
-stopping = False
+print "Packet:", p
 count = 0
-print "message sent"
 motor = numpy.matrix([[0],[0]])
 motor2 = numpy.matrix([[0],[0]])
 sendControl = 0
@@ -53,21 +47,29 @@ running = True
 sign = 1
 p = {'DevID': chr(255) , 'MsgID': 0,'Data': 0, 'Time': time.time()}
 p2 = {'DevID': chr(255) , 'MsgID': 0,'Data': 0, 'Time': time.time()}
-GPSFIX = False
-print p
+GPSFIX = True
+
+#receiver.
+
 try:
-    
     while running == True:
+            p = receiver.constructPacket("",0,9)
+            #receiver.sendPacket(p)
+
+            #print "hej"
             if(receiver.isOpen()):
                 try:
+
                     p = qu.get(False)
                     #receivinglog.write(str(p['DevID']) + "," + str(p['MsgID']) + "," + str("".join(p['Data'])) + "\r\n")
+                    #receiver.connection.write(struct.pack('>bbbbhhbb',0x24,0x04,0x0A,0x13,0,0,0x13,0x37))
                     if ord(p['DevID']) != 255:
                         #print "\r" + str(p),
                         #print p
                         pass
+
+                    # If current is GPS and previous was [I DON'T KNOW]
                     if ord(p['DevID']) == 30 and ord(p2['DevID']) == 255:
-                        
                         GPSFIX = True
                     #    print "Handling GPS Data!1"
                         p2 = p
@@ -85,7 +87,8 @@ try:
                         sendControl += 1
                     #    print measuredstates
                     
-                    elif ord(p2['DevID']) == 20 and ord(p['DevID']) == 30:
+                    # If previous packet was IMU and current is GPS
+                    elif ord(p2['DevID']) == 20 and ord(p['DevID']) == 30: 
                         GPSFIX = True
                     #    print "blaH"
                     ##    print "Handling GPS Data!2"
@@ -98,16 +101,19 @@ try:
                         sendControl += 1
                         #print measuredstates
                         #tempm = measuredstates
-                        
+                    
+                    # If both packets are IMU
                     elif ord(p2['DevID']) == 20 and ord(p['DevID']) == 20:
                         parser.parse(p2)
                         #print measuredstates[0]
                         sendControl += 1
-                        
+                    
+                    # If previous is IMU and current is [I DON'T KNOW]
                     elif ord(p2['DevID']) == 20 and ord(p['DevID']) == 255:
                         parser.parse(p2)
                         sendControl += 1
-                        
+                    
+                    # If both are [I DON'T KNOW] and sendControl > 0
                     if ord(p2['DevID']) == 255 and ord(p['DevID']) == 255 and sendControl > 0:
                         #print chr(27) + "[2J"
                         #print measuredstates[0][1]
@@ -116,7 +122,7 @@ try:
                         
                         #if measuredstates[0][1] == 1:
                         #    print "blaH"
-                        print time.time()
+                        
                         if GPSFIX == True:
                             print "GPS FIX!"
                             #AAUSHIP2.ReadStates(tempm,motor)

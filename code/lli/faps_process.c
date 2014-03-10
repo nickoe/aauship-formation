@@ -14,7 +14,7 @@ int process(msg_t *msg)
 {
 	char buildtime[] =  __DATE__ " " __TIME__;
 	char gitcommit[sizeof(__GIT_COMMIT__)] = __GIT_COMMIT__;
-	char buildinfo[sizeof(buildtime)+40+2];
+    char buildinfo[sizeof(buildtime)+sizeof(gitcommit)];
 	int16_t duty = 0;
 	int i = 0;
 
@@ -37,11 +37,11 @@ int process(msg_t *msg)
 					grs_send(package(0, 0x00, 0x06, 0),0); // PONG
 					break;
 				case 9:
-					memcpy(buildinfo,buildtime,sizeof(buildtime));
-					for (i = sizeof(buildtime); i < sizeof(buildinfo); i++) {
-						buildinfo[i] = gitcommit[i];
-					}
-					grs_send(package(sizeof(buildinfo), 0x00, 0x09, buildtime),sizeof(buildinfo));
+                    memcpy(buildinfo,buildtime,sizeof(buildtime)-1);
+                    for (i = sizeof(buildtime); i < sizeof(buildinfo); i++) {
+	                    buildinfo[i-1] = gitcommit[i-sizeof(buildtime)];
+                    }
+					grs_send(package(sizeof(buildinfo), 0x00, 0x09, buildinfo),sizeof(buildinfo));
 					break;
 			}
 
