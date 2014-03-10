@@ -10,6 +10,30 @@ Usefull packages for ROS
 nmea_navsat_driver
 rosserial
 
+Motornoter
+==========
+inline 475:
+g6606
+58 euro
+1217 kv
+aksel 3.17mm
+nom 11.1V max 14.8V
+
+compact 460z:
+g7741
+46 euro
+900 kv
+aksel 4mm
+nom 14.8V max 18.5V
+
+compact 465z:
+7772
+64 euro
+600 kv
+aksel 5mm
+nom 14.8V max 18.5V
+
+
 Stykliste
 =========
 3 Batterier
