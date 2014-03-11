@@ -39,6 +39,7 @@ log.txt
 *.sym
 *_bak
 test/
+*.pyc
 
 # Media files
 *.avi
