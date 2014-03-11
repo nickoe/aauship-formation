@@ -47,7 +47,9 @@ int main (void)
 	char buffer[MAX_MSG_SIZE];
 	char buffer2[MAX_MSG_SIZE];
 	char buffer3[MAX_MSG_SIZE];
-	int  idx = -1, idx2 = -1, idx3 = -1;
+	int  idx = -1;
+	int  idx2 = -1;
+	int  idx3 = -1;
 	int	 len = 0;
 	int	 len2 = 0;
 	int	 len3 = 0;

@@ -625,7 +625,7 @@ unsigned int uart1_getc(void)
     data = UART1_RxBuf[tmptail];
     
     data = (UART1_LastRxError << 8) + data;
-    UART_LastRxError = 0;
+    UART1_LastRxError = 0;
     return data;
 
 }/* uart1_getc */
@@ -811,7 +811,7 @@ unsigned int uart2_getc(void)
     data = UART2_RxBuf[tmptail];
     
     data = (UART2_LastRxError << 8) + data;
-    UART_LastRxError = 0;
+    UART2_LastRxError = 0;
     return data;
 
 }/* uart2_getc */
@@ -999,7 +999,7 @@ unsigned int uart3_getc(void)
     data = UART3_RxBuf[tmptail];
     
     data = (UART3_LastRxError << 8) + data;
-    UART_LastRxError = 0;
+    UART3_LastRxError = 0;
     return data;
 
 }/* uart3_getc */
