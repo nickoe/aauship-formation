@@ -13,7 +13,11 @@ FIGS_DIA=
 # Alle SVG-filer
 #FIGS_SVG=illustrations/cover.svg
 FIGS_SVG=fig/diffforms.svg \
-fig/cornoring.svg
+fig/cornoring.svg \
+fig/form_avoid.svg \
+fig/form_change_90.svg \
+fig/form_rigid_90.svg \
+fig/form_avoid_right.svg
 
 # Alle EPS-filer (PS-illustrationer angivet i linien nedenunder)
 #FIGS_EPS= \
