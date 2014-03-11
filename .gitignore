@@ -38,6 +38,7 @@ log.txt
 *.lst
 *.sym
 *_bak
+test/
 
 # Media files
 *.avi
