@@ -16,20 +16,14 @@ DESCRIPTION:
 
 #include "uart.h"
 
-
-/* define CPU frequency in Mhz here if not defined in Makefile */
-#ifndef F_CPU
-#define F_CPU 4000000UL
-#endif
-
-/* 9600 baud */
-#define UART_BAUD_RATE      9600      
+#define UART_BAUD_RATE      57600
+//#define UART_BAUD_RATE      115200
 
 
 int main(void)
 {
     unsigned int c;
-    char buffer[7];
+    char buffer[70];
     int  num=134;
 
     
