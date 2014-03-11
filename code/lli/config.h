@@ -67,8 +67,7 @@ extern uint8_t rmc_idx;
 
 /* Defines sample rate from the ADIS16405 bt counting interrupt ticks
  * from sample ready pin on device */
-#define ADIS_READY 1640 // ubrugeligt langsomt
-//#define ADIS_READY 164 // 10 Hz
+#define ADIS_READY 164 // 10 Hz
 //#define ADIS_READY 82 // 20Hz
 //#define ADIS_READY 42 // 40Hz
 
