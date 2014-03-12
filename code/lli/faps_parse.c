@@ -29,12 +29,12 @@ int8_t parse(msg_t *msg, char s[])
 
 void puts_msg(msg_t *msg)
 {
-	uart2_putc(rfmsg.len);
-	uart2_putc(rfmsg.devid);
-	uart2_putc(rfmsg.msgid);
-	uart2_puts(rfmsg.data);
-	uart2_putc(rfmsg.ckh);
-	uart2_putc(rfmsg.ckl);
+	uart2_putc(msg->len);
+	uart2_putc(msg->devid);
+	uart2_putc(msg->msgid);
+	uart2_puts(msg->data);
+	uart2_putc(msg->ckh);
+	uart2_putc(msg->ckl);
 }
 
 uint8_t rmc_cut(char rmc[], char data[]) {

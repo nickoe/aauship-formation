@@ -42,6 +42,7 @@ int process(msg_t *msg)
 	          buildinfo[i-1] = gitcommit[i-sizeof(buildtime)];
           }
 					grs_send(package(sizeof(buildinfo), 0x00, 0x09, buildinfo),sizeof(buildinfo));
+					hli_send(package(sizeof(buildinfo), 0x00, 0x09, buildinfo),sizeof(buildinfo));
 					break;
 			}
 

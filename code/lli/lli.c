@@ -175,15 +175,15 @@ int main (void)
 
 				if (idx == len) { // We now have a full packet
 
-					if (parse(&rfmsg, buffer)) {
+					if (parse(&hlimsg, buffer)) {
 						PORTL ^= (1<<LED1);
-						process(&rfmsg);
+						process(&hlimsg);
 					}
 
 					idx = -1; // Set flag in new packet mode
 
 					#ifdef DEBUG
-					//puts_msg(&rfmsg);
+					//puts_msg(&hlimsg);
 					#endif
 				}
 			}
