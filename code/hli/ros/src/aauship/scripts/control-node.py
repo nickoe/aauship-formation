@@ -12,16 +12,24 @@ import os
 
 class Control(object):
     def callback(self, data):
+        # send data to lli_input topic
 #        rospy.loginfo(rospy.get_caller_id()+"I heard %s",data.data)
-#        self.imulog.write(data.data)
+#        self.ctllog.write(data.data)
+        # Publish data to lli_input
+        print "control callback" + time.time()
         pass
 
     def run(self):
+
         self.ctllog = open(os.getcwd() + "/../meas/ctl.log",'w')
         print(self.ctllog.name)
-#        rospy.Subscriber('samples', String, self.callback)
+        pub = rospy.Publisher('lli_input', String)
         rospy.init_node('control')
-        rospy.spin() # Keeps the node running untill stopped
+        r = rospy.Rate(0.5) # Hz
+        #rospy.spin() # Keeps the node running untill stopped
+        while not rospy.is_shutdown():
+            pub.publish("control signals should be sent here")
+            r.sleep()
         print("\nClosing log file")
         self.ctllog.close()
         print("Exiting")

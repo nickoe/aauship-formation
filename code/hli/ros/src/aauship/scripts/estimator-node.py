@@ -12,10 +12,9 @@ import os
 
 class Estimator(object):
     def callback(self, data):
-        rospy.loginfo(rospy.get_caller_id()+"I heard %s",data.data)
+        #rospy.loginfo(rospy.get_caller_id()+"I heard %s",data.data)
         for i, c in enumerate(data.data):
 #            if c == '$' and ord(data.data[i+3]) == 9:
-            print(i)
             if ord(data.data[i-3]) == '$' and ord(data.data[i]) == 9:
                 print 'Data is', ord(data.data[i+2])
                 print 'BUILD INFO\n', data.data[i+4:]
