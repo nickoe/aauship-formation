@@ -1,10 +1,9 @@
 \chapter{\acs{ROS} design}
 \head{This chapter describes the details of the implementation level,
 which is done on a \acl{ROS} platform. This should provide all the
-information, needed to complete the implementation.}
+information needed to complete the implementation.}
 
-It was decided to try to use \ac{ROS} in the implementation, in the
-hope to make the authors familiar with this platform, and use this as
+It was decided to use \ac{ROS} in the implementation, It is used as
 an other abstraction layer on top of the \ac{LLI}. In turn making
 AAUSHIP more modular and make it easy for others to write parts of the
 control system without reimplementing everything. \todo{Det kunne være
@@ -28,8 +27,8 @@ licensed under an open source, BSD license.}
 
 \section{\acs{ROS} terminology}
 To start working with \ac{ROS} it is important to use the terminology
-used by \ac{ROS} and therefore these  will be stated in this section.
-The idea of ros is to make it easy to build a system very modularly,
+used by \ac{ROS} to avoid confusion. Therefore these  will be stated in this section.
+The idea of \ac{ROS} is to make it easy to build a system modularly,
 and this is achieved byt using almost ``self-contained'' blocks called
 \textit{nodes}, which is application parts that is run as its own
 process. A node should be designed to execute limited tasks such as
@@ -37,8 +36,8 @@ image processing or similar atomic processes. These nodes can then
 communicate with other nodes by the means of two main communication
 forms called \textit{topics} and \textit{services}.
 
-The topic is an asynchronous connection, that can ``publish'' from many
-nodes and be ``subscribed'' by many nodes.
+The topic is an asynchronous connection, that can \textit{publish} from many
+nodes and be \textit{subscribed} by many nodes.
 
 The service is a synchronous connection that is used between one node
 to another node.
@@ -46,3 +45,6 @@ to another node.
 \todo{Forklar noget om node håndtering, og master og storken og
 	blomsterne og bierne, og illustrationer er godt for den som lærer
 ved at se det.}
+
+\todo{Explaing tocic and service models better, keyowrd is unicast,
+multicast, asynchronous and synchronous}
