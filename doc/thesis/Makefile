@@ -17,7 +17,8 @@ fig/cornoring.svg \
 fig/form_avoid.svg \
 fig/form_change_90.svg \
 fig/form_rigid_90.svg \
-fig/form_avoid_right.svg
+fig/form_avoid_right.svg \
+fig/lead_follow.svg
 
 # Alle EPS-filer (PS-illustrationer angivet i linien nedenunder)
 #FIGS_EPS= \
