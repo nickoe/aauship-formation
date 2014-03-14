@@ -28,6 +28,10 @@ class LLI(object):
         print "Requesting buildinfo " + str(time.time())
         #nobw = self.ser.write(struct.pack('>bbbbbb', 0x24,0x00,0x00,0x09,0x13,0x37))
         #print "Wrote" + str(nobw) + "bytes"
+        jeppe = self.packet.constructPacket([],0,9)
+        print "JEPPE===============================\r\n" + str(jeppe)
+        self.packet.sendPacket(jeppe)
+        
         rospy.loginfo(data.data)
         pass
 
@@ -36,7 +40,7 @@ class LLI(object):
         self.qu = Queue.Queue()
         self.packet = fapsPacket.packetHandler('/dev/lli', 57600, 0.02, self.qu)
 
-        #self.parser = fapsParse.packetParser
+        self.parser = fapsParse.packetParser
 
 
         time.sleep(5)
@@ -52,7 +56,6 @@ class LLI(object):
           ##  self.packet
 
             try:
-                print "fem"
                 data = self.qu.get(False)
                 print data
                 #pub.publish(str(data))
