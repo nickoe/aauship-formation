@@ -22,6 +22,8 @@ int8_t parse(msg_t *msg, char s[])
 	crc = crc16_ccitt_calc(msg, msg->len+3);
 	if ( ((msg->ckh << 8) & 0xff00 | msg->ckl) == 0x1337 ) {	
 		return 1;
+	} else if ( ((msg->ckh << 8) & 0xff00 | msg->ckl) == crc ) {
+		return 1;
 	} else {
 		return 0;
 	}

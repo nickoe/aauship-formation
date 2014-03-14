@@ -26,7 +26,8 @@ kalqueue = Queue.Queue()
 to = 0.1665
 #receiver = packetHandler.packetHandler("/dev/tty.SLAB_USBtoUART",38400,0.02,qu,inclog)
 # Using the udev rules file 42-aauship.rules 
-receiver = packetHandler.packetHandler("/dev/lli",115200,0.02,qu,inclog) # This runs its own thread
+#receiver = packetHandler.packetHandler("/dev/lli",115200,0.02,qu,inclog) # This runs its own thread
+receiver = packetHandler.packetHandler("/dev/lli",57600,0.02,qu,inclog) # This runs its own thread
 #echorcv = serial.Serial("/dev/echosounder",4800,timeout=0.04)
 #gps2rcv = serial.Serial("/dev/gps2",115200,timeout=0.04)
 
