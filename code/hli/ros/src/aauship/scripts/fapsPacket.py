@@ -234,7 +234,7 @@ class packetHandler(threading.Thread):
 
 
 
-    def constructPacket(self,data,DevID,MsgID):
+    def package(self,data,DevID,MsgID):
         try:
             length = len(data)    #If the data is a string, get the length of the string
             dat = data    #if the data is a string, the data needs no formatting
@@ -258,38 +258,18 @@ class packetHandler(threading.Thread):
     ## The funciton to send the packet
     #
     #  This sends the assembled packet on the serial connection
-    def sendPacket(self,packet):
-        #Checksum = self.generateCheckSum(packet)
+    def lli_send(self,packet):
         Checksum = self.CheckSum(packet)    #First, the checksum of the packet is generated
         packet.append(Checksum[0])    #The checksum is appropriately appended
         packet.append(Checksum[1])
 
-        '''
-        #print "Packet to send: [",
-        #print hex(ord('$')) + " ,",
-        try:
-            for i in packet:
-                try:
-                    print hex(i),
-                except:
-                    try:
-                        print hex(ord(i)),
-                    except:
-                        print i    
-                #print ",",            
-            #print "]"
-        except:
-            pass
-        '''
         self.connection.write(chr(STARTCHAR)) #The startChar is written
         print "i-1=" + hex(STARTCHAR)
         for i in range(len(packet)):    #The byte are then written individually
-
             try:
                 self.connection.write(chr(packet[i]))
                 print "i=" + str(i) + " " + hex(packet[i])
             except:
                 self.connection.write(packet[i])
                 print "i=" + str(i) + " " + hex(ord(packet[i]))
-        #print "Succesfully sent packet"
     
