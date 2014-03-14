@@ -45,7 +45,7 @@ The port of Aalborg would like Aalborg University to help them to expand their o
 
 Another aspect from the port of Aalborg is a task to escort larger ships with cargo into the port of Aalborg. This is done by a pilot whom needs to sail out to incoming larger cargo ships and escort them safely into port. The pilot does this in a pilot boat which is controlled manually by the pilot. The port of Aalborg would like this process to become autonomous such that an autonomous boat can sail to the cargo ship and to some extend take over the control and guide the cargo ship into port. The system to do this implies that the port of Aalborg needs an autonomous ship which can perform this task.
 
-The mapping itself can be done by one ship or by more. For the moment one of the ships from the port of Aalborg, which is manned, and covers the mapping of the entire Limfjord ($\approx$ 65 km). This is only done every third year, but mapping around Hals Barre (a sandbar \todo{slet efterfølgende kommentar igen engang}and not a beach bar) at the end of the Limfjord is a more critical place and is mapped every third month.
+The mapping itself can be done by one ship or by more. For the moment one of the ships from the port of Aalborg, which is manned, and covers the mapping of the closer part of the Limfjord ($\approx$ 65 km). This is only done every third year, but mapping around Hals Barre (a sandbar \todo{slet efterfølgende kommentar igen engang}and not a beach bar) at the end of the Limfjord is a more critical place and is mapped every third month.
 
 If the port of Aalborg had admitted an autonomous ship, which could sail out and do the mapping by itself, t ey would see to map the outer part of the Limfjord more often to be able to deliver more precise seabed mappings to incoming ships. Due to the autonomous system with boats would the port be able to take measurements more often of the complete fjord and therefore more favourable than only having measurements each third year. \cite{portofaalborg}.
 
@@ -170,13 +170,13 @@ If the leader diverges from the path, drifting to the left, this will result in 
 
 The formation needs to take into account if it is of benefit to change leader. If some kind of obstacle makes the formation turn about it, it might come to benefit to change the leader which needs to be done on the fly. This entails a change in the group coordination and the ships needs to set their relative position and heading from another ship.
 
-The configuration of the formation will be set up, as a start, with one leader and a single follower. The follower will be offset from the leader with a distance of five metres. This can be seen on figure~i\vref{fig:l_f1}.
+The configuration of the formation will be set up, as a start, with one leader and a single follower. The follower will be offset from the leader with a distance of five metres. This can be seen on figure~\vref{fig:l_f1}.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\textwidth]{fig/lead_follow1}
+	\includegraphics[width=0.4\textwidth]{fig/lead_follow1}
 	\caption{The leader with a follower offset by 5 metres radius.}
 	\label{fig:l_f1}
 \end{figure}
+This will be a rigid formation that the ships needs to keep at all times. The change of leader will eventually be taken into account when the ships needs to turn. If the formation needs to turn clockwise about it might be of benefit to change the leader. 
 
-
-udformning af selve formation, rigid vs flexibel, formation vs omraade.
+The location to test and implementation the AAUSHIPs will be in the Limfjord. The optimum will be to make the formation go across the Limfjord and back in lawnmower pattern and make measurements of the seabed. Due to the location where it is presumed to have enough space, the formation is not of bigger importance to the mapping. The only important thing to include regarding the formation is that the ships needs to be able to turn around without loosing so much velocity such that they start drifting and offset the formation.
