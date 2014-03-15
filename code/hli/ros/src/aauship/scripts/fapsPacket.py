@@ -10,17 +10,14 @@ import struct
 running = True;
 STARTCHAR = ord('$')
 
-# Class for managing the packets from the LLI
+# Class for managing the packets to and from the LLI
 class packetHandler(threading.Thread):
     
     def __init__(self,serialport,speed,time,queue):
-        self.connection = serial.Serial(serialport,speed,timeout=time)    #Serial Connection
-        #print self.connection
-        #print self.connection.inWaiting()
-        self.myNewdata = []                #Array for storing new packets
+        self.connection = serial.Serial(serialport,speed,timeout=time)
         self.q = queue                    #Queue to share data between threads
         self.errorcount = 0
-        self.table = [
+        self.table = [ #CRC16 lookup table
             0x0000, 0x1189, 0x2312, 0x329B, 0x4624, 0x57AD, 0x6536, 0x74BF,
             0x8C48, 0x9DC1, 0xAF5A, 0xBED3, 0xCA6C, 0xDBE5, 0xE97E, 0xF8F7,
             0x1081, 0x0108, 0x3393, 0x221A, 0x56A5, 0x472C, 0x75B7, 0x643E,
@@ -52,7 +49,7 @@ class packetHandler(threading.Thread):
             0xE70E, 0xF687, 0xC41C, 0xD595, 0xA12A, 0xB0A3, 0x8238, 0x93B1,
             0x6B46, 0x7ACF, 0x4854, 0x59DD, 0x2D62, 0x3CEB, 0x0E70, 0x1FF9,
             0xF78F, 0xE606, 0xD49D, 0xC514, 0xB1AB, 0xA022, 0x92B9, 0x8330,
-            0x7BC7, 0x6A4E, 0x58D5, 0x495C, 0x3DE3, 0x2C6A, 0x1EF1, 0x0F78]                #CRC16 lookup table
+            0x7BC7, 0x6A4E, 0x58D5, 0x495C, 0x3DE3, 0x2C6A, 0x1EF1, 0x0F78]
         threading.Thread.__init__(self) #Initialize Thread
         
     def run(self):
@@ -120,17 +117,6 @@ class packetHandler(threading.Thread):
     def isOpen(self):
         return self.connection.isOpen()
     
-    def newdata(self):
-        try:
-            return len(self.myNewdata)
-        except:
-            return 0    
-            
-    def getdata(self):
-        try:
-            return self.newdata.pop(0)
-        except:
-            return 0
  
         
     def packetCheck(self,packet):
@@ -233,37 +219,36 @@ class packetHandler(threading.Thread):
 
 
 
-
+    ## Arrange data into a packet array, withour the startchar and checksum
     def package(self,data,DevID,MsgID):
         try:
-            length = len(data)    #If the data is a string, get the length of the string
-            dat = data    #if the data is a string, the data needs no formatting
-        except TypeError:    #The above will give a typeError if its a number
-            length = 0    #Init length
+            length = len(data) #If the data is a string, get the length of the string
+            dat = data         #If the data is a string, the data needs no formatting
+        except TypeError:      #The above will give a typeError if its a number
+            length = 0         #Initial length
             num = []
             dat = []
-            while (data >> 8*length) > 0: #Divide data into bytes
+            while (data >> 8*length) > 0:              #Divide data into bytes
                 num.append((data >> (8*length)) & 255) #Append bytewise
-                length = length+1    #increment length of data
-            #num = reversed(num)
-            for i in reversed(num):    #append the data to the dat array in reverse, due to endianness
+                length = length+1                      #Increment length of data
+            for i in reversed(num): #Append the data to the dat array in reverse, due to endianness
                 dat.append(i)
         
         packet = [length,DevID,MsgID] #The first part of the packet contains the length, the DevID and the MsgID
         
         for i in range(length):
-            packet.append(dat[i]) #The data is then appended.
+            packet.append(dat[i]) #The data is then appended
         return packet
 
     ## The funciton to send the packet
     #
     #  This sends the assembled packet on the serial connection
     def lli_send(self,packet):
-        Checksum = self.CheckSum(packet)    #First, the checksum of the packet is generated
-        packet.append(Checksum[0])    #The checksum is appropriately appended
+        Checksum = self.CheckSum(packet) #First, the checksum of the packet is generated
+        packet.append(Checksum[0])       #The checksum is appropriately appended
         packet.append(Checksum[1])
 
-        self.connection.write(chr(STARTCHAR)) #The startChar is written
+        self.connection.write(chr(STARTCHAR)) #The '$' is written
         print "i-1=" + hex(STARTCHAR)
         for i in range(len(packet)):    #The byte are then written individually
             try:

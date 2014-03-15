@@ -26,35 +26,26 @@ class LLI(object):
         pass
 
     def run(self):
-        #self.ser = serial.Serial('/dev/lli', 57600, timeout = 0.02)
         self.qu = Queue.Queue()
         self.packet = fapsPacket.packetHandler('/dev/lli', 57600, 0.02, self.qu)
 
-        self.parser = fapsParse.packetParser
-
+        #self.parser = fapsParse.packetParser
 
         time.sleep(5)
         self.packet.start()
         pub = rospy.Publisher('samples', String)
         sub = rospy.Subscriber('lli_input', String, self.callback)
         rospy.init_node('lli')
-        r = rospy.Rate(100) # Hz
+        r = rospy.Rate(100) # Rate in Hz
 
         while not rospy.is_shutdown():
-            #data = self.ser.readline()
-            #self.parser.parse(data)
-          ##  self.packet
-
             try:
                 data = self.qu.get(False)
                 #pub.publish(str(data))
             except Queue.Empty:
                 pass
-
-    #        rospy.loginfo(data)
             r.sleep()
 
-        #self.ser.close()
         self.packet.close()
         self.packet.join()
         
