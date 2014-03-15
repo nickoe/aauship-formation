@@ -249,12 +249,9 @@ class packetHandler(threading.Thread):
         packet.append(Checksum[1])
 
         self.connection.write(chr(STARTCHAR)) #The '$' is written
-        print "i-1=" + hex(STARTCHAR)
         for i in range(len(packet)):    #The byte are then written individually
             try:
                 self.connection.write(chr(packet[i]))
-                print "i=" + str(i) + " " + hex(packet[i])
             except:
                 self.connection.write(packet[i])
-                print "i=" + str(i) + " " + hex(ord(packet[i]))
     
