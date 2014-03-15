@@ -56,7 +56,7 @@ class packetHandler(threading.Thread):
         print "running thread"
         #print self.connection.isOpen() 
         while self.connection.isOpen():    
-            print "Reading ", time.time()
+            #print "Reading ", time.time()
             try:
                 checkchar = self.connection.read(1)
                 #print "successfull Read!"
@@ -68,8 +68,7 @@ class packetHandler(threading.Thread):
                     #print res
                     if(res[0]):    #If the packet is valid, prepare the packet and put it in the queue
                         print "Valid packet"
-                        print res
-                        
+                        #print res
                         packetforqueue = self.preparePacket(res[1])
                         self.q.put(packetforqueue)
                     else:
@@ -211,6 +210,16 @@ class packetHandler(threading.Thread):
                 return [False,packet]
                 pass
 
+    def preparePacket(self,packet):
+        length = packet[0]
+        DevID = packet[1]
+        MsgID = packet[2]
+        Data = []
+        for i in range(ord(length)):
+            Data.append(packet[3+i])
+        newpacket = {'DevID':DevID, 'MsgID': MsgID,'Data': Data, 'Time': time.time()}
+        #print newpacket
+        return newpacket
 
 
 
@@ -218,8 +227,7 @@ class packetHandler(threading.Thread):
 
 
 
-
-    ## Arrange data into a packet array, withour the startchar and checksum
+    ## Arrange data into a packet array, without the startchar and checksum
     def package(self,data,DevID,MsgID):
         try:
             length = len(data) #If the data is a string, get the length of the string

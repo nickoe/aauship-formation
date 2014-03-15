@@ -29,7 +29,7 @@ class LLI(object):
         self.qu = Queue.Queue()
         self.packet = fapsPacket.packetHandler('/dev/lli', 57600, 0.02, self.qu)
 
-        #self.parser = fapsParse.packetParser
+        self.parser = fapsParse.packetParser
 
         time.sleep(5)
         self.packet.start()
@@ -41,7 +41,10 @@ class LLI(object):
         while not rospy.is_shutdown():
             try:
                 data = self.qu.get(False)
-                #pub.publish(str(data))
+                #print data['Data']
+                if ord(data['DevID']) == 0:
+                    print ''.join(data['Data'])
+                    pub.publish(''.join(data['Data']))
             except Queue.Empty:
                 pass
             r.sleep()
