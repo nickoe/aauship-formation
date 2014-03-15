@@ -15,7 +15,7 @@ class packetHandler(threading.Thread):
     
     def __init__(self,serialport,speed,time,queue):
         self.connection = serial.Serial(serialport,speed,timeout=time)
-        self.q = queue                    #Queue to share data between threads
+        self.q = queue #Queue to share data between threads
         self.errorcount = 0
         self.table = [ #CRC16 lookup table
             0x0000, 0x1189, 0x2312, 0x329B, 0x4624, 0x57AD, 0x6536, 0x74BF,
@@ -69,7 +69,7 @@ class packetHandler(threading.Thread):
                     if(res[0]):    #If the packet is valid, prepare the packet and put it in the queue
                         print "Valid packet"
                         #print res
-                        packetforqueue = self.preparePacket(res[1])
+                        packetforqueue = self.unpackage(res[1])
                         self.q.put(packetforqueue)
                     else:
                         print '\033[1m' # White terminal color
@@ -92,7 +92,8 @@ class packetHandler(threading.Thread):
         
     def CheckSum(self,packet):
         crc = 0xFFFF
-        #print packet
+
+        ## I am not quite sure what thsi try except is usefulle for, sould probably be removed
         try:
             if ord(packet[0]) != 12:
                 pass
@@ -100,14 +101,14 @@ class packetHandler(threading.Thread):
         except:
             #print str(packet)
             pass
-        #print ord(packet[0])
+
         for i in packet:
             try:
                 value = (crc ^ i) & 0xFF        #If the value of 'i' is an int
             except:
-                value = (crc ^ ord(i)) & 0xFF    #if the value of 'i' is a chr
+                value = (crc ^ ord(i)) & 0xFF   #If the value of 'i' is a chr
             crc = (crc >> 8) ^self.table[value]    
-        result = [chr((crc>>8)&0xFF),chr(crc&0xFF)]         #Format checksum correctly
+        result = [chr((crc>>8)&0xFF),chr(crc&0xFF)] #Format checksum correctly
         return result
         
    
@@ -209,8 +210,17 @@ class packetHandler(threading.Thread):
             except:
                 return [False,packet]
                 pass
+    
 
-    def preparePacket(self,packet):
+
+
+
+
+
+
+
+    ## Arrange recieved data into a packet dict
+    def unpackage(self,packet):
         length = packet[0]
         DevID = packet[1]
         MsgID = packet[2]
@@ -218,14 +228,7 @@ class packetHandler(threading.Thread):
         for i in range(ord(length)):
             Data.append(packet[3+i])
         newpacket = {'DevID':DevID, 'MsgID': MsgID,'Data': Data, 'Time': time.time()}
-        #print newpacket
         return newpacket
-
-
-
-
-
-
 
     ## Arrange data into a packet array, without the startchar and checksum
     def package(self,data,DevID,MsgID):
