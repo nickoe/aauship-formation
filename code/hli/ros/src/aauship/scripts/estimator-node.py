@@ -6,6 +6,7 @@ import roslib; roslib.load_manifest('aauship')
 
 import rospy
 from std_msgs.msg import String
+from aauship.msg import *
 
 import time
 import os 
@@ -31,7 +32,8 @@ class Estimator(object):
         self.stat = 0
         self.imulog = open(os.getcwd() + "/../meas/imu.log",'w')
         print(self.imulog.name)
-        rospy.Subscriber('samples', String, self.callback)
+        rospy.Subscriber('samples', Faps, self.callback)
+#        rospy.Subscriber('samples', String, self.callback)
         rospy.init_node('estimator')
         rospy.spin() # Keeps the node running untill stopped
         print("\nClosing log file")

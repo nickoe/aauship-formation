@@ -6,6 +6,7 @@ import roslib; roslib.load_manifest('aauship')
 
 import rospy
 from std_msgs.msg import String
+from aauship.msg import *
 
 import serial
 import struct
@@ -29,11 +30,12 @@ class LLI(object):
         self.qu = Queue.Queue()
         self.packet = fapsPacket.packetHandler('/dev/lli', 57600, 0.02, self.qu)
 
-        self.parser = fapsParse.packetParser
+#        self.parser = fapsParse.packetParser
 
         time.sleep(5)
         self.packet.start()
-        pub = rospy.Publisher('samples', String)
+        pub = rospy.Publisher('samples', Faps)
+#        pub = rospy.Publisher('samples', String)
         sub = rospy.Subscriber('lli_input', String, self.callback)
         rospy.init_node('lli')
         r = rospy.Rate(100) # Rate in Hz
@@ -41,10 +43,12 @@ class LLI(object):
         while not rospy.is_shutdown():
             try:
                 data = self.qu.get(False)
-                #print data['Data']
-                if ord(data['DevID']) == 0:
-                    print ''.join(data['Data'])
-                    pub.publish(''.join(data['Data']))
+                print data
+#                self.parser.parse(data)
+#                if ord(data['DevID']) == 0:
+#                    print ''.join(data['Data'])
+#                    pub.publish(''.join(data['Data']))
+#                pub.publish(''.join(data))
             except Queue.Empty:
                 pass
             r.sleep()
