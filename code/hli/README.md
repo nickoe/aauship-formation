@@ -26,3 +26,8 @@ the LLI and that it works.
 
 `gpsfunctions.py`
 
+In the `ros` dir
+----------------
+This is the ROS.org system than runs on the ships.
+
+Install pynmea with pip install pynmea
