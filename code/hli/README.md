@@ -30,4 +30,12 @@ In the `ros` dir
 ----------------
 This is the ROS.org system than runs on the ships.
 
-Install pynmea with pip install pynmea
+# ROS setup
+Remember to add the soruces to your shell i.e.
+
+    source /opt/ros/hydro/setup.bash                                                
+    source ~/aauship-formation/code/hli/ros/devel/setup.bash 
+
+Install pynmea with `pip install pynmea`
+
+
