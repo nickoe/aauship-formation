@@ -15,6 +15,7 @@ import time
 import Queue
 import fapsParse  # fork of packetparser
 import fapsPacket # fork of packetHandler
+import numpy as np
 
 class LLI(object):
     def callback(self, data):
@@ -43,7 +44,13 @@ class LLI(object):
         while not rospy.is_shutdown():
             try:
                 data = self.qu.get(False)
-                print data
+                print "RAW:" + str((data['DevID']))
+                try:
+                    pub.publish(ord(data['DevID']),ord(data['MsgID']),''.join(data['Data']))
+                except:
+                    print "expected RAW" + str(type(data['DevID']))
+                    print "publishing failed miserably or something"
+                #pub.publish(np.uint8(data['DevID']),np.uint8(data['MsgID']),''.join(data['Data']))
 #                self.parser.parse(data)
 #                if ord(data['DevID']) == 0:
 #                    print ''.join(data['Data'])

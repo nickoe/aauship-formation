@@ -75,9 +75,10 @@ class packetHandler(threading.Thread):
                         print '\033[1m' # White terminal color
                         print res
                         print '\033[0m' # Reset terminal color
-                elif checkchar == '':
-                    endpacket = {'DevID': chr(255) , 'MsgID': 0,'Data': 0, 'Time': time.time()}
-                    self.q.put(endpacket)
+            #    elif checkchar == '':
+            #        What is the purpose of this? Uncommented for now.
+            #        endpacket = {'DevID': chr(255) , 'MsgID': 0,'Data': 0, 'Time': time.time()}
+            #        self.q.put(endpacket)
             except KeyboardInterrupt:
                 self.connection.close()
             except Exception as inst:
