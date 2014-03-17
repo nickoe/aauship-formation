@@ -45,17 +45,7 @@ class LLI(object):
             try:
                 data = self.qu.get(False)
                 print "RAW:" + str((data['DevID']))
-                try:
-                    pub.publish(ord(data['DevID']),ord(data['MsgID']),''.join(data['Data']))
-                except:
-                    print "expected RAW" + str(type(data['DevID']))
-                    print "publishing failed miserably or something"
-                #pub.publish(np.uint8(data['DevID']),np.uint8(data['MsgID']),''.join(data['Data']))
-#                self.parser.parse(data)
-#                if ord(data['DevID']) == 0:
-#                    print ''.join(data['Data'])
-#                    pub.publish(''.join(data['Data']))
-#                pub.publish(''.join(data))
+                pub.publish(ord(data['DevID']),ord(data['MsgID']),''.join(data['Data']))
             except Queue.Empty:
                 pass
             r.sleep()
