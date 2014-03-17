@@ -201,8 +201,8 @@ class packetParser():
                     measurements.append(tmeasurements[7])
                     measurements.append(tmeasurements[8])
                     measurements.append(tmeasurements[11])
-                    print measurements
-                    print "skumbanan"
+                    #print measurements
+                    #print "skumbanan"
                     self.accellog.write(str(time.time()) + "\r\n")
                     self.fulllog.write(str(time.time()) + "\r\n")
                     if abs(measurements[5]) < 10: #Check that the grounded ADC doesn't return a high value

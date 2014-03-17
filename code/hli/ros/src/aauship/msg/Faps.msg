@@ -2,3 +2,4 @@
 string DevID
 string MsgID
 string[] Data
+float64 Time

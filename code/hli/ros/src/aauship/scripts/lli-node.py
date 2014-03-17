@@ -28,7 +28,8 @@ class LLI(object):
 
     def run(self):
         self.qu = Queue.Queue()
-        self.packet = fapsPacket.packetHandler('/dev/lli', 57600, 0.02, self.qu)
+        self.packet = fapsPacket.Handler('/dev/lli', 57600, 0.02, self.qu)
+        # GPS2 and Echo sounder should be opened here, or maybe implemented in the fapsPacket.Handler thread
         time.sleep(5)
         self.packet.start()
         pub = rospy.Publisher('samples', Faps)
@@ -39,7 +40,10 @@ class LLI(object):
         while not rospy.is_shutdown():
             try:
                 data = self.qu.get(False)
-                pub.publish((data['DevID']),(data['MsgID']),(data['Data']))
+                pub.publish(data['DevID'],
+                            data['MsgID'],
+                            data['Data'],
+                            rospy.get_time())
             except Queue.Empty:
                 pass
             r.sleep()

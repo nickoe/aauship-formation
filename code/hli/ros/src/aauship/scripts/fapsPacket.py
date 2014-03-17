@@ -3,15 +3,13 @@ import threading
 import time
 import datetime
 import Queue
-from math import pow
-#import crc16 as crc
 import struct
 
 running = True;
 STARTCHAR = ord('$')
 
 # Class for managing the packets to and from the LLI
-class packetHandler(threading.Thread):
+class Handler(threading.Thread):
     
     def __init__(self,serialport,speed,time,queue):
         self.connection = serial.Serial(serialport,speed,timeout=time)
@@ -53,8 +51,7 @@ class packetHandler(threading.Thread):
         threading.Thread.__init__(self) #Initialize Thread
         
     def run(self):
-        print "running thread"
-        #print self.connection.isOpen() 
+        print "Running Handler thread"
         while self.connection.isOpen():    
             #print "Reading ", time.time()
             try:
