@@ -11,7 +11,8 @@ import time
 #
 # This parses the packets to identify messages and decodes them for the logs
 class packetParser():
-    def __init__(self,accelfile,gpsfile,measstate,fulllog,plog):
+    #def __init__(self,accelfile,gpsfile,measstate,fulllog,plog):
+    def __init__(self,accelfile,gpsfile,fulllog,plog):
         self.GPS = {0: 'Latitude',
                     1: 'Longtitude',
                     2: 'Velocity'}
@@ -36,7 +37,7 @@ class packetParser():
         self.excount = 0
         #self.accelburst = 0
         self.gpspacket = 0
-        self.measureddata = measstate
+#        self.measureddata = measstate
         self.n_rec = 0
         
         self.gpsdata = [0,0,0,0,0,0,0,0]
@@ -61,6 +62,7 @@ class packetParser():
     def parse(self,packet):
         #print packet
         try:
+
             if(ord(packet['DevID']) == 20): # IMU data
                 if(ord(packet['MsgID']) == 14):
                     #self.accelburst = self.accelburst + 1
@@ -133,9 +135,9 @@ class packetParser():
                             self.state[6] = [heading,    1]
                             self.state[7] = [gyroz,        1]
                             #print self.state
-                            for i in range(numpy.size(self.state,0)):
-                                for j in range(numpy.size(self.state,1)):
-                                    self.measureddata[i,j] = self.state[i,j]
+    #                        for i in range(numpy.size(self.state,0)):
+    #                            for j in range(numpy.size(self.state,1)):
+    #                                self.measureddata[i,j] = self.state[i,j]
                             #measstate = self.state
                             
                             #print chr(27) + "[2J"
@@ -200,6 +202,7 @@ class packetParser():
                     measurements.append(tmeasurements[8])
                     measurements.append(tmeasurements[11])
                     print measurements
+                    print "skumbanan"
                     self.accellog.write(str(time.time()) + "\r\n")
                     self.fulllog.write(str(time.time()) + "\r\n")
                     if abs(measurements[5]) < 10: #Check that the grounded ADC doesn't return a high value
@@ -232,9 +235,9 @@ class packetParser():
                         self.state[6] = [heading,    1]
                         self.state[7] = [gyroz,        1]
                         #print self.state
-                        for i in range(numpy.size(self.state,0)):
-                            for j in range(numpy.size(self.state,1)):
-                                self.measureddata[i,j] = self.state[i,j]
+    #                    for i in range(numpy.size(self.state,0)):
+    #                        for j in range(numpy.size(self.state,1)):
+    #                            self.measureddata[i,j] = self.state[i,j]
                         #measstate = self.state
                         
                         #print chr(27) + "[2J"
@@ -321,5 +324,5 @@ class packetParser():
         except Exception as e:
             self.excount += 1
             print " "+ str(self.excount)
-            print e,
+            print e
 
