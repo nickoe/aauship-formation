@@ -137,8 +137,6 @@ class Handler(threading.Thread):
     #
     #  This funciton is odd and peculiar in general
     def parser(self,array):
-        #print 'input: ' + repr(array)
-        success = False  #unused?
         packet = []
         length = 1
 
@@ -148,7 +146,6 @@ class Handler(threading.Thread):
                 packet.append(array[j])
         except:
             packet.append(array)
-            extrabits = 4 #unused?
 
         for i in range((ord(packet[0])-length+5)):
             tempc = self.connection.read(1)
@@ -159,24 +156,15 @@ class Handler(threading.Thread):
                 if deltaerr > 10:
                     break
                 deltaerr += 1
-                #print ""
-                #print "Read empty - tried again1: \t" + tempc
-                #print "Number of errors: " + str(self.errorcount)
-                #print ""
-            packet.append(tempc)
-            #print packet
-        check = self.verifyPacket(packet)
 
-        if ord(packet[0]) != 12: 
-            pass
-            #print str(ord(packet[0])) + "\t",
-            #print str(check) + " \t " + str(packet)
+            packet.append(tempc)
+
+        check = self.verifyPacket(packet)
 
         if(check):
             # We make sure that we have the valid/invlaid flag on the packet
             return [True, packet]
-        else: # I am not sure what the purpose of this else block is.
-        #    print "False: " + str(packet)
+        else: # I am not sure what the purpose of this else block with the try section is
             try:
                 index = packet.index(0x24)
                 if index == len(packet)-1:
@@ -188,25 +176,14 @@ class Handler(threading.Thread):
                         if deltaerr > 10:
                             break
                         deltaerr += 1
-                        
-                        
-                #        print ""
-                    #    print "Read empty - tried again2: \t" + tempc
-            #            print "Number of errors: " + str(self.errorcount)
-        #                print ""
+
                     packet.append(tempc)
+
                 del packet[0:index+1]
                 return self.parser(packet)
             except:
                 return [False,packet]
                 pass
-    
-
-
-
-
-
-
 
 
     ## Arrange recieved data into a packet dict
