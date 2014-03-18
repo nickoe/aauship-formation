@@ -41,6 +41,7 @@ log.txt
 test/
 code/**/doc
 *.pyc
+*.bag
 
 # Media files
 *.avi
