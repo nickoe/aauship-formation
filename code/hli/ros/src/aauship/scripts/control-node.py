@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-# This is the contorl node
-
 import roslib; roslib.load_manifest('aauship')
 
 import rospy
@@ -10,6 +8,7 @@ from std_msgs.msg import String
 import time
 import os 
 
+## This is the control node
 class Control(object):
     def callback(self, data):
         # send data to lli_input topic
@@ -20,8 +19,8 @@ class Control(object):
         pass
 
     def run(self):
-
-        self.ctllog = open(os.getcwd() + "/../meas/ctl.log",'w')
+        #self.ctllog = open(os.getcwd() + "/../meas/ctl.log",'w')
+        self.ctllog = open("logs/ctl.log",'w')
         print(self.ctllog.name)
         pub = rospy.Publisher('lli_input', String)
         rospy.init_node('control')

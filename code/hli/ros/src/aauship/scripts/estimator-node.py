@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-# This is the esitimator and sensor node
-
 import roslib; roslib.load_manifest('aauship')
 
 import rospy
@@ -13,6 +11,7 @@ import os
 
 import fapsParse
 
+## This is the esitimator and sensor node
 class Estimator(object):
     def callback(self, data):
         #rospy.loginfo(rospy.get_caller_id()+" I heard %s",data.Data)
@@ -32,7 +31,7 @@ class Estimator(object):
         self.imulog   = open("logs/imu.log",'w')   # was acclog
         self.mixedlog = open("logs/mixed.log",'w') # was recieved
         self.gpslog   = open("logs/gps.log",'w')   # was gpslog
-        self.ctllog   = open("logs/ctl.log",'w')   # was plog
+        self.plog     = open("logs/p.log",'w')     # was plog
         #self.echolog = open("meas/echolog.txt",'w')
         #self.gps2log = open("meas/gps2log.txt",'wb')
 
@@ -40,7 +39,7 @@ class Estimator(object):
                 self.imulog,
                 self.gpslog,
                 self.mixedlog,
-                self.ctllog)
+                self.plog)
 
         print(self.imulog.name)
         rospy.Subscriber('samples', Faps, self.callback)
@@ -50,7 +49,7 @@ class Estimator(object):
         self.imulog.close()
         self.mixedlog.close()
         self.gpslog.close()
-        self.ctllog.close()
+        self.plog.close()
         print("Exiting")
         exit()
 
