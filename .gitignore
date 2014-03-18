@@ -39,6 +39,7 @@ log.txt
 *.sym
 *_bak
 test/
+code/**/doc
 *.pyc
 
 # Media files
