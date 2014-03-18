@@ -12,21 +12,26 @@ import os
 import fapsParse
 
 ## This is the esitimator and sensor node
+#
+#  It takes the raw data published from the LLI node and interprets
+#  them with the fapsParse.packetParser.parser(). 
 class Estimator(object):
     def callback(self, data):
         #rospy.loginfo(rospy.get_caller_id()+" I heard %s",data.Data)
 
-        self.stat = self.stat + 1 # If this is 2, then it gets a callback before it has finished the last one
-        print self.stat
+        self.stat = self.stat + 1 # Used for callback debugging
+        if self.stat > 1:     
+            print "WARNING: This could be bad; Estimator gets a callback before it has finished the last one."
+            print "self.stat = " + str(self.stat)
 
         #print "Running parser"
         tmp = {'DevID':str(data.DevID), 'MsgID':str(data.MsgID),'Data': data.Data}
         self.parser.parse(tmp)
 
-        self.stat = 0
+        self.stat = 0 # Used for callback debugging
 
     def run(self):
-        self.stat = 0
+        self.stat = 0 # Used for callback debugging
 
         self.imulog   = open("logs/imu.log",'w')   # was acclog
         self.mixedlog = open("logs/mixed.log",'w') # was recieved
