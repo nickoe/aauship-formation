@@ -49,23 +49,19 @@ class Handler(threading.Thread):
             0xF78F, 0xE606, 0xD49D, 0xC514, 0xB1AB, 0xA022, 0x92B9, 0x8330,
             0x7BC7, 0x6A4E, 0x58D5, 0x495C, 0x3DE3, 0x2C6A, 0x1EF1, 0x0F78]
         threading.Thread.__init__(self) #Initialize Thread
-        
+    
+
+    ## run() method for fapsParse.Handler
     def run(self):
         print "Running Handler thread"
         while self.connection.isOpen():    
-            #print "Reading ", time.time()
             try:
-                checkchar = self.connection.read(1)
-                #print "successfull Read!"
-                #print checkchar    
+                checkchar = self.connection.read(1)#Try will not fail if we could read something
                 if checkchar == chr(STARTCHAR):    #Read char until start char is found
-                    #print "Checkchar is correct!"
-                    length=self.connection.read(1)    #The next char after start byte is the length
-                    res = self.parser(length)    #Input the length into the parser function
-                    #print res
-                    if(res[0]):    #If the packet is valid, prepare the packet and put it in the queue
-                        print "Valid packet"
-                        #print res
+                    length=self.connection.read(1) #The next char after start byte is the length
+                    res = self.parser(length)      #Input the length into the parser function to get packet
+                    if(res[0]):                    #If the packet is valid, prepare the packet and put it in the queue
+                        print "Valid packet", str(time.time())
                         packetforqueue = self.unpackage(res[1])
                         self.q.put(packetforqueue)
                     else:
@@ -79,19 +75,23 @@ class Handler(threading.Thread):
             except KeyboardInterrupt:
                 self.connection.close()
             except Exception as inst:
-            ##    print inst
+                print "Exception in fapsPacket.run():\t" + str(time.time()) + " " + str(inst)
                 pass
         running = False
         return
 
+
+    ## Method to close the serial connection
     def close(self):
         print "Error count:", str(self.errorcount)
-        self.connection.close()    #Close connection
+        self.connection.close()
         
-    def CheckSum(self,packet):
+
+    ## Generate CRC16 CCITT two byte checksum
+    def crc16_ccitt_calc(self,packet):
         crc = 0xFFFF
 
-        ## I am not quite sure what thsi try except is usefulle for, sould probably be removed
+        ## I am not quite sure what thsi try except is usefulls for, sould probably be removed
         try:
             if ord(packet[0]) != 12:
                 pass
@@ -108,46 +108,39 @@ class Handler(threading.Thread):
             crc = (crc >> 8) ^self.table[value]    
         result = [chr((crc>>8)&0xFF),chr(crc&0xFF)] #Format checksum correctly
         return result
-        
-   
- 
-        
+
+
+    ## Method to see if the serial connection is open
     def isOpen(self):
         return self.connection.isOpen()
     
  
-        
-    def packetCheck(self,packet):
+    ## Verifies weather a packet is valid or not
+    def verifyPacket(self,packet):
         p = packet[:] #Copy packet to p
 
-        incCheck=[p.pop(),p.pop()] #remove the two checksum bytes
+        incCheck=[p.pop(),p.pop()] #Remove the two checksum bytes
         incCheck.reverse()
-        check = self.CheckSum(p) #get the checksum of the bit.
-    #    print "check: " + str(check)
-    #    print "incCheck: " + str(incCheck)
-        
-        #print type(incCheck[1])
-        #print ord(incCheck[0])
+        check = self.crc16_ccitt_calc(p)   #Get the checksum of the bit.
+
         if incCheck == check:
-            #print "Godkendt"
             return True
         else:
-            
-            #print "Errorlog written!"
-            #time.sleep(0.5)
+            print "WARNING: Errorlog written!"
             errorlog = open('errorlog.log', 'a')
-            #errorlog.write("[" + str(ord(incCheck[0])) + " " + str(ord(incCheck[1])) + "] - [" + str(ord(check[0])) + " " + str(ord(check[1])) + "]\n")
             errorlog.write("".join(packet) + "[" + str(ord(incCheck[0])) + " " + str(ord(incCheck[1])) + "] - [" + str(ord(check[0])) + " " + str(ord(check[1])) + "]\n")
             errorlog.close()
-            #print "written"
             return False
-        
-        
+
+
+    ## Method that parses the recieved data
+    #
+    #  This funciton is odd and peculiar in general
     def parser(self,array):
         #print 'input: ' + repr(array)
-        success = False
+        success = False  #unused?
         packet = []
-        length=1
+        length = 1
 
         try:
             length = len(array)
@@ -155,7 +148,7 @@ class Handler(threading.Thread):
                 packet.append(array[j])
         except:
             packet.append(array)
-            extrabits = 4
+            extrabits = 4 #unused?
 
         for i in range((ord(packet[0])-length+5)):
             tempc = self.connection.read(1)
@@ -172,18 +165,17 @@ class Handler(threading.Thread):
                 #print ""
             packet.append(tempc)
             #print packet
-        check = self.packetCheck(packet)
+        check = self.verifyPacket(packet)
 
-        if ord(packet[0]) != 12:
+        if ord(packet[0]) != 12: 
             pass
             #print str(ord(packet[0])) + "\t",
             #print str(check) + " \t " + str(packet)
 
         if(check):
-            #print "EEEEEEEENS!"
-            #    print "True: " + str(packet)
+            # We make sure that we have the valid/invlaid flag on the packet
             return [True, packet]
-        else:
+        else: # I am not sure what the purpose of this else block is.
         #    print "False: " + str(packet)
             try:
                 index = packet.index(0x24)
@@ -228,6 +220,7 @@ class Handler(threading.Thread):
         newpacket = {'DevID':DevID, 'MsgID': MsgID,'Data': Data, 'Time': time.time()}
         return newpacket
 
+
     ## Arrange data into a packet array, without the startchar and checksum
     def package(self,data,DevID,MsgID):
         try:
@@ -249,11 +242,12 @@ class Handler(threading.Thread):
             packet.append(dat[i]) #The data is then appended
         return packet
 
+
     ## The funciton to send the packet
     #
     #  This sends the assembled packet on the serial connection
     def lli_send(self,packet):
-        Checksum = self.CheckSum(packet) #First, the checksum of the packet is generated
+        Checksum = self.crc16_ccitt_calc(packet) #First, the checksum of the packet is generated
         packet.append(Checksum[0])       #The checksum is appropriately appended
         packet.append(Checksum[1])
 

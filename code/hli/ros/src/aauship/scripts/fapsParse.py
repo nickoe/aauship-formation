@@ -32,7 +32,6 @@ class packetParser():
         self.accellog = accelfile
         self.fulllog = fulllog
         self.plog = plog
-    #    self.accelwriter = csv.writer(self.accellog)
         self.prevtime = 0
         self.excount = 0
         #self.accelburst = 0
@@ -43,8 +42,7 @@ class packetParser():
         self.gpsdata = [0,0,0,0,0,0,0,0]
         #Time of fix, Latitude, Longitude, Speed over ground, Course Made Good True, Date of Fix, Magnetic Variation, local timestamp
         self.gpslog = gpsfile
-    #    self.writer = csv.writer(self.accellog)
-        #self.gpswriter = csv.writer(self.gpslog)
+
         #print "Stdsqewarted!"
         self.state = numpy.zeros((9,2))
         self.mergedata = False
@@ -297,7 +295,6 @@ class packetParser():
                         
                         
                         pos = self.rot * (gpsfunctions.wgs842ecef(float(latdec),float(londec))-gpsfunctions.wgs842ecef(float(self.centerlat),float(self.centerlon)))
-                        #print pos
                         #print pos
                         
                         
