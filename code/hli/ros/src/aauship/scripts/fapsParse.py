@@ -44,7 +44,7 @@ class packetParser():
         self.gpslog = gpsfile
 
         #print "Stdsqewarted!"
-        self.state = numpy.zeros((9,2))
+        self.state = numpy.zeros((12,2))
         self.mergedata = False
         
         self.centerlat = 57.02175678643284*pi/180
@@ -149,7 +149,8 @@ class packetParser():
                     #print "IMU BURST!"
                     pass
                 elif(ord(packet['MsgID']) == 13): # Burst read
-                    tmeasurements = []
+                    print "Burst read"
+                    tmeasurements = [] # What is tmeasurements?
                     measurements = []
                     for i in range(len(packet['Data'])):
                         if ((i & 1) == 1):
@@ -164,7 +165,7 @@ class packetParser():
                             self.fulllog.write(str(val[0]) + ", ")
                             tmeasurements.append(val[0])
                             #print val[0]
-                    #print measurements[5]
+                    print "tmeasurements:", tmeasurements
 
                     '''
                     [0] Supply
@@ -232,7 +233,21 @@ class packetParser():
                         self.state[5] = [accy,        1]
                         self.state[6] = [heading,    1]
                         self.state[7] = [gyroz,        1]
-                        #print self.state
+
+                        self.state[0] = [tmeasurements[0], 1] #supply
+                        self.state[1] = [tmeasurements[1], 1] #xacc
+                        self.state[2] = [tmeasurements[2], 1] #yacc
+                        self.state[3] = [tmeasurements[3], 1] #zacc
+                        self.state[4] = [tmeasurements[4], 1] #xgyro
+                        self.state[5] = [tmeasurements[5], 1] #ygyro
+                        self.state[6] = [tmeasurements[6], 1] #zgyro
+                        self.state[7] = [tmeasurements[7], 1] #xmag
+                        self.state[8] = [tmeasurements[8], 1] #ymag
+                        self.state[9] = [tmeasurements[9], 1] #zmag
+                        self.state[10] = [tmeasurements[10], 1] #temp
+                        self.state[11] = [tmeasurements[11], 1] #adc
+
+                        print "self.state:", self.state
                         for i in range(numpy.size(self.state,0)):
                             for j in range(numpy.size(self.state,1)):
                                 self.measureddata[i,j] = self.state[i,j]
@@ -240,7 +255,7 @@ class packetParser():
                         
                         #print chr(27) + "[2J"
                         #print self.measureddata
-                        self.state = numpy.zeros((9,2))
+                        self.state = numpy.zeros((12,2))
                             
                 elif(ord(packet['MsgID']) == 15): # Reduced ADIS data, RF test
                     self.n_rec += 1

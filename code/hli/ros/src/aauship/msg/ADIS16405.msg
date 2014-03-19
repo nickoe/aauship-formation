@@ -1,13 +1,13 @@
-# Format for the ADIS16405 IMU from the LLI decoded data
-float64 supply
-float64 xgyro
-float64 ygyro
-float64 zgyro
-float64 xaccl
-float64 yaccl
-float64 zaccl
-float64 xmagn
-float64 ymagn
-float64 zmagn
-float64 temp
-float64 adc
+# Format for the ADIS13205 IMU from the LLI decoded data
+float32 supply
+float32 xgyro
+float32 ygyro
+float32 zgyro
+float32 xaccl
+float32 yaccl
+float32 zaccl
+float32 xmagn
+float32 ymagn
+float32 zmagn
+float32 temp
+float32 adc
