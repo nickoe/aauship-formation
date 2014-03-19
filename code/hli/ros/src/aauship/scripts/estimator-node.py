@@ -12,6 +12,7 @@ import os
 
 import fapsParse
 import numpy
+from math import atan2
 
 ## This is the esitimator and sensor node
 #
@@ -41,6 +42,7 @@ class Estimator(object):
                              numpy.asscalar(self.samples[9,0]),
                              numpy.asscalar(self.samples[10,0]),
                              numpy.asscalar(self.samples[11,0]))
+        print atan2(numpy.asscalar(self.samples[8,0]),numpy.asscalar(self.samples[7,0]))*180/3.14158+180
 
         self.stat = 0 # Used for callback debugging
 

@@ -43,7 +43,6 @@ class packetParser():
         #Time of fix, Latitude, Longitude, Speed over ground, Course Made Good True, Date of Fix, Magnetic Variation, local timestamp
         self.gpslog = gpsfile
 
-        #print "Stdsqewarted!"
         self.state = numpy.zeros((12,2))
         self.mergedata = False
         
@@ -150,7 +149,6 @@ class packetParser():
                     pass
                 elif(ord(packet['MsgID']) == 13): # Burst read
                     print "Burst read"
-                    tmeasurements = [] # What is tmeasurements?
                     measurements = []
                     for i in range(len(packet['Data'])):
                         if ((i & 1) == 1):
@@ -163,99 +161,30 @@ class packetParser():
                                 pass
                             self.accellog.write(str(val[0]) + ", ")
                             self.fulllog.write(str(val[0]) + ", ")
-                            tmeasurements.append(val[0])
-                            #print val[0]
-                    print "tmeasurements:", tmeasurements
+                            measurements.append(val[0])
 
-                    '''
-                    [0] Supply
-                    [1] X Gyro
-                    [2] Y Gyro
-                    [3] Z Gyro
-                    [4] X
-                    [5] Y
-                    [6] Z Acc
-                    [7] X
-                    [8] Y
-                    [9] Z Mag
-                    [10] Temp
-                    [11] ADC
-                    
-                    What we want:
-                    
-                    Zgyro
-                    X acc
-                    Y acc
-                    X Mag
-                    Y Mag
-                    ADC
-                    
-                    '''
-                    
-                    #print 
-                    #print "READY"
-                    measurements.append(tmeasurements[3])
-                    measurements.append(tmeasurements[4])
-                    measurements.append(tmeasurements[5])
-                    measurements.append(tmeasurements[7])
-                    measurements.append(tmeasurements[8])
-                    measurements.append(tmeasurements[11])
-                    #print measurements
-                    #print "skumbanan"
                     self.accellog.write(str(time.time()) + "\r\n")
                     self.fulllog.write(str(time.time()) + "\r\n")
-                    if abs(measurements[5]) < 10: #Check that the grounded ADC doesn't return a high value
-                        #Calculate heading from magnetometer:
-                        
-                        heading = 0
-                        if -measurements[3] > 0:
-                            heading = (90 - atan(float(-measurements[4])/float(-measurements[3]))*180/pi)*pi/180
-                        elif -measurements[3] < 0:
-                            heading = (270 - atan(float(-measurements[4])/float(-measurements[3]))*180/pi)*pi/180
-                        else:
-                            if -measurements[4] < 0:
-                                heading = pi
-                            else:
-                                heading = 0
-                                
-                        #heading = -(2*pi-heading-pi/2)
-                        heading = -heading
-                        #print chr(27) + "[2J"
-                        #print "[" + str(measurements[4]) + ", " + str(measurements[3]) + "]\t Theta: " + str(heading) + "\t Time:" + str(time.time())
-                        
-                        accx = -measurements[2] * self.accconst
-                        accy = -measurements[1] * self.accconst
-                        gyroz = measurements[0] * self.gyroconst
-                        
-                        
-                        
-                        self.state[2] = [accx,        1]
-                        self.state[5] = [accy,        1]
-                        self.state[6] = [heading,    1]
-                        self.state[7] = [gyroz,        1]
 
-                        self.state[0] = [tmeasurements[0], 1] #supply
-                        self.state[1] = [tmeasurements[1], 1] #xacc
-                        self.state[2] = [tmeasurements[2], 1] #yacc
-                        self.state[3] = [tmeasurements[3], 1] #zacc
-                        self.state[4] = [tmeasurements[4], 1] #xgyro
-                        self.state[5] = [tmeasurements[5], 1] #ygyro
-                        self.state[6] = [tmeasurements[6], 1] #zgyro
-                        self.state[7] = [tmeasurements[7], 1] #xmag
-                        self.state[8] = [tmeasurements[8], 1] #ymag
-                        self.state[9] = [tmeasurements[9], 1] #zmag
-                        self.state[10] = [tmeasurements[10], 1] #temp
-                        self.state[11] = [tmeasurements[11], 1] #adc
+                    self.state[0] = [measurements[0], 1] #supply
+                    self.state[1] = [measurements[1], 1] #xacc
+                    self.state[2] = [measurements[2], 1] #yacc
+                    self.state[3] = [measurements[3], 1] #zacc
+                    self.state[4] = [measurements[4], 1] #xgyro
+                    self.state[5] = [measurements[5], 1] #ygyro
+                    self.state[6] = [measurements[6], 1] #zgyro
+                    self.state[7] = [measurements[7], 1] #xmag
+                    self.state[8] = [measurements[8], 1] #ymag
+                    self.state[9] = [measurements[9], 1] #zmag
+                    self.state[10] = [measurements[10], 1] #temp
+                    self.state[11] = [measurements[11], 1] #adc
 
-                        print "self.state:", self.state
-                        for i in range(numpy.size(self.state,0)):
-                            for j in range(numpy.size(self.state,1)):
-                                self.measureddata[i,j] = self.state[i,j]
-                        #measstate = self.state
-                        
-                        #print chr(27) + "[2J"
-                        #print self.measureddata
-                        self.state = numpy.zeros((12,2))
+                    # Writing to our "output" object measureddata
+                    for i in range(numpy.size(self.state,0)):
+                        for j in range(numpy.size(self.state,1)):
+                            self.measureddata[i,j] = self.state[i,j]
+
+                    self.state = numpy.zeros((12,2))
                             
                 elif(ord(packet['MsgID']) == 15): # Reduced ADIS data, RF test
                     self.n_rec += 1
