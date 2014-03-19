@@ -11,8 +11,8 @@ import time
 #
 # This parses the packets to identify messages and decodes them for the logs
 class packetParser():
-    #def __init__(self,accelfile,gpsfile,measstate,fulllog,plog):
-    def __init__(self,accelfile,gpsfile,fulllog,plog):
+    def __init__(self,accelfile,gpsfile,measstate,fulllog,plog):
+    #def __init__(self,accelfile,gpsfile,fulllog,plog):
         self.GPS = {0: 'Latitude',
                     1: 'Longtitude',
                     2: 'Velocity'}
@@ -36,7 +36,7 @@ class packetParser():
         self.excount = 0
         #self.accelburst = 0
         self.gpspacket = 0
-#        self.measureddata = measstate
+        self.measureddata = measstate
         self.n_rec = 0
         
         self.gpsdata = [0,0,0,0,0,0,0,0]
@@ -62,7 +62,7 @@ class packetParser():
         try:
 
             if(ord(packet['DevID']) == 20): # IMU data
-                if(ord(packet['MsgID']) == 14):
+                if(ord(packet['MsgID']) == 14): # Burst read reduced
                     #self.accelburst = self.accelburst + 1
                     #print "IMU: " + str(self.accelburst)
                     
@@ -133,9 +133,9 @@ class packetParser():
                             self.state[6] = [heading,    1]
                             self.state[7] = [gyroz,        1]
                             #print self.state
-    #                        for i in range(numpy.size(self.state,0)):
-    #                            for j in range(numpy.size(self.state,1)):
-    #                                self.measureddata[i,j] = self.state[i,j]
+                            for i in range(numpy.size(self.state,0)):
+                                for j in range(numpy.size(self.state,1)):
+                                    self.measureddata[i,j] = self.state[i,j]
                             #measstate = self.state
                             
                             #print chr(27) + "[2J"
@@ -148,7 +148,7 @@ class packetParser():
                     
                     #print "IMU BURST!"
                     pass
-                elif(ord(packet['MsgID']) == 13):
+                elif(ord(packet['MsgID']) == 13): # Burst read
                     tmeasurements = []
                     measurements = []
                     for i in range(len(packet['Data'])):
@@ -233,16 +233,16 @@ class packetParser():
                         self.state[6] = [heading,    1]
                         self.state[7] = [gyroz,        1]
                         #print self.state
-    #                    for i in range(numpy.size(self.state,0)):
-    #                        for j in range(numpy.size(self.state,1)):
-    #                            self.measureddata[i,j] = self.state[i,j]
+                        for i in range(numpy.size(self.state,0)):
+                            for j in range(numpy.size(self.state,1)):
+                                self.measureddata[i,j] = self.state[i,j]
                         #measstate = self.state
                         
                         #print chr(27) + "[2J"
                         #print self.measureddata
                         self.state = numpy.zeros((9,2))
                             
-                elif(ord(packet['MsgID']) == 15): # Reduced ADIS data
+                elif(ord(packet['MsgID']) == 15): # Reduced ADIS data, RF test
                     self.n_rec += 1
                     msgnr = ord(packet['Data'][0])
                     #print msgnr

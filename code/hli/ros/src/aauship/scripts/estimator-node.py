@@ -5,11 +5,13 @@ import roslib; roslib.load_manifest('aauship')
 import rospy
 from std_msgs.msg import String
 from aauship.msg import *
+from rospy.numpy_msg import numpy_msg
 
 import time
 import os 
 
 import fapsParse
+import numpy
 
 ## This is the esitimator and sensor node
 #
@@ -27,6 +29,21 @@ class Estimator(object):
         #print "Running parser"
         tmp = {'DevID':str(data.DevID), 'MsgID':str(data.MsgID),'Data': data.Data}
         self.parser.parse(tmp)
+        #print type(numpy.asscalar(self.samples[2,0]))
+        print self.samples
+        self.pub.publish(0,
+                         numpy.asscalar(self.samples[2,0]),
+                         numpy.asscalar(self.samples[5,0]),
+                         numpy.asscalar(self.samples[7,0]),
+                         0,
+                         0,
+                         0,
+                         numpy.asscalar(self.samples[7,0]),
+                         numpy.asscalar(self.samples[4,0]),
+                         0,
+                         0,
+                         0)
+
 
         self.stat = 0 # Used for callback debugging
 
@@ -40,9 +57,13 @@ class Estimator(object):
         #self.echolog = open("meas/echolog.txt",'w')
         #self.gps2log = open("meas/gps2log.txt",'wb')
 
+        self.pub = rospy.Publisher('jeppe', ADIS16405)
+
+        self.samples = numpy.zeros((9,2))
         self.parser = fapsParse.packetParser(
                 self.imulog,
                 self.gpslog,
+                self.samples,
                 self.mixedlog,
                 self.plog)
 
