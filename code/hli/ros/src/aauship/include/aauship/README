@@ -1,0 +1,3 @@
+This include dir is nessesary to exist for catkin_make to be
+succesfull. But for git to commit the path, a file has to exist in the
+folder. This file is placed here for that purpose.
