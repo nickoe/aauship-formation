@@ -12,7 +12,7 @@ The robots can also be of various types: Driving vehicles, helicopters, aeroplan
 All these robots are in the terminology called \textit{agents}. These agents move either individually or in formation. This formation can be rigid or be flexible. If the agents move in rigid formation they will keep their relative positions to each other and does not diverge from the formation. The formation could also be flexible which sometimes proves to be preferable. If the distances between three agents on line are large, and an obstacle needs to be avoided, only one of the agents needs to move from this obstacle if the formation is flexible. This can be seen on figure~\vref{fig:form_avoid_right}. \todo{Inddel i afsnit, sådan mere generelt over det hele}
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.5\textwidth]{fig/form_avoid_right}
+	\includesvg[width=0.5\textwidth]{form_avoid_right}
 	\caption{A flexible formation where the right agent avoids an obstacle.}
 	\label{fig:form_avoid_right}
 \end{figure}
@@ -57,14 +57,14 @@ When only one ship need to map a complete seabed this process could take up much
 The distances between the ships would be determined by how far the sonars could reach the seabed. There should be some overlap of the maps from each sonar but still as little as possible. The specific formation could be a simple line or it could be more advanced formations. This does not have any relevant impact of how the mappings of the seabed would be due to the subsequent processing of the collected data from the maps. Different formations of ships can be seen on figure~\vref{fig:diffforms}.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.5\textwidth]{fig/diffforms}
+	\includesvg[width=0.5\textwidth]{diffforms}
 	\caption{Different formations which the \ac{ASV}s can make.}
 	\label{fig:diffforms}
 \end{figure}
 The formation of the ships may not need to be strictly rigid. Situations could appear where it would be of benefit to change the ship's formation. If the formation need to avoid an obstacle and one or more ships needs to go faster or slower, which leads to a change in the formation, it might be of benefit to regroup the formation which is faster to reach. An example can be seen on figure~\vref{fig:avoid}.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.5\textwidth]{fig/form_avoid}
+	\includesvg[width=0.5\textwidth]{form_avoid}
 	\caption{A formation needs to go around an obstacle where the inner most ship chooses the shortest path and the formation regroups.}
 	\label{fig:avoid}
 \end{figure}
@@ -104,7 +104,7 @@ other. If it is of benefit that a specific ship is at the most inner route, and 
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\textwidth]{fig/cornoring}
+	\includesvg[width=0.6\textwidth]{cornoring}
 	\caption{Two ships initializing and following the path offset
 		equally on each side, ships are constrained to sailing parallel
 		and heading the same as path when projected onto the path. Blue
@@ -124,7 +124,7 @@ following in formation. \citep{thorvaldsen}.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\textwidth]{fig/form_rigid_90}
+	\includesvg[width=0.6\textwidth]{form_rigid_90}
 	\caption{Three ships in formation needs to make a 90\textdegree turn and stays in their relative positions and keeps the rigid formation.}
 	\label{fig:form_rigid_90}
 \end{figure}
@@ -133,7 +133,7 @@ When the ships needs to make a turn about something they can do it in many ways.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\textwidth]{fig/form_change_90}
+	\includesvg[width=0.6\textwidth]{form_change_90}
 	\caption{Three ships in formation needs to make a 90\textdegree turn and changes their relative positions.}
 	\label{fig:form_change_90}
 \end{figure}
@@ -160,7 +160,7 @@ The placement of the waypoints will be placed such that the ships need to surge 
 When applying the leader-follower approach it needs to be determined how the formation precisely should be set up. In this project is only one leader considered at a time. The rest of the ships will act as followers to the leader. The idea can be seen on figure~\vref{fig:l_f} where only one leader is represented with a single or more followers.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\textwidth]{fig/lead_follow}
+	\includesvg[width=0.6\textwidth]{lead_follow}
 	\caption{A leader is always assigned and potential followers are following.}
 	\label{fig:l_f}
 \end{figure}
@@ -173,7 +173,7 @@ The formation needs to take into account if it is of benefit to change leader. I
 The configuration of the formation will be set up, as a start, with one leader and a single follower. The follower will be offset from the leader with a distance of five metres. This can be seen on figure~\vref{fig:l_f1}.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.4\textwidth]{fig/lead_follow1}
+	\includesvg[width=0.4\textwidth]{lead_follow1}
 	\caption{The leader with a follower offset by 5 metres radius.}
 	\label{fig:l_f1}
 \end{figure}

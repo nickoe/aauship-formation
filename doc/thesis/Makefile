@@ -12,15 +12,6 @@ FIGS_DIA=
 
 # Alle SVG-filer
 #FIGS_SVG=illustrations/cover.svg
-FIGS_SVG=fig/diffforms.svg \
-fig/cornoring.svg \
-fig/form_avoid.svg \
-fig/form_change_90.svg \
-fig/form_rigid_90.svg \
-fig/form_avoid_right.svg \
-fig/lead_follow.svg \
-fig/lead_follow1.svg \
-fig/allinallframes.svg
 
 # Alle EPS-filer (PS-illustrationer angivet i linien nedenunder)
 #FIGS_EPS= \
@@ -40,7 +31,7 @@ FIGS_PDF_GEN=$(FIGS_DIA:.dia=.pdf) $(FIGS_EPS:.eps=.pdf) $(FIGS_SVG:.svg=.pdf)
 .SUFFIXES: .dia .eps .pdf .jpeg .svg .ps
 
 debug:	$(FIGS_PDF_GEN)
-	latexmk -pdf $(TARGET)
+	latexmk -pdf -pdflatex="pdflatex --shell-escape %O %S" $(TARGET)
 
 final:	$(FIGS_PDF_GEN)
 	latexmk -pdf $(TARGET)
@@ -58,10 +49,11 @@ dvi:	$(FIGS_EPS_GEN)
 ps:	$(FIGS_EPS_GEN)
 	latexmk -ps $(TARGET)
 
-pdf:	$(FIGS_PDF_GEN)
+pdf: $(FIGS_PDF_GEN)
+	latexmk -pdf -pdflatex="pdflatex --shell-escape %O %S" $(TARGET)
 
 blazingfast:	$(FIGS_PDF_GEN)
-	latexmk -pdf -silent $(TARGET)
+	latexmk -pdf -silent -pdflatex="pdflatex --shell-escape %O %S" $(TARGET)
 
 clean:
 	latexmk -C
@@ -71,7 +63,8 @@ clean:
 	rm -f *.bak
 	rm -f $(FIGS_EPS_GEN)
 	rm -f $(FIGS_PDF_GEN)
-	rm -f illustrations/*.pdf_tex
+	rm -f fig/*.pdf
+	rm -f fig/*.pdf_tex
 	rm -f *.maf
 	rm -f *.mtc*
 	rm -f *.bbl
@@ -84,7 +77,7 @@ cleanex:
 	rm -f *.bak
 
 live:
-	latexmk -pvc -pdf -quiet $(TARGET).tex
+	latexmk -pvc -pdf -quiet -pdflatex="pdflatex --shell-escape %O %S" $(TARGET).tex
 
 raw:
 	pdflatex $(TARGET)
@@ -109,13 +102,5 @@ raw:
 
 # fx inkscape --export-pdf=target.pdf --export-text-to-path target.svg
 .svg.pdf:
-#	inkscape -D -z --export-pdf=$@ --export-latex $<
 	inkscape -D -z --export-pdf=$@ $<
 
-# fx epstopdf target.eps
-#.eps.pdf:
-#	epstopdf --outfile=$@ $<
-
-# fx pdftops -eps target.pdf
-#.pdf.eps:
-#	pdftops -eps $< $@
