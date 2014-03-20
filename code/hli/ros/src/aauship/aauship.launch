@@ -1,4 +1,4 @@
 <launch>
-  <node name="lli-node" pkg="aauship" type="lli-node.py" output="screen"/>
-  <node name="estimator-node" pkg="aauship" type="estimator-node.py" output="screen"/>
+  <node name="lli_node" pkg="aauship" type="lli-node.py" output="screen"/>
+  <node name="estimator_node" pkg="aauship" type="estimator-node.py" output="screen"/>
 </launch>
