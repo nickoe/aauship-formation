@@ -33,9 +33,9 @@ class LLI(object):
         gps2rcv = serial.Serial("/dev/gps2",115200,timeout=0.04)
         echorcv = serial.Serial("/dev/echosounder",4800,timeout=0.04)
 
-
-        echolog = open("logs/echolog.log",'w')
-        gps2log = open("logs/gps2log.log",'wb')
+	BUFSIZE = 1024
+        echolog = open("logs/echolog.log",'w',BUFSIZE)
+        gps2log = open("logs/gps2log.log",'wb',BUFSIZE)
         time.sleep(5)
         self.packet.start()
         pub = rospy.Publisher('samples', Faps)

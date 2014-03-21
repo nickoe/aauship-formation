@@ -20,8 +20,9 @@ class Control(object):
         pass
 
     def run(self):
+	BUFSIZE = 1024
         #self.ctllog = open(os.getcwd() + "/../meas/ctl.log",'w')
-        self.ctllog = open("logs/ctl.log",'w')
+        self.ctllog = open("logs/ctl.log",'w',BUFSIZE)
         print(self.ctllog.name)
         sub = rospy.Subscriber('control_input', Faps, self.callback)
         pub = rospy.Publisher('lli_input', Faps)

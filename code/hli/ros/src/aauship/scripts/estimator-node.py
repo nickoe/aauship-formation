@@ -48,13 +48,13 @@ class Estimator(object):
 
     def run(self):
         self.stat = 0 # Used for callback debugging
-
-        self.imulog   = open("logs/imu.log",'w')   # was acclog
-        self.mixedlog = open("logs/mixed.log",'w') # was recieved
-        self.gpslog   = open("logs/gps.log",'w')   # was gpslog
-        self.plog     = open("logs/p.log",'w')     # was plog
-        #self.echolog = open("meas/echolog.txt",'w')
-        #self.gps2log = open("meas/gps2log.txt",'wb')
+	BUFSIZE = 1024
+        self.imulog   = open("logs/imu.log",'w',BUFSIZE)   # was acclog
+        self.mixedlog = open("logs/mixed.log",'w',BUFSIZE) # was recieved
+        self.gpslog   = open("logs/gps.log",'w',BUFSIZE)   # was gpslog
+        self.plog     = open("logs/p.log",'w',BUFSIZE)     # was plog
+        #self.echolog = open("meas/echolog.txt",'w',BUFSIZE)
+        #self.gps2log = open("meas/gps2log.txt",'wb',BUFSIZE)
 
         self.samples = numpy.zeros((12,2))
         self.parser = fapsParse.packetParser(
