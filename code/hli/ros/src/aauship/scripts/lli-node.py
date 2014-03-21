@@ -19,8 +19,16 @@ import fapsPacket # fork of packetHandler
 class LLI(object):
     def callback(self, data):
         # write data to serial
-        self.packet.lli_send(self.packet.package(data.Data,data.DevID,data.MsgID))
-        
+        tmp = data.Data
+        new = []
+        print hex(tmp)
+        print hex((tmp >> 8) & 255)
+        print hex(tmp & 255)
+        #print hex( struct.pack('>BB', (tmp >> 8) & 255, tmp & 255) )
+        new = struct.pack('>h', tmp )
+        print ( new )
+        self.packet.lli_send(self.packet.package(new,data.DevID,data.MsgID))
+
         #rospy.loginfo(data.data)
         pass
 
@@ -46,7 +54,7 @@ class LLI(object):
                 data = self.qu.get(False)
                 pub.publish(data['DevID'],
                             data['MsgID'],
-                            str(data['Data']),
+                            (data['Data']),
                             rospy.get_time())
             except Queue.Empty:
                 pass
