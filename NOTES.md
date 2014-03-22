@@ -71,3 +71,16 @@ Part No: xxxxxxxx er bestillingsnummer hos cornwallmodelboats.co.uk
 6x5pcs (30 par) XT60 hobbyking.com  PRODUCT ID: 601Bx5 
 
 2 Motorer (måske Graupner 460Z 18.4V, men måske kun een hos cornwallmodelboats) http://www.conrad.com/ce/en/product/269860/Compact-460z-148-V-Graupner
+
+
+Vi skal også have fire stk
+Panelstik til PCB
+RS-varenummer 494-4471
+Fabrikant Bulgin
+Producentens varenummer PX0707/06S
+
+og fire stk
+Støvhætte
+RS-varenummer 2508479274
+Fabrikant Bulgin
+Producentens varenummer PX0711
