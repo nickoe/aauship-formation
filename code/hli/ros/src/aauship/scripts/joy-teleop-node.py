@@ -4,6 +4,7 @@ import roslib; roslib.load_manifest('aauship')
 
 import rospy
 from std_msgs.msg import String
+from sensor_msgs.msg import Joy
 
 import time
 import os 
