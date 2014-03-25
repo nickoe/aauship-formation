@@ -8,8 +8,9 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-	genmsg
-	message_generation
+  sensor_msgs
+  genmsg
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -53,9 +54,9 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 add_message_files(
-	FILES
-	Faps.msg
-	ADIS16405.msg
+  FILES
+  Faps.msg
+  ADIS16405.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -76,6 +77,7 @@ add_message_files(
 generate_messages(
   DEPENDENCIES
   std_msgs
+  sensor_msgs
 )
 
 ###################################
@@ -90,7 +92,7 @@ generate_messages(
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES aauship
-  CATKIN_DEPENDS roscpp rospy std_msgs message_runtime
+  CATKIN_DEPENDS roscpp rospy std_msgs sensor_msgs message_runtime
   DEPENDS system_lib
 )
 
@@ -122,8 +124,8 @@ include_directories(
 #   ${catkin_LIBRARIES}
 # )
 
-add_executable(talker src/talker.cpp)
-target_link_libraries(talker ${catkin_LIBRARIES})
+add_executable(joy-teleop-node src/joy-teleop-node.cpp)
+target_link_libraries(joy-teleop-node  ${catkin_LIBRARIES})
 
 #############
 ## Install ##

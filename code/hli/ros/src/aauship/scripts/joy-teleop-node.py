@@ -9,7 +9,7 @@ from sensor_msgs.msg import Joy
 import time
 import os 
 
-## This is the joy node
+## This is the joy tele operation node
 class Joy(object):
     def callback(self, data):
         #print data.buttons
