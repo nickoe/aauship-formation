@@ -21,9 +21,12 @@ class LLI(object):
         # write data to serial
         print "Requesting buildinfo " + str(time.time())
         jeppe = self.packet.package([],0,9)
+        jeppe = self.packet.package(data.Data,10,3)
+        print data.Data
+        
         self.packet.lli_send(jeppe)
         
-        rospy.loginfo(data.data)
+        #rospy.loginfo(data.data)
         pass
 
     def run(self):

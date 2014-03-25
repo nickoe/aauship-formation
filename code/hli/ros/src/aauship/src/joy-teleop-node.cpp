@@ -1,8 +1,11 @@
 #include "ros/ros.h"
 #include "sensor_msgs/Joy.h"
 #include "aauship/Faps.h"
+#include <std_msgs/Float32.h>
 
-#include <sstream> // For stupid CPP handling
+#include <sstream>
+#include <stdint.h>
+//#include <cstdint>
 
 // note on plain values:
 // buttons are either 0 or 1
@@ -49,7 +52,11 @@
 #define PS3_AXIS_GYRO_YAW                19
 
 
-
+#define AXIS_REAR_LEFT_2 12
+#define AXIS_REAR_RIGHT_2 13
+#define BUTTON_REAR_LEFT_1 10
+#define BUTTON_REAR_RIGHT_1 11
+#define BUTTON_SELECT 0
 /**
  * This is the joy tele operation node
  */
@@ -57,23 +64,39 @@
 class JoyTeleOperation
 {
 public:
+
+
   JoyTeleOperation()
   {
-    pub = n.advertise<aauship::Faps>("control_input", 1000);
+    pub = n.advertise<aauship::Faps>("lli_input", 1000);
     sub = n.subscribe("joy", 1000, &JoyTeleOperation::chatterCallback, this);
+
   }
 
   void chatterCallback(const sensor_msgs::Joy::ConstPtr& msg)
   {
+
     aauship::Faps msg2;
-    msg2.MsgID = 1;
-    msg2.DevID = 2;
-    std::stringstream ss;
-    ss << "hello world ";
-    msg2.Data = ss.str();
-    msg2.Time = 3.14159;
+    msg2.MsgID = 10;
+    msg2.DevID = 3;
+
+    float vel_left;
+    float vel_right;
+    int16_t val;
+    vel_left = ((-msg->axes[AXIS_REAR_LEFT_2]+1)/2*100)*3;
+    vel_right = ((-msg->axes[AXIS_REAR_RIGHT_2]+1)/2*100)*3;
+    if (msg->buttons[BUTTON_REAR_LEFT_1])
+      vel_left = vel_left*-1;
+    if (msg->buttons[BUTTON_REAR_RIGHT_1])
+      vel_right = vel_right*-1;
+
+    val = (int16_t)vel_left;
+    msg2.Data = "AB";
+    msg2.Data[0] = (val >> 8) & 0xff;
+    msg2.Data[1] = val & 0xff;
+    ROS_INFO("[%f, %f]", vel_left, vel_right);
+    msg2.Time = vel_left;
     pub.publish(msg2);
-    ROS_INFO("I heard: [%f, %f]", msg->axes[12], msg->axes[13]); // REAR_LEFT_2, REAR_RIGHT_2
   }
 
 private:
@@ -86,13 +109,10 @@ private:
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "teleop_node");
-  //Create an object of class SubscribeAndPublish that will take care of everything
-  JoyTeleOperation SAPObject;
+  //Create an object of class JoyTeleOperation that will take care of everything
+  JoyTeleOperation JTOObject;
   ros::spin();
 
   return 0;
 }
-
-
-
 
