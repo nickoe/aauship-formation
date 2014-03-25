@@ -4,6 +4,7 @@ import roslib; roslib.load_manifest('aauship')
 
 import rospy
 from std_msgs.msg import String
+from aauship.msg import *
 
 import time
 import os 
@@ -22,7 +23,8 @@ class Control(object):
         #self.ctllog = open(os.getcwd() + "/../meas/ctl.log",'w')
         self.ctllog = open("logs/ctl.log",'w')
         print(self.ctllog.name)
-        pub = rospy.Publisher('lli_input', String)
+        sub = rospy.Subscriber('control_input', Faps, self.callback)
+        pub = rospy.Publisher('lli_input', Faps)
         rospy.init_node('control')
         r = rospy.Rate(0.5) # Hz
         #rospy.spin() # Keeps the node running untill stopped
