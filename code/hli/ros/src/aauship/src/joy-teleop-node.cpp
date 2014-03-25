@@ -53,26 +53,46 @@
 /**
  * This is the joy tele operation node
  */
-void chatterCallback(const sensor_msgs::Joy::ConstPtr& msg)
+
+class JoyTeleOperation
 {
-  aauship::Faps msg2;
-  msg2.MsgID = 1;
-  msg2.DevID = 2;
-  std::stringstream ss;
-  ss << "hello world ";
-  msg2.Data = ss.str();
-  msg2.Time = 3.14159;
-  pub.publish(msg2);
-  ROS_INFO("I heard: [%f, %f]", msg->axes[12], msg->axes[13]); // REAR_LEFT_2, REAR_RIGHT_2
-}
+public:
+  JoyTeleOperation()
+  {
+    pub = n.advertise<aauship::Faps>("control_input", 1000);
+    sub = n.subscribe("joy", 1000, &JoyTeleOperation::chatterCallback, this);
+  }
+
+  void chatterCallback(const sensor_msgs::Joy::ConstPtr& msg)
+  {
+    aauship::Faps msg2;
+    msg2.MsgID = 1;
+    msg2.DevID = 2;
+    std::stringstream ss;
+    ss << "hello world ";
+    msg2.Data = ss.str();
+    msg2.Time = 3.14159;
+    pub.publish(msg2);
+    ROS_INFO("I heard: [%f, %f]", msg->axes[12], msg->axes[13]); // REAR_LEFT_2, REAR_RIGHT_2
+  }
+
+private:
+  ros::NodeHandle n;
+  ros::Publisher pub;
+  ros::Subscriber sub;
+
+}; // End of class JoyTeleOperation
 
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "teleop_node");
-  ros::NodeHandle n;
-  ros::Publisher pub = n.advertise<aauship::Faps>("control_input", 1000);
-  ros::Subscriber sub = n.subscribe("joy", 1000, chatterCallback);
+  //Create an object of class SubscribeAndPublish that will take care of everything
+  JoyTeleOperation SAPObject;
   ros::spin();
 
   return 0;
 }
+
+
+
+
