@@ -1,7 +1,41 @@
 \chapter{Different control strategies}
 
-\section{Manoeuvring the vessel using the LOS method}
-Path-following problems for vessels are often solved by implementing \ac{LOS} algorithms. Opposite to other position control algorithms, where the vessel may be driven both in longitudinal and transversal directions to converge to a path, the \ac{LOS} algorithm gives a more natural motion towards the desired path. This is done by giving a more natural reference to the heading of the vessel. One of the advantages of this is that it can be applied both to fully actuated and under actuated vessels.
+\head{"A control syste, that forces the system output $y(t)$ to track a desired output $y_d(t)$ solves a trajectory tracking problem" \citep{fossen}}.
+
+\section{Trajectory Tracking control}
+When applying control to a vessel that needs to track a specified trajectory, then the type control will be classified according to the number of available actuators.This is usually split between surge, sway and yaw, which corresponds to forward motion, sideslip and turning.
+
+A time varying reference trajectory for a vessel to track will be given as:
+\begin{align}
+\eta_d=
+\begin{bmatrix}
+N_d(t)\\
+E_d(t)\\
+\psi_d(t)
+\end{bmatrix}
+\end{align}
+To achieve tracking and convergence to such a trajectory is minimization of the error the main objective, $e(t):=\eta(t)-\eta_d(t)$. Or given by the previous notation:
+\begin{align}
+e(t):=
+\begin{bmatrix}
+N(t)-N_d(t)\\
+E(t)-E_d(t)\\
+\psi(t)-\psi_d(t)
+\end{bmatrix}
+\end{align}
+
+When designing a motion control system with this type of objective it is important to distinguish between the following three important control objectives:
+\begin{description}[style=nextline]
+	\item [Setpoint regulation]
+	This is the most basic way of regulating. In this method it is usually a human operator that controls the setpoint or reference to the vessel. The controller will then be a regulator that usually brings the error of the control signal and the real value to zero.
+	\item [Path-following control]
+	The path-following control makes the vessel follow a path independent of time with no temporal constraints. The method is usually used on underwater vessels or vessels in transit between continents.
+	\item [Trajectory-tracking control]
+	When applying trajectory-tracking control, position and and velocity of vessels should track the position and velocity of some time varying path reference signal. The feedback is a trajectory tracking controller to make the vessel converge to the trajectory. This is used when having course changing manoeuvres and speed changing along the trajectory. This could for instance be a change of speed in a turn of the vessel.
+\end{description}
+
+\subsection{Manoeuvring the vessel using the LOS method}
+Path-following problems for vessels are often solved by implementing \ac{LOS} algorithms. Opposite to other position control algorithms, where the vessel may be driven both in longitudinal and transversal directions to converge to a path, the \ac{LOS} algorithm gives a more natural motion towards the desired path. This is done by giving a more natural reference to the heading of the vessel. One of the advantages of this is that it can be applied both to fully actuated and underactuated vessels.
 
 Since it is only the leader, and not any of the followers, who need to follow a path, this is only applied on one vessel. This can also be extended to a leader in a virtual structure. To apply the \ac{LOS} algorithm a setup is needed. To get an overview of the functionality of the \ac{LOS} algorithm see figure~\vref{fig:allinallframes}.
 \begin{figure}[htbp]
