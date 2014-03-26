@@ -21,7 +21,7 @@ class LLI(object):
         # write data to serial
         print "Requesting buildinfo " + str(time.time())
         jeppe = self.packet.package([],0,9)
-        jeppe = self.packet.package(data.Data,10,3)
+        jeppe = self.packet.package(data.Data,data.DevID,data.MsgID)
         print data.Data
         
         self.packet.lli_send(jeppe)

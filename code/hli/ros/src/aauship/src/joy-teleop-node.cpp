@@ -57,6 +57,8 @@
 #define BUTTON_REAR_LEFT_1 10
 #define BUTTON_REAR_RIGHT_1 11
 #define BUTTON_SELECT 0
+#define BUTTON_CROSS_UP        4
+#define BUTTON_CROSS_DOWN        6
 /**
  * This is the joy tele operation node
  */
@@ -77,25 +79,41 @@ public:
   {
 
     aauship::Faps msg2;
-    msg2.MsgID = 10;
-    msg2.DevID = 3;
 
     float vel_left;
     float vel_right;
     int16_t val;
+
+    int16_t thrust_diff = 5;
+    int16_t thrust_step = 10;
+
     vel_left = ((-msg->axes[AXIS_REAR_LEFT_2]+1)/2*100)*3;
     vel_right = ((-msg->axes[AXIS_REAR_RIGHT_2]+1)/2*100)*3;
     if (msg->buttons[BUTTON_REAR_LEFT_1])
       vel_left = vel_left*-1;
     if (msg->buttons[BUTTON_REAR_RIGHT_1])
       vel_right = vel_right*-1;
+    ROS_INFO("[%f, %f]", vel_left, vel_right);
 
-    val = (int16_t)vel_left;
+//    if (msg->buttons[BUTTON_CROSS_UP]);
+//    if (msg->buttons[BUTTON_CROSS_DOWN]);
+      
+    val = (int16_t)(-1*vel_left);
     msg2.Data = "AB";
+    msg2.DevID = 10;
+    msg2.MsgID = 5;
     msg2.Data[0] = (val >> 8) & 0xff;
     msg2.Data[1] = val & 0xff;
-    ROS_INFO("[%f, %f]", vel_left, vel_right);
-    msg2.Time = vel_left;
+    msg2.Time = msg->buttons[BUTTON_CROSS_DOWN];
+    pub.publish(msg2);
+
+    val = (int16_t)(-1*vel_right);
+    msg2.Data = "AB";
+    msg2.DevID = 10;
+    msg2.MsgID = 3;
+    msg2.Data[0] = (val >> 8) & 0xff;
+    msg2.Data[1] = val & 0xff;
+    msg2.Time = msg->buttons[BUTTON_CROSS_DOWN];
     pub.publish(msg2);
   }
 
