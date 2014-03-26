@@ -78,6 +78,6 @@ extern uint8_t rmc_idx;
 
 /* Defines for how many control input packets we can loose without it
  * shutting down */
-#define AWAKE_THRESHOLD 30
+#define AWAKE_THRESHOLD 10
 
 #endif // CONFIG_H 
