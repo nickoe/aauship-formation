@@ -19,12 +19,7 @@ import fapsPacket # fork of packetHandler
 class LLI(object):
     def callback(self, data):
         # write data to serial
-        print "Requesting buildinfo " + str(time.time())
-        jeppe = self.packet.package([],0,9)
-        jeppe = self.packet.package(data.Data,data.DevID,data.MsgID)
-        print data.Data
-        
-        self.packet.lli_send(jeppe)
+        self.packet.lli_send(self.packet.package(data.Data,data.DevID,data.MsgID))
         
         #rospy.loginfo(data.data)
         pass
