@@ -61,7 +61,7 @@ class Handler(threading.Thread):
                     length=self.connection.read(1) #The next char after start byte is the length
                     res = self.parser(length)      #Input the length into the parser function to get packet
                     if(res[0]):                    #If the packet is valid, prepare the packet and put it in the queue
-                        print "Valid packet", str(time.time())
+                        #print "Valid packet", str(time.time())
                         packetforqueue = self.unpackage(res[1])
                         self.q.put(packetforqueue)
                     else:

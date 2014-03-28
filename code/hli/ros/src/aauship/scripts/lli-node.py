@@ -28,6 +28,12 @@ class LLI(object):
         self.qu = Queue.Queue()
         self.packet = fapsPacket.Handler('/dev/lli', 57600, 0.02, self.qu)
         # GPS2 and Echo sounder should be opened here, or maybe implemented in the fapsPacket.Handler thread
+        gps2rcv = serial.Serial("/dev/gps2",115200,timeout=0.04)
+        echorcv = serial.Serial("/dev/echosounder",4800,timeout=0.04)
+
+
+        echolog = open("logs/echolog.log",'w')
+        gps2log = open("logs/gps2log.log",'wb')
         time.sleep(5)
         self.packet.start()
         pub = rospy.Publisher('samples', Faps)
@@ -40,12 +46,36 @@ class LLI(object):
                 data = self.qu.get(False)
                 pub.publish(data['DevID'],
                             data['MsgID'],
-                            data['Data'],
+                            str(data['Data']),
                             rospy.get_time())
             except Queue.Empty:
                 pass
+
+
+            # Grabbing the GPS2 data (tempory implementation)
+            try:
+                gps2 = gps2rcv.readline()
+                if gps2 != "":
+                    gps2 = gps2.rstrip()
+                    gps2log.write(gps2 + ',' +str(time.time()) + "\r\n")
+            except Exception:
+                pass
+
+            # Grabbing the echosounder data (tempory implementation)
+            try:
+                echosounder = echorcv.readline()
+                echosounder = echosounder.rstrip()
+                if echosounder != "":
+                    echolog.write(echosounder + ',' + str(time.time()) + "\r\n")
+            except Exception:
+                pass
+
+
+            # End of loop, wait to keep the rate
             r.sleep()
 
+        echolog.close()
+        gps2log.close()
         self.packet.close()
         self.packet.join()
         
