@@ -98,7 +98,7 @@ public:
 //    if (msg->buttons[BUTTON_CROSS_UP]);
 //    if (msg->buttons[BUTTON_CROSS_DOWN]);
       
-    val = (int16_t)(-1*vel_left);
+    val = (int16_t)(vel_left);
     msg2.Data = "AB";
     msg2.DevID = 10;
     msg2.MsgID = 5;
@@ -107,7 +107,7 @@ public:
     msg2.Time = msg->buttons[BUTTON_CROSS_DOWN];
     pub.publish(msg2);
 
-    val = (int16_t)(-1*vel_right);
+    val = (int16_t)(vel_right);
     msg2.Data = "AB";
     msg2.DevID = 10;
     msg2.MsgID = 3;
