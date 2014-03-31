@@ -1,10 +1,12 @@
 #include "ros/ros.h"
 #include "sensor_msgs/Joy.h"
 #include "aauship/Faps.h"
+#include "aauship/LLIinput.h"
 #include <std_msgs/Float32.h>
 
 #include <sstream>
 #include <stdint.h>
+#include <string>
 //#include <cstdint>
 
 // note on plain values:
@@ -70,7 +72,7 @@ public:
 
   JoyTeleOperation()
   {
-    pub = n.advertise<aauship::Faps>("lli_input", 1000);
+    pub = n.advertise<aauship::LLIinput>("lli_input", 1000);
     sub = n.subscribe("joy", 1000, &JoyTeleOperation::chatterCallback, this);
 
   }
@@ -78,8 +80,7 @@ public:
   void chatterCallback(const sensor_msgs::Joy::ConstPtr& msg)
   {
 
-    aauship::Faps msg2;
-
+    aauship::LLIinput msg2;
     float vel_left;
     float vel_right;
     int16_t val;
@@ -99,22 +100,29 @@ public:
 //    if (msg->buttons[BUTTON_CROSS_DOWN]);
       
     val = (int16_t)(vel_left);
-    msg2.Data = "AB";
+
     msg2.DevID = 10;
     msg2.MsgID = 5;
-    msg2.Data[0] = (val >> 8) & 0xff;
-    msg2.Data[1] = val & 0xff;
+    //std::copy((const char*)&val, (const char*)&val+sizeof(val), back_inserter(msg2.Data[0]));
+    msg2.Data = val;
     msg2.Time = msg->buttons[BUTTON_CROSS_DOWN];
     pub.publish(msg2);
 
+
+
+
     val = (int16_t)(vel_right);
-    msg2.Data = "AB";
+    //msg2.Data = "AB";
+    //msg2.Data[0]=(char)0;
+    //msg2.Data[1]=(char)0;
+/*
     msg2.DevID = 10;
     msg2.MsgID = 3;
     msg2.Data[0] = (val >> 8) & 0xff;
     msg2.Data[1] = val & 0xff;
     msg2.Time = msg->buttons[BUTTON_CROSS_DOWN];
     pub.publish(msg2);
+*/
   }
 
 private:

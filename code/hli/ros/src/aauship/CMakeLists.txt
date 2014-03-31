@@ -57,6 +57,7 @@ add_message_files(
   FILES
   Faps.msg
   ADIS16405.msg
+  LLIinput.msg
 )
 
 ## Generate services in the 'srv' folder

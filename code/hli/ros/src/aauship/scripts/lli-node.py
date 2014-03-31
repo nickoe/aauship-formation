@@ -37,7 +37,7 @@ class LLI(object):
         time.sleep(5)
         self.packet.start()
         pub = rospy.Publisher('samples', Faps)
-        sub = rospy.Subscriber('lli_input', Faps, self.callback)
+        sub = rospy.Subscriber('lli_input', LLIinput, self.callback)
         rospy.init_node('lli')
         r = rospy.Rate(100) # Rate in Hz
 

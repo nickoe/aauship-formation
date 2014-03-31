@@ -28,7 +28,7 @@ class Estimator(object):
             print "self.stat = " + str(self.stat)
 
         #print "Running parser"
-        tmp = {'DevID':str(data.DevID), 'MsgID':str(data.MsgID),'Data': data.Data}
+        tmp = {'DevID':str(data.DevID), 'MsgID':str(data.MsgID),'Data': str(data.Data)}
         self.parser.parse(tmp)
         self.pub_imu.publish(numpy.asscalar(self.samples[0,0]),
                              numpy.asscalar(self.samples[1,0]),
