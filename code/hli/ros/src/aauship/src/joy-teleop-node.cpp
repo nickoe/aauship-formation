@@ -103,26 +103,16 @@ public:
 
     msg2.DevID = 10;
     msg2.MsgID = 5;
-    //std::copy((const char*)&val, (const char*)&val+sizeof(val), back_inserter(msg2.Data[0]));
     msg2.Data = val;
     msg2.Time = msg->buttons[BUTTON_CROSS_DOWN];
     pub.publish(msg2);
 
-
-
-
     val = (int16_t)(vel_right);
-    //msg2.Data = "AB";
-    //msg2.Data[0]=(char)0;
-    //msg2.Data[1]=(char)0;
-/*
     msg2.DevID = 10;
     msg2.MsgID = 3;
-    msg2.Data[0] = (val >> 8) & 0xff;
-    msg2.Data[1] = val & 0xff;
+    msg2.Data = val;
     msg2.Time = msg->buttons[BUTTON_CROSS_DOWN];
     pub.publish(msg2);
-*/
   }
 
 private:

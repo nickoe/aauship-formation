@@ -19,15 +19,9 @@ import fapsPacket # fork of packetHandler
 class LLI(object):
     def callback(self, data):
         # write data to serial
-        tmp = data.Data
-        new = []
-        print hex(tmp)
-        print hex((tmp >> 8) & 255)
-        print hex(tmp & 255)
-        #print hex( struct.pack('>BB', (tmp >> 8) & 255, tmp & 255) )
-        new = struct.pack('>h', tmp )
-        print ( new )
-        self.packet.lli_send(self.packet.package(new,data.DevID,data.MsgID))
+        tmp = []
+        tmp = struct.pack('>h', data.Data )
+        self.packet.lli_send(self.packet.package(tmp,data.DevID,data.MsgID))
 
         #rospy.loginfo(data.data)
         pass
