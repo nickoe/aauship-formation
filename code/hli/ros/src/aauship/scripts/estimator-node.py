@@ -51,7 +51,7 @@ class Estimator(object):
 	BUFSIZE = 1024
         self.imulog   = open("logs/imu.log",'w',BUFSIZE)   # was acclog
         self.mixedlog = open("logs/mixed.log",'w',BUFSIZE) # was recieved
-        self.gpslog   = open("logs/gps.log",'w',BUFSIZE)   # was gpslog
+        self.gpslog   = open("logs/gps1.log",'w',BUFSIZE)   # was gpslog
         self.plog     = open("logs/p.log",'w',BUFSIZE)     # was plog
         #self.echolog = open("meas/echolog.txt",'w',BUFSIZE)
         #self.gps2log = open("meas/gps2log.txt",'wb',BUFSIZE)

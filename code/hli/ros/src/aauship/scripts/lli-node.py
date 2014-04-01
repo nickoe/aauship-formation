@@ -35,7 +35,7 @@ class LLI(object):
 
 	BUFSIZE = 1024
         echolog = open("logs/echolog.log",'w',BUFSIZE)
-        gps2log = open("logs/gps2log.log",'wb',BUFSIZE)
+        gps2log = open("logs/gps2.log",'wb',BUFSIZE)
         time.sleep(5)
         self.packet.start()
         pub = rospy.Publisher('samples', Faps)
