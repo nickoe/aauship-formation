@@ -102,12 +102,12 @@ Tr = Tr';
 
 
 %% ADIS16405 Inertial Measurement Unit
-supply = imudata(:,1)/0.002418; % Scale 2.418 mV
-gyro = imudata(:,2:4)/0.05; % Scale 0.05 degrees/sec
-accl = (imudata(:,5:7)*0.00333)/9.82;   %/333)*9.82; % Scale 3.33 mg (g is gravity, that is g-force)
+supply = imudata(:,1)*0.002418; % Scale 2.418 mV
+gyro = imudata(:,2:4)*0.05; % Scale 0.05 degrees/sec
+accl = (imudata(:,5:7)*0.00333)*9.82;   %/333)*9.82; % Scale 3.33 mg (g is gravity, that is g-force)
 magn = imudata(:,8:10)*0.0005; % 0.5 mgauss
-temp = imudata(:,11)/0.14; % 0.14 degrees celcius 
-aux_adc = imudata(:,12)/0.806; % 0.806 mV
+temp = imudata(:,11)*0.14; % 0.14 degrees celcius 
+aux_adc = imudata(:,12)*0.806; % 0.806 mV
 imutime = imudata(:,13)-starttime; % Seconds since epoch on HLI
 
 figure(4)
