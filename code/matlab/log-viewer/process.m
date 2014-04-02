@@ -12,6 +12,7 @@ testname = 'crashtest';
 %% Data files
 gps1file = fopen([logpath,testname,'/gps1.log']);
 imudata = load([logpath,testname,'/imu.log']);
+starttime = imudata(1,13); % Earliest timestamp
 
 
 %% Reading GPS data
@@ -103,11 +104,11 @@ Tr = Tr';
 %% ADIS16405 Inertial Measurement Unit
 supply = imudata(:,1)/0.002418; % Scale 2.418 mV
 gyro = imudata(:,2:4)/0.05; % Scale 0.05 degrees/sec
-accl = (imudata(:,5:7)/333)*9.82; % Scale 3.33 mg/LSB (g is gravity, that is g-force)
-magn = imudata(:,8:10)/0.5; % 0.5 mgauss
+accl = (imudata(:,5:7)*0.00333)/9.82;   %/333)*9.82; % Scale 3.33 mg (g is gravity, that is g-force)
+magn = imudata(:,8:10)*0.0005; % 0.5 mgauss
 temp = imudata(:,11)/0.14; % 0.14 degrees celcius 
 aux_adc = imudata(:,12)/0.806; % 0.806 mV
-imutime = imudata(:,13)-imudata(1,13); % Seconds since epoch on HLI
+imutime = imudata(:,13)-starttime; % Seconds since epoch on HLI
 
 figure(4)
 subplot(4,1,1)
@@ -132,4 +133,16 @@ title('Supply, temperature and ADC of the ADIS16405 IMU')
 ylabel('[V, degC, V]')
 xlabel('Time [s]')
 legend('Supply','Temp','ADC')
+
+%% Heading
+% X_H = X*cos(pitch) + Y*sin(roll)*sin(pitch) - Z*cos(roll)*sin(pitch)
+% Y_H = Y*cos(roll) + Z*sin(roll)
+% Azimuth = atan2 (Y_H / X_H )
+
+heading = atan2(-magn(:,2),magn(:,1))*180/pi;
+figure(5)
+% subplot(2,1,1)
+plot(imutime,heading)
+% subplot(2,1,1)
+% plot(imutime,Azimuth)
 
