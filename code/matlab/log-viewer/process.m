@@ -100,13 +100,33 @@ end
 Tr = Tr';
 
 
-%%
-zgyro = imudata(:,1);
-xacc = imudata(:,2);
-yacc = imudata(:,3);
-xmag = imudata(:,4);
-adc = imudata(:,5);
+%% ADIS16405 Inertial Measurement Unit
+supply = imudata(:,1);
+xgyro = imudata(:,2);
+ygyro = imudata(:,3);
+zgyro = imudata(:,4);
+xaccl = imudata(:,5);
+yaccl = imudata(:,6);
+zaccl = imudata(:,7);
+xmagn = imudata(:,8);
+ymagn = imudata(:,9);
+zmagn = imudata(:,10);
+temp = imudata(:,11);
+aux_adc = imudata(:,12);
 
 figure(4)
-plot(imudata(:,1:4))
+subplot(4,1,1)
+plot(imudata(:,2:4))
+title('Gyrometer')
 
+subplot(4,1,2)
+plot(imudata(:,5:7))
+title('Accelerometer')
+
+subplot(4,1,3)
+plot(imudata(:,8:10))
+title('Magnetometer')
+
+subplot(4,1,4)
+plot(imudata(:,11:12))
+title('Supply, temperature and ADC of the ADIS16405 IMU')
