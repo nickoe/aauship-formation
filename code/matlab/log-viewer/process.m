@@ -114,6 +114,7 @@ subplot(4,1,1)
 plot(imutime, gyro)
 title('Gyrometer')
 ylabel('[degrees/sec]')
+legend('X','Y','Z')
 
 subplot(4,1,2)
 plot(imutime, accl)
@@ -130,3 +131,5 @@ plot(imutime, imudata(:,[1 11:12]))
 title('Supply, temperature and ADC of the ADIS16405 IMU')
 ylabel('[V, degC, V]')
 xlabel('Time [s]')
+legend('Supply','Temp','ADC')
+
