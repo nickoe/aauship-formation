@@ -101,32 +101,32 @@ Tr = Tr';
 
 
 %% ADIS16405 Inertial Measurement Unit
-supply = imudata(:,1);
-xgyro = imudata(:,2);
-ygyro = imudata(:,3);
-zgyro = imudata(:,4);
-xaccl = imudata(:,5);
-yaccl = imudata(:,6);
-zaccl = imudata(:,7);
-xmagn = imudata(:,8);
-ymagn = imudata(:,9);
-zmagn = imudata(:,10);
-temp = imudata(:,11);
-aux_adc = imudata(:,12);
+supply = imudata(:,1)/0.002418; % Scale 2.418 mV
+gyro = imudata(:,2:4)/0.05; % Scale 0.05 degrees/sec
+accl = (imudata(:,5:7)/333)*9.82; % Scale 3.33 mg/LSB (g is gravity, that is g-force)
+magn = imudata(:,8:10)/0.5; % 0.5 mgauss
+temp = imudata(:,11)/0.14; % 0.14 degrees celcius 
+aux_adc = imudata(:,12)/0.806; % 0.806 mV
+imutime = imudata(:,13)-imudata(1,13); % Seconds since epoch on HLI
 
 figure(4)
 subplot(4,1,1)
-plot(imudata(:,2:4))
+plot(imutime, gyro)
 title('Gyrometer')
+ylabel('[degrees/sec]')
 
 subplot(4,1,2)
-plot(imudata(:,5:7))
+plot(imutime, accl)
 title('Accelerometer')
+ylabel('[m/s^2]')
 
 subplot(4,1,3)
-plot(imudata(:,8:10))
+plot(imutime, magn)
 title('Magnetometer')
+ylabel('[gauss]')
 
 subplot(4,1,4)
-plot(imudata(:,11:12))
+plot(imutime, imudata(:,[1 11:12]))
 title('Supply, temperature and ADC of the ADIS16405 IMU')
+ylabel('[V, degC, V]')
+xlabel('Time [s]')
