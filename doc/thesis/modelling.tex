@@ -25,4 +25,19 @@ r^b_g &= [x_g,y_g,z_g]^T & &- \text{vector from } o_b \text{ to CG expressed in 
 
 \section{Total Model of Vessel}
 
+\section{Identification of Hydrodynamic Derivatives}
+The linear kinetic model \eqref{eq:MDt} consisting of the mass matrix $M$ and the damping matrix $D$, which has some coefficients that can be determined by tests.
+\begin{align}
+M \dot \nu + D \nu = \tau
+\label{eq:MDt}
+\end{align}\todo{Not entirely correct}
 
+These coefficients can be determined in multiple ways. Often times for a ship design company they are able to use \ac{CFD} to determin e the coefficients, but theese application are often expensive and propriotary. So a third method to do this is to use use soem simple tests to do the approximations.
+
+For the forward coefficients
+\begin{align}
+M_{11} \ddot x + D_{11} \dot x = 0
+\end{align}
+
+One can then solve for $D_{11}$
+ 
