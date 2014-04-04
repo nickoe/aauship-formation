@@ -120,6 +120,10 @@ int main (void)
 			pwm_set_duty(RC2, 0 );
 			pwm_set_duty(DC1, 50 );
 			pwm_set_duty(DC2, 50 );
+			pwm_set_duty(DC3, 50 );
+            PORTF &= ~(1<<DCDIR1);
+            PORTF &= ~(1<<DCDIR2);
+            PORTF &= ~(1<<DCDIR3);
 		};
 
 		if(tx_counter >= TX_READY) {

@@ -134,24 +134,33 @@ int process(msg_t *msg)
 				case 20:
 					break;
 				case 21:
-					PORTF |= (1<<DCDIR1);
 					duty = (int16_t) (msg->data[0]);
 					duty = (duty << 8) & 0xFF00;
 					duty = (duty | ((msg->data[1])&0xFF));
+              if duty == 0:
+                PORTF &= ~(1<<DCDIR1);
+              else:
+    					PORTF |= (1<<DCDIR1);
 					pwm_set_duty(DC1, duty );
 					break;
 				case 22:
-					PORTF |= (1<<DCDIR2);
 					duty = (int16_t) (msg->data[0]);
 					duty = (duty << 8) & 0xFF00;
 					duty = (duty | ((msg->data[1])&0xFF));
+              if duty == 0:
+                PORTF &= ~(1<<DCDIR2);
+              else:
+    					PORTF |= (1<<DCDIR2);
 					pwm_set_duty(DC2, duty );
 					break;
 				case 23:
-					PORTF |= (1<<DCDIR3);
 					duty = (int16_t) (msg->data[0]);
 					duty = (duty << 8) & 0xFF00;
 					duty = (duty | ((msg->data[1])&0xFF));
+              if duty == 0:
+                PORTF &= ~(1<<DCDIR3);
+              else:
+    					PORTF |= (1<<DCDIR3);
 					pwm_set_duty(DC3, duty );
 					break;
 				case 34:
