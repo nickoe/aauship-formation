@@ -13,7 +13,7 @@
 /**@{*/
 
 //efine DCPERIOD 2000 // Period time 2 ms, 500 Hz
-#define DCPERIOD 100 // Period time 0.1 ms
+#define DCPERIOD 100 // Period time 0.1 ms, 10 kHz
 
 /**
  * PWM outputs
