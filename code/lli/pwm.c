@@ -8,7 +8,7 @@
 /*
 f_OCnA = fclk_IO/(2*N*(1+OCRnA)
 */
-// Initialiser PWM, specifikt for vores bil
+// Initialiser PWM
 void pwm_init(void) {
 	// Enable all PWM pins as outputs
 	DDRE = (1<<DCPWM1) | (1<<DCPWM2) | (1<<DCPWM3);
