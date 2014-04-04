@@ -19,6 +19,7 @@ int process(msg_t *msg)
 	int i = 0;
 
 	switch (msg->devid) {
+		// GENERAL LLI
 		case 0:
 			switch (msg->msgid) {
 				case 0:
@@ -46,7 +47,7 @@ int process(msg_t *msg)
 					break;
 			}
 
-
+		// ACTUATORS
 		case 10: 
 			switch (msg->msgid) {
 				case 0:
@@ -121,20 +122,51 @@ int process(msg_t *msg)
 					break;
 				case 19:
 					duty = (int16_t) (msg->data[0]);
-					duty = (duty << 8) & 0xFF00; 
+					duty = (duty << 8) & 0xFF00;
 					duty = (duty | ((msg->data[1])&0xFF));
 					pwm_set_duty(RC1, duty );
 					duty = (int16_t) (msg->data[2]);
-					duty = (duty << 8) & 0xFF00; 
+					duty = (duty << 8) & 0xFF00;
 					duty = (duty | ((msg->data[3])&0xFF));
 					pwm_set_duty(RC2, duty );
 					awake_flag = 0;
 					break;
 				case 20:
 					break;
+				case 21:
+					PORTF |= (1<<DCDIR1);
+					duty = (int16_t) (msg->data[0]);
+					duty = (duty << 8) & 0xFF00;
+					duty = (duty | ((msg->data[1])&0xFF));
+					pwm_set_duty(DC1, duty );
+					break;
+				case 22:
+					PORTF |= (1<<DCDIR2);
+					duty = (int16_t) (msg->data[0]);
+					duty = (duty << 8) & 0xFF00;
+					duty = (duty | ((msg->data[1])&0xFF));
+					pwm_set_duty(DC2, duty );
+					break;
+				case 23:
+					PORTF |= (1<<DCDIR3);
+					duty = (int16_t) (msg->data[0]);
+					duty = (duty << 8) & 0xFF00;
+					duty = (duty | ((msg->data[1])&0xFF));
+					pwm_set_duty(DC3, duty );
+					break;
+				case 34:
+					PORTF &= ~(1<<DCDIR1);
+					break;
+				case 35:
+					PORTF &= ~(1<<DCDIR2);
+					break;
+				case 36:
+					PORTF &= ~(1<<DCDIR3);
+					break;
 
 			}
 
+		// This must be some old debugging id's
 		case 101: 
 			pwm_set_duty(DC2, msg->data[0]);
 			break;

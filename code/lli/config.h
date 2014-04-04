@@ -43,6 +43,20 @@ extern uint8_t rmc_idx;
 #define LED3 PL2 // GPS message indicator
 #define LED4 PL3 // IMU indicator
 
+/**
+ * Auxiliary Interruptable IO (PCINTx)
+ */
+#define IO1 PK0
+#define IO2 PK1
+#define IO3 PK2
+#define IO4 PK3
+
+/**
+ * Other IO
+ */
+#define RF_EN PK4
+#define BATV  AD0
+#define KILL  AD0
 
 /**
  * PWM outputs
@@ -58,6 +72,13 @@ extern uint8_t rmc_idx;
 // OC4 timer
 #define RCPWM4 PH4 // OC4B
 #define RCPWM5 PH5 // OC4C
+
+/**
+ * Direction IO for actuators
+ */
+#define DCDIR1 PF2
+#define DCDIR2 PF3
+#define DCDIR3 PF4
 
 /**
  * Message related stuff

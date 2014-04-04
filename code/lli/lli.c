@@ -78,6 +78,8 @@ int main (void)
   /* Set outputs */
 	PORTL = 0xff; // Turn off all LEDS as initial state
   DDRL = (1<<LED1) | (1<<LED2) | (1<<LED3) | (1<<LED4); // Set pins for LED as output
+	PORTF = 0xff;
+  DDRF = (1<<DCDIR1) | (1<<DCDIR2) | (1<<DCDIR3); // Set pins for DCDIRx as output
 
 	/* Initialize peripherals */
 	pwm_init();
@@ -116,6 +118,8 @@ int main (void)
 		if (awake_flag > AWAKE_THRESHOLD) {
 			pwm_set_duty(RC1, 0 );
 			pwm_set_duty(RC2, 0 );
+			pwm_set_duty(DC1, 50 );
+			pwm_set_duty(DC2, 50 );
 		};
 
 		if(tx_counter >= TX_READY) {
