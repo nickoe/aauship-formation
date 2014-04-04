@@ -86,19 +86,63 @@ mz_g & 0 & -mx_g & -I_{yx} & I_y & -I_{yz}\\
 \end{bmatrix}
 \end{align}
 
-\section{Identification of Hydrodynamic Derivatives}
-The linear kinetic model \eqref{eq:MDt} consisting of the mass matrix $M$ and the damping matrix $D$, which has some coefficients that can be determined by tests.
+This will be reduced to a 5 \ac{DOF} system due to the fact that the vessels buoyancy cannot be controlled as such. The vessel will always be on the water surface and this removes the degree of freedom which is the heave, the change of $z$ position of the vessel. A 5 \ac{DOF} system will be modelled as:
 \begin{align}
-M \dot \nu + D \nu = \tau
-\label{eq:MDt}
-\end{align}\todo{Not entirely correct}
-
-These coefficients can be determined in multiple ways. Often times for a ship design company they are able to use \ac{CFD} to determin e the coefficients, but theese application are often expensive and propriotary. So a third method to do this is to use use soem simple tests to do the approximations.
-
-For the forward coefficients
-\begin{align}
-M_{11} \ddot x + D_{11} \dot x = 0
+M_{RB} =
+\begin{bmatrix}
+m & 0 & 0 & mz_g & -my_g\\
+0 & m & -mz_g & 0 & mx_g\\
+0 & -mz_g & I_x & -I_{xy} & -I_{xz}\\
+mz_g & 0 & -I_{yx} & I_y & -I_{yz}\\
+-my_g & mx_g & -I_{zx} & -I_{zy} & I_z
+\end{bmatrix}
 \end{align}
+and
+\begin{align}
+D = -
+\begin{bmatrix}
+X_u & 0 & 0 & 0 & 0\\
+0 & Y_v & Y_p & 0 & Y_r\\
+0 & K_v & K_p & 0 & K_r\\
+0 & 0 & 0 & M_q & 0\\
+0 & N_v & N_p & 0 & N_r
+\end{bmatrix}
+\end{align}
+where the heave are neglected from the 6 \ac{DOF} system. In the principle could a 3 \ac{DOF} system be enough to make the control to the vessel and make it manoeuvre in the water, but as the scope is to exploit the sonar to map the seabed it would be beneficial to implement the roll and pitch as well and make the system as a 5 \ac{DOF}.
 
-One can then solve for $D_{11}$
- 
+\section{Identification of Hydrodynamic Derivatives}
+The linear kinetic model \eqref{eq:reducedmodel1}, which consists of the mass matrix $M_{RB}$ and the damping matrix $D$.
+\begin{align}
+M_{RB} \dot \nu_r + D\nu_r = \tau_{RB} + \tau
+\label{eq:reducedmodel1}
+\end{align}
+The coefficients of the model needs to be determined before the model can be simulated and implemented. These coefficients can be determined in multiple ways. Often ship design companies are able to use \ac{CFD} to determine the coefficients, or make use of a towing tank to determine the coefficients. These applications are often expensive and proprietary. So a third method to do this is to perform some simple tests to do approximations of the coefficients. To do so some assumptions needs to be made. The model looks like:
+\begin{align}
+M_{RB} \dot \nu_r + D\nu_r = \tau_{hyd} + \tau_{hs} + \tau_{wind} + \tau_{wave} + \tau
+\end{align}
+Since the tests will be performed in still water some of the forces can be neglected. The $\tau$ is the only force to be taken into account to perform the tests. This is the input to the vessel. This can be assumed due to the forthcoming procedure of the tests.
+
+At first the vessel is accelerated to maximum constant velocity. When maximum velocity is ensured the input force to the vessel is removed and zero input is applied. This will correspond to a model like:
+\begin{align}
+M_{RB} \dot \nu_r + D\nu_r = 0
+\label{eq:decelmodel}
+\end{align}
+\todo{lav tegning med step på og fra baad og indsaet her}
+This makes it possible to determine some of the coefficients of the $D$ matrix. e.g. is the damping in the x direction determined by:
+\begin{align} 
+M_{11} \ddot x + D_{11} \dot x = 0
+\label{eq:noinput}
+\end{align}
+The mass of the vessel can be measured, being the $M_{11}$. The velocity and acceleration can be estimated from measurements of the internal \ac{IMU} at the vessel. This makes the damping coefficient $D_{11}$ the only unknown in equation \ref{eq:noinput}. From this a linearisation is can be made, see appendix \todo{indsaet et ref til appendix naar det er lavet}.
+
+This makes it possible to determine the input force by applying a step input on the motors and let the vessel accelerate to a maximum velocity. A model of this will look like:
+\begin{align} 
+M_{11} \ddot x + D_{11} \dot x = \tau
+\label{eq:maxinput}
+\end{align}
+From this it is possible to estimate the input force since it is the only unknown in equation \ref{eq:maxinput}.
+
+This type of procedure is used in all of the tests. Step one is to apply force in one direction and measure the damping and after this determine the input.
+
+
+
