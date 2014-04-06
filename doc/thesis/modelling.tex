@@ -1,5 +1,7 @@
 \chapter{Modelling}
-\head{Within this chapter will different models be developed to make the actuation of the vessel more precise.}
+\head{This chapter describes the modelling of AAUSHIP. This is
+necessary to be able to use model based control algorithms and
+estimators.}
 
 \section{Hydrodynamic Modelling}
 Definition: Hydrodynamic added mass is defined as the mass added to a system due to an accelerating or decelerating body must move a volume of the surrounding fluid as it moves through it. To this is said that the object and fluid is not able to occupy the same physical space simultaneously.
@@ -10,7 +12,7 @@ M_A \dot \nu_r + C_A(\nu_r)\nu_r + D(\nu_r)\nu_r = \tau
 where
 \begin{align}
 &M_A \text{is the added mass matrix from the system}\nonumber\\
-&C_A \text{ is the added mass matrix due to coriolis}\nonumber\\
+&C_A \text{ is the added mass matrix due to the Coriolis force}\nonumber\\
 &D(\nu) \text{ is both the potential and viscous damping matrices}\nonumber\\
 &\tau \text{ is control and propulsion forces}\nonumber\\
 &\nu \text{ is the velocities of the vessel in all directions and moments}
@@ -70,12 +72,13 @@ X_u & 0 & 0 & 0 & 0 & 0\\
 
 The rigid-body system matrix of the vessel is given for a 6 \ac{DOF} system by ~\citep{fossen} as:
 \begin{align}
-M_{RB} =
+M_{RB} &=
 \begin{bmatrix}
 m\boldsymbol{I}_{3x3} & -m\boldsymbol{S}(r^b_g)\\
 -m\boldsymbol{S}(r^b_g) & \boldsymbol{I}_b
 \end{bmatrix}
-=
+\nonumber\\
+&=
 \begin{bmatrix}
 m & 0 & 0 & 0 & mz_g & -my_g\\
 0 & m & 0 & -mz_g & 0 & mx_g\\
@@ -86,7 +89,11 @@ mz_g & 0 & -mx_g & -I_{yx} & I_y & -I_{yz}\\
 \end{bmatrix}
 \end{align}
 
-This will be reduced to a 5 \ac{DOF} system due to the fact that the vessels buoyancy cannot be controlled as such. The vessel will always be on the water surface and this removes the degree of freedom which is the heave, the change of $z$ position of the vessel. A 5 \ac{DOF} system will be modelled as:
+This will be reduced to a 5 \ac{DOF} system due to the fact that the
+vessels buoyancy cannot be controlled as such. The vessel will always
+be on the water surface and this removes the degree of freedom which
+is the heave, the change of $z$ position of the vessel. A 5 \ac{DOF}
+system will be modelled as;
 \begin{align}
 M_{RB} =
 \begin{bmatrix}
