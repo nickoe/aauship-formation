@@ -1,8 +1,20 @@
 \chapter{Modelling}
 \head{Within this chapter will different models be developed to make the actuation of the vessel more precise.}
 
-\section{Added Mass Modelling}
+\section{Hydrodynamic Modelling}
 Definition: Hydrodynamic added mass is defined as the mass added to a system due to an accelerating or decelerating body must move a volume of the surrounding fluid as it moves through it. To this is said that the object and fluid is not able to occupy the same physical space simultaneously.
+\begin{align}
+M_A \dot \nu_r + C_A(\nu_r)\nu_r + D(\nu_r)\nu_r = \tau
+\label{eq:hydmodel}
+\end{align}
+where
+\begin{align}
+&M_A \text{is the added mass matrix from the system}\nonumber\\
+&C_A \text{ is the added mass matrix due to coriolis}\nonumber\\
+&D(\nu) \text{ is both the potential and viscous damping matrices}\nonumber\\
+&\tau \text{ is control and propulsion forces}\nonumber\\
+&\nu \text{ is the velocities of the vessel in all directions and moments}
+\end{align}
 
 \section{Rigid Body Modelling}
 The rigid body is used to model the physics of the vessel. It is an idealization of the solid body from where the physical motions of the vessel are to be derived. From analysis of this can translational motion and rotational motion be derived, and by \citep{fossen} written in component form as:
@@ -14,30 +26,123 @@ v^b_{b/n} &= [u,v,w]^T & &- \text{linear velocity of } o_b \text{ relative } o_n
 r^b_g &= [x_g,y_g,z_g]^T & &- \text{vector from } o_b \text{ to CG expressed in } \{b\}
 \end{align}
 
-\section{Disturbances}
-
-
-\subsection{Linear}
-
-
-\subsection{Non Linear}
-
-
-\section{Total Model of Vessel}
-
-\section{Identification of Hydrodynamic Derivatives}
-The linear kinetic model \eqref{eq:MDt} consisting of the mass matrix $M$ and the damping matrix $D$, which has some coefficients that can be determined by tests.
 \begin{align}
-M \dot \nu + D \nu = \tau
-\label{eq:MDt}
-\end{align}\todo{Not entirely correct}
-
-These coefficients can be determined in multiple ways. Often times for a ship design company they are able to use \ac{CFD} to determin e the coefficients, but theese application are often expensive and propriotary. So a third method to do this is to use use soem simple tests to do the approximations.
-
-For the forward coefficients
+M_{RB} \dot \nu_r + C_{RB}(\nu_r)\nu_r = \tau_{RB}
+\label{eq:rigidmodel}
+\end{align}
+where
 \begin{align}
-M_{11} \ddot x + D_{11} \dot x = 0
+&M_{RB} \text{is the system inertia matrix}\nonumber\\
+&C_{RB} \text{ is coriolis-centriopedal matrix}\nonumber\\
+&\tau_{RB} \text{ is a lumped force combined of } \tau_{hyd} + \tau_{hs} + \tau_{wind} + \tau_{wave} + \tau\nonumber\\
+&\quad \text{where}\nonumber\\
+&\qquad \tau_{hyd} \text{ is the hydrodynamic force}\nonumber\\
+&\qquad \tau_{hs} \text{ is the hydrostatic force}\nonumber\\
+&\qquad \tau_{wind} \text{ is the wind force}\nonumber\\
+&\qquad \tau_{wave} \text{ is the wave force}\nonumber\\
+&\qquad \tau \text{ is the control and propulsion forces}\nonumber
 \end{align}
 
-One can then solve for $D_{11}$
- 
+\section{Total Model of Vessel}
+\begin{align}
+\underbrace{M_{RB} \dot \nu_r + C_{RB}(\nu_r)\nu_r}_{\text{rigid-body forces}} + \underbrace{M_A \dot \nu_r + C_A(\nu_r)\nu_r + D(\nu_r)\nu_r}_{\text{hydrodynamic forces}}  = \tau + \tau_{RB}
+\label{eq:totmodel}
+\end{align}
+
+Delimitation:
+Since the vessel within this project is of smaller scale, the $M_A$, $C_A$ and $C_{RB}$ from \ref{eq:hydmodel} and \ref{eq:rigidmodel} are neglected. $M_A$ is the added mass and is as a start omitted due to the tests needs to be made as an object moving through the water with some drag. If the model needs to be further improved in the process this is a place to start modelling. The coefficients of $M_A$ are rather inconvenient to determine without advanced equipment like a towing tank, where constant velocity can be applied and measure drag and more in all directions and moments. $C_A$ and $C_{RB}$ represents forces due to a rotation of the body frame, \{b\}, about the inertial frame, the NED frame. These are omitted as well due to the small vessel where the body frame is placed in a predefined local frame which acts as the NED frame. This reduces equation \ref{eq:totmodel} down to the following
+\begin{align}
+M_{RB} \dot \nu_r + D\nu_r = \tau_{RB} + \tau
+\label{eq:reducedmodel}
+\end{align}
+The damping matrix which contains the coefficients of the drag is denoted the hydrodynamic damping matrix. This consists both of $D$ which is the linear damping matrix due to potential damping and possible skin friction with the water and $D_n(\nu_r)$ which is the nonlinear damping matrix due to quadratic damping and higher order terms.  This will, as a start be modelled as the linear part, being potential and viscous damping. As higher velocities will the nonlinear part become more dominant due to the quadratic terms of the velocity, thus is mostly used at faster vessels. The linear damping matrix $D$ contributes more at lower speed manoeuvring and stationkeeping. Therefore is the damping matrix $D$ used, and is expressed by ~\citep{fossen} for a 6 \ac{DOF} system to be
+\begin{align}
+D =-
+\begin{bmatrix}
+X_u & 0 & 0 & 0 & 0 & 0\\
+0 & Y_v & 0 & Y_p & 0 & Y_r\\
+0 & 0 & Z_w & 0 & Z_q & 0\\
+0 & K_v & 0 & K_p & 0 & K_r\\
+0 & 0 & M_w & 0 & M_q & 0\\
+0 & N_v & 0 & N_p & 0 & N_r
+\end{bmatrix}
+\end{align}
+
+The rigid-body system matrix of the vessel is given for a 6 \ac{DOF} system by ~\citep{fossen} as:
+\begin{align}
+M_{RB} =
+\begin{bmatrix}
+m\boldsymbol{I}_{3x3} & -m\boldsymbol{S}(r^b_g)\\
+-m\boldsymbol{S}(r^b_g) & \boldsymbol{I}_b
+\end{bmatrix}
+=
+\begin{bmatrix}
+m & 0 & 0 & 0 & mz_g & -my_g\\
+0 & m & 0 & -mz_g & 0 & mx_g\\
+0 & 0 & m & my_g & -mx_g & 0\\
+0 & -mz_g & my_g & I_x & -I_{xy} & -I_{xz}\\
+mz_g & 0 & -mx_g & -I_{yx} & I_y & -I_{yz}\\
+-my_g & mx_g & 0 & -I_{zx} & -I_{zy} & I_z
+\end{bmatrix}
+\end{align}
+
+This will be reduced to a 5 \ac{DOF} system due to the fact that the vessels buoyancy cannot be controlled as such. The vessel will always be on the water surface and this removes the degree of freedom which is the heave, the change of $z$ position of the vessel. A 5 \ac{DOF} system will be modelled as:
+\begin{align}
+M_{RB} =
+\begin{bmatrix}
+m & 0 & 0 & mz_g & -my_g\\
+0 & m & -mz_g & 0 & mx_g\\
+0 & -mz_g & I_x & -I_{xy} & -I_{xz}\\
+mz_g & 0 & -I_{yx} & I_y & -I_{yz}\\
+-my_g & mx_g & -I_{zx} & -I_{zy} & I_z
+\end{bmatrix}
+\end{align}
+and
+\begin{align}
+D = -
+\begin{bmatrix}
+X_u & 0 & 0 & 0 & 0\\
+0 & Y_v & Y_p & 0 & Y_r\\
+0 & K_v & K_p & 0 & K_r\\
+0 & 0 & 0 & M_q & 0\\
+0 & N_v & N_p & 0 & N_r
+\end{bmatrix}
+\end{align}
+where the heave are neglected from the 6 \ac{DOF} system. In the principle could a 3 \ac{DOF} system be enough to make the control to the vessel and make it manoeuvre in the water, but as the scope is to exploit the sonar to map the seabed it would be beneficial to implement the roll and pitch as well and make the system as a 5 \ac{DOF}.
+
+\section{Identification of Hydrodynamic Derivatives}
+The linear kinetic model \eqref{eq:reducedmodel1}, which consists of the mass matrix $M_{RB}$ and the damping matrix $D$.
+\begin{align}
+M_{RB} \dot \nu_r + D\nu_r = \tau_{RB} + \tau
+\label{eq:reducedmodel1}
+\end{align}
+The coefficients of the model needs to be determined before the model can be simulated and implemented. These coefficients can be determined in multiple ways. Often ship design companies are able to use \ac{CFD} to determine the coefficients, or make use of a towing tank to determine the coefficients. These applications are often expensive and proprietary. So a third method to do this is to perform some simple tests to do approximations of the coefficients. To do so some assumptions needs to be made. The model looks like:
+\begin{align}
+M_{RB} \dot \nu_r + D\nu_r = \tau_{hyd} + \tau_{hs} + \tau_{wind} + \tau_{wave} + \tau
+\end{align}
+Since the tests will be performed in still water some of the forces can be neglected. The $\tau$ is the only force to be taken into account to perform the tests. This is the input to the vessel. This can be assumed due to the forthcoming procedure of the tests.
+
+At first the vessel is accelerated to maximum constant velocity. When maximum velocity is ensured the input force to the vessel is removed and zero input is applied. This will correspond to a model like:
+\begin{align}
+M_{RB} \dot \nu_r + D\nu_r = 0
+\label{eq:decelmodel}
+\end{align}
+\todo{lav tegning med step på og fra baad og indsaet her}
+This makes it possible to determine some of the coefficients of the $D$ matrix. e.g. is the damping in the x direction determined by:
+\begin{align} 
+M_{11} \ddot x + D_{11} \dot x = 0
+\label{eq:noinput}
+\end{align}
+The mass of the vessel can be measured, being the $M_{11}$. The velocity and acceleration can be estimated from measurements of the internal \ac{IMU} at the vessel. This makes the damping coefficient $D_{11}$ the only unknown in equation \ref{eq:noinput}. From this a linearisation is can be made, see appendix \todo{indsaet et ref til appendix naar det er lavet}.
+
+This makes it possible to determine the input force by applying a step input on the motors and let the vessel accelerate to a maximum velocity. A model of this will look like:
+\begin{align} 
+M_{11} \ddot x + D_{11} \dot x = \tau
+\label{eq:maxinput}
+\end{align}
+From this it is possible to estimate the input force since it is the only unknown in equation \ref{eq:maxinput}.
+
+This type of procedure is used in all of the tests. Step one is to apply force in one direction and measure the damping and after this determine the input.
+
+
+
