@@ -44,18 +44,33 @@ to another node.
 \todo{Explaing tocic and service models better, keyowrd is unicast,
 multicast, asynchronous and synchronous}
 
-\missingfigure{Simple node topic illustration}
+\begin{figure}[htbp]
+	\centering
+	\includesvg{ros_node_simple_concept}
+	\caption{Basic principle of the node abstraction illustrating a
+	service and two topics. The topology choosen here is only to illustrate
+	the possibilities.}
+	\label{fig:ros-node-simple-concept}
+\end{figure}
 
 When that is said, that is not the whole picture of the topology. In a
 need to make this flexible \ac{ROS} has made it such that the nodes
 can be started and stopped kind of ``runtime''. That is such that it is
-possible to have different configurations of nods to run in different
+possible to have different configurations of nodes to run in different
 scenarios, i.e. in development with debugging nodes and virtual sensor
 nodes versus in the real mission where no debugging nodes is used and
 real sesnor nodes that use real sensor data is used.
 
-\missingfigure{Full topology picture of the system with a master and
-multiple machines}
+\begin{figure}[htbp]
+	\centering
+	\includesvg{ros_node_master_concept}
+	\caption{Concept showing the ROS master together with the nodes,
+	also illustrating the masters role with multiple machines. Dashed
+	lines hows that the node will either subscribe or publish to the
+	topic. This only happens initially when connecting to a topic. Gray
+	area is two physical separate machines.}
+	\label{fig:ros-node-master-concept}
+\end{figure}
 
 \todo{Forklar noget om node håndtering, og master og storken og
 blomsterne og bierne, og illustrationer er godt for den som lærer ved
