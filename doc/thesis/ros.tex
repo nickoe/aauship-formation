@@ -23,28 +23,41 @@ licensed under an open source, BSD license.}
 	\hfill ROS.org
 \end{quote}
 
-
-
 \section{\acs{ROS} terminology}
 To start working with \ac{ROS} it is important to use the terminology
-used by \ac{ROS} to avoid confusion. Therefore these  will be stated in this section.
-The idea of \ac{ROS} is to make it easy to build a system modularly,
-and this is achieved byt using almost ``self-contained'' blocks called
-\textit{nodes}, which is application parts that is run as its own
-process. A node should be designed to execute limited tasks such as
-image processing or similar atomic processes. These nodes can then
-communicate with other nodes by the means of two main communication
-forms called \textit{topics} and \textit{services}.
+used by \ac{ROS} to avoid confusion. Therefore these  will be stated
+in this section.  The idea of \ac{ROS} is to make it easy to build a
+system modularly, and this is achieved byt using almost
+``self-contained'' code segments called \textit{nodes}, which is
+application parts that is run as its own process. A node should be
+designed to execute limited tasks such as image processing or similar
+atomic processes. These nodes can then communicate with other nodes by
+the means of two main communication forms called \textit{topics} and
+\textit{services}.
 
-The topic is an asynchronous connection, that can \textit{publish} from many
-nodes and be \textit{subscribed} by many nodes.
-
-The service is a synchronous connection that is used between one node
+\begin{description}
+\item[The topic] is an asynchronous connection, that can \textit{publish}
+from many nodes and be \textit{subscribed} by many nodes.
+\item[The service] is a synchronous connection that is used between one node
 to another node.
-
-\todo{Forklar noget om node håndtering, og master og storken og
-	blomsterne og bierne, og illustrationer er godt for den som lærer
-ved at se det.}
-
+\end{description}
 \todo{Explaing tocic and service models better, keyowrd is unicast,
 multicast, asynchronous and synchronous}
+
+\missingfigure{Simple node topic illustration}
+
+When that is said, that is not the whole picture of the topology. In a
+need to make this flexible \ac{ROS} has made it such that the nodes
+can be started and stopped kind of ``runtime''. That is such that it is
+possible to have different configurations of nods to run in different
+scenarios, i.e. in development with debugging nodes and virtual sensor
+nodes versus in the real mission where no debugging nodes is used and
+real sesnor nodes that use real sensor data is used.
+
+\missingfigure{Full topology picture of the system with a master and
+multiple machines}
+
+\todo{Forklar noget om node håndtering, og master og storken og
+blomsterne og bierne, og illustrationer er godt for den som lærer ved
+at se det.}
+
