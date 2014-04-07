@@ -34,7 +34,7 @@ class LLI(object):
         echorcv = serial.Serial("/dev/echosounder",4800,timeout=0.04)
 
 	BUFSIZE = 1024
-        echolog = open("logs/echolog.log",'w',BUFSIZE)
+        echolog = open("logs/echo.log",'w',BUFSIZE)
         gps2log = open("logs/gps2.log",'wb',BUFSIZE)
         time.sleep(5)
         self.packet.start()
