@@ -3,22 +3,22 @@
 which is done on a \acl{ROS} platform. This should provide all the
 information needed to complete the implementation.}
 
-It was decided to use \ac{ROS} in the implementation, It is used as
-an other abstraction layer on top of the \ac{LLI}. In turn making
-AAUSHIP more modular and make it easy for others to write parts of the
-control system without reimplementing everything. \todo{Det kunne være
-	smart at få ordet ``extensible'' in her}
-
-\ac{ROS} is a project available at \url{http://ros.org}, which
-describes itself in short as following:
+It was decided to use \ac{ROS} in the implementation, It is used as an
+other abstraction layer on top of the \ac{LLI}. In turn making AAUSHIP
+modular and make it easy for others to write parts of the control
+system without reimplementing basic components. This in turn makes it
+an extensible platform, that should be easy to extend. \ac{ROS} is a
+project available at \url{http://ros.org}, which describes itself in
+short as following:
 
 \begin{quote}
-\noindent	\textit{
+\textit{\noindent
 	ROS (Robot Operating System) provides libraries and
 	tools to help software developers create robot applications. It
 	provides hardware abstraction, device drivers, libraries,
 	visualizers, message-passing, package management, and more. ROS is
-licensed under an open source, BSD license.}
+	licensed under an open source, BSD license.
+}
 		
 	\hfill ROS.org
 \end{quote}
@@ -37,18 +37,34 @@ the means of two main communication forms called \textit{topics} and
 
 \begin{description}
 \item[The topic] is an asynchronous connection, that can \textit{publish}
-from many nodes and be \textit{subscribed} by many nodes.
+from many nodes and be \textit{subscribed} by many nodes. This means
+that it is a multicast form for providing data.
 \item[The service] is a synchronous connection that is used between one node
-to another node.
+to another node. This is only unicast.
 \end{description}
-\todo{Explaing tocic and service models better, keyowrd is unicast,
-multicast, asynchronous and synchronous}
+
+An illustration of multiple nodes connected via topics and a service
+is on figure~\vref{fig:ros-node-simple-concept}. This concept can also
+be used across multiple machines. This is illustrated in
+figure~\vref{fig:ros-node-master-concept}. On this a new type of unique
+node is introduced, this is the \ac{ROS} master. This is a required
+component for a ROS system to run. The masters only purpose is to make
+the nodes connect together via the topics or services. There can only
+be one master per \ac{ROS} system. This also enables multiple machines
+to share topics, by connecting the master that runs on one machine. In
+short the masters sole purpose is to make these connections. It is
+illustrated by the dashed arrows. Each node says that it want to i.e.
+publish or subscribe to a certain topic. To connect a node from one
+machine to another, the environment variable \texttt{ROS\_MASTER\_URI}
+has to be set to the host with the master running, and the
+\texttt{/etc/hosts} file has to be set on all machines with the other
+machines hostnames.
 
 \begin{figure}[htbp]
 	\centering
 	\includesvg{ros_node_simple_concept}
 	\caption{Basic principle of the node abstraction illustrating a
-	service and two topics. The topology choosen here is only to illustrate
+	service and two topics. The topology chosen here is only to illustrate
 	the possibilities.}
 	\label{fig:ros-node-simple-concept}
 \end{figure}
@@ -59,7 +75,7 @@ can be started and stopped kind of ``runtime''. That is such that it is
 possible to have different configurations of nodes to run in different
 scenarios, i.e. in development with debugging nodes and virtual sensor
 nodes versus in the real mission where no debugging nodes is used and
-real sesnor nodes that use real sensor data is used.
+real sensor nodes that use real sensor data is used.
 
 \begin{figure}[htbp]
 	\centering
@@ -72,7 +88,11 @@ real sesnor nodes that use real sensor data is used.
 	\label{fig:ros-node-master-concept}
 \end{figure}
 
-\todo{Forklar noget om node håndtering, og master og storken og
-blomsterne og bierne, og illustrationer er godt for den som lærer ved
-at se det.}
+\section{ROS on AAUSHIP}
+\begin{figure}[htbp]
+	\centering
+	\includesvg{ros_aauship_teleop}
+	\caption{ROS configuration on AAUSHIP for manual tele operation.}
+	\label{fig:ros-aauship-teleop}
+\end{figure}
 
