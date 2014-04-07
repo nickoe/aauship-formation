@@ -6,12 +6,12 @@ logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 testname = 'crashtest';
 % fid = fopen('busroute/mbus5/gpsdata141212.txt'); % reduced GPS
 % fidr = fopen('busroute/gpsdata141212.txt'); % all GPS
-% kdata = load('busroute/mbus5/Kalmandata141212.txt'); % Position outputs
 % adata = load('busroute/mbus5/accdata141212.csv'); % Accelerometer outputs
 
 %% Data files
 gps1file = fopen([logpath,testname,'/gps1.log']);
 imudata = load([logpath,testname,'/imu.log']);
+echofile = fopen([logpath,testname,'/echo.log']);
 starttime = imudata(1,13); % Earliest timestamp
 
 
@@ -110,7 +110,7 @@ temp = imudata(:,11)*0.14; % 0.14 degrees celcius
 aux_adc = imudata(:,12)*0.806; % 0.806 mV
 imutime = imudata(:,13)-starttime; % Seconds since epoch on HLI
 
-figure(4)
+figure(2)
 subplot(4,1,1)
 plot(imutime, gyro)
 title('Gyrometer')
@@ -140,9 +140,63 @@ legend('Supply','Temp','ADC')
 % Azimuth = atan2 (Y_H / X_H )
 
 heading = atan2(-magn(:,2),magn(:,1))*180/pi;
-figure(5)
+figure(3)
 % subplot(2,1,1)
 plot(imutime,heading)
 % subplot(2,1,1)
 % plot(imutime,Azimuth)
 
+%% Echosounder data
+echo.depth.value=NaN;
+echo.depth.timestamp=NaN;
+echo.temperature.value=NaN;
+echo.temperature.timestamp=NaN;
+
+ii=1;
+
+filenotdone = 1;
+while(filenotdone > 0)
+    % scan single line into matrix
+    [str, count] = fscanf(echofile, '%[^\n]', 1);
+    % skip over \n
+    [strnl, count] = fscanf(echofile, '%[\n]', 1);
+    % make sure we stop the while when EOF
+    if(count == 0)
+        filenotdone = 0;
+    end
+    
+    delim = findstr(',',str);
+    
+    % detph data
+    if isempty(findstr(str,'$SDDPT,'))~=1
+        ii=ii+1;
+        s = sscanf(str(delim(1)+1:delim(2)-1), '%f');
+        ss = sscanf(str(delim(3)+1:length(str)), '%f');
+        if(s)
+            echo.depth.value(ii) = s;
+            echo.depth.timestamp(ii) = ss;
+        else
+            echo.depth.value(ii) = NaN;
+            echo.depth.timestamp(ii) = NaN;
+        end
+    end
+    
+    % temperature data
+    if isempty(findstr(str,'$SDMTW,'))~=1
+        s = sscanf(str(delim(1)+1:delim(2)-1), '%f');
+        ss = sscanf(str(delim(3)+1:length(str)), '%f');
+        if(s)
+            echo.temperature.value(ii) = s;
+            echo.temperature.timestamp(ii) = ss;
+        else
+            echo.temperature.value(ii) = NaN;
+            echo.temperature.timestamp(ii) = NaN;
+        end
+    end
+    
+end
+figure(4)
+plot(echo.depth.timestamp,echo.depth.value,echo.temperature.timestamp',echo.temperature.value)
+xlabel('Timestamp [s]')
+ylabel('Depth [m] / Temperature [degree C]')
+legend('Depth','Temperature')
