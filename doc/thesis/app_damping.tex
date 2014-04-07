@@ -1,5 +1,7 @@
-\chapter{Determination of damping coefficients}
+\chapter{Identification of hydrodynamic coefficients}
 \label{app:damping}
+\section{Purpose}
+The purpose with this test is to identify the hydrodynamic coefficients used in the linear model for AAUSHIP.}
 
 \section{Theory}
 The theory behind this measurement journal is as described in section \ref{sec:hydrocoeff}. The purpose is to determine the hydrodynamic damping coefficients. This is done from three tests, first a surge test, next a sway test and lastly a rotation test. The system is seen as a 3 \ac{DOF} system due to the missing control of heave, pitch and roll. The damping coefficients from these cannot be determined from the following tests, but some of these have been estimated by \todo{ref til lunde og brian} and are used directly from that work.
@@ -7,17 +9,22 @@ The theory behind this measurement journal is as described in section \ref{sec:h
 \section{Tools}
 Tools needed are:
 \begin{itemize}
-	\item The AAUSHIP
-	\item Computer
+	\item AAUSHIP equipped with:
+		\begin{enumerate}
+			\item Controller for surge only
+			\item Controller for sway only
+			\item Controller for yawing only
+		\end{enumerate}
+	\item Computer to set remote parameters and tele operation
 \end{itemize}
 To be able to make the tests the AAUSHIP needs to have both forward thrusters and sideways thrusters. These are implemented and can be controlled from a computer.
 
 \section{Method}
 The tests performed are as follows:
 \begin{enumerate}
-	\item The first test is a surge test. This test is done to test the forward damping coefficient being $X_u$ from the damping matrix $D$. The vessel will accelerate to a certain velocity and keep this. Then all input is put to zero and the vessel will decelerate. This will, as described in section \ref{sec:hydrocoeff}, give a damping coefficient in the forward motion. This is expressed as $m \ddot x - X_u \dot x = 0$ and $X_u$ can be estimated. A step input is now set on the vessel to see the acceleration from zero velocity to the same constant velocity as before. This now gives the input force at the vessel, which is the last unknown in $m \ddot x - X_u \dot x = \tau$.
-	\item The second test is a purely sway test. The vessel will make use of the sideways thrusters to move strictly sideways. This implies that there is no rotation or movement in $\psi$ and $x$. Thus makes the moving equation as $m \ddot y - Y_v \dot y = 0$. Here is the vessel again accelerated to a constant velocity and the input is then set to zero, and $Y_v$ can be determined. After this the sideways thrusters can be used to accelerate the vessel and the input can be estimated by $m \ddot y - Y_v \dot y = \tau$ where $\tau$ is the only unknown.
-	\item The last test is the rotation test. In this test it is of importance to control the sideways thrusters such that the vessel will keep the position at both $x$ and $y$, suck that only rotation is used to move the surrounding water. The vessel is accelerated to a constant angular velocity and the input is then set to zero. The damping of this will determine $N_r$ from $I_z\ddot \psi - N_r \dot \psi = 0$. Now the vessel needs to reach the constant angular velocity again from zero, and the input can now be estimated from $I_z\ddot \psi - N_r \dot \psi = \tau$.
+	\item The first test is a \textit{surge} test. This test is done to test the forward damping coefficient being $X_u$ from the damping matrix $D$. The vessel will accelerate to a certain velocity and keep this. Then all input is put to zero and the vessel will decelerate. This will, as described in section \ref{sec:hydrocoeff}, give a damping coefficient in the forward motion. This is expressed as $m \ddot x - X_u \dot x = 0$ and $X_u$ can be estimated. A step input is now set on the vessel to see the acceleration from zero velocity to the same constant velocity as before. This now gives the input force at the vessel, which is the last unknown in $m \ddot x - X_u \dot x = \tau$.
+\item The second test is a purely \textit{sway} test. The vessel will make use of the sideways thrusters to move strictly sideways. This implies that there is no rotation or movement in $\psi$ and $x$. Thus makes the moving equation as $m \ddot y - Y_v \dot y = 0$. Here is the vessel again accelerated to a constant velocity and the input is then set to zero, and $Y_v$ can be determined. After this the sideways thrusters can be used to accelerate the vessel and the input can be estimated by $m \ddot y - Y_v \dot y = \tau$ where $\tau$ is the only unknown.
+	\item The last test is the \textit{yaw} test. In this test it is of importance to control the sideways thrusters such that the vessel will keep the position at both $x$ and $y$, suck that only rotation is used to move the surrounding water. The vessel is accelerated to a constant angular velocity and the input is then set to zero. The damping of this will determine $N_r$ from $I_z\ddot \psi - N_r \dot \psi = 0$. Now the vessel needs to reach the constant angular velocity again from zero, and the input can now be estimated from $I_z\ddot \psi - N_r \dot \psi = \tau$.
 \end{enumerate}
 After these constants have been estimated only two needs to be determined in the damping matrix. Recall the damping matrix for a 3 \ac{DOF} system
 \begin{align}
