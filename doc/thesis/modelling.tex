@@ -118,6 +118,7 @@ X_u & 0 & 0 & 0 & 0\\
 where the heave are neglected from the 6 \ac{DOF} system. In the principle could a 3 \ac{DOF} system be enough to make the control to the vessel and make it manoeuvre in the water, but as the scope is to exploit the sonar to map the seabed it would be beneficial to implement the roll and pitch as well and make the system as a 5 \ac{DOF}.
 
 \section{Identification of Hydrodynamic Derivatives}
+\label{sec:hydrocoeff}
 The linear kinetic model \eqref{eq:reducedmodel1}, which consists of the mass matrix $M_{RB}$ and the damping matrix $D$.
 \begin{align}
 M_{RB} \dot \nu_r + D\nu_r = \tau_{RB} + \tau
@@ -134,22 +135,48 @@ At first the vessel is accelerated to maximum constant velocity. When maximum ve
 M_{RB} \dot \nu_r + D\nu_r = 0
 \label{eq:decelmodel}
 \end{align}
-\todo{lav tegning med step på og fra baad og indsaet her}
+An acceleration, constant velocity and deceleration will look like figure \ref{fig:acceldecel}.
+\begin{figure}[htbp]
+	\centering
+	\includesvg[width=0.5\textwidth]{acceldecel}
+	\caption{An acceleration followed by constant velocity followed by zero input.}
+	\label{fig:acceldecel}
+\end{figure}
 This makes it possible to determine some of the coefficients of the $D$ matrix. e.g. is the damping in the x direction determined by:
 \begin{align} 
 M_{11} \ddot x + D_{11} \dot x = 0
 \label{eq:noinput}
 \end{align}
-The mass of the vessel can be measured, being the $M_{11}$. The velocity and acceleration can be estimated from measurements of the internal \ac{IMU} at the vessel. This makes the damping coefficient $D_{11}$ the only unknown in equation \ref{eq:noinput}. From this a linearisation is can be made, see appendix \todo{indsaet et ref til appendix naar det er lavet}.
+The mass of the vessel can be measured, being the $M_{11}$. The velocity and acceleration can be estimated from measurements of the positions measured by the \ac{GPS} at the vessel. This makes the damping coefficient $D_{11}$ the only unknown in equation \ref{eq:noinput}. From this a linearisation can be made, see appendix \ref{app:damping}.
 
-This makes it possible to determine the input force by applying a step input on the motors and let the vessel accelerate to a maximum velocity. A model of this will look like:
+This makes it possible to determine the input force by applying a step input on the motors and let the vessel accelerate to a maximum velocity. This can be done since, due to the previous test, only the input is unknown. A model of this will look like:
 \begin{align} 
 M_{11} \ddot x + D_{11} \dot x = \tau
 \label{eq:maxinput}
 \end{align}
-From this it is possible to estimate the input force since it is the only unknown in equation \ref{eq:maxinput}.
+From this it is possible to estimate the input force as a linearisation, since this is the only unknown from equation \ref{eq:maxinput}.
 
-This type of procedure is used in all of the tests. Step one is to apply force in one direction and measure the damping and after this determine the input.
+This type of procedure is used in all of the tests and can be put into steps.
+\begin{enumerate}
+	\item Step one is to apply force in one direction until a constant speed is achieved and then measure the damping while the vessel is decelerating to estimate the damping coefficient.
+	\item Step two can be made after knowing the damping coefficient. Then is only the input unknown and a step can be applied to accelerate the vessel to constant velocity again. From this step input can a input force be estimated.
+\end{enumerate}
 
-
-
+One of the important things are to decouple the tests such that the damping coefficients can be measured. This can, as a start, be performed in x-, y- and z-directions. The mixed damping coefficients, as the $Y_r$ (the force in y-direction due to a rotation), are harder to determine without the right equipment. When taking these into consideration they may not have as big an influence as the decoupled damping coefficients in x-, y- and z-directions. Therefore are the mixed damping coefficients omitted and set to zero. The decoupled coefficients are tested from the equations in \ref{eq:syseq}.
+\begin{subequations}
+\begin{align}
+M_{11} \ddot x + D_{11} \dot x = \tau\\
+M_{22} \ddot x + D_{22} \dot x = \tau\\
+M_{55} \ddot x + D_{55} \dot x = \tau
+\end{align}
+\end{subequations}
+being
+\begin{subequations}
+\begin{align}
+m \ddot x - X_u \dot x = \tau\\
+m \ddot x - Y_v \dot x = \tau\\
+I_z \ddot x - N_r \dot x = \tau
+\end{align}
+\label{eq:syseq}
+\end{subequations}
+The performed tests to measure these coefficients can be found in appendix \ref{app:damping}.
