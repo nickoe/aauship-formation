@@ -1,50 +1,17 @@
 \input{preamble}
-
-\hypersetup{
-  pdftitle={Formation Control for Unmanned Surface Vehicles for Surveying Purposes},
-  pdfsubject={Master's thesis, Aalborg University},
-  pdfauthor={Nick \O stergaard and Jeppe Dam},
-  pdfcreator=LaTeX rules for typesetting!,
-  linkcolor=black,
-  citecolor=black,
-  filecolor=black,
-  urlcolor=black
-}
+\include{frontmatter/hypersetup}
 
 % This can be used to reduce the number of chapters to be formatted
-%\includeonly{ros} 
+%\includeonly{ros}
+
 \begin{document}
-
-% Frontpage
-\newgeometry{left=3cm,top=3cm,right=3cm,bottom=3cm}
-\author{Nick Østergaard and Jeppe Dam}
-\title{\textbf{\emph{Formation Control for Unmanned Surface Vehicles for Surveying Purposes}}}
-\date{\today}
-\maketitle
-\thispagestyle{empty}
-\begin{center}
-	\includegraphics[width=13cm]{frontmatter/aauship}
-\end{center}
-\vfill
-\begin{center}
-	\includegraphics[width=5cm]{frontmatter/AAU_LOGO_CMYK_UK}\\
-	Department of Electronic Systems
-\end{center}
-\clearpage
-\restoregeometry
-
 \frontmatter
+\include{frontmatter/frontpage}
 %\chapterstyle{nickoe}
-
-%\layout
-%  \includepdf{illustrations/cover}
-%\cleardoublepage
-%\input{formalities/titelbladdk}
 \cleardoublepage
-\input{frontmatter/titlepage}
-\input{frontmatter/preface}
+\include{frontmatter/titlepage}
+\include{frontmatter/preface}
 
-%%%%%%% Maybe we should have an overview of the system here
 \cleardoublepage
 \tableofcontents
 \input{../manual/acronyms}
@@ -52,11 +19,8 @@
 \mainmatter
 \descpart{Introduction}{In this part is the motivation for the project stated and the previous work within the subject will be summed up.}
 \chapter{Introduction}
-% \input{introduction}
-\input{formcontrol}
-
-% \descpart{Preliminary analysis}{%
-% This is da stuff that is roolin'.}
+%\input{introduction} % Talk specifically about the data from havnen?
+\include{formcontrol}
 
 \descpart{Control Design}{}
 \include{designs}
@@ -69,9 +33,8 @@
 \descpart{Appendix}{%
 The appendix includes chapters which are important for the project, but not necessarily interesting to the reader of the report.}
 \appendix
-\include{app_damping}
-\includepdf[pages=-]{../manual/manual.pdf}
-
+\include{appendix/identification_of_hydrodynamic_derivatives}
+\include{appendix/manual}
 
 \backmatter
 \bibliographystyle{apalike}

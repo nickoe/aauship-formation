@@ -1,8 +1,11 @@
-\documentclass[a4paper,11pt,oneside,fleqn]{memoir}
-\usepackage{pdfpages} % Inkludere en pdf side som en side  
+\input{preamble}
+\def\wkno{3}
+\hypersetup{
+  pdfsubject={Worksheet \#\wkno},
+}
 \begin{document}
 \author{14gr1034}
-\title{Worksheet \#3}
+\title{Worksheet \#\wkno}
 \date{\today}
 \maketitle
 \begin{center}
@@ -17,6 +20,4 @@ A. A small introduction to ROS is included.}
 \includepdf[pages=43-46]{thesis}
 \includepdf[pages=57]{thesis}
 
-%Whole report
-%\includepdf[pages=-]{thesis}
 \end{document}
