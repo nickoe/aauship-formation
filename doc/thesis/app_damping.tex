@@ -5,13 +5,13 @@ The purpose with this test is to identify the hydrodynamic coefficients used in 
 
 \section{Theory}
 The theory behind this measurement journal is as described in section
-\ref{sec:hydrocoeff}. The purpose is to determine the hydrodynamic
+\ref{sec:hydrocoeff}, and is expanded in this journal to explicit get the coefficients needed. The purpose is to identify the hydrodynamic
 damping coefficients. This is done from three tests, first a surge
 test, next a sway test and lastly a rotation test. The system is seen
 as a 3 \ac{DOF} system due to the missing control of heave, pitch and
 roll. The damping coefficients from these cannot be determined from
-the following tests, but some of these have been estimated by
-\citep{13gr931} and are used directly from that work.
+the following tests, and the heave is a parameter that cannot be controlled since the vessel cannot dive.
+%but some of these have been estimated by \citep{13gr931} and are used directly from that work.
 
 \todo{Are we using the values 13gr931 found, else, state which
 	parameters exactly. If then, it might be better to state them as a
@@ -19,6 +19,42 @@ result. Or if not used here at all, then don't mention them.}
 
 \todo{There is no explicit equations on how to actually
 evaluate/calculate the data}
+\\
+
+\textbf{Surge test}\\
+From the surge test it is possible to estimate the damping coefficient in $x$, being $X_u$. This can be estimated by
+\begin{align}
+m \ddot x - X_u \dot x = 0\nonumber\\
+X_u = \frac{m \ddot x}{\dot x}
+\end{align}
+Measurements of the \ac{GPS} on the vessel and the gyroscope can be used to estimate the position, velocity and acceleration.\\
+
+\textbf{Sway test}\\
+From the sway test it is possible to estimate the damping coefficient in $y$, being $Y_v$. This can be estimated by
+\begin{align}
+m \ddot y - Y_v \dot y = 0\nonumber\\
+Y_v = \frac{m \ddot y}{\dot y}
+\end{align}
+Measurements of the \ac{GPS} on the vessel and the gyroscope can be used to estimate
+the position, velocity and acceleration.\\
+
+\textbf{Rotation test}\\
+From test of rotation it is possible to estimate the damping coefficient due to rotation, being $N_r$. This can be estimated by
+\begin{align}
+I_z\ddot \psi - N_r \dot \psi = 0\nonumber\\
+N_r = \frac{I_z \ddot \psi}{\dot \psi}
+\end{align}
+The vessel may not move in $x$ and $y$ directions which can be verified by the \ac{GPS}. The gyroscope measures the velocity and acceleration of the moment.
+
+In all three tests it is of importance that the vessel only moves in the respective directions such that only a pure damping in the directions is measured. After measurement of the three first coefficients it is possible to determine the last two. These are solved by the following
+\begin{align}
+m \ddot y + mx_g\ddot\psi - Y_v \dot y - Y_r \dot \psi = \tau\\
+\end{align}
+
+\begin{align}
+mx_g \ddot y + I_z\ddot \psi - N_v \dot y - N_r \dot \psi = \tau\\
+\end{align}
+
 
 \section{Tools}
 Tools needed are:
@@ -37,7 +73,7 @@ To be able to make the tests the AAUSHIP needs to have both forward thrusters an
 The tests performed are as follows:
 \begin{enumerate}
 	\item The first test is a \textit{surge} test. This test is done to test the forward damping coefficient being $X_u$ from the damping matrix $D$. The vessel will accelerate to a certain velocity and keep this. Then all input is put to zero and the vessel will decelerate. This will, as described in section \ref{sec:hydrocoeff}, give a damping coefficient in the forward motion. This is expressed as $m \ddot x - X_u \dot x = 0$ and $X_u$ can be estimated. A step input is now set on the vessel to see the acceleration from zero velocity to the same constant velocity as before. This now gives the input force at the vessel, which is the last unknown in $m \ddot x - X_u \dot x = \tau$.
-\item The second test is a purely \textit{sway} test. The vessel will make use of the sideways thrusters to move strictly sideways. This implies that there is no rotation or movement in $\psi$ and $x$. Thus makes the moving equation as $m \ddot y - Y_v \dot y = 0$. Here is the vessel again accelerated to a constant velocity and the input is then set to zero, and $Y_v$ can be determined. After this the sideways thrusters can be used to accelerate the vessel and the input can be estimated by $m \ddot y - Y_v \dot y = \tau$ where $\tau$ is the only unknown.
+	\item The second test is a purely \textit{sway} test. The vessel will make use of the sideways thrusters to move strictly sideways. This implies that there is no rotation or movement in $\psi$ and $x$. Thus makes the moving equation as $m \ddot y - Y_v \dot y = 0$. Here is the vessel again accelerated to a constant velocity and the input is then set to zero, and $Y_v$ can be determined. After this the sideways thrusters can be used to accelerate the vessel and the input can be estimated by $m \ddot y - Y_v \dot y = \tau$ where $\tau$ is the only unknown.
 	\item The last test is the \textit{yaw} test. In this test it is of importance to control the sideways thrusters such that the vessel will keep the position at both $x$ and $y$, suck that only rotation is used to move the surrounding water. The vessel is accelerated to a constant angular velocity and the input is then set to zero. The damping of this will determine $N_r$ from $I_z\ddot \psi - N_r \dot \psi = 0$. Now the vessel needs to reach the constant angular velocity again from zero, and the input can now be estimated from $I_z\ddot \psi - N_r \dot \psi = \tau$.
 \end{enumerate}
 After these constants have been estimated only two needs to be determined in the damping matrix. Recall the damping matrix for a 3 \ac{DOF} system
@@ -49,6 +85,9 @@ X_u & 0 & 0\\
 0 & N_v & N_r
 \end{bmatrix}
 \end{align}
+These two coefficients can be determined as described in the theory.
+
+
 So now is only $Y_r$ and $N_v$ unknown. These two can be determined from the system equations since the rest of the constants have been estimated. They can be determined from:
 \begin{align}
 m \ddot y + mx_g\ddot\psi - Y_v \dot y - Y_r \dot \psi = \tau\\
@@ -59,8 +98,55 @@ The methods should describe the actions to perform, this is more like
 theory for the most part
 
 \section{Results}
-\todo{There is no table for transferring measurement results}
+Test 1.
+
+
+
+
+Test 2.
+
+
+
+
+Test 3.
+
+
+
+
+
+
+The results from measurements and estimation can be found in tabel \ref{tab:dmatrix}.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{ c | c }
+  Coefficient & Value \\
+  \hline
+  $X_u$ & 2 \\
+  $Y_v$ & 2 \\
+  $N_r$ & 2 \\
+  $Y_r$ & 2 \\
+  $N_v$ & 2
+\end{tabular}
+\caption{Hej}
+\label{tab:dmatrix}
+\end{table}
+
+The full 5 \ac{DOF} damping matrix looks like
+\begin{align}
+D =-
+\begin{bmatrix}
+X_u & 0 & 0 & 0 & 0\\
+0 & Y_v & Y_p & 0 & Y_r\\
+0 & K_v & K_p & 0 & K_r\\
+0 & 0 & 0 & M_q & 0\\
+0 & N_v & N_p & 0 & N_r
+\end{bmatrix}
+\end{align}
+
 
 \section{Discussion}
 
+
 \section{Conclusion}
+
