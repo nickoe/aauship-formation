@@ -70,6 +70,7 @@ To be able to make the tests the AAUSHIP needs to have both forward thrusters an
 
 \section{Method}
 The tests performed are as follows:
+\todo{Hvordan konverteres maaleresultater til de noedvendige tal fra ligningerne? Dette har vaeret et stoerre spsergsmaal og problem! Vi kan godt se, at der skal vaere en sammenhaeng mellem hastigheden og daempningen, men vi kan ikke faa det skrevet ud i vores ligninger. Vi kan ikke loese ligningen (fatsvag)}
 \begin{enumerate}
 	\item The first test is a \textit{surge} test. This test is done to test the forward damping coefficient being $X_u$ from the damping matrix $D$. The vessel will accelerate to a certain velocity and keep this. Then all input is put to zero and the vessel will decelerate. This will, as described in section \ref{sec:hydrocoeff}, give a damping coefficient in the forward motion. This is expressed as $m \ddot x - X_u \dot x = 0$ and $X_u$ can be estimated. A step input is now set on the vessel to see the acceleration from zero velocity to the same constant velocity as before. This now gives the input force at the vessel, which is the last unknown in $m \ddot x - X_u \dot x = \tau$.
 	\item The second test is a purely \textit{sway} test. The vessel will make use of the sideways thrusters to move strictly sideways. This implies that there is no rotation or movement in $\psi$ and $x$. Thus makes the moving equation as $m \ddot y - Y_v \dot y = 0$. Here is the vessel again accelerated to a constant velocity and the input is then set to zero, and $Y_v$ can be determined. After this the sideways thrusters can be used to accelerate the vessel and the input can be estimated by $m \ddot y - Y_v \dot y = \tau$ where $\tau$ is the only unknown.
@@ -88,7 +89,6 @@ These two coefficients can be determined as described in the theory.
 
 \section{Results}
 \todo{Her skal maalinger fra tests ind, og tilnaermelse af kurve fra daempningen.}
-\todo{Hvordan konverteres maaleresultater til de noedvendige tal fra ligningerne? Dette har vaeret et stoerre spsergsmaal og problem! Vi kan godt se, at der skal vaere en sammenhaeng mellem hastigheden og daempningen, men vi kan ikke faa det skrevet ud i vores ligninger. Vi kan ikke loese ligningen (fatsvag)}
 \subsubsection{Surge test}
 \todo{Maalinger af acceleration fra 0 til konstant hastighed + Maaling af deceleration med 0 input fra konstant hastighed + tilnaermelse af aftagende kurve}
 \subsubsection{Sway test}
