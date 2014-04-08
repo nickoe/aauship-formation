@@ -19,40 +19,39 @@ result. Or if not used here at all, then don't mention them.}
 
 \todo{There is no explicit equations on how to actually
 evaluate/calculate the data}
-\\
 
-\textbf{Surge test}\\
+\subsubsection{Surge test}
 From the surge test it is possible to estimate the damping coefficient in $x$, being $X_u$. This can be estimated by
 \begin{align}
-m \ddot x - X_u \dot x = 0\nonumber\\
-X_u = \frac{m \ddot x}{\dot x}
+m \ddot x - X_u \dot x &= 0\\
+X_u &= \frac{m \ddot x}{\dot x}
 \end{align}
 Measurements of the \ac{GPS} on the vessel and the gyroscope can be used to estimate the position, velocity and acceleration.\\
 
-\textbf{Sway test}\\
+\subsubsection{Sway test}
 From the sway test it is possible to estimate the damping coefficient in $y$, being $Y_v$. This can be estimated by
 \begin{align}
-m \ddot y - Y_v \dot y = 0\nonumber\\
-Y_v = \frac{m \ddot y}{\dot y}
+m \ddot y - Y_v \dot y &= 0\\
+Y_v &= \frac{m \ddot y}{\dot y}
 \end{align}
 Measurements of the \ac{GPS} on the vessel and the gyroscope can be used to estimate
 the position, velocity and acceleration.\\
 
-\textbf{Rotation test}\\
+\subsubsection{Yaw test}
 From test of rotation it is possible to estimate the damping coefficient due to rotation, being $N_r$. This can be estimated by
 \begin{align}
-I_z\ddot \psi - N_r \dot \psi = 0\nonumber\\
-N_r = \frac{I_z \ddot \psi}{\dot \psi}
+I_z\ddot \psi - N_r \dot \psi &= 0\\\
+N_r &= \frac{I_z \ddot \psi}{\dot \psi}
 \end{align}
 The vessel may not move in $x$ and $y$ directions which can be verified by the \ac{GPS}. The gyroscope measures the velocity and acceleration of the moment.
 
 In all three tests it is of importance that the vessel only moves in the respective directions such that only a pure damping in the directions is measured. After measurement of the three first coefficients it is possible to determine the last two. These are solved by the following
 \begin{align}
-m \ddot y + mx_g\ddot\psi - Y_v \dot y - Y_r \dot \psi = \tau\\
+m \ddot y + mx_g\ddot\psi - Y_v \dot y - Y_r \dot \psi = \tau
 \end{align}
 
 \begin{align}
-mx_g \ddot y + I_z\ddot \psi - N_v \dot y - N_r \dot \psi = \tau\\
+mx_g \ddot y + I_z\ddot \psi - N_v \dot y - N_r \dot \psi = \tau
 \end{align}
 
 
@@ -98,20 +97,9 @@ The methods should describe the actions to perform, this is more like
 theory for the most part
 
 \section{Results}
-Test 1.
-
-
-
-
-Test 2.
-
-
-
-
-Test 3.
-
-
-
+\subsubsection{Surge test}
+\subsubsection{Sway test}
+\subsubsection{Yaw test}
 
 
 
@@ -128,7 +116,7 @@ The results from measurements and estimation can be found in tabel \ref{tab:dmat
   $Y_r$ & 2 \\
   $N_v$ & 2
 \end{tabular}
-\caption{Hej}
+\caption{Results of fitted values and the calculated coefficients.}
 \label{tab:dmatrix}
 \end{table}
 
