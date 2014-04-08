@@ -134,9 +134,10 @@ int process(msg_t *msg)
 				case 20:
 					break;
 				case 21:
-					duty = (int16_t) (msg->data[0]);
-					duty = (duty << 8) & 0xFF00;
-					duty = (duty | ((msg->data[1])&0xFF));
+					//duty = (int16_t) (msg->data[0]);
+					//duty = (duty << 8) & 0xFF00;
+					//duty = (duty | ((msg->data[1])&0xFF));
+					duty = (int16_t) ((msg->data[0] << 8) & 0xFF00) | (msg->data[1]&0xFF);
               if (duty == 0)
                 PORTF &= ~(1<<DCDIR1);
               else
@@ -145,9 +146,10 @@ int process(msg_t *msg)
 					awake_flag = 0;
 					break;
 				case 22:
-					duty = (int16_t) (msg->data[0]);
-					duty = (duty << 8) & 0xFF00;
-					duty = (duty | ((msg->data[1])&0xFF));
+					//duty = (int16_t) (msg->data[0]);
+					//duty = (duty << 8) & 0xFF00;
+					//duty = (duty | ((msg->data[1])&0xFF));
+					duty = (int16_t) ((msg->data[0] << 8) & 0xFF00) | (msg->data[1]&0xFF);
               if (duty == 0)
                 PORTF &= ~(1<<DCDIR2);
               else
@@ -156,9 +158,10 @@ int process(msg_t *msg)
 					awake_flag = 0;
 					break;
 				case 23:
-					duty = (int16_t) (msg->data[0]);
-					duty = (duty << 8) & 0xFF00;
-					duty = (duty | ((msg->data[1])&0xFF));
+					//duty = (int16_t) (msg->data[0]);
+					//duty = (duty << 8) & 0xFF00;
+					//duty = (duty | ((msg->data[1])&0xFF));
+					duty = (int16_t) ((msg->data[0] << 8) & 0xFF00) | (msg->data[1]&0xFF);
               if (duty == 0)
                 PORTF &= ~(1<<DCDIR3);
               else
