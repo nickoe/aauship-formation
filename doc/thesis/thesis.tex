@@ -17,20 +17,17 @@
 \input{../manual/acronyms}
 
 \mainmatter
-\descpart{Introduction}{In this part is the motivation for the project stated and the previous work within the subject will be summed up.}
-\chapter{Introduction}
-%\input{introduction} % Talk specifically about the data from havnen?
-\include{formcontrol}
+\descpart{System design}{All the magic about the system}
+\include{mainmatter/introduction} % Talk specifically about the data from havnen?
+\include{mainmatter/formcontrol}
+\include{mainmatter/designs}
+\include{mainmatter/modelling}
+\include{mainmatter/ros}
 
-\descpart{Control Design}{}
-\include{designs}
-\include{modelling}
-\include{ros}
+\descpart{Simulation}{All the magic about the numerical part}
+%\include{mainmatter/foo}
 
-\descpart{Simulation}{}
-
-\cleardoublepage
-\descpart{Appendix}{%
+\cleardoublepage\descpart{Appendix}{%
 The appendix includes chapters which are important for the project, but not necessarily interesting to the reader of the report.}
 \appendix
 \include{appendix/identification_of_hydrodynamic_derivatives}
