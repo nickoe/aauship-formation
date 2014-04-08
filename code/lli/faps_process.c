@@ -142,6 +142,7 @@ int process(msg_t *msg)
               else
 	    					PORTF |= (1<<DCDIR1);
 					pwm_set_duty(DC1, duty );
+					awake_flag = 0;
 					break;
 				case 22:
 					duty = (int16_t) (msg->data[0]);
@@ -152,6 +153,7 @@ int process(msg_t *msg)
               else
 	    					PORTF |= (1<<DCDIR2);
 					pwm_set_duty(DC2, duty );
+					awake_flag = 0;
 					break;
 				case 23:
 					duty = (int16_t) (msg->data[0]);
@@ -162,6 +164,7 @@ int process(msg_t *msg)
               else
 	    					PORTF |= (1<<DCDIR3);
 					pwm_set_duty(DC3, duty );
+					awake_flag = 0;
 					break;
 				case 34:
 					PORTF &= ~(1<<DCDIR1);
