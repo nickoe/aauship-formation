@@ -1,16 +1,18 @@
 \input{preamble}
 
 \hypersetup{
-  pdftitle={AAUB\AA D},
-  pdfsubject={6th semester of Electronics and IT, Aalborg University},
-  pdfauthor={Brian Bach Nielsen, Nick \O stergaard, Simon Als Nielsen, Rasmus Lundgaard Christensen and Christoffer Stagsted Andreassen},
-  pdfcreator=LaTeX,
+  pdftitle={Formation Control for Unmanned Surface Vehicles for Surveying Purposes},
+  pdfsubject={Master's thesis, Aalborg University},
+  pdfauthor={Nick \O stergaard and Jeppe Dam},
+  pdfcreator=LaTeX rules for typesetting!,
   linkcolor=black,
   citecolor=black,
   filecolor=black,
   urlcolor=black
 }
 
+% This can be used to reduce the number of chapters to be formatted
+%\includeonly{ros} 
 \begin{document}
 
 % Frontpage
@@ -57,9 +59,9 @@
 % This is da stuff that is roolin'.}
 
 \descpart{Control Design}{}
-\input{designs}
-\input{modelling}
-\input{ros}
+\include{designs}
+\include{modelling}
+\include{ros}
 
 \descpart{Simulation}{}
 
