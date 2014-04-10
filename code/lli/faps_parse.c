@@ -1,5 +1,6 @@
-#include	"faps_parse.h"
-#include	"faps_process.h"
+#include "faps_parse.h"
+#include "faps_process.h"
+#include "config.h"
 
 uint8_t rmc_idx;
 
