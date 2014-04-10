@@ -1,16 +1,19 @@
 \chapter{Identification of hydrodynamic coefficients}
 \label{app:damping}
-\section{Purpose}
-The purpose with this test is to identify the hydrodynamic coefficients used in the linear model for AAUSHIP.
 
-\section{Theory}
-The theory behind this measurement journal is as described in section
-\ref{sec:hydrocoeff}, and is expanded in this journal to explicit get the coefficients needed. The purpose is to identify the hydrodynamic
-damping coefficients. This is done from three tests, first a surge
-test, next a sway test and lastly a rotation test. The system is seen
-as a 3 \ac{DOF} system due to the missing control of heave, pitch and
-roll. The damping coefficients from these cannot be determined from
-the following tests, and the heave is a parameter that cannot be controlled since the vessel cannot dive.
+\section{Purpose}
+The purpose with this test is to
+identify the hydrodynamic coefficients used in the linear model for
+AAUSHIP.
+
+\section{Theory} The theory behind this measurement journal is as
+described in section \ref{sec:hydrocoeff}, and is expanded in this
+journal to explicitly get the coefficients needed. The purpose is to
+identify the hydrodynamic damping coefficients for the 5 \ac{DOF} damping
+matrix~\vref{eq:damping-matrix}. This is accomplished by
+three sea trails; a surge test, a sway test and a yaw
+test together with some roll and pitch tests in a small basin.
+
 %but some of these have been estimated by \citep{13gr931} and are used directly from that work.
 
 %\todo{Are we using the values 13gr931 found, else, state which
@@ -19,6 +22,8 @@ the following tests, and the heave is a parameter that cannot be controlled sinc
 
 %\todo{There is no explicit equations on how to actually
 %evaluate/calculate the data}
+
+
 
 \subsubsection{Surge test}
 From the surge test it is possible to estimate the damping coefficient in $x$, being $X_u$. This can be estimated by
@@ -63,51 +68,69 @@ Tools needed are:
 			\item Controller for surge only
 			\item Controller for sway only
 			\item Controller for yawing only
+			\item Logging capability for \ac{IMU}, GPS1, GPS2 with UBX data
+				and control inputs.
 		\end{enumerate}
 	\item Computer to set remote parameters and tele operation
+	\item RTK base station logging UBX data.
 \end{itemize}
 To be able to make the tests the AAUSHIP needs to have both forward thrusters and sideways thrusters. These are implemented and can be controlled from a computer.
 
 \section{Method}
 The tests performed are as follows:
 \todo{Hvordan konverteres maaleresultater til de noedvendige tal fra ligningerne? Dette har vaeret et stoerre spsergsmaal og problem! Vi kan godt se, at der skal vaere en sammenhaeng mellem hastigheden og daempningen, men vi kan ikke faa det skrevet ud i vores ligninger. Vi kan ikke loese ligningen (fatsvag)}
+
+\todo{Skriv hvilke log data der skal opsamles}
 \begin{enumerate}
 	\item The first test is a \textit{surge} test. This test is done to test the forward damping coefficient being $X_u$ from the damping matrix $D$. The vessel will accelerate to a certain velocity and keep this. Then all input is put to zero and the vessel will decelerate. This will, as described in section \ref{sec:hydrocoeff}, give a damping coefficient in the forward motion. This is expressed as $m \ddot x - X_u \dot x = 0$ and $X_u$ can be estimated. A step input is now set on the vessel to see the acceleration from zero velocity to the same constant velocity as before. This now gives the input force at the vessel, which is the last unknown in $m \ddot x - X_u \dot x = \tau$.
 	\item The second test is a purely \textit{sway} test. The vessel will make use of the sideways thrusters to move strictly sideways. This implies that there is no rotation or movement in $\psi$ and $x$. Thus makes the moving equation as $m \ddot y - Y_v \dot y = 0$. Here is the vessel again accelerated to a constant velocity and the input is then set to zero, and $Y_v$ can be determined. After this the sideways thrusters can be used to accelerate the vessel and the input can be estimated by $m \ddot y - Y_v \dot y = \tau$ where $\tau$ is the only unknown.
 	\item The last test is the \textit{yaw} test. In this test it is of importance to control the sideways thrusters such that the vessel will keep the position at both $x$ and $y$, suck that only rotation is used to move the surrounding water. The vessel is accelerated to a constant angular velocity and the input is then set to zero. The damping of this will determine $N_r$ from $I_z\ddot \psi - N_r \dot \psi = 0$. Now the vessel needs to reach the constant angular velocity again from zero, and the input can now be estimated from $I_z\ddot \psi - N_r \dot \psi = \tau$.
 \end{enumerate}
-After these constants have been estimated only two needs to be determined in the damping matrix. Recall the damping matrix for a 3 \ac{DOF} system
-\begin{align}
-D = -
-\begin{bmatrix}
-X_u & 0 & 0\\
-0 & Y_v & Y_r\\
-0 & N_v & N_r
-\end{bmatrix}
-\end{align}
-These two coefficients can be determined as described in the theory.
 
 \section{Results}
-\todo{Her skal maalinger fra tests ind, og tilnaermelse af kurve fra daempningen.}
 \subsubsection{Surge test}
-\todo{Maalinger af acceleration fra 0 til konstant hastighed + Maaling af deceleration med 0 input fra konstant hastighed + tilnaermelse af aftagende kurve}
+\missingfigure{Maalinger af acceleration fra 0 til konstant hastighed
++ Maaling af deceleration med 0 input fra konstant hastighed +
+regræssionskurve af disse}
 \subsubsection{Sway test}
-\todo{Maalinger af acceleration fra 0 til konstant hastighed + Maaling af deceleration med 0 input fra konstant hastighed + tilnaermelse af aftagende kurve}
+\missingfigure{Maalinger af acceleration fra 0 til konstant hastighed
++ Maaling af deceleration med 0 input fra konstant hastighed +
+regræssionskurve af disse}
 \subsubsection{Yaw test}
-\todo{Maalinger af acceleration fra 0 til konstant vinkel hastighed + Maaling af deceleration med 0 input fra konstant vinkel hastighed + tilnaermelse af aftagende kurve}
+\missingfigure{Maalinger af acceleration fra 0 til konstant vinkel
+hastighed + Maaling af deceleration med 0 input fra konstant vinkel
+hastighed + regræssionskurve af disse}
 
 The results from measurements and estimation can be found in table \ref{tab:dmatrix}.
 
+
 \begin{table}[htbp]
 \centering
-\begin{tabular}{ c | c }
+\begin{tabular}{ccc}
+	\toprule
   Coefficient & Value \\
-  \hline
+  \midrule
+  $m$ & 2 \\
+  $x_g$ & 2 \\
+	\dots\\
+	\bottomrule
+\end{tabular}
+\caption{Rigig body mass matrix constants for $M_{RB}}
+\label{tab:constants}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{ccc}
+	\toprule
+  Hydrodynamic\\Coefficient & Value \\
+  \midrule
   $X_u$ & 2 \\
   $Y_v$ & 2 \\
   $N_r$ & 2 \\
   $Y_r$ & 2 \\
-  $N_v$ & 2
+  $N_v$ & 2 \\
+	\bottomrule
 \end{tabular}
 \caption{Results of fitted values and the calculated coefficients.}
 \label{tab:dmatrix}
