@@ -38,4 +38,6 @@ Source files
 
 `uart.{c,h}` is the derivative work by David A. Mellis from the original Peter Fleury UART library under GPL. http://beaststwo.org/avr-uart/index.shtml
 
+`i2cmaster.{S,h} is from Peter Fleyru I2C library under GPS. http://homepage.hispeed.ch/peterfleury/avr-software.html
+
 `spi.{c,h}` is from Pascal Stang's avrlib, no license is specified, seems like public domain. http://www.procyonengineering.com/embedded/avr/avrlib/

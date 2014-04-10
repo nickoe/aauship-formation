@@ -27,6 +27,7 @@
 #include "pwm.h"
 #include "spi.h"
 #include "adis16405.h"
+#include "i2cmaster.h"
 
 
 volatile int adis_ready_counter=0;
@@ -85,6 +86,7 @@ int main (void)
 	/* Initialize peripherals */
 	pwm_init();
 	spiInit();
+	i2c_init();
 
 	/* Initialize UARTS */
   uart_init( UART_BAUD_SELECT(UART_BAUD_RATE,F_CPU) ); // USB connection
