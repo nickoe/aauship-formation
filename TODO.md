@@ -14,6 +14,11 @@ Opgavelisten
 * Få 'mariner.m' til at reagere på input OK
 * Få mariner til at følge en path OK
 * Heading autopilot til mariner OK
+* Fix rælæafbrydere med nøgle
+* Fix rqt GUI
+  - Print data op gui
+* Lav ny battery monitor print
+* Lav software til battery monitor
 * Få autopiloten ind i sin egen funktion i stedet for kode i main.m
 * Heading autopilot til Twin Propeller Ship aauship.m
 * Få flere mariner'ere til at følge en path OK
@@ -36,7 +41,7 @@ berører:
 * Hardware
 	- Knapafbryder i stedet for klemmerækken (praktisk ting)
 	- Byg to både mere
-		. Bestil manglende dele
+		. Bestil manglende dele OK
 		. Sæt delene sammen
 * Dokumentation
 	- Basal ledningsføringsdokumentation [nickoe]
