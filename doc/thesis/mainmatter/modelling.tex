@@ -52,7 +52,8 @@ where in $\tau_{RB}$
 \underbrace{M_{RB} \dot \nu_r + C_{RB}(\nu_r)\nu_r}_{\text{rigid-body forces}} + \underbrace{M_A \dot \nu_r + C_A(\nu_r)\nu_r + D(\nu_r)\nu_r}_{\text{hydrodynamic forces}}  = \tau + \tau_{RB}
 \label{eq:totmodel}
 \end{align}
-
+\todo{Argumenter via reference til f.eks. fossen at vi kan se bort fra
+nogle led. Er det en valid antagelse?}
 Since the vessel within this project is of smaller scale, the $M_A$, $C_A$ and $C_{RB}$ from \ref{eq:hydmodel} and \ref{eq:rigidmodel} are neglected. $M_A$ is the added mass and is as a start omitted due to the tests needs to be made as an object moving through the water with some drag. If the model needs to be further improved in the process this is a place to start modelling. The coefficients of $M_A$ are rather inconvenient to determine without advanced equipment like a towing tank, where constant velocity can be applied and measure drag and more in all directions and moments. $C_A$ and $C_{RB}$ represents forces due to a rotation of the body frame, \{$b$\}, about the inertial frame, the NED frame. These are omitted as well due to the small vessel where the body frame is placed in a predefined local frame which acts as the NED frame. This reduces equation \ref{eq:totmodel} down to the following
 \begin{align}
 M_{RB} \dot \nu_r + D(\nu_r)\nu_r = \tau_{RB} + \tau
