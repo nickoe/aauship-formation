@@ -85,6 +85,9 @@ bootloader:
 doc: Doxyfile *.c *.h
 	doxygen $<
 
+publish_doc: doc
+	cp -r doc/html/ /afs/ies.auc.dk/group/14gr1034/public_html/api/
+
 %.o: %.c Makefile
 	@echo "  CC        $@"
 	@$(CC) -c $(CFLAGS) -o $@ $(subst .o,.c,$@)
