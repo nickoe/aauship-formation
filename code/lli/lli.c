@@ -80,7 +80,6 @@ int main (void)
   DDRL = (1<<LED1) | (1<<LED2) | (1<<LED3) | (1<<LED4); // Set pins for LED as output
 	PORTF = 0xff;
   DDRF = (1<<DCDIR1) | (1<<DCDIR2) | (1<<DCDIR3); // Set pins for DCDIRx as output
-  PORTF = (1<<DCDIR1) | (1<<DCDIR2) | (1<<DCDIR3); // Set pins for DCDIRx as output
 
 	/* Initialize peripherals */
 	pwm_init();
@@ -122,9 +121,9 @@ int main (void)
 			pwm_set_duty(DC1, 50 );
 			pwm_set_duty(DC2, 50 );
 			pwm_set_duty(DC3, 50 );
-/*            PORTF &= ~(1<<DCDIR1);
-            PORTF &= ~(1<<DCDIR2);
-            PORTF &= ~(1<<DCDIR3);*/
+      PORTF &= ~(1<<DCDIR1);
+      PORTF &= ~(1<<DCDIR2);
+      PORTF &= ~(1<<DCDIR3);
 		};
 
 		if(tx_counter >= TX_READY) {
