@@ -16,7 +16,8 @@ AVRDUDE = avrdude
 AVRDUDECONF = /etc/avrdude.conf
 
 # Programmer port
-PROGPORT = /dev/ttyACM0
+PROGPORT = /dev/lli
+#PROGPORT = /dev/ttyACM0
 #PROGPORT = /dev/ttyUSB0
 
 # Programmer baud rate
