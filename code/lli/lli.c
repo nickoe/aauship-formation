@@ -78,7 +78,7 @@ int main (void)
   /* Set outputs */
 	PORTL = 0xff; // Turn off all LEDS as initial state
   DDRL = (1<<LED1) | (1<<LED2) | (1<<LED3) | (1<<LED4); // Set pins for LED as output
-	PORTF = 0xff;
+	PORTF = 0x00;
   DDRF = (1<<DCDIR1) | (1<<DCDIR2) | (1<<DCDIR3); // Set pins for DCDIRx as output
 
 	/* Initialize peripherals */
