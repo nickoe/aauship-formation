@@ -32,6 +32,7 @@
 *.fpd
 *autosave-*.kicad_pcb
 log.txt
+shapes3D/
 
 # Software files
 *.hex
@@ -46,6 +47,7 @@ code/**/doc
 
 # Media files
 *.avi
+*.png
 
 # MATLAB
 slprj/
