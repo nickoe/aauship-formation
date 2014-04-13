@@ -1,4 +1,4 @@
-PCBNEW-LibModule-V1  Sat 12 Apr 2014 20:55:19 CEST
+PCBNEW-LibModule-V1  Sun 13 Apr 2014 16:06:31 CEST
 # encoding utf-8
 Units mm
 $INDEX
@@ -11,6 +11,7 @@ JST-XH_TOP_ENTRY
 KX1205
 LED-1206-header
 ML-24-2
+Socket_MOLEX-KK-RM2-54mm_Lock_4pin_straight
 XT60
 $EndINDEX
 $MODULE APC220
@@ -756,6 +757,58 @@ Ne 0 ""
 Po -5.4991 19.35226
 $EndPAD
 $EndMODULE ML-24-2
+$MODULE Socket_MOLEX-KK-RM2-54mm_Lock_4pin_straight
+Po 0 0 0 15 534A98D5 00000000 ~~
+Li Socket_MOLEX-KK-RM2-54mm_Lock_4pin_straight
+Cd Socket, MOLEX, KK, RM 2.54mm, Lock, 4pin, straight,
+Kw Socket, MOLEX, KK, RM 2.54mm, Lock, 4pin, straight,
+Sc 0
+AR 
+Op 0 0 0
+T0 0 -5.08 1.524 1.524 0 0.3048 N V 21 N "X"
+T1 0 5.08 1.524 1.524 0 0.3048 N V 21 N "Socket_MOLEX-KK-RM2-54mm_Lock_4pin_straight"
+DS 5.08 -2.54 -5.08 -2.54 0.381 21
+DS 5.08 1.905 5.08 3.175 0.381 21
+DS -5.08 -1.905 -5.08 -3.175 0.381 21
+DS -5.08 -3.175 5.08 -3.175 0.381 21
+DS 5.08 -3.175 5.08 -1.905 0.381 21
+DS 5.08 3.175 -5.08 3.175 0.381 21
+DS -5.08 3.175 -5.08 1.905 0.381 21
+$PAD
+Sh "1" O 1.80086 3.50012 0 0 0
+Dr 1.19888 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -3.81 0
+$EndPAD
+$PAD
+Sh "2" O 1.80086 3.50012 0 0 0
+Dr 1.19888 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -1.27 0
+$EndPAD
+$PAD
+Sh "3" O 1.80086 3.50012 0 0 0
+Dr 1.19888 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 1.27 0
+$EndPAD
+$PAD
+Sh "4" O 1.80086 3.50012 0 0 0
+Dr 1.19888 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 3.81 0
+$EndPAD
+$SHAPE3D
+Na "/home/nickoe/aauship-formation/hw/bm/lib/molex-22-27-2041.wrl"
+Sc 0.3937 0.3937 0.3937
+Of 0 0 0.065
+Ro 270 0 0
+$EndSHAPE3D
+$EndMODULE Socket_MOLEX-KK-RM2-54mm_Lock_4pin_straight
 $MODULE XT60
 Po 0 0 0 15 53493B65 00000000 ~~
 Li XT60
