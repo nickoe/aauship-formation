@@ -4,6 +4,7 @@ import rospy
 
 from qt_gui.plugin import Plugin
 from python_qt_binding import loadUi
+from python_qt_binding.QtCore import Qt, QTimer, Slot
 from python_qt_binding.QtGui import QWidget
 from python_qt_binding.QtGui import *
 
@@ -52,9 +53,16 @@ class MyPlugin(Plugin):
         self._sub = rospy.Subscriber( "test",  # name of the topic                 
                                       String,  # type of the topic       
                                       self._cb)   
+
+        self.shortcut_w = QShortcut(QKeySequence(Qt.Key_W), self._widget)
+        self.shortcut_w.setContext(Qt.ApplicationShortcut)
+        self.shortcut_w.activated.connect(self._cb2)
     
     def _cb(self, msg):
         self._widget.label.setText(msg.data)
+
+    def _cb2(self):
+        self._widget.label.setText('meh')
 
     '''
     def keyPressEvent(self, event):
