@@ -131,9 +131,11 @@ The coefficients of the model needs to be determined before the model can be sim
 \begin{align}
 M_{RB} \dot \nu_r + D\nu_r = \tau_{hyd} + \tau_{hs} + \tau_{wind} + \tau_{wave} + \tau
 \end{align}
-Since the tests will be performed in still water some of the forces can be neglected. The $\tau$ is the only force to be taken into account to perform the tests. This is the input to the vessel. This can be assumed due to the forthcoming procedure of the tests.
+Since the tests will be pjackerformed in still water some of the forces can be neglected. The $\tau$ is the only force to be taken into account to perform the tests. This is the input to the vessel. The delimitation can be assumed due to the forthcoming procedure of the tests.
 
-At first the vessel is accelerated to maximum constant velocity. When maximum velocity is ensured the input force to the vessel is removed and zero input is applied. This will correspond to a model like:
+Two different types of measurements needs to be made. These are dependent on which coefficients that is wanted. The first type of test is split into three phases, as seen on figure \ref{fig:acceldecel}, and is approximated from a first order fitting. The second type of test is made as seen on figure \ref{fig:harmonic-damping}, and is approximated from a second order fitting.
+
+In the first type of test is the vessel accelerated to constant velocity. When the constant velocity is ensured, the input force to the vessel is removed and zero input is therefore applied. This will correspond to a model like:
 \begin{align}
 M_{RB} \dot \nu_r + D\nu_r = 0
 \label{eq:decelmodel}
@@ -148,7 +150,7 @@ An acceleration, constant velocity and deceleration will look like figure \ref{f
 \begin{figure}[htbp]
 	\centering
 	\includesvg[width=0.5\textwidth]{harmonic_damping}
-	\caption{Pitch and roll response}
+	\caption{Pitch and roll response.}
 	\label{fig:harmonic-damping}
 \end{figure}
 This makes it possible to determine some of the coefficients of the $D$ matrix. e.g. is the damping in the x direction determined by:
@@ -156,22 +158,52 @@ This makes it possible to determine some of the coefficients of the $D$ matrix. 
 M_{11} \ddot x + D_{11} \dot x = 0
 \label{eq:noinput}
 \end{align}
-The mass of the vessel can be measured, being the $M_{11}$. The velocity and acceleration can be estimated from measurements of the positions measured by the \ac{GPS} at the vessel. This makes the damping coefficient $D_{11}$ the only unknown in equation \ref{eq:noinput}. From this a linearisation can be made, see appendix \ref{app:damping}.
+The mass of the vessel can be measured, being the $M_{11}$. The velocity and acceleration can be estimated from measurements of the positions measured by the \ac{GPS} at the vessel. This makes the damping coefficient $D_{11}$ the only unknown in equation \ref{eq:noinput}. From this a linearisation can be made, see appendix \ref{app:damping}. From this can the damping coefficient be determined.
 
-This makes it possible to determine the input force by applying a step input on the motors and let the vessel accelerate to a maximum velocity. This can be done since, due to the previous test, only the input is unknown. A model of this will look like:
+This makes it possible to determine the input force by applying a step input on the motors and let the vessel accelerate to the same constant velocity. This can be done since, due to the previous test, only the input is unknown. A model of this will look like:
 \begin{align} 
 M_{11} \ddot x + D_{11} \dot x = \tau
 \label{eq:maxinput}
 \end{align}
 From this it is possible to estimate the input force as a linearisation, since this is the only unknown from equation \ref{eq:maxinput}.
 
-This type of procedure is used in all of the tests and can be put into steps.
+This type of procedure is used in all of the first type tests and can be put into steps.
 \begin{enumerate}
-	\item Step one is to apply force in one direction until a constant speed is achieved and then measure the damping while the vessel is decelerating to estimate the damping coefficient.
+	\item Step one is to apply force in one direction until a constant velocity is achieved and then measure the damping while the vessel is decelerating to estimate the damping coefficient.
 	\item Step two can be made after knowing the damping coefficient. Then is only the input unknown and a step can be applied to accelerate the vessel to constant velocity again. From this step input can a input force be estimated.
 \end{enumerate}
 
-One of the important things are to decouple the tests such that the damping coefficients can be measured. This can, as a start, be performed in x-, y- and z-directions. The mixed damping coefficients, as the $Y_r$ (the force in y-direction due to a rotation), are harder to determine without the right equipment. But, after have performed the previous tests, these will become the next unknowns to be determined. Looking at the system as a 3 \ac{DOF} will make it possible to determine the coefficients needed. The rest of the coefficients can be found in \todo{ref til Rasmus og Brian}. The decoupled coefficients are tested from the equations in \ref{eq:syseq}.
+The second type of test is used when determining coefficients as pitch and roll, $r$ and $p$. In these tests is the vessel put to a maximum angle in pitch or roll and is afterwards released. This will make the vessel converge to steady state, as seen on figure \ref{fig:harmonic-damping}. This is due to the acting restoring force due to that the vessel is perturbed away from its equilibrium and converges back to it. The convergence is dependent on the angle of either pitch or roll of the vessel, and therefore the tests need to be made from the same angle every time.
+
+When determining the forces in sway due to rolling, $Y_p$, the following equation needs to be outlined:
+\begin{align}
+M_{RB} \dot \nu + D \nu = \tau
+\end{align}
+which for roll will be:
+\begin{align}
+M_{RB2} \dot \nu =
+\begin{bmatrix}
+0 & m & -mz_g & 0 & mx_g
+\end{bmatrix}
+\dot \nu
+\label{eq:rollmedmere1}
+\end{align}
+and
+\begin{align}
+D_2 \nu =
+\begin{bmatrix}
+0 & Y_v & Y_p & 0 & Y_r
+\end{bmatrix}
+\nu
+\label{eq:rollmedmere2}
+\end{align}
+Since the roll is uncontrollable should the equation equal zero, due to no input. When taking the parts from equation \ref{eq:rollmedmere1} and \ref{eq:rollmedmere2} that consider only roll, and with no input, it reduces to the following equation:
+\begin{align}
+-mz_g \dot p + Y_pp = 0
+\end{align}
+This can be approximated to a second order equation fulfilling the convergence as shown on figure \ref{fig:harmonic-damping}. From this it is possible to determine the damping in roll due to a acting force in sway, $Y_r$.
+
+One of the important things are to decouple the tests such that the damping coefficients can be measured. This can, as a start, be performed in x-, y- and z-directions. The mixed damping coefficients, as the $Y_r$ (the force in y-direction due to a rotation), has got many components as shown above. But, after have performed the previous tests, these will become the next unknowns to be determined. Looking at the system as a 5 \ac{DOF} will make it possible to determine the coefficients needed. Some of the coefficients can be found from measurements made by \todo{ref til Rasmus og Brian}. The decoupled coefficients are tested from the equations in \ref{eq:syseq}.
 \begin{subequations}
 \begin{align}
 M_{11} \ddot x + D_{11} \dot x = \tau\\
