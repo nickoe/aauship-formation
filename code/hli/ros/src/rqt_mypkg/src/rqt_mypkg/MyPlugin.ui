@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>766</width>
+    <height>292</height>
    </rect>
+  </property>
+  <property name="sizeIncrement">
+   <size>
+    <width>2</width>
+    <height>0</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Title of form for test plugin</string>
@@ -85,8 +91,8 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>30</y>
+     <x>340</x>
+     <y>0</y>
      <width>171</width>
      <height>31</height>
     </rect>
@@ -116,6 +122,297 @@ color: rgb(0, 0, 0);</string>
    <property name="margin">
     <number>5</number>
    </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBoxAutopilot">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>40</y>
+     <width>271</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Enable Autopilots</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <widget class="QRadioButton" name="radioButtonSurgeTest">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>251</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Surge Test Controller theta</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButtonSwayTest">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>70</y>
+      <width>251</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Sway Test Controller</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButtonYawTest">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>251</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Yaw Test Controller</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_2">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>40</y>
+     <width>191</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Reference Setpoints</string>
+   </property>
+   <widget class="QDoubleSpinBox" name="SpinBoxSurgeVel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="value">
+     <double>1.000000000000000</double>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="SpinBoxSurgeAng">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>40</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="value">
+     <double>1.000000000000000</double>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="SpinBoxSwayVel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>70</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="value">
+     <double>1.000000000000000</double>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="SpinBoxYawAngVel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="value">
+     <double>1.000000000000000</double>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="SpinBoxSwayAng">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>70</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="value">
+     <double>1.000000000000000</double>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>100</y>
+      <width>69</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>←Angular</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>88</y>
+      <width>191</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>81</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Velocity↓</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>20</y>
+      <width>81</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Angle↓</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>40</y>
+     <width>261</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>PID Controller</string>
+   </property>
+   <widget class="QDoubleSpinBox" name="SpinBoxSurgeP">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="SpinBoxSurgeI">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>40</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="SpinBoxSurgeD">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>40</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="SpinBoxSwayD">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>70</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="SpinBoxSwayI">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>70</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="SpinBoxSwayP">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>70</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="SpinBoxYawD">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>100</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="SpinBoxYawI">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>100</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="SpinBoxYawP">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
