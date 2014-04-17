@@ -23,34 +23,34 @@ import os
 #  (aauship/testSetpoints.msg) and one for the PID coefficients
 #  (aauship/PID.msg).
 class Control(object):
-    '''
-    def callback(self, data):
-        # send data to lli_input topic
-#        rospy.loginfo(rospy.get_caller_id()+"I heard %s",data.data)
-#        self.ctllog.write(data.data)
-        # Publish data to lli_input
-        print "control callback" + str(time.time())
-        print os.getcwd()
-        print os.environ
-        pass
-    '''
-
-    ## Reference callback
+    ## Reference callback to update variables
     def ref_cb(self, data):
         print data
         pass
 
-    ## PID callback
+    ## PID callback to update variables
     def pid_cb(self, data):
         print data
         pass
 
-    ## PID controller
-    def pid(self, Kp, Ki, Kd):
+    ## PID controller to calculate actuator input
+    def pid(self, Kp, Ki, Kd, desired, currentstate):
+
+        '''
+        error = desired - currentstate
+        integral = integral + error*dt
+        if i~=1
+        derivative(i) = (error(i) - prev_error)*dt
+        end
+        actuatorinput = Kp*error + Ki*integral + Kd*derivative
+        prev_error = error
+        return actuatorinput
+        #sleep(dt)
+        '''
         pass
 
     def run(self):
-	BUFSIZE = 1024
+	    BUFSIZE = 1024
         self.ctllog = open(str(os.environ['ROS_TEST_RESULTS_DIR']) + "/../../src/aauship/scripts/logs/ctl.log",'w',BUFSIZE)
         print(self.ctllog.name)
 
