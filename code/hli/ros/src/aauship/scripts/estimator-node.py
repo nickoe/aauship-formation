@@ -48,7 +48,7 @@ class Estimator(object):
 
     def run(self):
         self.stat = 0 # Used for callback debugging
-	BUFSIZE = 1024
+        BUFSIZE = 1024
         self.imulog   = open("logs/imu.log",'w',BUFSIZE)   # was acclog
         self.mixedlog = open("logs/mixed.log",'w',BUFSIZE) # was recieved
         self.gpslog   = open("logs/gps1.log",'w',BUFSIZE)  # was gpslog
