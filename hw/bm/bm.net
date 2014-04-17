@@ -1,8 +1,8 @@
 (export (version D)
   (design
     (source /home/nickoe/aauship-formation/hw/bm/bm.sch)
-    (date "Sun 13 Apr 2014 16:32:33 CEST")
-    (tool "Eeschema (2014-04-09 BZR 4797)-drawing_tool"))
+    (date "Tue 15 Apr 2014 14:19:11 CEST")
+    (tool "Eeschema (2014-04-14 BZR 4801)-kicad"))
   (components
     (comp (ref P6)
       (value JST-XH)
