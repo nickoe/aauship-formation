@@ -3,7 +3,8 @@ for fighandle = findobj('Type','figure')', clf(fighandle), end
 
 %% Data files
 logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
-testname = 'crashtest';
+% testname = 'crashtest';
+testname = 'magnetometertest-lab';
 % fid = fopen('busroute/mbus5/gpsdata141212.txt'); % reduced GPS
 % fidr = fopen('busroute/gpsdata141212.txt'); % all GPS
 % adata = load('busroute/mbus5/accdata141212.csv'); % Accelerometer outputs
@@ -36,69 +37,44 @@ plot_google_map('maptype','satellite')
 title('WGS84')
 
 
-%%
-latrad = lat*pi/180;
-lonrad = lon*pi/180;
+%% Tangent plance coordinates xyz (not verified)
+% latrad = lat*pi/180;
+% lonrad = lon*pi/180;
 % hei = gpsdata(:,3);
-N = length(lat);
-hei=zeros(N,1);
-x=zeros(N,1);
-y=zeros(N,1);
-z=zeros(N,1);
-for kk = 1:N
-    %[x(kk) y(kk) z(kk)] = wgs842ecef(latrad(kk),lonrad(kk),0);
-    [x(kk) y(kk) z(kk)] = geodetic2ecef(latrad(kk),lonrad(kk),hei(kk),referenceEllipsoid('wgs84'));
-end
-
-%% Transform
-%index = 4;
-%meanlat = latrad(1);
-%meanlon = lonrad(1);
- meanlat = 57.015179789287792*pi/180;
- meanlon = 9.985062449450744*pi/180;
-meanhei = hei(1);
-% [a b c]=wgs842ecef(meanlat,meanlon,meanhei);
-[a b c]=geodetic2ecef(meanlat,meanlon,meanhei,referenceEllipsoid('wgs84'));
-% plot3(a,b,c,'r*')
-R_e2t = [-sin(meanlat)*cos(meanlon) -sin(meanlat)*sin(meanlon) cos(meanlat);...
-    -sin(meanlon) cos(meanlon) 0;...
-    -cos(meanlat)*cos(meanlon) -cos(meanlat)*sin(meanlon) -sin(meanlat)];
-
-T = zeros(3,N);
-for kk = 1:N
-    T(:,kk) = R_e2t*([x(kk);y(kk);z(kk)]-[a;b;c]);
-end
-T = T';
-
-figure(1)
-% T(300:360,:) = 0
-plot(T(:,2),T(:,1))
-title('Raw GPS log (localframe)')
-
-
-
-%%%%
-
-%%
-latradr = lat*pi/180;
-lonradr = lon*pi/180;
-% hei = gpsdata(:,3);
-N = length(lat);
-heir=zeros(N,1);
-xr=zeros(N,1);
-yr=zeros(N,1);
-zr=zeros(N,1);
-for kk = 1:N
-    %[x(kk) y(kk) z(kk)] = wgs842ecef(latrad(kk),lonrad(kk),0);
-    [xr(kk) yr(kk) zr(kk)] = geodetic2ecef(latradr(kk),lonradr(kk),heir(kk),referenceEllipsoid('wgs84'));
-end
-
-%% Transform
-Tr = zeros(3,N);
-for kk = 1:N
-    Tr(:,kk) = R_e2t*([xr(kk);yr(kk);zr(kk)]-[a;b;c]);
-end
-Tr = Tr';
+% N = length(lat);
+% hei=zeros(N,1);
+% x=zeros(N,1);
+% y=zeros(N,1);
+% z=zeros(N,1);
+% for kk = 1:N
+%     %[x(kk) y(kk) z(kk)] = wgs842ecef(latrad(kk),lonrad(kk),0);
+%     [x(kk) y(kk) z(kk)] = geodetic2ecef(latrad(kk),lonrad(kk),hei(kk),referenceEllipsoid('wgs84'));
+% end
+% 
+% %% Transform 
+% %index = 4;
+% %meanlat = latrad(1);
+% %meanlon = lonrad(1);
+%  meanlat = 57.015179789287792*pi/180;
+%  meanlon = 9.985062449450744*pi/180;
+% meanhei = hei(1);
+% % [a b c]=wgs842ecef(meanlat,meanlon,meanhei);
+% [a b c]=geodetic2ecef(meanlat,meanlon,meanhei,referenceEllipsoid('wgs84'));
+% % plot3(a,b,c,'r*')
+% R_e2t = [-sin(meanlat)*cos(meanlon) -sin(meanlat)*sin(meanlon) cos(meanlat);...
+%     -sin(meanlon) cos(meanlon) 0;...
+%     -cos(meanlat)*cos(meanlon) -cos(meanlat)*sin(meanlon) -sin(meanlat)];
+% 
+% T = zeros(3,N);
+% for kk = 1:N
+%     T(:,kk) = R_e2t*([x(kk);y(kk);z(kk)]-[a;b;c]);
+% end
+% T = T';
+% 
+% figure(1)
+% % T(300:360,:) = 0
+% plot(T(:,2),T(:,1))
+% title('Raw GPS log (localframe)')
 
 
 %% ADIS16405 Inertial Measurement Unit
@@ -108,7 +84,7 @@ accl = (imudata(:,5:7)*0.00333)*9.82;   %/333)*9.82; % Scale 3.33 mg (g is gravi
 magn = imudata(:,8:10)*0.0005; % 0.5 mgauss
 temp = imudata(:,11)*0.14; % 0.14 degrees celcius 
 aux_adc = imudata(:,12)*0.806; % 0.806 mV
-imutime = imudata(:,13)-starttime; % Seconds since epoch on HLI
+imutime = imudata(:,13)-starttime; % Seconds since start, periodic timing determined by imu
 
 figure(2)
 subplot(4,1,1)
@@ -142,9 +118,22 @@ legend('Supply','Temp','ADC')
 heading = atan2(-magn(:,2),magn(:,1))*180/pi;
 figure(3)
 % subplot(2,1,1)
-plot(imutime,heading)
+
+plot(imutime,smooth(heading,15, 'rloess'),'-')
+
 % subplot(2,1,1)
 % plot(imutime,Azimuth)
+
+%% Animate heading
+clf
+for ii = 1:length(heading)
+    heading(ii)
+    polar([heading(ii)*pi/180,0],[2,0],'-')
+    pause(0.1)
+end
+hold off
+
+
 
 %% Echosounder data
 echo.depth.value=NaN;
