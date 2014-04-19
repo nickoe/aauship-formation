@@ -204,57 +204,57 @@ The equations equal $\tau$, being the input to the vessel. Some of the contribut
 
 From the first row can the following be outlined:
 \begin{align}
-m\dot u + X_uu = \tau_{surge}
+m\dot u + X_uu = \tau_{u}
 \end{align}
 From the second row can the following be outlined:
 \begin{align}
-m\dot v + Y_vv &= \tau_{sway}\\
+m\dot v + Y_vv &= \tau_{v}\\
 -mz_g\dot p + Y_pp &= 0\\
-mx_g\dot r + Y_rr &= \tau_{yaw}
+mx_g\dot r + Y_rr &= \tau_{r}
 \end{align}
 From the third row can the following be outlined:
 \begin{align}
--mz_g\dot v + K_vv &= \tau_{sway}\\
+-mz_g\dot v + K_vv &= \tau_{v}\\
 I_x\dot p + K_pp &= 0\\
 -I_{xy}\dot q &= 0\\
--I_{xz}\dot r + K_rr &= \tau_{yaw}\\
+-I_{xz}\dot r + K_rr &= \tau_{r}\\
 \end{align}
 From the forth row can the following be outlined:
 \begin{align}
-mz_g\dot u &= \tau_{surge}\\
+mz_g\dot u &= \tau_{u}\\
 -I_{yx}\dot p &= 0\\
 I_y\dot q + M_qq &= 0\\
--I_{yz}\dot r &= \tau_{yaw}\\
+-I_{yz}\dot r &= \tau_{r}\\
 \end{align}
 From the fifth row can the following be outlined:
 \begin{align}
--my_g\dot u &= \tau_{surge}\\
-mx_g\dot v + N_vv &= \tau_{sway}\\
+-my_g\dot u &= \tau_{u}\\
+mx_g\dot v + N_vv &= \tau_{v}\\
 -I_{zx}\dot p + N_pp &= 0\\
 -I_{zy}\dot q &= 0\\
-I_z\dot r + N_rr &= \tau_{yaw}
+I_z\dot r + N_rr &= \tau_{r}
 \end{align}
-These equations can be utilized to calculate the coefficients from the damping matrix $D$. The coefficients regarding surge, sway and yaw will be determined by \textit{method one} and coefficients regarding pitch and roll will be determined by \textit{method two}.
+These equations can be utilized to calculate the coefficients from the damping matrix $D$. The coefficients regarding surge, sway and yaw, $u$, $v$ and $r$, will be determined by \textit{method one} and coefficients regarding pitch and roll, $q$ and $p$, will be determined by \textit{method two}.
 
 \subsubsection{Surge test}
 \begin{align}
-m\dot u + X_uu = \tau_{surge}
+m\dot u + X_uu = \tau_{u}
 \end{align}
 where only \textit{method one} is used.
 
 \subsubsection{Sway test}
 \begin{align}
-m\dot v + Y_vv &= \tau_{sway}\\
--mz_g\dot v + K_vv &= \tau_{sway}\\
-mx_g\dot v + N_vv &= \tau_{sway}
+m\dot v + Y_vv &= \tau_{v}\\
+-mz_g\dot v + K_vv &= \tau_{v}\\
+mx_g\dot v + N_vv &= \tau_{v}
 \end{align}
 where only \textit{method one} is used.
 
 \subsubsection{Yaw test}
 \begin{align}
-mx_g\dot r + Y_rr &= \tau_{yaw}\\
--I_{xz}\dot r + K_rr &= \tau_{yaw}\\
-I_z\dot r + N_rr &= \tau_{yaw}
+mx_g\dot r + Y_rr &= \tau_{r}\\
+-I_{xz}\dot r + K_rr &= \tau_{r}\\
+I_z\dot r + N_rr &= \tau_{r}
 \end{align}
 where only \textit{method one} is used.
 
@@ -290,7 +290,6 @@ To be able to make the tests the AAUSHIP needs to have both forward thrusters an
 
 \section{Method}
 The tests performed are as follows:
-\todo{Skriv hvilke log data der skal opsamles}
 \begin{enumerate}
 	\item The first test is a \textit{surge} test. This test is done to test the forward damping coefficient being $X_u$ from the damping matrix $D$. The vessel will accelerate to a certain velocity and keep this. Then all input is put to zero and the vessel will decelerate. This will, as described in section \ref{sec:hydrocoeff}, give a damping coefficient in the forward motion. This is expressed as $m \ddot x - X_u \dot x = 0$ and $X_u$ can be estimated. A step input is now set on the vessel to see the acceleration from zero velocity to the same constant velocity as before. This now gives the input force at the vessel, which is the last unknown in $m \ddot x - X_u \dot x = \tau$. Both $X_u$ and $\tau$ is estimated by fitting to a first order differential curve, as described in \ref{subsec:methodone}. To make this test and data fitting is only position data in the forward motion from the \ac{GPS} of importance. The position can be differentiated twice, to give both velocity and acceleration of the vessel and cab be used to fit the acceleration and deceleration of the vessel.
 	\item The second test is a purely \textit{sway} test. The vessel will make use of the sideways thrusters to move strictly sideways. This implies that there is no rotation or movement in $\psi$ and $x$. Thus makes the moving equation as $m \ddot y - Y_v \dot y = 0$. Here is the vessel again accelerated to a constant velocity and the input is then set to zero, and $Y_v$ can be determined. After this the sideways thrusters can be used to accelerate the vessel to the same constant velocity and the input can be estimated by $m \ddot y - Y_v \dot y = \tau$ where $\tau$ is the only unknown. $K_v$ and $N_v$ can be determined from the same test, though the fitting needs to be changed due to the new parameter from $M_{RB}$. The fitting should be done to the same type, namely like procedure \textit{method one} in \ref{subsec:methodone}. To make this test and data fitting is only position data in sideways motion from the \ac{GPS} of importance. This can be differentiated twice to give both velocity and acceleration in the sideways direction. This can be fitted to a acceleration and deceleration of the vessel when only moving in the sideways direction.
