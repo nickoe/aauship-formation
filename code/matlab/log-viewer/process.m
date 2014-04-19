@@ -4,7 +4,7 @@ for fighandle = findobj('Type','figure')', clf(fighandle), end
 %% Data files
 logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 % testname = 'crashtest';
-testname = 'magnetometertest-lab';
+testname = 'magnetometertest-lab2';
 % fid = fopen('busroute/mbus5/gpsdata141212.txt'); % reduced GPS
 % fidr = fopen('busroute/gpsdata141212.txt'); % all GPS
 % adata = load('busroute/mbus5/accdata141212.csv'); % Accelerometer outputs
@@ -83,7 +83,7 @@ gyro = imudata(:,2:4)*0.05; % Scale 0.05 degrees/sec
 accl = (imudata(:,5:7)*0.00333)*9.82;   %/333)*9.82; % Scale 3.33 mg (g is gravity, that is g-force)
 magn = imudata(:,8:10)*0.0005; % 0.5 mgauss
 temp = imudata(:,11)*0.14; % 0.14 degrees celcius 
-aux_adc = imudata(:,12)*0.806; % 0.806 mV
+aux_adc = imudata(:,12)*0.806; % 0.mV
 imutime = imudata(:,13)-starttime; % Seconds since start, periodic timing determined by imu
 
 figure(2)
@@ -120,19 +120,22 @@ figure(3)
 % subplot(2,1,1)
 
 plot(imutime,smooth(heading,15, 'rloess'),'-')
-
+title('Heading calculated with atan2, not corrected for pitch or roll')
 % subplot(2,1,1)
 % plot(imutime,Azimuth)
 
 %% Animate heading
-clf
-for ii = 1:length(heading)
-    heading(ii)
-    polar([heading(ii)*pi/180,0],[2,0],'-')
-    pause(0.1)
-end
-hold off
+% clf
+% for ii = 1:length(heading)
+%     polar([heading(ii)*pi/180,0],[2,0],'-')
+%     pause(0.03)
+% end
+% hold off
 
+
+%% MEMSENS stuff
+imu2beh(gyro, accl, magn, length(gyro));
+calc_beh_main('testfile.mat',true,true,true,true)
 
 
 %% Echosounder data
