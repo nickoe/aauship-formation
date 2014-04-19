@@ -41,18 +41,18 @@ m \ddot x + D \dot x &= 0
 \end{align}
 A guess to fit such a first order differential equation could be:
 \begin{align}
-u = k \cdot e^{-st}
+u = k \cdot \euler^{-st}
 \end{align}
 This is the expression of the surge speed, as seen from figure \ref{fig:phase3}. This is plugged into the dynamic equation to be able to fit the dynamic equation to the differential equation.
 \begin{align}
 m \dot u + Du &= 0\\
-m \cdot (-kse^{-st}) + D \cdot k \cdot e^{-st} &= 0\\
+m \cdot (-ks\euler^{-st}) + D \cdot k \cdot \euler^{-st} &= 0\\
 -ms+D&=0\\
 s&=\frac{D}{m}
 \end{align}
 This makes the surge velocity to be expressed as:
 \begin{align}
-u = k \cdot e^{-\frac{D}{m}t}
+u = k \cdot \euler^{-\frac{D}{m}t}
 \end{align}
 By setting the time to zero gives the initial velocity:
 \begin{align}
@@ -68,7 +68,7 @@ After the damping is determined is the input force the only unknown in the dynam
 The differential equation to fit this curve would be given by the inhomogeneous equation:
 \begin{align}
 u_{\text{inh}} &= u_0 - u_{\text{h}}\\
-u &= u_0 - k \cdot e^{-st}
+u &= u_0 - k \cdot \euler^{-st}
 \end{align}
 where the $s$ still would be given as:
 \begin{align}
@@ -89,7 +89,7 @@ mZ_g\ddot \varphi + Y_p\dot \varphi = 0
 \end{align}
 $\varphi$ is the position of the angle of the vessel. This is the position that needs to follow the damping as seen on figure~\vref{fig:harmonic-damping}. This can be fit to a second order differential equation. The position of the angle can be expressed as:
 \begin{align}
-\varphi = ke^{-st} \cdot \cos(\omega t)
+\varphi = k\euler^{-st} \cdot \cos(\omega t)
 \end{align}
 A standard second order polynomial is given by:
 \begin{align}
@@ -112,7 +112,7 @@ where:
 \end{align}
 This can then be fit to a position given by the previous:
 \begin{align}
-\varphi = ke^{-\left(\frac{\frac{b}{a}+\sqrt{(-\frac{b}{a})^2}}{2}\right)t} \cdot \cos(\omega t)
+\varphi = k\euler^{-\left(\frac{\frac{b}{a}+\sqrt{(-\frac{b}{a})^2}}{2}\right)t} \cdot \cos(\omega t)
 \end{align}
 
 \subsection{Which parameters to determine}
