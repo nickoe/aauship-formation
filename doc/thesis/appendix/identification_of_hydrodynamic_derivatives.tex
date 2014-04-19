@@ -290,17 +290,13 @@ To be able to make the tests the AAUSHIP needs to have both forward thrusters an
 
 \section{Method}
 The tests performed are as follows:
-
-
 \todo{Skriv hvilke log data der skal opsamles}
-
-
 \begin{enumerate}
-	\item The first test is a \textit{surge} test. This test is done to test the forward damping coefficient being $X_u$ from the damping matrix $D$. The vessel will accelerate to a certain velocity and keep this. Then all input is put to zero and the vessel will decelerate. This will, as described in section \ref{sec:hydrocoeff}, give a damping coefficient in the forward motion. This is expressed as $m \ddot x - X_u \dot x = 0$ and $X_u$ can be estimated. A step input is now set on the vessel to see the acceleration from zero velocity to the same constant velocity as before. This now gives the input force at the vessel, which is the last unknown in $m \ddot x - X_u \dot x = \tau$. Both $X_u$ and $\tau$ is estimated by fitting to a first order differential curve, as described in \ref{subsec:methodone}.
-	\item The second test is a purely \textit{sway} test. The vessel will make use of the sideways thrusters to move strictly sideways. This implies that there is no rotation or movement in $\psi$ and $x$. Thus makes the moving equation as $m \ddot y - Y_v \dot y = 0$. Here is the vessel again accelerated to a constant velocity and the input is then set to zero, and $Y_v$ can be determined. After this the sideways thrusters can be used to accelerate the vessel to the same constant velocity and the input can be estimated by $m \ddot y - Y_v \dot y = \tau$ where $\tau$ is the only unknown. $K_v$ and $N_v$ can be determined from the same test, though the fitting needs to be changed due to the new parameter from $M_{RB}$. The fitting should be done to the same type, namely like procedure \textit{method one} in \ref{subsec:methodone}.
-	\item The last test to perform is the \textit{yaw} test. In this test it is of importance to control the sideways thrusters such that the vessel will keep the position at both $x$ and $y$, such that only rotation is used to move the surrounding water. The vessel is accelerated to a constant angular velocity and the input is then set to zero. The damping of this will determine $N_r$ from $I_z\ddot \psi - N_r \dot \psi = 0$. Now the vessel needs to reach the constant angular velocity again from zero, and the input can now be estimated from $I_z\ddot \psi - N_r \dot \psi = \tau$. $Y_r$ and and $K_r$ can be determined from the same test, but the fitting is a little different due to the new parameter from $M_{RB}$. These fittings should be done as procedure \textit{method one} in \ref{subsec:methodone}.
+	\item The first test is a \textit{surge} test. This test is done to test the forward damping coefficient being $X_u$ from the damping matrix $D$. The vessel will accelerate to a certain velocity and keep this. Then all input is put to zero and the vessel will decelerate. This will, as described in section \ref{sec:hydrocoeff}, give a damping coefficient in the forward motion. This is expressed as $m \ddot x - X_u \dot x = 0$ and $X_u$ can be estimated. A step input is now set on the vessel to see the acceleration from zero velocity to the same constant velocity as before. This now gives the input force at the vessel, which is the last unknown in $m \ddot x - X_u \dot x = \tau$. Both $X_u$ and $\tau$ is estimated by fitting to a first order differential curve, as described in \ref{subsec:methodone}. To make this test and data fitting is only position data in the forward motion from the \ac{GPS} of importance. The position can be differentiated twice, to give both velocity and acceleration of the vessel and cab be used to fit the acceleration and deceleration of the vessel.
+	\item The second test is a purely \textit{sway} test. The vessel will make use of the sideways thrusters to move strictly sideways. This implies that there is no rotation or movement in $\psi$ and $x$. Thus makes the moving equation as $m \ddot y - Y_v \dot y = 0$. Here is the vessel again accelerated to a constant velocity and the input is then set to zero, and $Y_v$ can be determined. After this the sideways thrusters can be used to accelerate the vessel to the same constant velocity and the input can be estimated by $m \ddot y - Y_v \dot y = \tau$ where $\tau$ is the only unknown. $K_v$ and $N_v$ can be determined from the same test, though the fitting needs to be changed due to the new parameter from $M_{RB}$. The fitting should be done to the same type, namely like procedure \textit{method one} in \ref{subsec:methodone}. To make this test and data fitting is only position data in sideways motion from the \ac{GPS} of importance. This can be differentiated twice to give both velocity and acceleration in the sideways direction. This can be fitted to a acceleration and deceleration of the vessel when only moving in the sideways direction.
+	\item The last test to perform is the \textit{yaw} test. In this test it is of importance to control the sideways thrusters such that the vessel will keep the position at both $x$ and $y$, such that only rotation is used to move the surrounding water. The vessel is accelerated to a constant angular velocity and the input is then set to zero. The damping of this will determine $N_r$ from $I_z\ddot \psi - N_r \dot \psi = 0$. Now the vessel needs to reach the constant angular velocity again from zero, and the input can now be estimated from $I_z\ddot \psi - N_r \dot \psi = \tau$. $Y_r$ and and $K_r$ can be determined from the same test, but the fitting is a little different due to the new parameter from $M_{RB}$. These fittings should be done as procedure \textit{method one} in \ref{subsec:methodone}. To make these should the position from the \ac{GPS} be measured to ensure that the vessel does not move of greater importance in forward and sideways directions. Measurements from the magnetometer and accelerometer is used to determine the heading and thereby the change on heading and the acceleration. The accelerometer is used to compensate the pitch and roll in the magnetometer measurements.
 \end{enumerate}
-The parameters in pitch and roll is determined by fitting data to \textit{method two} as described in \ref{subsec:methodtwo}. Previous work done by \todo{ref til Brian og Lunde} has provided the data to be fitted. These data can be found on the cd, \todo{ref til cd}. The data is dependent of the position on the angle of the vessel and the equations is therefore formulated to fit these measurements. The fitting of the data is done as procedure \textit{method two} and no further tests needs to be performed. The tests shows pitch and roll, measured in a vicon motion tracking lab. The vessel is put to a maximum angle without level it into the water. Afterwards it is released and the vessel will damp to zero angle, being horizontal in steady water.
+The parameters in pitch and roll is determined by fitting data to \textit{method two} as described in \ref{subsec:methodtwo}. Previous work done by \citep{13gr931} has provided the data to be fitted. These data can be found on the cd, \todo{ref til cd}. The data is dependent of the position on the angle of the vessel and the equations is therefore formulated to fit these measurements. The fitting of the data is done as procedure \textit{method two} and no further tests needs to be performed. The tests shows pitch and roll, measured in a vicon motion tracking lab. The vessel is put to a maximum angle without level it into the water. Afterwards it is released and the vessel will damp to zero angle, being horizontal in steady water. To verify the data from \citep{13gr931} accelerometer will be collected both in pitch and roll from two simpler tests without the vicon motion tracking lab.
 
 \section{Results}
 \subsubsection{Surge test}
@@ -315,10 +311,13 @@ regræssionskurve af disse}
 \missingfigure{Maalinger af acceleration fra 0 til konstant vinkel
 hastighed + Maaling af deceleration med 0 input fra konstant vinkel
 hastighed + regræssionskurve af disse}
+\subsubsection{Pitch test}
+\missingfigure{Maalinger af deceleration fra max vinkel til steady state + regræssionskurve af disse + sammenligning med lunde og brian}
+\subsubsection{Roll test}
+\missingfigure{Maalinger af deceleration fra max vinkel til steady state + regræssionskurve af disse + sammenligning med lunde og brian}
 
-The results from measurements and estimation can be found in table \ref{tab:dmatrix}.
-
-
+The rigid body constants for the vessel can be found in table \ref{tab:constants} and the results from measurements and estimation can be found in table \ref{tab:dmatrix}.
+\todo{Disse skal måles op og sættes ind}
 \begin{table}[htbp]
 \centering
 \begin{tabular}{ccc}
@@ -327,8 +326,13 @@ The results from measurements and estimation can be found in table \ref{tab:dmat
   \midrule
   $m$ & 2 \\
   $x_g$ & 2 \\
-	\dots\\
-	\bottomrule
+  $z_g$ & 2\\
+  $I_{xz}$ & 2 \\
+  $I_z$ & 2 \\
+  $I_y$ & 2 \\
+  $I_x$ & 2 \\
+  $I_{zx}$ & 2 \\
+  \bottomrule
 \end{tabular}
 \caption{Rigid body mass matrix constants for $M_{RB}$}
 \label{tab:constants}
@@ -342,15 +346,31 @@ The results from measurements and estimation can be found in table \ref{tab:dmat
   \midrule
   $X_u$ & 2 \\
   $Y_v$ & 2 \\
+  $K_v$ & 2 \\
+  $N_v$ & 2 \\
   $N_r$ & 2 \\
   $Y_r$ & 2 \\
-  $N_v$ & 2 \\
+  $K_r$ & 2 \\
+  $Y_p$ & 2 \\
+  $K_p$ & 2 \\
+  $N_p$ & 2 \\
+  $M_q$ & 2 \\
 	\bottomrule
 \end{tabular}
 \caption{Results of fitted values and the calculated coefficients.}
 \label{tab:dmatrix}
 \end{table}
-
+This makes the linear damping matrix as:
+\begin{align}
+D = -
+\begin{bmatrix}
+X_u & 0 & 0 & 0 & 0\\
+0 & Y_v & Y_p & 0 & Y_r\\
+0 & K_v & K_p & 0 & K_r\\
+0 & 0 & 0 & M_q & 0\\
+0 & N_v & N_p & 0 & N_r
+\end{bmatrix}
+\end{align}
 
 \section{Discussion}
 
