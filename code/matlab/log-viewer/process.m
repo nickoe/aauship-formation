@@ -126,21 +126,23 @@ heading = atan2(-magn(:,2),magn(:,1))*180/pi;
 % plot(imutime,Azimuth)
 
 figure(50)
-plot3(magn(:,1),magn(:,2),magn(:,3))
+bias = [(max(magn(:,1))-min(magn(:,1)))/2+min(magn(:,1)),...
+        (max(magn(:,2))-min(magn(:,2)))/2+min(magn(:,2)),...
+        (max(magn(:,3))-min(magn(:,3)))/2+min(magn(:,3))]
+plot3(magn(:,1)-bias(1),magn(:,2)-bias(2),magn(:,3)-bias(3))
 xlabel('x');ylabel('y');zlabel('z');
 axis equal
 grid on
-hold on
-plot3((max(magn(:,1))-min(magn(:,1)))/2+min(magn(:,1)),...
-      (max(magn(:,2))-min(magn(:,2)))/2+min(magn(:,2)),...
-      (max(magn(:,3))-min(magn(:,3)))/2+min(magn(:,3)),'*')
-hold off
+% hold on
+% plot3(bias(1), bias(2), bias(3),'r*')
+% hold off
 
 
 %% MEMSENS stuff
-imu2beh(gyro, accl/9.82, magn/1000, length(gyro));
+magnbias = [magn(:,1)-bias(1) magn(:,2)-bias(2) magn(:,3)-bias(3)];
+imu2beh(gyro, accl/9.82, magnbias, length(gyro));
 % imu2beh([gyro(:,1) -gyro(:,2) -gyro(:,3)], [accl(:,1) -accl(:,2) -accl(:,3)], [magn(:,1) -magn(:,2) -magn(:,3)], length(gyro));
-calc_beh_main('testfile.mat',false,true,false,false);
+calc_beh_main('testfile.mat',false,true,true,false);
 
 %% Animate heading
 %     figure(42)
