@@ -133,7 +133,7 @@ grid on
 hold on
 plot3((max(magn(:,1))-min(magn(:,1)))/2+min(magn(:,1)),...
       (max(magn(:,2))-min(magn(:,2)))/2+min(magn(:,2)),...
-      (max(magn(:,3))-min(magn(:,3)))/+min(magn(:,3)),'*')
+      (max(magn(:,3))-min(magn(:,3)))/2+min(magn(:,3)),'*')
 hold off
 
 
