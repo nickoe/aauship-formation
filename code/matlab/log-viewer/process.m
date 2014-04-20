@@ -4,7 +4,7 @@ for fighandle = findobj('Type','figure')', clf(fighandle), end
 %% Data files
 logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 % testname = 'crashtest';
-testname = 'magnetometertest-lab2';
+testname = 'magnetometertest-lab4';
 % fid = fopen('busroute/mbus5/gpsdata141212.txt'); % reduced GPS
 % fidr = fopen('busroute/gpsdata141212.txt'); % all GPS
 % adata = load('busroute/mbus5/accdata141212.csv'); % Accelerometer outputs
@@ -31,10 +31,10 @@ walltime = line{8};
 lat = pos(1,:);
 lon = pos(2,:);
 
-figure(1)
-plot(lon,lat,'.r')
-plot_google_map('maptype','satellite')
-title('WGS84')
+% figure(1)
+% plot(lon,lat,'.r')
+% plot_google_map('maptype','satellite')
+% title('WGS84')
 
 
 %% Tangent plance coordinates xyz (not verified)
@@ -86,29 +86,29 @@ temp = imudata(:,11)*0.14; % 0.14 degrees celcius
 aux_adc = imudata(:,12)*0.806; % 0.mV
 imutime = imudata(:,13)-starttime; % Seconds since start, periodic timing determined by imu
 
-figure(2)
-subplot(4,1,1)
-plot(imutime, gyro)
-title('Gyrometer')
-ylabel('[degrees/sec]')
-legend('X','Y','Z')
-
-subplot(4,1,2)
-plot(imutime, accl)
-title('Accelerometer')
-ylabel('[m/s^2]')
-
-subplot(4,1,3)
-plot(imutime, magn)
-title('Magnetometer')
-ylabel('[gauss]')
-
-subplot(4,1,4)
-plot(imutime, imudata(:,[1 11:12]))
-title('Supply, temperature and ADC of the ADIS16405 IMU')
-ylabel('[V, degC, V]')
-xlabel('Time [s]')
-legend('Supply','Temp','ADC')
+% figure(2)
+% subplot(4,1,1)
+% plot(imutime, gyro)
+% title('Gyrometer')
+% ylabel('[degrees/sec]')
+% legend('X','Y','Z')
+% 
+% subplot(4,1,2)
+% plot(imutime, accl)
+% title('Accelerometer')
+% ylabel('[m/s^2]')
+% 
+% subplot(4,1,3)
+% plot(imutime, magn)
+% title('Magnetometer')
+% ylabel('[gauss]')
+% 
+% subplot(4,1,4)
+% plot(imutime, imudata(:,[1 11:12]))
+% title('Supply, temperature and ADC of the ADIS16405 IMU')
+% ylabel('[V, degC, V]')
+% xlabel('Time [s]')
+% legend('Supply','Temp','ADC')
 
 %% Heading
 % X_H = X*cos(pitch) + Y*sin(roll)*sin(pitch) - Z*cos(roll)*sin(pitch)
@@ -116,26 +116,43 @@ legend('Supply','Temp','ADC')
 % Azimuth = atan2 (Y_H / X_H )
 
 heading = atan2(-magn(:,2),magn(:,1))*180/pi;
-figure(3)
-% subplot(2,1,1)
-
-plot(imutime,smooth(heading,15, 'rloess'),'-')
-title('Heading calculated with atan2, not corrected for pitch or roll')
-% subplot(2,1,1)
+% figure(3)
+% % subplot(2,1,1)
+% 
+% % plot(imutime,smooth(heading,15, 'rloess'),'-')
+% plot(imutime,heading,'-')
+% title('Heading calculated with atan2, not corrected for pitch or roll')
+% % subplot(2,1,1)
 % plot(imutime,Azimuth)
 
-%% Animate heading
-% clf
-% for ii = 1:length(heading)
-%     polar([heading(ii)*pi/180,0],[2,0],'-')
-%     pause(0.03)
-% end
-% hold off
+figure(50)
+plot3(magn(:,1),magn(:,2),magn(:,3))
+xlabel('x');ylabel('y');zlabel('z');
+axis equal
+grid on
+hold on
+plot3((max(magn(:,1))-min(magn(:,1)))/2+min(magn(:,1)),...
+      (max(magn(:,2))-min(magn(:,2)))/2+min(magn(:,2)),...
+      (max(magn(:,3))-min(magn(:,3)))/+min(magn(:,3)),'*')
+hold off
 
 
 %% MEMSENS stuff
-imu2beh(gyro, accl, magn, length(gyro));
-calc_beh_main('testfile.mat',true,true,true,true)
+imu2beh(gyro, accl/9.82, magn/1000, length(gyro));
+% imu2beh([gyro(:,1) -gyro(:,2) -gyro(:,3)], [accl(:,1) -accl(:,2) -accl(:,3)], [magn(:,1) -magn(:,2) -magn(:,3)], length(gyro));
+calc_beh_main('testfile.mat',false,true,false,false);
+
+%% Animate heading
+%     figure(42)
+% 
+% clf
+% for ii = 1:length(heading)
+%     figure(42)
+%     polar([heading(ii)*pi/180,0],[2,0],'-')
+%     title(num2str(imutime(ii,1)))
+%     pause(0.03)
+% end
+% hold off
 
 
 %% Echosounder data
@@ -187,8 +204,8 @@ while(filenotdone > 0)
     end
     
 end
-figure(4)
-plot(echo.depth.timestamp,echo.depth.value,echo.temperature.timestamp',echo.temperature.value)
-xlabel('Timestamp [s]')
-ylabel('Depth [m] / Temperature [degree C]')
-legend('Depth','Temperature')
+% figure(4)
+% plot(echo.depth.timestamp,echo.depth.value,echo.temperature.timestamp',echo.temperature.value)
+% xlabel('Timestamp [s]')
+% ylabel('Depth [m] / Temperature [degree C]')
+% legend('Depth','Temperature')

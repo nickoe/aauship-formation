@@ -85,19 +85,19 @@ function beh = calc_beh_main(fname, headingGT180, hasCounterCol, preSmooth, post
     end
     
     % plot raw accelerations
-    figure(32);
-    subplot(3, 1, 1);
-    plot(ax);
-    title('Ax');
-    ylabel('G');
-    subplot(3, 1, 2);
-    plot(ay);
-    title('Ay');
-    ylabel('G');
-    subplot(3, 1, 3);
-    plot(az);
-    title('Az');
-    ylabel('G');
+%     figure(32);
+%     subplot(3, 1, 1);
+%     plot(ax);
+%     title('Ax');
+%     ylabel('G');
+%     subplot(3, 1, 2);
+%     plot(ay);
+%     title('Ay');
+%     ylabel('G');
+%     subplot(3, 1, 3);
+%     plot(az);
+%     title('Az');
+%     ylabel('G');
     
     
     % plot R/P/Y
