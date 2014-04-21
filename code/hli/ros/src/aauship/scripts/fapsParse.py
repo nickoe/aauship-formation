@@ -198,7 +198,7 @@ class packetParser():
             elif (ord(packet['DevID']) == 30): # GPS data
                 #print "GPS!"
                 #time.sleep(1)
-                if(ord(packet['MsgID']) == 6):
+                if(ord(packet['MsgID']) == 6): # This is what the LII sends for the moment
                     #print str("".join(packet['Data']))
                     content = "".join(packet['Data']).split(',')
                     if content[0] == "$GPRMC" and content[2] == 'A':
