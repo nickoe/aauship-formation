@@ -51,7 +51,6 @@ class MyPlugin(Plugin):
         # Add widget to the user interface
         context.add_widget(self._widget)
 
-        self._widget.label.setText('hej') # example on changing a label
         self._sub = rospy.Subscriber( "test",  # name of the topic                 
                                       String,  # type of the topic       
                                       self._cb)   
@@ -118,8 +117,14 @@ class MyPlugin(Plugin):
     def _enable_autopilot(self):
         if self._widget.groupBoxAutopilot.isChecked():
             print "Autopilot Enabled"
+            self._widget.labelControlStatus.setStyleSheet(
+                    "background-color: rgb(0, 255, 0);")
+            self._widget.labelControlStatus.setText('CONTROL ENABLED') 
         else:
             print "Autopilot Disabled"
+            self._widget.labelControlStatus.setStyleSheet(
+                    "background-color: rgb(171, 171, 171);")
+            self._widget.labelControlStatus.setText('CONTROL DISABLED') 
 
     def foo(self):
         print "Foo, this is a dummy function"

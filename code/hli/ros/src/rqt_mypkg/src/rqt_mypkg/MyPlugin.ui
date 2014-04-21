@@ -19,7 +19,10 @@
   <property name="windowTitle">
    <string>Title of form for test plugin</string>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="labelControlStatus">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>0</x>
