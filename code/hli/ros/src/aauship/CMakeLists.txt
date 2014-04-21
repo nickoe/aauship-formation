@@ -60,6 +60,7 @@ add_message_files(
   LLIinput.msg
   testSetpoints.msg
   PID.msg
+  Attitude.msg
 )
 
 ## Generate services in the 'srv' folder
