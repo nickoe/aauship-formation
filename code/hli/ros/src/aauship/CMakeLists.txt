@@ -61,6 +61,7 @@ add_message_files(
   testSetpoints.msg
   PID.msg
   Attitude.msg
+  GPS.msg
 )
 
 ## Generate services in the 'srv' folder

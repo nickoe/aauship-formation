@@ -8,6 +8,8 @@ from python_qt_binding.QtCore import Qt, QTimer, Slot
 from python_qt_binding.QtGui import QWidget
 from python_qt_binding.QtGui import *
 
+from aauship.msg import *
+
 from std_msgs.msg import String
 
 class MyPlugin(Plugin):
@@ -54,6 +56,11 @@ class MyPlugin(Plugin):
                                       String,  # type of the topic       
                                       self._cb)   
 
+        self._sub_attitude = rospy.Subscriber( "attitude", Attitude,
+                self._update_attitude)
+        self._sub_gps = rospy.Subscriber( "gps1", GPS,
+                self._update_gps)
+
         self.shortcut_w = QShortcut(QKeySequence(Qt.Key_W), self._widget)
         self.shortcut_w.setContext(Qt.ApplicationShortcut)
         self.shortcut_w.activated.connect(self._cb2)
@@ -64,16 +71,16 @@ class MyPlugin(Plugin):
     def _cb2(self):
         self._widget.label.setText('meh')
 
-    '''
-    def keyPressEvent(self, event):
-        print "poop"
-        if type(event) == QtGui.QKeyEvent:
-          #here accept the event and do something
-          print event.key()
-          event.accept()
-        else:
-          event.ignore()
-    '''
+    def _update_attitude(self, data):
+        self._widget.labelPitch.setText(str(data.pitch))
+        self._widget.labelRoll.setText(str(data.roll))
+        self._widget.labelYaw.setText(str(data.yaw))
+
+    def _update_gps(self, data):
+        self._widget.labelGPSlat.setText(str(data.latitude))
+        self._widget.labelGPSlon.setText(str(data.longitude))
+        self._widget.labelGPSHeading.setText(str(data.true_heading))
+        self._widget.labelGPSSpeed.setText(str(data.speed_over_ground))
 
     def shutdown_plugin(self):
         # TODO unregister all publishers here
