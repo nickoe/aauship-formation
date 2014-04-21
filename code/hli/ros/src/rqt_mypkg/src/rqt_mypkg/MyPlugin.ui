@@ -599,6 +599,16 @@
      <string>E</string>
     </property>
    </widget>
+   <widget class="QDial" name="dial">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>30</y>
+      <width>50</width>
+      <height>64</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

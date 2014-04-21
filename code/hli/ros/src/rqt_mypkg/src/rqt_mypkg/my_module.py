@@ -55,7 +55,7 @@ class MyPlugin(Plugin):
                 self._update_attitude)
         self._sub_gps = rospy.Subscriber( "gps1", GPS,
                 self._update_gps)
-        self._pub_pid = rospy.Publisher( "testPID", PID)
+        self._pub_pid = rospy.Publisher( "testPID", controlTest)
 
         # Catch keypresses (shortcuts)
         self.shortcut_w = QShortcut(QKeySequence(Qt.Key_W), self._widget)
@@ -73,10 +73,22 @@ class MyPlugin(Plugin):
         self._widget.SpinBoxYawP.valueChanged.connect(self._update_pid_values)
         self._widget.SpinBoxYawI.valueChanged.connect(self._update_pid_values)
         self._widget.SpinBoxYawD.valueChanged.connect(self._update_pid_values)
+
+        self._widget.SpinBoxSurgeVel.valueChanged.connect(self._update_pid_values)
+        self._widget.SpinBoxSurgeAng.valueChanged.connect(self._update_pid_values)
+        self._widget.SpinBoxSwayVel.valueChanged.connect(self._update_pid_values)
+        self._widget.SpinBoxSwayAng.valueChanged.connect(self._update_pid_values)
+        self._widget.SpinBoxYawAngVel.valueChanged.connect(self._update_pid_values)
+
         self._widget.groupBoxAutopilot.toggled.connect(self._enable_autopilot)
         self._widget.radioButtonSurgeTest.toggled.connect(self._update_pid_values)
         self._widget.radioButtonSwayTest.toggled.connect(self._update_pid_values)
         self._widget.radioButtonYawTest.toggled.connect(self._update_pid_values)
+
+        print self._widget.SpinBoxSurgeAng.maximum()
+        self._widget.SpinBoxSurgeAng.setMinimum(-100)
+
+        self.controllerData = controlTest()
     
     def _cb2(self):
         self._widget.label.setText('meh')
@@ -93,21 +105,34 @@ class MyPlugin(Plugin):
         self._widget.labelGPSSpeed.setText(str(data.speed_over_ground))
 
     def _update_pid_values(self):
+        print "dd"
+        print self.controllerData.pid
+        print "ff"
+        self._pub_pid.publish(self.controllerData)
         if self._widget.radioButtonSurgeTest.isChecked():
             print "Surge controller selected"
-            self._pub_pid.publish(self._widget.SpinBoxSurgeP.value(),
-                    self._widget.SpinBoxSurgeI.value(),
-                    self._widget.SpinBoxSurgeD.value())
+            self.controllerData.pid.Kp = self._widget.SpinBoxSurgeP.value()
+            self.controllerData.pid.Ki = self._widget.SpinBoxSurgeI.value()
+            self.controllerData.pid.Kd = self._widget.SpinBoxSurgeD.value()
+            self.controllerData.setpoints.cmd_vel = self._widget.SpinBoxSurgeVel.value()
+            self.controllerData.setpoints.cmd_ang = self._widget.SpinBoxSurgeAng.value()
+            self.controllerData.setpoints.controller_type = 1
         elif self._widget.radioButtonSwayTest.isChecked():
             print "Sway controller selected"
-            self._pub_pid.publish(self._widget.SpinBoxSwayP.value(),
-                    self._widget.SpinBoxSwayI.value(),
-                    self._widget.SpinBoxSwayD.value())
+            self.controllerData.pid.Kp = self._widget.SpinBoxSwayP.value()
+            self.controllerData.pid.Ki = self._widget.SpinBoxSwayI.value()
+            self.controllerData.pid.Kd = self._widget.SpinBoxSwayD.value()
+            self.controllerData.setpoints.cmd_vel = self._widget.SpinBoxSwayVel.value()
+            self.controllerData.setpoints.cmd_ang = self._widget.SpinBoxSwayAng.value()
+            self.controllerData.setpoints.controller_type = 2
         elif self._widget.radioButtonYawTest.isChecked():
             print "Yaw controller selected"
-            self._pub_pid.publish(self._widget.SpinBoxYawP.value(),
-                    self._widget.SpinBoxYawI.value(),
-                    self._widget.SpinBoxYawD.value())
+            self.controllerData.pid.Kp = self._widget.SpinBoxYawP.value()
+            self.controllerData.pid.Ki = self._widget.SpinBoxYawI.value()
+            self.controllerData.pid.Kd = self._widget.SpinBoxYawD.value()
+            self.controllerData.setpoints.cmd_angvel = self._widget.SpinBoxYawAngVel.value()
+            self.controllerData.setpoints.controller_type = 3
+        self._pub_pid.publish(self.controllerData)
 
     def _enable_autopilot(self):
         if self._widget.groupBoxAutopilot.isChecked():
