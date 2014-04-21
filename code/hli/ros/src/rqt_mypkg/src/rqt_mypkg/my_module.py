@@ -78,6 +78,10 @@ class MyPlugin(Plugin):
         self._widget.SpinBoxYawP.valueChanged.connect(self._update_pid_yaw_values)
         self._widget.SpinBoxYawI.valueChanged.connect(self._update_pid_yaw_values)
         self._widget.SpinBoxYawD.valueChanged.connect(self._update_pid_yaw_values)
+        self._widget.groupBoxAutopilot.toggled.connect(self._enable_autopilot)
+        self._widget.radioButtonSurgeTest.toggled.connect(self.foo)
+        self._widget.radioButtonSwayTest.toggled.connect(self.foo)
+        self._widget.radioButtonYawTest.toggled.connect(self.foo)
     
     def _cb(self, msg):
         self._widget.label.setText(msg.data)
@@ -110,6 +114,15 @@ class MyPlugin(Plugin):
         self._pub_pid.publish(self._widget.SpinBoxYawP.value(),
                 self._widget.SpinBoxYawI.value(),
                 self._widget.SpinBoxYawD.value())
+
+    def _enable_autopilot(self):
+        if self._widget.groupBoxAutopilot.isChecked():
+            print "Autopilot Enabled"
+        else:
+            print "Autopilot Disabled"
+
+    def foo(self):
+        print "Foo, this is a dummy function"
 
     def shutdown_plugin(self):
         # TODO unregister all publishers here
