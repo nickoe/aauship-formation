@@ -81,7 +81,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Surge Test Controller theta</string>
+     <string>Surge Test Controller</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="radioButtonSwayTest">
@@ -125,7 +125,7 @@
    </property>
    <widget class="QDoubleSpinBox" name="SpinBoxSurgeVel">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -154,7 +154,7 @@
    </widget>
    <widget class="QDoubleSpinBox" name="SpinBoxSwayVel">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -399,7 +399,7 @@
     </rect>
    </property>
    <property name="title">
-    <string>Data</string>
+    <string>Telemetry Data</string>
    </property>
    <widget class="QLabel" name="label_7">
     <property name="geometry">
