@@ -33,26 +33,28 @@ class Control(object):
         print data
         pass
 
-    ## PID controller to calculate actuator input
-    def pid(self, Kp, Ki, Kd, desired, currentstate):
+        pid_u = self.pid_controller_update()
+        pid_v = 
+        pid_r = 
 
-        '''
+    ## PID controller to calculate actuator input
+    def pid_controller_update(self, Kp, Ki, Kd, desired, currentstate):
         error = desired - currentstate
-        integral = integral + error*dt
-        if i~=1
-        derivative(i) = (error(i) - prev_error)*dt
-        end
+        integral = integral + error
+        derivative = error - prev_error
         actuatorinput = Kp*error + Ki*integral + Kd*derivative
         prev_error = error
         return actuatorinput
         #sleep(dt)
-        '''
         pass
 
     def run(self):
 	    BUFSIZE = 1024
         self.ctllog = open(str(os.environ['ROS_TEST_RESULTS_DIR']) + "/../../src/aauship/scripts/logs/ctl.log",'w',BUFSIZE)
         print(self.ctllog.name)
+
+        prev_error = 0
+        
 
         subref = rospy.Subscriber('ref_input', testSetpoints, self.pid_cb)
         subpid = rospy.Subscriber('pid_input', PID, self.ref_cb)
