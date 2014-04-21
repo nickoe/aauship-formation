@@ -60,10 +60,24 @@ class MyPlugin(Plugin):
                 self._update_attitude)
         self._sub_gps = rospy.Subscriber( "gps1", GPS,
                 self._update_gps)
+        self._pub_pid = rospy.Publisher( "testPID", PID)
 
+        # Catch keypresses (shortcuts)
         self.shortcut_w = QShortcut(QKeySequence(Qt.Key_W), self._widget)
         self.shortcut_w.setContext(Qt.ApplicationShortcut)
         self.shortcut_w.activated.connect(self._cb2)
+
+        # Catch change events on widgets
+        #self._widget.name.valueChanged.connect(self.foo)
+        self._widget.SpinBoxSurgeP.valueChanged.connect(self._update_pid_surge_values)
+        self._widget.SpinBoxSurgeI.valueChanged.connect(self._update_pid_surge_values)
+        self._widget.SpinBoxSurgeD.valueChanged.connect(self._update_pid_surge_values)
+        self._widget.SpinBoxSwayP.valueChanged.connect(self._update_pid_sway_values)
+        self._widget.SpinBoxSwayI.valueChanged.connect(self._update_pid_sway_values)
+        self._widget.SpinBoxSwayD.valueChanged.connect(self._update_pid_sway_values)
+        self._widget.SpinBoxYawP.valueChanged.connect(self._update_pid_yaw_values)
+        self._widget.SpinBoxYawI.valueChanged.connect(self._update_pid_yaw_values)
+        self._widget.SpinBoxYawD.valueChanged.connect(self._update_pid_yaw_values)
     
     def _cb(self, msg):
         self._widget.label.setText(msg.data)
@@ -81,6 +95,21 @@ class MyPlugin(Plugin):
         self._widget.labelGPSlon.setText(str(data.longitude))
         self._widget.labelGPSHeading.setText(str(data.true_heading))
         self._widget.labelGPSSpeed.setText(str(data.speed_over_ground))
+
+    def _update_pid_surge_values(self):
+        self._pub_pid.publish(self._widget.SpinBoxSurgeP.value(),
+                self._widget.SpinBoxSurgeI.value(),
+                self._widget.SpinBoxSurgeD.value())
+
+    def _update_pid_sway_values(self):
+        self._pub_pid.publish(self._widget.SpinBoxSwayP.value(),
+                self._widget.SpinBoxSwayI.value(),
+                self._widget.SpinBoxSwayD.value())
+
+    def _update_pid_yaw_values(self):
+        self._pub_pid.publish(self._widget.SpinBoxYawP.value(),
+                self._widget.SpinBoxYawI.value(),
+                self._widget.SpinBoxYawD.value())
 
     def shutdown_plugin(self):
         # TODO unregister all publishers here
