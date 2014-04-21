@@ -51,10 +51,6 @@ class MyPlugin(Plugin):
         # Add widget to the user interface
         context.add_widget(self._widget)
 
-        self._sub = rospy.Subscriber( "test",  # name of the topic                 
-                                      String,  # type of the topic       
-                                      self._cb)   
-
         self._sub_attitude = rospy.Subscriber( "attitude", Attitude,
                 self._update_attitude)
         self._sub_gps = rospy.Subscriber( "gps1", GPS,
@@ -68,23 +64,20 @@ class MyPlugin(Plugin):
 
         # Catch change events on widgets
         #self._widget.name.valueChanged.connect(self.foo)
-        self._widget.SpinBoxSurgeP.valueChanged.connect(self._update_pid_surge_values)
-        self._widget.SpinBoxSurgeI.valueChanged.connect(self._update_pid_surge_values)
-        self._widget.SpinBoxSurgeD.valueChanged.connect(self._update_pid_surge_values)
-        self._widget.SpinBoxSwayP.valueChanged.connect(self._update_pid_sway_values)
-        self._widget.SpinBoxSwayI.valueChanged.connect(self._update_pid_sway_values)
-        self._widget.SpinBoxSwayD.valueChanged.connect(self._update_pid_sway_values)
-        self._widget.SpinBoxYawP.valueChanged.connect(self._update_pid_yaw_values)
-        self._widget.SpinBoxYawI.valueChanged.connect(self._update_pid_yaw_values)
-        self._widget.SpinBoxYawD.valueChanged.connect(self._update_pid_yaw_values)
+        self._widget.SpinBoxSurgeP.valueChanged.connect(self._update_pid_values)
+        self._widget.SpinBoxSurgeI.valueChanged.connect(self._update_pid_values)
+        self._widget.SpinBoxSurgeD.valueChanged.connect(self._update_pid_values)
+        self._widget.SpinBoxSwayP.valueChanged.connect(self._update_pid_values)
+        self._widget.SpinBoxSwayI.valueChanged.connect(self._update_pid_values)
+        self._widget.SpinBoxSwayD.valueChanged.connect(self._update_pid_values)
+        self._widget.SpinBoxYawP.valueChanged.connect(self._update_pid_values)
+        self._widget.SpinBoxYawI.valueChanged.connect(self._update_pid_values)
+        self._widget.SpinBoxYawD.valueChanged.connect(self._update_pid_values)
         self._widget.groupBoxAutopilot.toggled.connect(self._enable_autopilot)
-        self._widget.radioButtonSurgeTest.toggled.connect(self.foo)
-        self._widget.radioButtonSwayTest.toggled.connect(self.foo)
-        self._widget.radioButtonYawTest.toggled.connect(self.foo)
+        self._widget.radioButtonSurgeTest.toggled.connect(self._update_pid_values)
+        self._widget.radioButtonSwayTest.toggled.connect(self._update_pid_values)
+        self._widget.radioButtonYawTest.toggled.connect(self._update_pid_values)
     
-    def _cb(self, msg):
-        self._widget.label.setText(msg.data)
-
     def _cb2(self):
         self._widget.label.setText('meh')
 
@@ -99,20 +92,22 @@ class MyPlugin(Plugin):
         self._widget.labelGPSHeading.setText(str(data.true_heading))
         self._widget.labelGPSSpeed.setText(str(data.speed_over_ground))
 
-    def _update_pid_surge_values(self):
-        self._pub_pid.publish(self._widget.SpinBoxSurgeP.value(),
-                self._widget.SpinBoxSurgeI.value(),
-                self._widget.SpinBoxSurgeD.value())
-
-    def _update_pid_sway_values(self):
-        self._pub_pid.publish(self._widget.SpinBoxSwayP.value(),
-                self._widget.SpinBoxSwayI.value(),
-                self._widget.SpinBoxSwayD.value())
-
-    def _update_pid_yaw_values(self):
-        self._pub_pid.publish(self._widget.SpinBoxYawP.value(),
-                self._widget.SpinBoxYawI.value(),
-                self._widget.SpinBoxYawD.value())
+    def _update_pid_values(self):
+        if self._widget.radioButtonSurgeTest.isChecked():
+            print "Surge controller selected"
+            self._pub_pid.publish(self._widget.SpinBoxSurgeP.value(),
+                    self._widget.SpinBoxSurgeI.value(),
+                    self._widget.SpinBoxSurgeD.value())
+        elif self._widget.radioButtonSwayTest.isChecked():
+            print "Sway controller selected"
+            self._pub_pid.publish(self._widget.SpinBoxSwayP.value(),
+                    self._widget.SpinBoxSwayI.value(),
+                    self._widget.SpinBoxSwayD.value())
+        elif self._widget.radioButtonYawTest.isChecked():
+            print "Yaw controller selected"
+            self._pub_pid.publish(self._widget.SpinBoxYawP.value(),
+                    self._widget.SpinBoxYawI.value(),
+                    self._widget.SpinBoxYawD.value())
 
     def _enable_autopilot(self):
         if self._widget.groupBoxAutopilot.isChecked():
@@ -131,6 +126,9 @@ class MyPlugin(Plugin):
 
     def shutdown_plugin(self):
         # TODO unregister all publishers here
+        if self._pub_pid is not None:
+            self._pub_pid.unregister()
+            self._pub_pid = None
         pass
 
     def save_settings(self, plugin_settings, instance_settings):
