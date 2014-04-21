@@ -12,13 +12,50 @@ import os
 
 import fapsParse
 import numpy
-from math import atan2
+from math import atan2,sqrt,cos,sin
 
 ## This is the esitimator and sensor node
 #
 #  It takes the raw data published from the LLI node and interprets
 #  them with the fapsParse.packetParser.parser(). 
 class Estimator(object):
+    def __init__(self):
+        self.imu = {'supply':0.0,
+                    'xgyro':0.0,
+                    'ygyro':0.0,
+                    'zgyro':0.0,
+                    'xaccl':0.0,
+                    'yaccl':0.0,
+                    'zaccl':0.0,
+                    'xmagn':0.0,
+                    'ymagn':0.0,
+                    'zmagn':0.0,
+                    'temp':0.0,
+                    'adc':0.0}
+        self.magnbias = {'x':0.25825, 'y':0.1225, 'z':-0.686}
+
+
+    def pitchroll(self,ax,ay,az):
+        x2 = ax**2
+        y2 = ay**2
+        z2 = az**2
+        sxy = sqrt(x2+z2)
+        syz = sqrt(y2+z2)
+
+        roll = atan2(ay,sxy)
+
+        pitch = -atan2(ax,syz)
+
+        return {'roll':roll, 'pitch':pitch}
+
+    def yaw(self,mx,my,mz,pitch,roll):
+        xhead = mx*cos(-pitch) + my*sin(-roll)*sin(-pitch) - mz*cos(-roll)*sin(-pitch)
+        yhead = my*cos(-roll) + mz*sin(-roll)
+        heading = -atan2(yhead, xhead)
+
+        return heading
+
+
     def callback(self, data):
         #rospy.loginfo(rospy.get_caller_id()+" I heard %s",data.Data)
 
@@ -30,21 +67,33 @@ class Estimator(object):
         #print "Running parser"
         tmp = {'DevID':str(data.DevID), 'MsgID':str(data.MsgID),'Data': (data.Data)}
         self.parser.parse(tmp)
-        self.pub_imu.publish(numpy.asscalar(self.samples[0,0]),
-                             numpy.asscalar(self.samples[1,0]),
-                             numpy.asscalar(self.samples[2,0]),
-                             numpy.asscalar(self.samples[3,0]),
-                             numpy.asscalar(self.samples[4,0]),
-                             numpy.asscalar(self.samples[5,0]),
-                             numpy.asscalar(self.samples[6,0]),
-                             numpy.asscalar(self.samples[7,0]),
-                             numpy.asscalar(self.samples[8,0]),
-                             numpy.asscalar(self.samples[9,0]),
-                             numpy.asscalar(self.samples[10,0]),
-                             numpy.asscalar(self.samples[11,0]))
-        print atan2(numpy.asscalar(self.samples[8,0]),numpy.asscalar(self.samples[7,0]))*180/3.14158+180
+        self.imu['supply'] = numpy.asscalar(self.samples[0,0])*0.002418
+        self.imu['xgyro'] = numpy.asscalar(self.samples[1,0])*0.05
+        self.imu['ygyro'] = numpy.asscalar(self.samples[2,0])*0.05
+        self.imu['zgyro'] = numpy.asscalar(self.samples[3,0])*0.05
+        self.imu['xaccl'] = numpy.asscalar(self.samples[4,0])*9.82
+        self.imu['yaccl'] = numpy.asscalar(self.samples[5,0])*9.82
+        self.imu['zaccl'] = numpy.asscalar(self.samples[6,0])*9.82
+        self.imu['xmagn'] = numpy.asscalar(self.samples[7,0])*0.0005-self.magnbias['x']
+        self.imu['ymagn'] = numpy.asscalar(self.samples[8,0])*0.0005-self.magnbias['y']
+        self.imu['zmagn'] = numpy.asscalar(self.samples[9,0])*0.0005-self.magnbias['z']
+        self.imu['temp'] = numpy.asscalar(self.samples[10,0])*0.14
+        self.imu['adc'] = numpy.asscalar(self.samples[11,0])*0.806
+        self.pub_imu.publish(
+            self.imu['supply'],
+            self.imu['xgyro'],self.imu['ygyro'],self.imu['zgyro'],
+            self.imu['xaccl'],self.imu['yaccl'],self.imu['zaccl'],
+            self.imu['xmagn'],self.imu['ymagn'],self.imu['zmagn'],
+            self.imu['temp'],self.imu['adc'])
+        
+        pr = self.pitchroll(self.imu['xaccl'],self.imu['yaccl'],self.imu['zaccl'])
+        head = self.yaw(self.imu['xmagn'],self.imu['ymagn'],self.imu['zmagn'],pr['pitch'],pr['roll'])
+
+        self.pub_attitude.publish(pr['pitch'],pr['roll'],head)
+        print(head)
 
         self.stat = 0 # Used for callback debugging
+
 
     def run(self):
         self.stat = 0 # Used for callback debugging
@@ -69,6 +118,7 @@ class Estimator(object):
         rospy.init_node('estimator')
         rospy.Subscriber('samples', Faps, self.callback)
         self.pub_imu = rospy.Publisher('imu', ADIS16405)
+        self.pub_attitude = rospy.Publisher('attitude',Attitude)
         rospy.spin() # Keeps the node running untill stopped
         print("\nClosing log files")
         self.imulog.close()
