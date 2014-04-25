@@ -1,6 +1,9 @@
 % This script plots the roll angle on top of a image or movie, this is to
 % compare the estimated values with the horizon.
 
+% Maybe use http://www.mathworks.se/help/vision/ref/undistortimage.html
+% to undistort wide angle image from GoPro.
+
 clf, clear all
 
 f = imread('horizon-demo.jpg');
