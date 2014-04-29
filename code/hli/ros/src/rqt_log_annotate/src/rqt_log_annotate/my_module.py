@@ -71,9 +71,10 @@ class MyPlugin(Plugin):
         self._widget.labelTimestamp.setText(str(self.now))
         self.starttime = 0.0
         self.stoptime = 0.0
+        self.running = False
        
         # Open log file
-        self.log = open("logs/annotate.log", 'w', 1)
+        self.log = open("logs/annotate" + str(rospy.get_time()) + ".log", 'w', 1)
 
     def _get_time(self):
         self.now = rospy.get_time()
@@ -82,7 +83,9 @@ class MyPlugin(Plugin):
     
     def _start(self):
         print("Started")
-        self.starttime = self._get_time()
+        if not (self.running):
+            self.starttime = self._get_time()
+            self.running = True
         self._widget.lineEditDescription.setStyleSheet(
                 "background-color: rgb(255, 0, 0);")
 
@@ -93,6 +96,7 @@ class MyPlugin(Plugin):
                 "background-color: rgb(0, 255, 0);")
         self.desc = self._widget.lineEditDescription.text()
         line = str(self.starttime) + ',' + str(self.stoptime) + ',' + self.desc + "\n"
+        self.running = False
         print line
         self.log.write(line)
         self._widget.lineEditDescription.clear()

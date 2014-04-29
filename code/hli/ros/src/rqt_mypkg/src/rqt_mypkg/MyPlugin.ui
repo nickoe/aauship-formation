@@ -180,6 +180,12 @@
       <height>27</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <strikeout>false</strikeout>
+      <kerning>true</kerning>
+     </font>
+    </property>
     <property name="value">
      <double>1.000000000000000</double>
     </property>
@@ -597,16 +603,6 @@
     </property>
     <property name="text">
      <string>E</string>
-    </property>
-   </widget>
-   <widget class="QDial" name="dial">
-    <property name="geometry">
-     <rect>
-      <x>490</x>
-      <y>30</y>
-      <width>50</width>
-      <height>64</height>
-     </rect>
     </property>
    </widget>
   </widget>
