@@ -17,10 +17,16 @@ import fapsParse  # fork of packetparser
 import fapsPacket # fork of packetHandler
 
 class LLI(object):
+    def __init__(self):
+        self.ctllog = open("logs/ctl.log",'w',256)
+
     def callback(self, data):
         # write data to serial
         tmp = []
         tmp = struct.pack('>h', data.Data )
+
+	if ord(data.DevID) == 10:
+            self.ctllog.write(str(ord(data.MsgID)) + ',' + str(data.Data) + ',' + str(time.time()) + "\r\n")
         self.packet.lli_send(self.packet.package(tmp,data.DevID,data.MsgID))
 
         #rospy.loginfo(data.data)
@@ -36,6 +42,7 @@ class LLI(object):
         BUFSIZE = 1024
         echolog = open("logs/echo.log",'w',BUFSIZE)
         gps2log = open("logs/gps2.log",'wb',BUFSIZE)
+
         time.sleep(5)
         self.packet.start()
         pub = rospy.Publisher('samples', Faps)
@@ -78,6 +85,7 @@ class LLI(object):
 
         echolog.close()
         gps2log.close()
+        self.ctllog.close()
         self.packet.close()
         self.packet.join()
         
