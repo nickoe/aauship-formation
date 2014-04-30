@@ -65,6 +65,7 @@ class Control(object):
         #rospy.spin() # Keeps the node running untill stopped
         while not rospy.is_shutdown():
             #pub.publish("control signals should be sent here")
+            print("\nHusk at logge motor inputs")
             r.sleep()
         print("\nClosing log file")
         self.ctllog.close()
