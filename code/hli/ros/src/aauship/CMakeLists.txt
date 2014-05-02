@@ -62,6 +62,7 @@ add_message_files(
   PID.msg
   Attitude.msg
   GPS.msg
+  controlTest.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -129,8 +130,10 @@ include_directories(
 #   ${catkin_LIBRARIES}
 # )
 
-add_executable(joy-teleop-node src/joy-teleop-node.cpp)
-target_link_libraries(joy-teleop-node  ${catkin_LIBRARIES})
+#add_executable(joy-teleop-node src/joy-teleop-node.cpp)
+#target_link_libraries(joy-teleop-node  ${catkin_LIBRARIES})
+add_executable(joy-teleop-step-node src/joy-teleop-step-node.cpp)
+target_link_libraries(joy-teleop-step-node  ${catkin_LIBRARIES})
 
 #############
 ## Install ##
