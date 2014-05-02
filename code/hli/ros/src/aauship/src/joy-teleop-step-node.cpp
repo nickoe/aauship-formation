@@ -62,7 +62,9 @@
 #define BUTTON_REAR_RIGHT_2 9
 #define BUTTON_SELECT 0
 #define BUTTON_CROSS_UP        4
-#define BUTTON_CROSS_DOWN        6
+#define BUTTON_CROSS_RIGHT     5
+#define BUTTON_CROSS_DOWN      6
+#define BUTTON_CROSS_LEFT      7
 /**
  * This is the joy tele operation node
  */
@@ -86,6 +88,7 @@ public:
     float vel_left;
     float vel_right;
     int16_t val;
+    int16_t valc;
 
     int16_t thrust_diff = 5;
     int16_t thrust_step = 10;
@@ -126,8 +129,8 @@ public:
       //bprintf("%d", button_state);
       switch (i){
         case BUTTON_CROSS_UP:
-          val = (int16_t)100;
-          if (msg->buttons[i] == 0 && button_state[i] == 1) val = (int16_t) 0;
+          valc = (int16_t)100;
+          if (msg->buttons[i] == 0 && button_state[i] == 1) valc = (int16_t) 0;
           if (msg->buttons[i] == 0 && button_state[i] == 0) break;
           button_state[i] = 1;
 
@@ -136,24 +139,21 @@ public:
           msg2.DevID = 10;
 
           msg2.MsgID = 5;
-          msg2.Data = val;
+          msg2.Data = valc;
           msg2.Time = msg->buttons[BUTTON_CROSS_UP];
           pub.publish(msg2);
           
           msg2.MsgID = 3;
-          msg2.Data = val;
+          msg2.Data = valc;
           msg2.Time = msg->buttons[BUTTON_CROSS_UP];
           pub.publish(msg2);
 
-          if (val==0) button_state[i] = 0;
+          if (valc==0) button_state[i] = 0;
           break;
 
         case BUTTON_CROSS_DOWN:
-          val = (int16_t)-100;
-          if (msg->buttons[i] == 0 && button_state[i] == 1) {
-            val = (int16_t) 0;
-            printf("this should be once");
-          }
+          valc = (int16_t)-100;
+          if (msg->buttons[i] == 0 && button_state[i] == 1) valc = (int16_t) 0;
           if (msg->buttons[i] == 0 && button_state[i] == 0) break;
            button_state[i] = 1;
 
@@ -161,26 +161,80 @@ public:
           msg2.DevID = 10;
 
           msg2.MsgID = 5;
-          msg2.Data = val;
+          msg2.Data = valc;
           msg2.Time = msg->buttons[BUTTON_CROSS_DOWN];
           pub.publish(msg2);
           
           msg2.MsgID = 3;
-          msg2.Data = val;
+          msg2.Data = valc;
           msg2.Time = msg->buttons[BUTTON_CROSS_DOWN];
           pub.publish(msg2);
 
-          if (val==0) button_state[i] = 0;
+          if (valc==0) button_state[i] = 0;
+          break;
+
+        case BUTTON_CROSS_LEFT:
+          vel_left = 100;
+          vel_right = -100;
+          if (msg->buttons[i] == 0 && button_state[i] == 1) {
+            vel_left = 0;
+            vel_right = 0;
+          }
+          if (msg->buttons[i] == 0 && button_state[i] == 0) break;
+          button_state[i] = 1;
+
+          printf("cross left\n");
+
+          msg2.DevID = 10;
+
+          msg2.MsgID = 5;
+          msg2.Data = (int16_t)vel_left;
+          msg2.Time = msg->buttons[BUTTON_CROSS_UP];
+          pub.publish(msg2);
+          
+          msg2.MsgID = 3;
+          msg2.Data = (int16_t)vel_right;
+          msg2.Time = msg->buttons[BUTTON_CROSS_UP];
+          pub.publish(msg2);
+
+          if ((vel_left || vel_right) == 0) button_state[i] = 0;
+          break;
+
+        case BUTTON_CROSS_RIGHT:
+          vel_left = -100;
+          vel_right = 100;
+          if (msg->buttons[i] == 0 && button_state[i] == 1) {
+            vel_left = 0;
+            vel_right = 0;
+          }
+          if (msg->buttons[i] == 0 && button_state[i] == 0) break;
+           button_state[i] = 1;
+
+          printf("cross right\n");
+          msg2.DevID = 10;
+
+          msg2.MsgID = 5;
+          msg2.Data = (int16_t)vel_left;
+          msg2.Time = msg->buttons[BUTTON_CROSS_DOWN];
+          pub.publish(msg2);
+          
+          msg2.MsgID = 3;
+          msg2.Data = (int16_t)vel_right;
+          msg2.Time = msg->buttons[BUTTON_CROSS_DOWN];
+          pub.publish(msg2);
+
+          if ((vel_left || vel_right) == 0) button_state[i] = 0;
           break;
 
         default:
-
           if (was_pressed != 1) {
-            if ((msg->buttons[BUTTON_REAR_LEFT_1] ||
-          msg->buttons[BUTTON_REAR_LEFT_2] ||
-          msg->buttons[BUTTON_REAR_RIGHT_1] || 
-          msg->buttons[BUTTON_REAR_RIGHT_2]) !=1) break;
-      button_state[i] = 1;
+            if ( ( (msg->buttons[BUTTON_REAR_LEFT_1] ||
+            msg->buttons[BUTTON_REAR_LEFT_2] ||
+            msg->buttons[BUTTON_REAR_RIGHT_1] || 
+            msg->buttons[BUTTON_REAR_RIGHT_2]) !=1 ) && button_state[i] == 0)
+            break;
+ 
+            button_state[i] = 1;
             val = (int16_t)(vel_left);
             msg2.DevID = 10;
             msg2.MsgID = 5;
@@ -195,6 +249,7 @@ public:
             msg2.Time = msg->buttons[BUTTON_CROSS_DOWN];
             pub.publish(msg2);
 
+            if ((vel_left || vel_right) == 0) button_state[i] = 0;
             was_pressed =1;
           }
           break;
