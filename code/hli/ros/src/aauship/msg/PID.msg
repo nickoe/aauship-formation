@@ -1,4 +1,4 @@
 # This is a msg format for exchanging PID controller values
-float32 Kp
-float32 Ki
-float32 Kd
+float64 Kp
+float64 Ki
+float64 Kd

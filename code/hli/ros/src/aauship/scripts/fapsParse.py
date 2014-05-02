@@ -195,7 +195,7 @@ class packetParser():
                     self.plog.write(", 0\n")
                         
                         
-            elif (ord(packet['DevID']) == 30): # GPS data
+            elif (ord(packet['DevID']) == 30): # GPS1 data
                 #print "GPS!"
                 #time.sleep(1)
                 if(ord(packet['MsgID']) == 6): # This is what the LII sends for the moment
