@@ -85,35 +85,110 @@ The second method is used when determining coefficients as pitch and roll, $r$ a
 
 The damping coefficient $Y_p$ can be found from the dynamic equation of roll by:
 \begin{align}
-mZ_g\ddot \varphi + Y_p\dot \varphi - \tau_{hyd,hs} = 0
+mZ_g\ddot \varphi + Y_p\dot \varphi + G\varphi = 0
+\label{eq:solveddyneq}
 \end{align}
 $\varphi$ is the position of the angle of the vessel. This is the position that needs to follow the damping as seen on figure~\vref{fig:harmonic-damping}. This can be fit to a second order differential equation. The position of the angle can be expressed as:
 \begin{align}
 \varphi = k\euler^{-st} \cdot \cos(\omega t)
 \end{align}
-A standard second order polynomial is given by:
+This is an under damped system, which has a standard second order polynomial given by:
 \begin{align}
-ay''+by'+cy = 0
+a\ddot y + b\dot y + cy = 0
 \end{align}
-This can be rewritten by the following:
+Which can be normalized with the coefficient of $a$, such that it takes the form:
 \begin{align}
-mZ_g\ddot \varphi + Y_p\dot \varphi = 0\\
--as^2+bs+0=0\\
-s^2-\frac{b}{a}s=0
+\ddot y + \frac{b}{a}\dot y + \frac{c}{a}y = 0
+\label{eq:parameterized}
 \end{align}
-This makes, in the standard solution of the second order equation, $a=1$ amd $b=-\frac{b}{a}$. The standard solution will then become:
+For an under damped system this can be seen as:
 \begin{align}
-s &= \frac{-b+\sqrt{b^2-4ac}}{2a}\\
-s &= \frac{\frac{b}{a}+\sqrt{(-\frac{b}{a})^2}}{2}
+\ddot y + b\dot y + cy = 0\\
+\ddot y + 2\zeta \omega_0 \dot y + \omega_0^2 y = 0
+\label{eq:normalized}
+\end{align}
+The solution to this is guessed as:
+\begin{align}
+y(t) = k\euler^{-st} \cos{\omega_dt}
+\label{eq:solutionguess}
+\end{align}
+Substituting this into \ref{eq:normalized}, and transforming, gives:
+\begin{align}
+s^2k\euler^{-st} \cos{\omega_dt} + 2\zeta \omega_0sk\euler^{-st} \cos{\omega_dt} + \omega_0^2k\euler^{-st} \cos{\omega_dt} = 0
+\end{align}
+Which can be divided by $k\euler^{-st} \cos{\omega_dt}$:
+\begin{align}
+s^2 + 2\zeta \omega_0s + \omega_0^2 = 0
+\label{eq:dampeq}
+\end{align}
+The solution for the second order polynomial in \ref{eq:dampeq} can be expressed as:
+\begin{align}
+s = \frac{-2\zeta \omega_0 \pm \sqrt{4\zeta^2\omega_0^2-4\omega_0^2}}{2}
 \end{align}
 where:
 \begin{align}
-\frac{b}{a} = \frac{Y_p}{mZ_g}
+a &= 1\\
+b &= 2\zeta \omega_0\\
+c &= \omega_0^2
 \end{align}
-This can then be fit to a position given by the previous:
+Which for an under damped system can be expressed as:
 \begin{align}
-\varphi = k\euler^{-\left(\frac{\frac{b}{a}+\sqrt{(-\frac{b}{a})^2}}{2}\right)t} \cdot \cos(\omega t)
+s &\stackrel{\zeta < 1}{=} -\zeta\omega_0\pm\omega_0\sqrt{1-\zeta^2}\\
+&=-\sigma\pm j\omega_d
 \end{align}
+Where:
+\begin{align}
+\zeta\omega_0 &= s\ \text{from equation} \ref{eq:solutionguess}, \text{which is the real part}\\
+\omega_0\sqrt{1-\zeta^2} &= \omega_d\ \text{from equation} \ref{eq:solutionguess}, \text{which is the imaginary part}
+\end{align}
+By comparing \ref{eq:dyneq}, \ref{eq:parameterized} and \ref{eq:dampeq} it can be seen that:
+\begin{align}
+a &= 1\\
+b &= 2\zeta\omega_0 = \frac{Y_p}{m}\\
+c &= \omega_0^2 = \frac{G}{m}
+\end{align}
+From the fitting of data is two variables known:
+\begin{align}
+s &= \zeta\omega_0\\
+\omega_d&=\omega_0\sqrt{1-\zeta^2}
+\end{align}
+This makes it possible to determine $Y_p$ by:
+\begin{align}
+b = 2\zeta\omega_0 = 2s = \frac{Y_p}{m}\\
+Y_p = 2sm
+\end{align}
+The coefficient $G$ can be determined by:
+\begin{align}
+\omega_d = \omega_0\sqrt{1-\zeta^2}\\
+\omega_d^2 = \omega_0^2-(\zeta\omega_0)^2 = c - s^2 = \frac{G}{m}-s^2\\
+G = \omega_d^2m+s^2m
+\end{align}
+This makes the dynamic equation with roll as:
+\begin{align}
+mZ_g\ddot \varphi + Y_p\dot \varphi + G\varphi = 0\\
+mZ_g\ddot \varphi + (2sm)\dot \varphi + (\omega_d^2m+s^2m)\varphi = 0
+\label{eq:solveddyneq}
+\end{align}
+
+
+%This can be rewritten by the following:
+%\begin{align}
+%-mZ_g\ddot \varphi + Y_p\dot \varphi - \tau_{hyd,hs} = 0\\
+%as^2+bs+c=0
+%\end{align}
+%This makes, in the standard solution of the second order equation, $a=-mZ_g$, $b=Y_p$ and $c=-\tau_{hyd,hs}$. The standard solution will then become:
+%\begin{align}
+%s &= \frac{-b\pm\sqrt{b^2-4ac}}{2a}\\
+%s &= \frac{-Y_p\pm\sqrt{Y_p^2-4(-mZ_g)\tau_{rest}}}{2(-mZ_g)}
+%\end{align}
+%This can then be fit to a position given by the previous:
+%\begin{align}
+%\varphi = k\euler^{\left(\frac{-Y_p\pm\sqrt{Y_p^2-4(-mZ_g)\tau_{rest}}}{2(-mZ_g)}\right)t} \cdot \cos(\omega t)
+%\end{align}
+%This makes a solution at zero degree, being the horizontal equilibrium, as:
+%\begin{align}
+%s\big|_{\varphi=0} = \frac{-Y_p}{-2mZ_g}
+%\end{align}
 
 \subsection{Which parameters to determine}
 The parameters that needs to be determined is the damping coefficients from the damping matrix. The 5 \ac{DOF} damping matrix is given by:
