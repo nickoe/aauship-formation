@@ -81,11 +81,11 @@ m \dot u + Du &= \tau
 
 \subsection{Method Two}
 \label{subsec:methodtwo}
-The second method is used when determining coefficients as pitch and roll, $r$ and $p$. In these tests is the vessel put to a maximum angle in pitch or roll and is afterwards released. This will make the vessel converge to steady state, as seen on figure~\vref{fig:harmonic-damping}. This damping must be determined by fitting the damping to a second order differential equation. This can be illustrated by looking at the determination of the damping coefficient $Y_p$.
+The second method is used when determining coefficients as pitch and roll, $r$ and $p$. In these tests is the vessel put to a maximum angle in pitch or roll and afterwards released. This will make the vessel converge to steady state, as seen on figure~\vref{fig:harmonic-damping}. This damping must be determined by fitting the damping to a second order differential equation. This can be illustrated by looking at the determination of the damping coefficient $Y_p$.
 
 The damping coefficient $Y_p$ can be found from the dynamic equation of roll by:
 \begin{align}
-mZ_g\ddot \varphi + Y_p\dot \varphi = 0
+mZ_g\ddot \varphi + Y_p\dot \varphi - \tau_{hyd,hs} = 0
 \end{align}
 $\varphi$ is the position of the angle of the vessel. This is the position that needs to follow the damping as seen on figure~\vref{fig:harmonic-damping}. This can be fit to a second order differential equation. The position of the angle can be expressed as:
 \begin{align}
