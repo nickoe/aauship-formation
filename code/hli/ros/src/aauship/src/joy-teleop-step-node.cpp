@@ -83,7 +83,6 @@ public:
 
   void chatterCallback(const sensor_msgs::Joy::ConstPtr& msg)
   {
-  
     aauship::LLIinput msg2;
     float vel_left;
     float vel_right;
@@ -103,6 +102,11 @@ public:
       vel_right = vel_right*-1;
     ROS_INFO("[%f, %f]", vel_left, vel_right);
 
+    if ( (vel_left == 150 || vel_right == 150) && started==0 ) {
+       printf("User is not ready yet");
+       return;
+    } else {       started = 1;}
+    printf("should not be printed");
     //No button is pressed, so sum of vector is zero
     /*if (std::accumulate(msg->buttons.begin(), msg->buttons.end(), 0) == 0){
       if (msg->buttons[BUTTON_REAR_LEFT_1] ||
@@ -183,7 +187,7 @@ public:
           if (msg->buttons[i] == 0 && button_state[i] == 0) break;
           button_state[i] = 1;
 
-          printf("cross left\n");
+          printf("cross left %f\n", vel_left);
 
           msg2.DevID = 10;
 
@@ -197,7 +201,7 @@ public:
           msg2.Time = msg->buttons[BUTTON_CROSS_UP];
           pub.publish(msg2);
 
-          if ((vel_left || vel_right) == 0) button_state[i] = 0;
+          if ((vel_left == 0) || (vel_right == 0)) button_state[i] = 0;
           break;
 
         case BUTTON_CROSS_RIGHT:
@@ -208,9 +212,9 @@ public:
             vel_right = 0;
           }
           if (msg->buttons[i] == 0 && button_state[i] == 0) break;
-           button_state[i] = 1;
+          button_state[i] = 1;
 
-          printf("cross right\n");
+          printf("cross right %d\n", vel_left);
           msg2.DevID = 10;
 
           msg2.MsgID = 5;
@@ -223,7 +227,7 @@ public:
           msg2.Time = msg->buttons[BUTTON_CROSS_DOWN];
           pub.publish(msg2);
 
-          if ((vel_left || vel_right) == 0) button_state[i] = 0;
+          if ((vel_left == 0) || (vel_right == 0)) button_state[i] = 0;
           break;
 
         default:
@@ -235,14 +239,14 @@ public:
             break;
  
             button_state[i] = 1;
-            val = (int16_t)(vel_left);
+            val = (int16_t)vel_left;
             msg2.DevID = 10;
             msg2.MsgID = 5;
             msg2.Data = val;
             msg2.Time = msg->buttons[BUTTON_CROSS_DOWN];
             pub.publish(msg2);
 
-            val = (int16_t)(vel_right);
+            val = (int16_t)vel_right;
             msg2.DevID = 10;
             msg2.MsgID = 3;
             msg2.Data = val;
@@ -254,8 +258,6 @@ public:
           }
           break;
       }
-
-
     }
   }
 
@@ -264,6 +266,7 @@ private:
   ros::Publisher pub;
   ros::Subscriber sub;
   volatile int button_state[20];
+  volatile int started;
 
 }; // End of class JoyTeleOperation
 
