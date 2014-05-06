@@ -27,7 +27,7 @@ The surge, sway and yaw tests are performed with theory of one method of testing
 
 \subsection{Method one}
 \label{subsec:methodone}
-This method is used to fit a first order differential equation to be able to estimate the damping coefficient. This is done by performing a test of the vessel. The vessel is accelerated to a constant velocity from where the input is taken away. This will make a velocity curve as seen on figure \ref{fig:phase3}.
+This method is used to fit a first order differential equation to be able to estimate the damping coefficient. This is done by performing a test of the vessel. The vessel is accelerated from zero velocity to a constant velocity from where the input is taken away. This will make a velocity curve as seen on figure \ref{fig:phase3}.
 \begin{figure}[htbp]
 	\centering
 	\includesvg[width=0.5\textwidth]{phase3}
@@ -43,7 +43,7 @@ A guess to fit such a first order differential equation could be:
 \begin{align}
 u = k \cdot \euler^{-st}
 \end{align}
-This is the expression of the surge speed, as seen from figure \ref{fig:phase3}. This is plugged into the dynamic equation to be able to fit the dynamic equation to the differential equation.
+This is the expression of the surge speed, as seen from figure \ref{fig:phase3}. This is substituted into the dynamic equation to be able to fit the dynamic equation to the differential equation.
 \begin{align}
 m \dot u + Du &= 0\\
 m \cdot (-ks\euler^{-st}) + D \cdot k \cdot \euler^{-st} &= 0\\
@@ -83,14 +83,14 @@ m \dot u + Du &= \tau
 \label{subsec:methodtwo}
 The second method is used to determine the coefficients $Y_r$, $K_r$,
 $N_r$, $Y_p$, $K_p$, and $N_p$ for the pitch and
-roll cross terms in the damping matrix \eqref{eq:damping-matrix}. In
-these tests is the vessel is put to a certain angle in pitch and roll and
-hereafter released. This will make the vessel go back the buoyant
+roll cross terms in the damping matrix \eqref{eq:damping-matrix} and the restoring forces from $G$ being $K_\varphi$ and $M_\theta$. In
+these tests is the vessel put to a certain angle in pitch and roll and
+hereafter released. This will make the vessel go back to the buoyant
 steady state, as seen on figure~\vref{fig:harmonic-damping}. The
 damping must be determined by fitting \eqref{eq:kestcoswt} to the
 measured data, then this can be used to identify the coefficients for
 the second order differential equation. The procedure is illustrated by
-calculating it with the example of $Y_p$.
+calculating it with the example of $Y_p$ and $K_\varphi$.
 
 The damping coefficient $Y_p$ can be found from the dynamic equation
 of roll by: \todo{Indtast (4.26)  et sted of referet til den herfra,
@@ -101,7 +101,7 @@ mZ_g\ddot \varphi - Y_p\dot \varphi - K_\varphi \varphi = 0
 \end{align}
 $\varphi$ is angle position of the vessel. This is the position that needs to follow the damping as seen on figure~\vref{fig:harmonic-damping}. This can be fit to a second order differential equation. The position of the angle can be expressed as:
 \begin{align}
-\varphi = k\euler^{-st} \cdot \cos(\omega t)
+\varphi = k\euler^{-\sigma t} \cdot \cos(\omega_d t)
 \label{eq:kestcoswt}
 \end{align}
 This is an under damped system, which is described by a second order
@@ -120,16 +120,16 @@ For an under damped system this can be seen as:
 \ddot y + 2\zeta \omega_0 \dot y + \omega_0^2 y = 0
 \label{eq:normalized}
 \end{align}
-\todo{Beskriv varablene i denne}The solution to this is guessed as:
+Where $\zeta$ is the exponential damping ratio of the system and $\omega_0$ is the undamped natural frequency. The solution to this is guessed as:
 \begin{align}
-y(t) = k\euler^{-st} \cos{\omega_dt}
+y(t) = k\euler^{-st}
 \label{eq:solutionguess}
 \end{align}
-Substituting this into \ref{eq:normalized}, and transforming, gives:
+This will make the curve as the damping from the pitch and roll dampings. Substituting this into \ref{eq:normalized}, and transforming, gives:
 \begin{align}
-s^2k\euler^{-st} \cos{\omega_dt} + 2\zeta \omega_0sk\euler^{-st} \cos{\omega_dt} + \omega_0^2k\euler^{-st} \cos{\omega_dt} = 0
+s^2k\euler^{-st} + 2\zeta \omega_0sk\euler^{-st} + \omega_0^2k\euler^{-st} = 0
 \end{align}
-Which can be divided by $k\euler^{-st} \cos{\omega_dt}$:
+Which can be divided by $k\euler^{-st}$:
 \begin{align}
 s^2 + 2\zeta \omega_0s + \omega_0^2 = 0
 \label{eq:dampeq}
@@ -145,43 +145,42 @@ a &= 1\\
 b &= 2\zeta \omega_0\\
 c &= \omega_0^2
 \end{align}
-Which for an under damped system can be expressed as:
+Which for an under damped system can be expressed in the complex form:
 \begin{align}
 s &\stackrel{\zeta < 1}{=} -\zeta\omega_0\pm\omega_0\sqrt{1-\zeta^2}\\
 &=-\sigma\pm j\omega_d
 \end{align}
 Where:
 \begin{align}
-\zeta\omega_0 &= s\ \text{from equation} \ref{eq:solutionguess}, \text{which is the real part}\\
-\omega_0\sqrt{1-\zeta^2} &= \omega_d\ \text{from equation} \ref{eq:solutionguess}, \text{which is the imaginary part}
+\zeta\omega_0 &= \sigma\ \text{from equation} \ref{eq:kestcoswt}, \text{which is the real part}\\
+\omega_0\sqrt{1-\zeta^2} &= \omega_d\ \text{from equation} \ref{eq:kestcoswt}, \text{which is the imaginary part}
 \end{align}
-By comparing \ref{eq:dyneq}, \ref{eq:parameterized} and \ref{eq:dampeq} it can be seen that:
+By comparing \ref{eq:parameterized} and \ref{eq:dampeq} it can be seen that:
 \begin{align}
 a &= 1\\
 b &= 2\zeta\omega_0 = \frac{Y_p}{m}\\
-c &= \omega_0^2 = \frac{G}{m}
+c &= \omega_0^2 = \frac{K_\varphi}{m}
 \end{align}
 From the fitting of data is two variables known:
 \begin{align}
-s &= \zeta\omega_0\\
+\sigma &= \zeta\omega_0\\
 \omega_d&=\omega_0\sqrt{1-\zeta^2}
 \end{align}
 This makes it possible to determine $Y_p$ by:
 \begin{align}
-b = 2\zeta\omega_0 = 2s = \frac{Y_p}{m}\\
-Y_p = 2sm
+b = 2\zeta\omega_0 = 2\sigma = \frac{Y_p}{m}\\
+Y_p = 2\sigma m
 \end{align}
 The coefficient $K_\varphi$ can be determined by: 
-\todo{byt G ud med $K_\varphi$ hvor det skal gøres}
 \begin{align}
 \omega_d = \omega_0\sqrt{1-\zeta^2}\\
-\omega_d^2 = \omega_0^2-(\zeta\omega_0)^2 = c - s^2 = \frac{G}{m}-s^2\\
-G = \omega_d^2m+s^2m
+\omega_d^2 = \omega_0^2-(\zeta\omega_0)^2 = c - \sigma^2 = \frac{K_\varphi}{m}-\sigma^2\\
+K_\varphi = \omega_d^2m+\sigma^2m
 \end{align}
 This makes the dynamic equation with roll as:
 \begin{align}
-mZ_g\ddot \varphi + Y_p\dot \varphi + G\varphi = 0\\
-mZ_g\ddot \varphi + (2sm)\dot \varphi + (\omega_d^2m+s^2m)\varphi = 0
+mZ_g\ddot \varphi + Y_p\dot \varphi + K_\varphi\varphi = 0\\
+mZ_g\ddot \varphi + (2\sigma m)\dot \varphi + (\omega_d^2m+\sigma^2m)\varphi = 0
 \label{eq:solveddyneq}
 \end{align}
 
