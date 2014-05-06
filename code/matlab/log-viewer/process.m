@@ -4,7 +4,7 @@ for fighandle = findobj('Type','figure')', clf(fighandle), end
 %% Data files
 logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 % testname = 'crashtest';
-testname = 'magnetometertest-lab4';
+testname = 'newseatrail';
 % fid = fopen('busroute/mbus5/gpsdata141212.txt'); % reduced GPS
 % fidr = fopen('busroute/gpsdata141212.txt'); % all GPS
 % adata = load('busroute/mbus5/accdata141212.csv'); % Accelerometer outputs
@@ -14,6 +14,8 @@ gps1file = fopen([logpath,testname,'/gps1.log']);
 imudata = load([logpath,testname,'/imu.log']);
 echofile = fopen([logpath,testname,'/echo.log']);
 starttime = imudata(1,13); % Earliest timestamp
+annotatefid = fopen([logpath,testname,'/annotate1399289431.26.log'],'r');
+textscan(annotatefid, '%f%f%s%[^\n\r]', 'Delimiter', ';')
 
 
 %% Reading GPS data
