@@ -72,13 +72,10 @@
 class JoyTeleOperation
 {
 public:
-
-
   JoyTeleOperation()
   {
     pub = n.advertise<aauship::LLIinput>("lli_input", 1000);
     sub = n.subscribe("joy", 1000, &JoyTeleOperation::chatterCallback, this);
-
   }
 
   void chatterCallback(const sensor_msgs::Joy::ConstPtr& msg)
@@ -91,6 +88,8 @@ public:
 
     int16_t thrust_diff = 5;
     int16_t thrust_step = 10;
+
+    int16_t setpoint = 150;
 
     int16_t was_pressed = 0;
 
@@ -105,22 +104,9 @@ public:
     if ( (vel_left == 150 || vel_right == 150) && started==0 ) {
        printf("User is not ready yet");
        return;
-    } else {       started = 1;}
-    printf("should not be printed");
-    //No button is pressed, so sum of vector is zero
-    /*if (std::accumulate(msg->buttons.begin(), msg->buttons.end(), 0) == 0){
-      if (msg->buttons[BUTTON_REAR_LEFT_1] ||
-          msg->buttons[BUTTON_REAR_LEFT_2] ||
-          msg->buttons[BUTTON_REAR_RIGHT_1] || 
-          msg->buttons[BUTTON_REAR_RIGHT_2])
-       {
-          
-       }
-    }*/
-    // If button press from any key other than the rear keys, then we should
-    // use the values from them, and have the default manual control, else do
-    // what a button says.
-
+    } else {
+       started = 1;
+    }
 
     int prev_was_pressed = 0;
     for(size_t i =0; i < msg->buttons.size(); i++){
@@ -133,7 +119,7 @@ public:
       //bprintf("%d", button_state);
       switch (i){
         case BUTTON_CROSS_UP:
-          valc = (int16_t)100;
+          valc = (int16_t)setpoint;
           if (msg->buttons[i] == 0 && button_state[i] == 1) valc = (int16_t) 0;
           if (msg->buttons[i] == 0 && button_state[i] == 0) break;
           button_state[i] = 1;
@@ -156,7 +142,7 @@ public:
           break;
 
         case BUTTON_CROSS_DOWN:
-          valc = (int16_t)-100;
+          valc = (int16_t)-setpoint;
           if (msg->buttons[i] == 0 && button_state[i] == 1) valc = (int16_t) 0;
           if (msg->buttons[i] == 0 && button_state[i] == 0) break;
            button_state[i] = 1;
@@ -178,8 +164,8 @@ public:
           break;
 
         case BUTTON_CROSS_LEFT:
-          vel_left = 100;
-          vel_right = -100;
+          vel_left = -setpoint;
+          vel_right = setpoint;
           if (msg->buttons[i] == 0 && button_state[i] == 1) {
             vel_left = 0;
             vel_right = 0;
@@ -205,8 +191,8 @@ public:
           break;
 
         case BUTTON_CROSS_RIGHT:
-          vel_left = -100;
-          vel_right = 100;
+          vel_left = setpoint;
+          vel_right = -setpoint;
           if (msg->buttons[i] == 0 && button_state[i] == 1) {
             vel_left = 0;
             vel_right = 0;
