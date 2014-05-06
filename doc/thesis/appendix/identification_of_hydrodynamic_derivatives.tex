@@ -206,7 +206,7 @@ mZ_g\ddot \varphi + (2\sigma m)\dot \varphi + (\omega_d^2m+\sigma^2m)\varphi = 0
 
 \subsection{Which parameters to determine}
 The parameters that needs to be determined is the damping coefficients
-from the damping matrix. \todo{ref to original (6DOF) D} The 5 \ac{DOF} damping matrix is given by:
+from the damping matrix. The 5 \ac{DOF} damping matrix is reduced from the 6 \ac{DOF} damping matrix from \ref{eq:6dofd}:
 \begin{align}
 D = -
 \begin{bmatrix}
@@ -217,15 +217,31 @@ X_u & 0 & 0 & 0 & 0\\
 0 & N_v & N_p & 0 & N_r
 \end{bmatrix}
 \end{align}
+and the coefficients from the restoring force matrix $G$, being:
+\begin{align}
+G = -
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & K_\varphi & 0 & 0\\
+0 & 0 & 0 & M_\theta & 0\\
+0 & 0 & 0 & 0 & 0
+\end{bmatrix}
+\end{align}
 The different coefficients can be found by writing the complete dynamic system:
 \begin{align}
-M_{RB} \dot \nu + D\nu = \tau
+M_{RB} \dot \nu + D\nu + G\eta = \tau
 \end{align}
 where:
 \begin{align}
 \nu =
 \begin{bmatrix}
 u & v & p & q & r
+\end{bmatrix}^T
+\quad , \quad
+\eta =
+\begin{bmatrix}
+x & y & \varphi & \theta & \psi
 \end{bmatrix}^T
 \end{align}
 and
@@ -239,57 +255,57 @@ mz_g & 0 & -I_{yx} & I_y & -I_{yz}\\
 -my_g & mx_g & -I_{zx} & -I_{zy} & I_z
 \end{bmatrix}
 \end{align}
-The full dynamic system equations can then be written as:
+The full 5 \ac{DOF} dynamic system equations can then be written as:
 \begin{align}
-M_{RB1}\dot \nu + D_{1} \nu &= \tau\\
-M_{RB2}\dot \nu + D_{2} \nu &= \tau\\
-M_{RB3}\dot \nu + D_{3} \nu &= \tau\\
-M_{RB4}\dot \nu + D_{4} \nu &= \tau\\
-M_{RB5}\dot \nu + D_{5} \nu &= \tau
+M_{RB1}\dot \nu + D_{1} \nu + G_{1} \eta &= \tau\\
+M_{RB2}\dot \nu + D_{2} \nu + G_{2} \eta &= \tau\\
+M_{RB3}\dot \nu + D_{3} \nu + G_{3} \eta &= \tau\\
+M_{RB4}\dot \nu + D_{4} \nu + G_{4} \eta &= \tau\\
+M_{RB5}\dot \nu + D_{5} \nu + G_{5} \eta &= \tau
 \end{align}
-Which can be outlined as:
-\begin{align}
-\begin{bmatrix}
-m & 0 & 0 & mz_g & -my_g
-\end{bmatrix}
-\dot \nu &+
-\begin{bmatrix}
-X_u & 0 & 0 & 0 & 0
-\end{bmatrix}
-\nu = \tau\\
-\begin{bmatrix}
-0 & m & -mz_g & 0 & mx_g
-\end{bmatrix}
-\dot \nu &+
-\begin{bmatrix}
-0 & Y_v & Y_p & 0 & Y_r
-\end{bmatrix}
-\nu = \tau\\
-\begin{bmatrix}
-0 & -mz_g & I_x & -I_{xy} & -I_{xz}
-\end{bmatrix}
-\dot \nu &+
-\begin{bmatrix}
-0 & K_v & K_p & 0 & K_r
-\end{bmatrix}
-\nu = \tau\\
-\begin{bmatrix}
-mz_g & 0 & -I_{yx} & I_y & -I_{yz}
-\end{bmatrix}
-\dot \nu &+
-\begin{bmatrix}
-0 & 0 & 0 & M_q & 0
-\end{bmatrix}
-\nu = \tau\\
-\begin{bmatrix}
--my_g & mx_g & -I_{zx} & -I_{zy} & I_z
-\end{bmatrix}
-\dot \nu &+
-\begin{bmatrix}
-0 & N_v & N_p & 0 & N_r
-\end{bmatrix}
-\nu = \tau
-\end{align}
+%Which can be outlined as:
+%\begin{align}
+%\begin{bmatrix}
+%m & 0 & 0 & mz_g & -my_g
+%\end{bmatrix}
+%\dot \nu &+
+%\begin{bmatrix}
+%X_u & 0 & 0 & 0 & 0
+%\end{bmatrix}
+%\nu = \tau\\
+%\begin{bmatrix}
+%0 & m & -mz_g & 0 & mx_g
+%\end{bmatrix}
+%\dot \nu &+
+%\begin{bmatrix}
+%0 & Y_v & Y_p & 0 & Y_r
+%\end{bmatrix}
+%\nu = \tau\\
+%\begin{bmatrix}
+%0 & -mz_g & I_x & -I_{xy} & -I_{xz}
+%\end{bmatrix}
+%\dot \nu &+
+%\begin{bmatrix}
+%0 & K_v & K_p & 0 & K_r
+%\end{bmatrix}
+%\nu = \tau\\
+%\begin{bmatrix}
+%mz_g & 0 & -I_{yx} & I_y & -I_{yz}
+%\end{bmatrix}
+%\dot \nu &+
+%\begin{bmatrix}
+%0 & 0 & 0 & M_q & 0
+%\end{bmatrix}
+%\nu = \tau\\
+%\begin{bmatrix}
+%-my_g & mx_g & -I_{zx} & -I_{zy} & I_z
+%\end{bmatrix}
+%\dot \nu &+
+%\begin{bmatrix}
+%0 & N_v & N_p & 0 & N_r
+%\end{bmatrix}
+%\nu = \tau
+%\end{align}
 The equations equal $\tau$, being the input to the vessel. Some of the contributions cannot have an input, since actuators for controlling pitch and roll is not implemented.
 
 From the first row can the following be outlined:
@@ -305,7 +321,7 @@ mx_g\dot r + Y_rr &= \tau_{r}
 From the third row can the following be outlined:
 \begin{align}
 -mz_g\dot v + K_vv &= \tau_{v}\\
-I_x\dot p + K_pp &= 0\\
+I_x\dot p + K_pp + K_\varphi\varphi &= 0\\
 -I_{xy}\dot q &= 0\\
 -I_{xz}\dot r + K_rr &= \tau_{r}\\
 \end{align}
@@ -313,7 +329,7 @@ From the forth row can the following be outlined:
 \begin{align}
 mz_g\dot u &= \tau_{u}\\
 -I_{yx}\dot p &= 0\\
-I_y\dot q + M_qq &= 0\\
+I_y\dot q + M_qq + M_\theta \theta&= 0\\
 -I_{yz}\dot r &= \tau_{r}\\
 \end{align}
 From the fifth row can the following be outlined:
@@ -350,14 +366,14 @@ where only \textit{method one} is used.
 
 \subsubsection{Pitch test}
 \begin{align}
-I_y\dot q + M_qq = 0\\
+I_y\dot q + M_qq + M_\theta \theta&= 0\\
 \end{align}
 where only \textit{method two} is used.
 
 \subsubsection{Roll test}
 \begin{align}
 -mz_g\dot p + Y_pp &= 0\\
-I_x\dot p + K_pp &= 0\\
+I_x\dot p + K_pp + K_\varphi\varphi &= 0\\
 -I_{zx}\dot p + N_pp &= 0
 \end{align}
 where only \textit{method two} is used.
