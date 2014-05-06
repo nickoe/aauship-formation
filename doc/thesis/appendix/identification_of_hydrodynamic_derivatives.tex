@@ -81,18 +81,31 @@ m \dot u + Du &= \tau
 
 \subsection{Method Two}
 \label{subsec:methodtwo}
-The second method is used when determining coefficients as pitch and roll, $r$ and $p$. In these tests is the vessel put to a maximum angle in pitch or roll and afterwards released. This will make the vessel converge to steady state, as seen on figure~\vref{fig:harmonic-damping}. This damping must be determined by fitting the damping to a second order differential equation. This can be illustrated by looking at the determination of the damping coefficient $Y_p$.
+The second method is used to determine the coefficients $Y_r$, $K_r$,
+$N_r$, $Y_p$, $K_p$, and $N_p$ for the pitch and
+roll cross terms in the damping matrix \eqref{eq:damping-matrix}. In
+these tests is the vessel is put to a certain angle in pitch and roll and
+hereafter released. This will make the vessel go back the buoyant
+steady state, as seen on figure~\vref{fig:harmonic-damping}. The
+damping must be determined by fitting \eqref{eq:kestcoswt} to the
+measured data, then this can be used to identify the coefficients for
+the second order differential equation. The procedure is illustrated by
+calculating it with the example of $Y_p$.
 
-The damping coefficient $Y_p$ can be found from the dynamic equation of roll by:
+The damping coefficient $Y_p$ can be found from the dynamic equation
+of roll by: \todo{Indtast (4.26)  et sted of referet til den herfra,
+med hensyn til $-K_\varphi$.}
 \begin{align}
-mZ_g\ddot \varphi + Y_p\dot \varphi + G\varphi = 0
+mZ_g\ddot \varphi - Y_p\dot \varphi - K_\varphi \varphi = 0
 \label{eq:solveddyneq}
 \end{align}
-$\varphi$ is the position of the angle of the vessel. This is the position that needs to follow the damping as seen on figure~\vref{fig:harmonic-damping}. This can be fit to a second order differential equation. The position of the angle can be expressed as:
+$\varphi$ is angle position of the vessel. This is the position that needs to follow the damping as seen on figure~\vref{fig:harmonic-damping}. This can be fit to a second order differential equation. The position of the angle can be expressed as:
 \begin{align}
 \varphi = k\euler^{-st} \cdot \cos(\omega t)
+\label{eq:kestcoswt}
 \end{align}
-This is an under damped system, which has a standard second order polynomial given by:
+This is an under damped system, which is described by a second order
+homogeneous linear equation given by:
 \begin{align}
 a\ddot y + b\dot y + cy = 0
 \end{align}
@@ -107,7 +120,7 @@ For an under damped system this can be seen as:
 \ddot y + 2\zeta \omega_0 \dot y + \omega_0^2 y = 0
 \label{eq:normalized}
 \end{align}
-The solution to this is guessed as:
+\todo{Beskriv varablene i denne}The solution to this is guessed as:
 \begin{align}
 y(t) = k\euler^{-st} \cos{\omega_dt}
 \label{eq:solutionguess}
@@ -121,7 +134,8 @@ Which can be divided by $k\euler^{-st} \cos{\omega_dt}$:
 s^2 + 2\zeta \omega_0s + \omega_0^2 = 0
 \label{eq:dampeq}
 \end{align}
-The solution for the second order polynomial in \ref{eq:dampeq} can be expressed as:
+The solution for the second order polynomial in \ref{eq:dampeq} is
+then:
 \begin{align}
 s = \frac{-2\zeta \omega_0 \pm \sqrt{4\zeta^2\omega_0^2-4\omega_0^2}}{2}
 \end{align}
@@ -157,7 +171,8 @@ This makes it possible to determine $Y_p$ by:
 b = 2\zeta\omega_0 = 2s = \frac{Y_p}{m}\\
 Y_p = 2sm
 \end{align}
-The coefficient $G$ can be determined by:
+The coefficient $K_\varphi$ can be determined by: 
+\todo{byt G ud med $K_\varphi$ hvor det skal gøres}
 \begin{align}
 \omega_d = \omega_0\sqrt{1-\zeta^2}\\
 \omega_d^2 = \omega_0^2-(\zeta\omega_0)^2 = c - s^2 = \frac{G}{m}-s^2\\
@@ -191,7 +206,8 @@ mZ_g\ddot \varphi + (2sm)\dot \varphi + (\omega_d^2m+s^2m)\varphi = 0
 %\end{align}
 
 \subsection{Which parameters to determine}
-The parameters that needs to be determined is the damping coefficients from the damping matrix. The 5 \ac{DOF} damping matrix is given by:
+The parameters that needs to be determined is the damping coefficients
+from the damping matrix. \todo{ref to original (6DOF) D} The 5 \ac{DOF} damping matrix is given by:
 \begin{align}
 D = -
 \begin{bmatrix}
@@ -352,13 +368,12 @@ Tools needed are:
 \begin{itemize}
 	\item AAUSHIP equipped with:
 		\begin{enumerate}
-			\item Controller for surge only
-			\item Controller for sway only
-			\item Controller for yawing only
+			\item Capability to set thrusters to equal setpoints and stop at
+			the same time.
 			\item Logging capability for \ac{IMU}, GPS1, GPS2 with UBX data
 				and control inputs.
 		\end{enumerate}
-	\item Computer to set remote parameters and tele operation
+	\item Computer to set remote parameters and tele operation.
 	\item RTK base station logging UBX data.
 \end{itemize}
 To be able to make the tests the AAUSHIP needs to have both forward thrusters and sideways thrusters. These are implemented and can be controlled from a computer.
