@@ -68,6 +68,7 @@ function res = calc_heading(bank, elevation, mx, my, mz, headingGT180, plotMagne
         title('Magnetic Components');
         legend('Mx', 'My', 'Mz');
         
+        
         % plot out heading based on uncorrected mag data
         subplot(2, 1, 2);
         heading_raw = -atan2(my, mx);

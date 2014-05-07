@@ -217,6 +217,6 @@ figure(100)
 clf
 hold on
 plot(ctl{3}-starttime, ctl{2})
-diffad=annotate{1}(1)-starttime-1874;
+diffad=annotate{1}(1)-starttime-1870;
 annotatefill(annotate{1}-diffad-starttime,annotate{2}-diffad-starttime,annotate{3},-150,150)
 hold off
