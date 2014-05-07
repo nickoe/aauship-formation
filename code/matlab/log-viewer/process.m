@@ -3,20 +3,18 @@ for fighandle = findobj('Type','figure')', clf(fighandle), end
 
 %% Data files
 logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
-% testname = 'crashtest';
 testname = 'newseatrail';
-% fid = fopen('busroute/mbus5/gpsdata141212.txt'); % reduced GPS
-% fidr = fopen('busroute/gpsdata141212.txt'); % all GPS
-% adata = load('busroute/mbus5/accdata141212.csv'); % Accelerometer outputs
 
 %% Data files
 gps1file = fopen([logpath,testname,'/gps1.log']);
 imudata = load([logpath,testname,'/imu.log']);
 echofile = fopen([logpath,testname,'/echo.log']);
 starttime = imudata(1,13); % Earliest timestamp
-annotatefid = fopen([logpath,testname,'/annotate1399289431.26.log'],'r');
-textscan(annotatefid, '%f%f%s%[^\n\r]', 'Delimiter', ';')
+annotatefile = fopen([logpath,testname,'/annotate1399289431.26.log'],'r');
+ctlfile = fopen([logpath,testname,'/ctl.log'],'r');
 
+annotate = textscan(annotatefile, '%f%f%s', 'Delimiter', ';');
+ctl = textscan(ctlfile, '%f%f%f', 'Delimiter', ',');
 
 %% Reading GPS data
 line = textscan(gps1file,'%f,%c,%f,%c,%f,%c,%f,%f');
@@ -179,7 +177,6 @@ while(filenotdone > 0)
     end
     
     delim = findstr(',',str);
-    
     % detph data
     if isempty(findstr(str,'$SDDPT,'))~=1
         ii=ii+1;
@@ -208,8 +205,18 @@ while(filenotdone > 0)
     end
     
 end
-% figure(4)
-% plot(echo.depth.timestamp,echo.depth.value,echo.temperature.timestamp',echo.temperature.value)
-% xlabel('Timestamp [s]')
-% ylabel('Depth [m] / Temperature [degree C]')
-% legend('Depth','Temperature')
+figure(4)
+plot(echo.depth.timestamp,echo.depth.value,echo.temperature.timestamp',echo.temperature.value)
+xlabel('Timestamp [s]')
+ylabel('Depth [m] / Temperature [degree C]')
+legend('Depth','Temperature')
+
+
+%% 
+figure(100)
+clf
+hold on
+plot(ctl{3}-starttime, ctl{2})
+diffad=annotate{1}(1)-starttime-1874;
+annotatefill(annotate{1}-diffad-starttime,annotate{2}-diffad-starttime,annotate{3},-150,150)
+hold off
