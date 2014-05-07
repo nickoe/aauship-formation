@@ -220,3 +220,5 @@ plot(ctl{3}-starttime, ctl{2})
 diffad=annotate{1}(1)-starttime-1870;
 annotatefill(annotate{1}-diffad-starttime,annotate{2}-diffad-starttime,annotate{3},-150,150)
 hold off
+xlabel('Time [s]')
+ylabel('Control inputs, not sorted by MsgID [-]')
