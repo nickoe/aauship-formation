@@ -56,7 +56,10 @@ Senere todo, når båden er sejlklar
 * Mere SW
 	- Implementer software til battery monitoren
 
-
+Fuld manuel kontrol giver også angrebspunkt
+Restoring forece mangler i B.15 og så videre, altså for at få anden
+ordens differentialligning for for metode 2.
+Bollard pull test på hver propel
 
 Milepæle
 --------
