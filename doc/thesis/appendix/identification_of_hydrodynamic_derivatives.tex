@@ -144,14 +144,14 @@ From the third row can the following be outlined:
 -mz_g\dot v - K_vv &= \tau_{v}\\
 I_x\dot p - K_pp - K_\varphi\varphi &= 0\\
 -I_{xy}\dot q &= 0\\
--I_{xz}\dot r - K_rr &= \tau_{r}\\
+-I_{xz}\dot r - K_rr &= \tau_{r}
 \end{align}
 From the forth row can the following be outlined:
 \begin{align}
 mz_g\dot u &= \tau_{u}\\
 -I_{yx}\dot p &= 0\\
 I_y\dot q - M_qq - M_\theta \theta&= 0\\
--I_{yz}\dot r &= \tau_{r}\\
+-I_{yz}\dot r &= \tau_{r}
 \end{align}
 From the fifth row can the following be outlined:
 \begin{align}
@@ -285,8 +285,8 @@ c &= \omega_0^2
 \end{align}
 Which for an under damped system can be expressed in the complex form:
 \begin{align}
-s &\stackrel{\zeta < 1}{=} -\zeta\omega_0\pm\omega_0\sqrt{1-\zeta^2}\\
-&=-\sigma\pm j\omega_d
+s \stackrel{\zeta < 1}{=} &-\zeta\omega_0\pm\omega_0\sqrt{1-\zeta^2}\\
+= &-\sigma\pm j\omega_d
 \end{align}
 Where:
 \begin{align}
@@ -306,14 +306,14 @@ From the fitting of data is two variables known:
 \end{align}
 This makes it possible to determine $Y_p$ by:
 \begin{align}
-b = 2\zeta\omega_0 = 2\sigma = \frac{Y_p}{m}\\
-Y_p = 2\sigma m
+b &= 2\zeta\omega_0 = 2\sigma = \frac{Y_p}{m}\\
+Y_p &= 2\sigma m
 \end{align}
 The coefficient $K_\varphi$ can be determined by: 
 \begin{align}
-\omega_d = \omega_0\sqrt{1-\zeta^2}\\
-\omega_d^2 = \omega_0^2-(\zeta\omega_0)^2 = c - \sigma^2 = \frac{K_\varphi}{m}-\sigma^2\\
-K_\varphi = \omega_d^2m+\sigma^2m
+\omega_d &= \omega_0\sqrt{1-\zeta^2}\\
+\omega_d^2 &= \omega_0^2-(\zeta\omega_0)^2 = c - \sigma^2 = \frac{K_\varphi}{m}-\sigma^2\\
+K_\varphi &= \omega_d^2m+\sigma^2m
 \end{align}
 This makes the dynamic equation with roll as:
 \begin{align}
@@ -395,6 +395,95 @@ Tools needed are:
 To be able to make the tests the AAUSHIP needs to have both forward thrusters and sideways thrusters. These are implemented and can be controlled from a computer.
 
 \section{Method}
+Two different types of measurements needs to be made. These are dependent on which coefficients that is wanted. The first type of test is split into three phases, as seen on figure \ref{fig:acceldecel}, and is approximated from a first order fitting. The second type of test is made as seen on figure \ref{fig:harmonic-damping}, and is approximated from a second order fitting.
+
+In the first type of test is the vessel accelerated to constant velocity. When the constant velocity is ensured, the input force to the vessel is removed and zero input is therefore applied. This will correspond to a model like:
+\begin{align}
+M_{RB} \dot \nu_r + D\nu_r = 0
+\label{eq:decelmodel}
+\end{align}
+An acceleration, constant velocity and deceleration will look like figure \ref{fig:acceldecel}.
+\begin{figure}[htbp]
+	\centering
+	\includesvg[width=0.5\textwidth]{acceldecel}
+	\caption{An acceleration followed by constant velocity followed by zero input.}
+	\label{fig:acceldecel}
+\end{figure}
+\begin{figure}[htbp]
+	\centering
+	\includesvg[width=0.5\textwidth]{harmonic_damping}
+	\caption{Pitch and roll response.}
+	\label{fig:harmonic-damping}
+\end{figure}
+This makes it possible to determine some of the coefficients of the $D$ matrix. e.g. is the damping in the x direction determined by:
+\begin{align} 
+M_{11} \ddot x + D_{11} \dot x = 0
+\label{eq:noinput}
+\end{align}
+The mass of the vessel can be measured, being the $M_{11}$. The velocity and acceleration can be estimated from measurements of the positions measured by the \ac{GPS} at the vessel. This makes the damping coefficient $D_{11}$ the only unknown in equation \ref{eq:noinput}. From this a linearisation can be made, see appendix \ref{app:damping}. From this can the damping coefficient be determined.
+
+This makes it possible to determine the input force by applying a step input on the motors and let the vessel accelerate to the same constant velocity. This can be done since, due to the previous test, only the input is unknown. A model of this will look like:
+\begin{align} 
+M_{11} \ddot x + D_{11} \dot x = \tau
+\label{eq:maxinput}
+\end{align}
+From this it is possible to estimate the input force as a linearisation, since this is the only unknown from equation \ref{eq:maxinput}.
+
+This type of procedure is used in all of the first types of tests and can be put into steps.
+\begin{enumerate}
+	\item Step one is to apply force in one direction until a constant velocity is achieved and then measure the damping while the vessel is decelerating to estimate the damping coefficient.
+	\item Step two can be made after knowing the damping coefficient. Then is only the input unknown and a step can be applied to accelerate the vessel to constant velocity again. From this step input can a input force be estimated.
+\end{enumerate}
+
+The second type of test is used when determining coefficients as pitch and roll, $r$ and $p$. In these tests is the vessel put to a certain angle in pitch or roll and is afterwards released. This will make the vessel converge to steady state, as seen on figure \ref{fig:harmonic-damping}. This is due to the acting restoring force due to that the vessel is perturbed away from its equilibrium and converges back to it. The convergence is dependent on the angle of either pitch or roll of the vessel, and therefore the tests need to be made from the same angle every time.
+
+% When determining the forces in sway due to rolling, $Y_p$, the following equation needs to be outlined:
+% \begin{align}
+% M_{RB} \dot \nu + D \nu = \tau
+% \end{align}
+% which for roll will be:
+% \begin{align}
+% M_{RB2} \dot \nu =
+% \begin{bmatrix}
+% 0 & m & -mz_g & 0 & mx_g
+% \end{bmatrix}
+% \dot \nu
+% \label{eq:rollmedmere1}
+% \end{align}
+% and
+% \begin{align}
+% D_2 \nu =
+% \begin{bmatrix}
+% 0 & Y_v & Y_p & 0 & Y_r
+% \end{bmatrix}
+% \nu
+% \label{eq:rollmedmere2}
+% \end{align}
+% Since the roll is uncontrollable should the equation equal zero, due to no input. When taking the parts from equation \ref{eq:rollmedmere1} and \ref{eq:rollmedmere2} that consider only roll, and with no input, it reduces to the following equation:
+% \begin{align}
+% -mz_g \dot p + Y_pp = 0
+% \end{align}
+% This can be approximated to a second order equation fulfilling the convergence as shown on figure \ref{fig:harmonic-damping}. From this it is possible to determine the damping in roll due to a acting force in sway, $Y_r$.
+% \todo{omkring her skal der rettes videre}
+
+One of the important things are to decouple the tests such that the damping coefficients can be measured. This can, as a start, be performed in x-, y- and z-directions. The mixed damping coefficients, as the $Y_r$ (the force in y-direction due to a rotation), has got many components as shown above. But, after have performed the previous tests, these will become the next unknowns to be determined. Looking at the system as a 5 \ac{DOF} will make it possible to determine the coefficients needed. Some of the coefficients can be found from measurements made by \citep{13gr931}. The decoupled coefficients are tested from the equations in \ref{eq:syseq}.
+\begin{subequations}
+\begin{align}
+M_{11} \ddot x + D_{11} \dot x = \tau\\
+M_{22} \ddot y + M_{23} \ddot \psi + D_{22} \dot y + D_{23} \dot \psi = \tau\\
+M_{45} \ddot y + M_{55} \ddot \psi + D_{45} \dot y + D_{55} \dot \psi = \tau
+\end{align}
+\end{subequations}
+being
+\begin{subequations}
+\begin{align}
+m \ddot x - X_u \dot x = \tau\\
+m \ddot y + mx_g\ddot\psi - Y_v \dot y - Y_r \dot \psi = \tau\\
+mx_g \ddot y + I_z\ddot \psi - N_v \dot y - N_r \dot \psi = \tau
+\end{align}
+\label{eq:syseq}
+\end{subequations}
+
 The tests performed are as follows:
 \begin{enumerate}
 	\item The first test is a \textit{surge} test. This test is done to test the forward damping coefficient being $X_u$ from the damping matrix $D$. The vessel will accelerate to a certain velocity and keep this. Then all input is put to zero and the vessel will decelerate. This will, as described in section \ref{sec:hydrocoeff}, give a damping coefficient in the forward motion. This is expressed as $m \ddot x - X_u \dot x = 0$ and $X_u$ can be estimated. A step input is now set on the vessel to see the acceleration from zero velocity to the same constant velocity as before. This now gives the input force at the vessel, which is the last unknown in $m \ddot x - X_u \dot x = \tau$. Both $X_u$ and $\tau$ is estimated by fitting to a first order differential curve, as described in \ref{subsec:methodone}. To make this test and data fitting is only position data in the forward motion from the \ac{GPS} of importance. The position can be differentiated twice, to give both velocity and acceleration of the vessel and cab be used to fit the acceleration and deceleration of the vessel.
