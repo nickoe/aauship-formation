@@ -10,9 +10,9 @@ AAUSHIP.
 described in section \ref{sec:hydrocoeff}, and is expanded in this
 journal to explicitly get the coefficients needed. The purpose is to
 identify the hydrodynamic damping coefficients for the 5 \ac{DOF} damping
-matrix~\vref{eq:damping-matrix}. This is accomplished by
+matrix~\vref{eq:damping-matrix} and the restoring force during pitch and roll. This is accomplished by
 three sea trails; a surge test, a sway test and a yaw
-test, together with roll and pitch tests in a small basin.
+test in a lake, where pitch and roll tests are performed in a small basin.
 
 %but some of these have been estimated by \citep{13gr931} and are used directly from that work.
 
@@ -24,6 +24,144 @@ test, together with roll and pitch tests in a small basin.
 %evaluate/calculate the data}
 
 The surge, sway and yaw tests are performed with theory of one method of testing, and theory of another method is used when determining pitch and roll. The damping in surge, sway and yaw is estimated by fitting data to a first order differential equation where the pitch and roll dampings are determined from fitting onto a second order differential equation. These two ways of determining the damping coefficients will be denoted \textit{method one} for the first order fitting and \textit{method two} for the second order fitting.
+
+\subsection{Which parameters to determine}
+The parameters that needs to be determined is the damping coefficients
+from the damping matrix. The 5 \ac{DOF} damping matrix is reduced from the 6 \ac{DOF} damping matrix from \ref{eq:6dofd}:
+\begin{align}
+D = -
+\begin{bmatrix}
+X_u & 0 & 0 & 0 & 0\\
+0 & Y_v & Y_p & 0 & Y_r\\
+0 & K_v & K_p & 0 & K_r\\
+0 & 0 & 0 & M_q & 0\\
+0 & N_v & N_p & 0 & N_r
+\end{bmatrix}
+\end{align}
+and the coefficients from the restoring force matrix $G$, being:
+\begin{align}
+G = -
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & K_\varphi & 0 & 0\\
+0 & 0 & 0 & M_\theta & 0\\
+0 & 0 & 0 & 0 & 0
+\end{bmatrix}
+\end{align}
+The different coefficients can be found by writing the complete dynamic system:
+\begin{align}
+M_{RB} \dot \nu + D\nu + G\eta = \tau
+\end{align}
+where:
+\begin{align}
+\nu =
+\begin{bmatrix}
+u & v & p & q & r
+\end{bmatrix}^T
+\quad , \quad
+\eta =
+\begin{bmatrix}
+x & y & \varphi & \theta & \psi
+\end{bmatrix}^T
+\end{align}
+and
+\begin{align}
+M_{RB} =
+\begin{bmatrix}
+m & 0 & 0 & mz_g & -my_g\\
+0 & m & -mz_g & 0 & mx_g\\
+0 & -mz_g & I_x & -I_{xy} & -I_{xz}\\
+mz_g & 0 & -I_{yx} & I_y & -I_{yz}\\
+-my_g & mx_g & -I_{zx} & -I_{zy} & I_z
+\end{bmatrix}
+\end{align}
+The full 5 \ac{DOF} dynamic system equations can then be written as:
+\begin{align}
+M_{RB1}\dot \nu + D_{1} \nu &= \tau\\
+M_{RB2}\dot \nu + D_{2} \nu &= \tau\\
+M_{RB3}\dot \nu + D_{3} \nu + G_{3} \eta &= \tau\\
+M_{RB4}\dot \nu + D_{4} \nu + G_{4} \eta &= \tau\\
+M_{RB5}\dot \nu + D_{5} \nu &= \tau
+\end{align}
+%Which can be outlined as:
+%\begin{align}
+%\begin{bmatrix}
+%m & 0 & 0 & mz_g & -my_g
+%\end{bmatrix}
+%\dot \nu &+
+%\begin{bmatrix}
+%X_u & 0 & 0 & 0 & 0
+%\end{bmatrix}
+%\nu = \tau\\
+%\begin{bmatrix}
+%0 & m & -mz_g & 0 & mx_g
+%\end{bmatrix}
+%\dot \nu &+
+%\begin{bmatrix}
+%0 & Y_v & Y_p & 0 & Y_r
+%\end{bmatrix}
+%\nu = \tau\\
+%\begin{bmatrix}
+%0 & -mz_g & I_x & -I_{xy} & -I_{xz}
+%\end{bmatrix}
+%\dot \nu &+
+%\begin{bmatrix}
+%0 & K_v & K_p & 0 & K_r
+%\end{bmatrix}
+%\nu = \tau\\
+%\begin{bmatrix}
+%mz_g & 0 & -I_{yx} & I_y & -I_{yz}
+%\end{bmatrix}
+%\dot \nu &+
+%\begin{bmatrix}
+%0 & 0 & 0 & M_q & 0
+%\end{bmatrix}
+%\nu = \tau\\
+%\begin{bmatrix}
+%-my_g & mx_g & -I_{zx} & -I_{zy} & I_z
+%\end{bmatrix}
+%\dot \nu &+
+%\begin{bmatrix}
+%0 & N_v & N_p & 0 & N_r
+%\end{bmatrix}
+%\nu = \tau
+%\end{align}
+The equations equal $\tau$, being the input to the vessel. Some of the contributions cannot have an input, since actuators for controlling pitch and roll is not implemented.
+
+From the first row can the following be outlined:
+\begin{align}
+m\dot u - X_uu = \tau_{u}
+\end{align}
+From the second row can the following be outlined:
+\begin{align}
+m\dot v - Y_vv &= \tau_{v}\\
+-mz_g\dot p - Y_pp &= 0\\
+mx_g\dot r - Y_rr &= \tau_{r}
+\end{align}
+From the third row can the following be outlined:
+\begin{align}
+-mz_g\dot v - K_vv &= \tau_{v}\\
+I_x\dot p - K_pp - K_\varphi\varphi &= 0\\
+-I_{xy}\dot q &= 0\\
+-I_{xz}\dot r - K_rr &= \tau_{r}\\
+\end{align}
+From the forth row can the following be outlined:
+\begin{align}
+mz_g\dot u &= \tau_{u}\\
+-I_{yx}\dot p &= 0\\
+I_y\dot q - M_qq - M_\theta \theta&= 0\\
+-I_{yz}\dot r &= \tau_{r}\\
+\end{align}
+From the fifth row can the following be outlined:
+\begin{align}
+-my_g\dot u &= \tau_{u}\\
+mx_g\dot v - N_vv &= \tau_{v}\\
+-I_{zx}\dot p - N_pp &= 0\\
+-I_{zy}\dot q &= 0\\
+I_z\dot r - N_rr &= \tau_{r}
+\end{align}
+These equations can be utilized to calculate the coefficients from the damping matrix $D$ and the restoring force matrix $G$. The coefficients regarding surge, sway and yaw, $u$, $v$ and $r$, will be determined by \textit{method one} and coefficients regarding pitch and roll, $q$ and $p$, and the restoring force coefficients $K_\varphi$ amd $M_\theta$ will be determined by \textit{method two}.
 
 \subsection{Method one}
 \label{subsec:methodone}
@@ -204,143 +342,6 @@ mZ_g\ddot \varphi + (2\sigma m)\dot \varphi + (\omega_d^2m+\sigma^2m)\varphi = 0
 %s\big|_{\varphi=0} = \frac{-Y_p}{-2mZ_g}
 %\end{align}
 
-\subsection{Which parameters to determine}
-The parameters that needs to be determined is the damping coefficients
-from the damping matrix. The 5 \ac{DOF} damping matrix is reduced from the 6 \ac{DOF} damping matrix from \ref{eq:6dofd}:
-\begin{align}
-D = -
-\begin{bmatrix}
-X_u & 0 & 0 & 0 & 0\\
-0 & Y_v & Y_p & 0 & Y_r\\
-0 & K_v & K_p & 0 & K_r\\
-0 & 0 & 0 & M_q & 0\\
-0 & N_v & N_p & 0 & N_r
-\end{bmatrix}
-\end{align}
-and the coefficients from the restoring force matrix $G$, being:
-\begin{align}
-G = -
-\begin{bmatrix}
-0 & 0 & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 0\\
-0 & 0 & K_\varphi & 0 & 0\\
-0 & 0 & 0 & M_\theta & 0\\
-0 & 0 & 0 & 0 & 0
-\end{bmatrix}
-\end{align}
-The different coefficients can be found by writing the complete dynamic system:
-\begin{align}
-M_{RB} \dot \nu + D\nu + G\eta = \tau
-\end{align}
-where:
-\begin{align}
-\nu =
-\begin{bmatrix}
-u & v & p & q & r
-\end{bmatrix}^T
-\quad , \quad
-\eta =
-\begin{bmatrix}
-x & y & \varphi & \theta & \psi
-\end{bmatrix}^T
-\end{align}
-and
-\begin{align}
-M_{RB} =
-\begin{bmatrix}
-m & 0 & 0 & mz_g & -my_g\\
-0 & m & -mz_g & 0 & mx_g\\
-0 & -mz_g & I_x & -I_{xy} & -I_{xz}\\
-mz_g & 0 & -I_{yx} & I_y & -I_{yz}\\
--my_g & mx_g & -I_{zx} & -I_{zy} & I_z
-\end{bmatrix}
-\end{align}
-The full 5 \ac{DOF} dynamic system equations can then be written as:
-\begin{align}
-M_{RB1}\dot \nu + D_{1} \nu + G_{1} \eta &= \tau\\
-M_{RB2}\dot \nu + D_{2} \nu + G_{2} \eta &= \tau\\
-M_{RB3}\dot \nu + D_{3} \nu + G_{3} \eta &= \tau\\
-M_{RB4}\dot \nu + D_{4} \nu + G_{4} \eta &= \tau\\
-M_{RB5}\dot \nu + D_{5} \nu + G_{5} \eta &= \tau
-\end{align}
-%Which can be outlined as:
-%\begin{align}
-%\begin{bmatrix}
-%m & 0 & 0 & mz_g & -my_g
-%\end{bmatrix}
-%\dot \nu &+
-%\begin{bmatrix}
-%X_u & 0 & 0 & 0 & 0
-%\end{bmatrix}
-%\nu = \tau\\
-%\begin{bmatrix}
-%0 & m & -mz_g & 0 & mx_g
-%\end{bmatrix}
-%\dot \nu &+
-%\begin{bmatrix}
-%0 & Y_v & Y_p & 0 & Y_r
-%\end{bmatrix}
-%\nu = \tau\\
-%\begin{bmatrix}
-%0 & -mz_g & I_x & -I_{xy} & -I_{xz}
-%\end{bmatrix}
-%\dot \nu &+
-%\begin{bmatrix}
-%0 & K_v & K_p & 0 & K_r
-%\end{bmatrix}
-%\nu = \tau\\
-%\begin{bmatrix}
-%mz_g & 0 & -I_{yx} & I_y & -I_{yz}
-%\end{bmatrix}
-%\dot \nu &+
-%\begin{bmatrix}
-%0 & 0 & 0 & M_q & 0
-%\end{bmatrix}
-%\nu = \tau\\
-%\begin{bmatrix}
-%-my_g & mx_g & -I_{zx} & -I_{zy} & I_z
-%\end{bmatrix}
-%\dot \nu &+
-%\begin{bmatrix}
-%0 & N_v & N_p & 0 & N_r
-%\end{bmatrix}
-%\nu = \tau
-%\end{align}
-The equations equal $\tau$, being the input to the vessel. Some of the contributions cannot have an input, since actuators for controlling pitch and roll is not implemented.
-
-From the first row can the following be outlined:
-\begin{align}
-m\dot u + X_uu = \tau_{u}
-\end{align}
-From the second row can the following be outlined:
-\begin{align}
-m\dot v + Y_vv &= \tau_{v}\\
--mz_g\dot p + Y_pp &= 0\\
-mx_g\dot r + Y_rr &= \tau_{r}
-\end{align}
-From the third row can the following be outlined:
-\begin{align}
--mz_g\dot v + K_vv &= \tau_{v}\\
-I_x\dot p + K_pp + K_\varphi\varphi &= 0\\
--I_{xy}\dot q &= 0\\
--I_{xz}\dot r + K_rr &= \tau_{r}\\
-\end{align}
-From the forth row can the following be outlined:
-\begin{align}
-mz_g\dot u &= \tau_{u}\\
--I_{yx}\dot p &= 0\\
-I_y\dot q + M_qq + M_\theta \theta&= 0\\
--I_{yz}\dot r &= \tau_{r}\\
-\end{align}
-From the fifth row can the following be outlined:
-\begin{align}
--my_g\dot u &= \tau_{u}\\
-mx_g\dot v + N_vv &= \tau_{v}\\
--I_{zx}\dot p + N_pp &= 0\\
--I_{zy}\dot q &= 0\\
-I_z\dot r + N_rr &= \tau_{r}
-\end{align}
-These equations can be utilized to calculate the coefficients from the damping matrix $D$. The coefficients regarding surge, sway and yaw, $u$, $v$ and $r$, will be determined by \textit{method one} and coefficients regarding pitch and roll, $q$ and $p$, will be determined by \textit{method two}.
 
 \subsubsection{Surge test}
 \begin{align}
