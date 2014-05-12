@@ -93,8 +93,8 @@ real sensor nodes that use real sensor data is used.
 \begin{description}
 	\item[\texttt{/lli\_node}]\hfill \\
 		This is responsible for communicaiting with the \ac{LLI}. It
-		publishes sensor data and recieves various input commands and
-		forwards them to the \ac{LLI}.
+		publishes sensor data from the \ac{LLI} and recieves various input
+		commands and forwards them to the \ac{LLI}.
 	\item[\texttt{/estimator\_node}]\hfill \\
 		This decodes the samples from the \ac{LLI} and publishes this to
 		the relevant topics.
@@ -103,13 +103,14 @@ real sensor nodes that use real sensor data is used.
 		various joystick inputs. Here it is used to get data from a PS3
 		controller.
 	\item[\texttt{/joy\_teleop\_node}]\hfill \\
-		This is node parses some data from the PS3 controller, and formats
+		This is node parses some data from the PlayStation 3 controller, and formats
 		those as messages that is to be sent to the \ac{LLI}.
 \end{description}
 \begin{figure}[htbp]
 	\centering
 	\includesvg{ros_aauship_teleop}
-	\caption{ROS configuration on AAUSHIP for manual tele operation.}
+	\caption{ROS configuration on AAUSHIP for manual tele operation.
+	AAUSHIP and GRS are connected via a Wi-Fi connection.}
 	\label{fig:ros-aauship-teleop}
 \end{figure}
 
