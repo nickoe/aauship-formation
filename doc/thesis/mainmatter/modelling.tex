@@ -93,13 +93,20 @@ mz_g & 0 & -mx_g & -I_{yx} & I_y & -I_{yz}\\
 \end{bmatrix}
 \end{align}
 
-The restoring forces acting on the vessel, while not in zero angle position in pitch and roll, is given by the coefficients of the $G$ matrix. The restoring forces acts on the vessel when it is perturbed away from the steady state angle in both pitch and roll. Then vessel will, due to Archimedes law, move back into steady state. The change in mass under waterline will rotate back to steady state and the change in angle will become zero. Noget med minear og nonlinear beskrivelse osv osv.
+The restoring forces acting on the vessel, while not in zero angle position in pitch and roll, is given by the coefficients of the $g$ matrix. The restoring forces acts on the vessel when it is perturbed away from the steady state angle in both pitch and roll. Then vessel will, due to Archimedes law, move back into steady state. The change in mass under waterline will rotate back to steady state and the change in angle will become zero. The coefficients in $g$ is the nonlinear terms contributing to the restoring force. Though it can be convenient to use the linear approximation, defined for a 6 \ac{DOF} system by \citep{fossen}, as:
+\begin{align}
+g(\eta) \approx G\eta
+\end{align}
+where $G$, for an asymmetric vessel, is defined as:
 \begin{align}
 G = -
 \begin{bmatrix}
-0 & 0 & 0\\
-0 & 0 & 0\\
-0 & 0 & 0
+0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & -Z_z & 0 & -Z_\theta & 0\\
+0 & 0 & 0 & K_\phi & 0 & 0\\
+0 & 0 & -M_z & 0 & M_\theta & 0\\
+0 & 0 & 0 & 0 & 0 & 0\\
 \end{bmatrix}
 \end{align}
 
@@ -130,7 +137,18 @@ X_u & 0 & 0 & 0 & 0\\
 \end{bmatrix}
 \label{eq:damping-matrix}
 \end{align}
-where the heave are neglected from the 6 \ac{DOF} system. In the principle could a 3 \ac{DOF} system be enough to make the control to the vessel and make it manoeuvre in the water, but as the scope is to exploit the sonar to map the seabed it would be beneficial to implement the roll and pitch as well and make the system as a 5 \ac{DOF}.
+and
+\begin{align}
+G = -
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & K_\phi & 0 & 0\\
+0 & 0 & 0 & M_\theta & 0\\
+0 & 0 & 0 & 0 & 0\\
+\end{bmatrix}
+\end{align}
+where the heave are neglected from the 6 \ac{DOF} system. In the principle could a 3 \ac{DOF} system be enough to make the control to the vessel and make it manoeuvre in the water, but as the scope is to exploit the sonar to map the seabed it would be beneficial to implement the roll and pitch as well and make the system as a 5 \ac{DOF}. The $G$ matrix has been reduced under the assumption that there exists yz symmetry, which is a good assumption based on the design of the vessel.
 
 \section{Identification of Hydrodynamic Derivatives}
 \label{sec:hydrocoeff}
