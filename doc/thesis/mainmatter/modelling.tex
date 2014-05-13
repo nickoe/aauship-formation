@@ -147,12 +147,13 @@ G = -
 0 & 0 & 0 & M_\theta & 0\\
 0 & 0 & 0 & 0 & 0\\
 \end{bmatrix}
+\label{eq:restoreforce}
 \end{align}
 where the heave are neglected from the 6 \ac{DOF} system. In the principle could a 3 \ac{DOF} system be enough to make the control to the vessel and make it manoeuvre in the water, but as the scope is to exploit the sonar to map the seabed it would be beneficial to implement the roll and pitch as well and make the system as a 5 \ac{DOF}. The $G$ matrix has been reduced under the assumption that there exists yz symmetry, which is a good assumption based on the design of the vessel.
 
 \section{Identification of Hydrodynamic Derivatives}
 \label{sec:hydrocoeff}
-The linear model \eqref{eq:reducedmodel1} consists of the mass matrix $M_{RB}$, the damping matrix $D$ and the restoring force matrix $G$.
+The linear model \eqref{eq:reducedmodel1}, which is used to model AAUSHIP, consists of the mass matrix $M_{RB}$, the damping matrix $D$ and the restoring force matrix $G$. This makes the system as:
 \begin{align}
 M_{RB} \dot \nu_r + D\nu_r + G\eta = \tau_{RB} + \tau
 \label{eq:reducedmodel1}
@@ -166,7 +167,7 @@ Since the tests will be performed in still water some of the forces can be negle
 M_{RB} \dot \nu_r + D\nu_r + G\eta = \tau
 \label{eq:testsystem}
 \end{align}
-The system is modelled as a 5 \ac{DOF} system and the nessesary coefficients are found in appendix \ref{app:damping}.
+The system is modelled as a 5 \ac{DOF} system and the necessary coefficients are found in appendix \ref{app:damping}.
 
 % While testing, as seen in appendix \ref{app:damping}, the vessel will in one test surge straight forward, in the next only perform sway and in the last only perform a rotation. This will, in the second test, make the terms regarding rotation be zero. Therefore it becomes possible to determine the remaining coefficients. This is also done in the last test while rotating. By making the vessel be in the same position, then any movement in x and y can be neglected. This makes it possible to determine the damping while rotating. After these three tests it is possible to determine the last cross terms from the system. The equations to determine will look like:
 % \begin{align}
@@ -181,3 +182,5 @@ The system is modelled as a 5 \ac{DOF} system and the nessesary coefficients are
 % \end{align}
 % $Y_r$ and $N_v$ are the only unknowns and the rest to be determined. The performed tests to measure these coefficients can be found in appendix \ref{app:damping}.
 
+The system ends up being:
+\todo{konkluder hvordan systemet ser ud med de fundne variable}
