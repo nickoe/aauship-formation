@@ -4,25 +4,12 @@
 \section{Purpose}
 The purpose with this test is to
 identify the hydrodynamic coefficients used in the linear model for
-AAUSHIP.
-
-\section{Theory} The theory behind this measurement journal is as
-described in section \ref{sec:hydrocoeff}, and is expanded in this
-journal to explicitly get the coefficients needed. The purpose is to
-identify the hydrodynamic damping coefficients for the 5 \ac{DOF} damping
+AAUSHIP, being the hydrodynamic damping coefficients for the 5 \ac{DOF} damping
 matrix~\vref{eq:damping-matrix} and the restoring force during pitch and roll. This is accomplished by
 three sea trails; a surge test, a sway test and a yaw
-test in a lake, where pitch and roll tests are performed in a small basin.
+test, performed in a lake, and two tests to determine pitch and roll, performed in a small pool.
 
-%but some of these have been estimated by \citep{13gr931} and are used directly from that work.
-
-%\todo{Are we using the values 13gr931 found, else, state which
-%	parameters exactly. If then, it might be better to state them as a
-%result. Or if not used here at all, then don't mention them.}
-
-%\todo{There is no explicit equations on how to actually
-%evaluate/calculate the data}
-
+\section{Theory}
 The surge, sway and yaw tests are performed with theory of one method of testing, and theory of another method is used when determining pitch and roll. The damping in surge, sway and yaw is estimated by fitting data to a first order differential equation where the pitch and roll dampings are determined from fitting onto a second order differential equation. These two ways of determining the damping coefficients will be denoted \textit{method one} for the first order fitting and \textit{method two} for the second order fitting.
 
 \subsection{Which parameters to determine}
@@ -38,7 +25,7 @@ X_u & 0 & 0 & 0 & 0\\
 0 & N_v & N_p & 0 & N_r
 \end{bmatrix}
 \end{align}
-and the coefficients from the restoring force matrix $G$, being:
+and the coefficients from the restoring force matrix $G$, \ref{eq:restoreforce}, being:
 \begin{align}
 G = -
 \begin{bmatrix}
@@ -573,26 +560,62 @@ The rigid body constants for the vessel can be found in table \ref{tab:constants
   $Y_r$ & 2 \\
   $K_r$ & 2 \\
   $Y_p$ & 2 \\
-  $K_p$ & 2 \\
+  $K_p$ & 0.1677 \\
   $N_p$ & 2 \\
-  $M_q$ & 2 \\
+  $M_q$ & 0.8497 \\
 	\bottomrule
 \end{tabular}
 \caption{Results of fitted values and the calculated coefficients.}
 \label{tab:dmatrix}
 \end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{ccc}
+	\toprule
+  Restoring force\\Coefficient & Value \\
+  \midrule
+  $K_\varphi$ & 0.1385 \\
+  $M_\theta$ & 0.1788 \\
+  	\bottomrule
+\end{tabular}
+\caption{Results of fitted values and the calculated coefficients.}
+\label{tab:gmatrix}
+\end{table}
+
 This makes the linear damping matrix as:
 \begin{align}
 D = -
 \begin{bmatrix}
 X_u & 0 & 0 & 0 & 0\\
 0 & Y_v & Y_p & 0 & Y_r\\
-0 & K_v & K_p & 0 & K_r\\
-0 & 0 & 0 & M_q & 0\\
+0 & K_v & 0.1677 & 0 & K_r\\
+0 & 0 & 0 & 0.8497 & 0\\
 0 & N_v & N_p & 0 & N_r
 \end{bmatrix}
 \end{align}
-
+and the restoring for matrix as:
+\begin{align}
+G = -
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0.1385 & 0 & 0\\
+0 & 0 & 0 & 0.1788 & 0\\
+0 & 0 & 0 & 0 & 0
+\end{bmatrix}
+\end{align}
+and the rigid body matrix as:
+\begin{align}
+M_{RB} =
+\begin{bmatrix}
+m & 0 & 0 & mz_g & -my_g\\
+0 & m & -mz_g & 0 & mx_g\\
+0 & -mz_g & I_x & -I_{xy} & -I_{xz}\\
+mz_g & 0 & -I_{yx} & I_y & -I_{yz}\\
+-my_g & mx_g & -I_{zx} & -I_{zy} & I_z
+\end{bmatrix}
+\end{align}
 \section{Discussion}
 
 
