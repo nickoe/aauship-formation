@@ -560,26 +560,62 @@ The rigid body constants for the vessel can be found in table \ref{tab:constants
   $Y_r$ & 2 \\
   $K_r$ & 2 \\
   $Y_p$ & 2 \\
-  $K_p$ & 2 \\
+  $K_p$ & 0.1677 \\
   $N_p$ & 2 \\
-  $M_q$ & 2 \\
+  $M_q$ & 0.8497 \\
 	\bottomrule
 \end{tabular}
 \caption{Results of fitted values and the calculated coefficients.}
 \label{tab:dmatrix}
 \end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{ccc}
+	\toprule
+  Restoring force\\Coefficient & Value \\
+  \midrule
+  $K_\varphi$ & 0.1385 \\
+  $M_\theta$ & 0.1788 \\
+  	\bottomrule
+\end{tabular}
+\caption{Results of fitted values and the calculated coefficients.}
+\label{tab:gmatrix}
+\end{table}
+
 This makes the linear damping matrix as:
 \begin{align}
 D = -
 \begin{bmatrix}
 X_u & 0 & 0 & 0 & 0\\
 0 & Y_v & Y_p & 0 & Y_r\\
-0 & K_v & K_p & 0 & K_r\\
-0 & 0 & 0 & M_q & 0\\
+0 & K_v & 0.1677 & 0 & K_r\\
+0 & 0 & 0 & 0.8497 & 0\\
 0 & N_v & N_p & 0 & N_r
 \end{bmatrix}
 \end{align}
-
+and the restoring for matrix as:
+\begin{align}
+G = -
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0.1385 & 0 & 0\\
+0 & 0 & 0 & 0.1788 & 0\\
+0 & 0 & 0 & 0 & 0
+\end{bmatrix}
+\end{align}
+and the rigid body matrix as:
+\begin{align}
+M_{RB} =
+\begin{bmatrix}
+m & 0 & 0 & mz_g & -my_g\\
+0 & m & -mz_g & 0 & mx_g\\
+0 & -mz_g & I_x & -I_{xy} & -I_{xz}\\
+mz_g & 0 & -I_{yx} & I_y & -I_{yz}\\
+-my_g & mx_g & -I_{zx} & -I_{zy} & I_z
+\end{bmatrix}
+\end{align}
 \section{Discussion}
 
 
