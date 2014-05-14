@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import roslib; roslib.load_manifest('rospy_tutorials')
+import roslib; roslib.load_manifest('aauship')
 
 import rospy
 from std_msgs.msg import *

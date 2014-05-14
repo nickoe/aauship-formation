@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-PKG = 'rospy_tutorials' # this package name
+PKG = 'aauship' # this package name
 import roslib; roslib.load_manifest(PKG)
 
 import rospy
