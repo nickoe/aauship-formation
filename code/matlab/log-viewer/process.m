@@ -1,5 +1,10 @@
 clear all
 for fighandle = findobj('Type','figure')', clf(fighandle), end
+% Stuff for handling figure output
+set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
+set(gcf,'paperunits','centimeters')
+set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
+set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
 
 %% Data files
 logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
@@ -215,17 +220,20 @@ legend('Depth','Temperature')
 
 
 %% 
-%figure(100)
+figure(100)
 clf
 scale_imutime = 0.8305;
 offset_imutime = 205;
+zgyro = smooth(gyro(:,3),21);
 hold on
 plot(ctl{3}-starttime, ctl{2},'.-',...
      imutime*scale_imutime+offset_imutime,accl(:,1)*100,...
      imutime*scale_imutime+offset_imutime,accl(:,2)*100,...
      imutime*scale_imutime+offset_imutime,accl(:,3)*100,...
      (walltime-starttime)*scale_imutime+offset_imutime,nmeaspeed*100,'.-k',...
-     imutime*scale_imutime+offset_imutime,beh.heading)
+     imutime*scale_imutime+offset_imutime,beh.heading,...
+     imutime*scale_imutime+offset_imutime,zgyro*75)
+
  plot((walltime(1057)-starttime)*scale_imutime+offset_imutime,nmeaspeed(1057)*100,'r*')
 
 % plot(ctl{3}-starttime, ctl{2}, imutime*0.865,heading(:,1),'.-k')
@@ -243,7 +251,7 @@ ylabel('Control inputs, not sorted by MsgID [-]')
 %%
 % Plotting speeds from nmeaspeed
 % Timediff from nmeasspeed to sample = 828
-% figure(42)
+figure(150)
 
 % Determine X_u
 m = 13;
@@ -266,11 +274,38 @@ plot(-3:(length(surge6)-4),surge6,'c');
 k = 3.3*0.5144;
 s = 0.22;
 plot(x,k*exp(-s*x),'p')
-hold off
 D = s * m;
 X_u = D
+xlabel('Time [s]')
+ylabel('Velocity [m/s]')
+legend('Test 1', 'Test 2', 'Test 3', 'Test 4', 'Test 5', 'Test6', 'Regression')
+text(25,0.4,{['k=' num2str(k)] ['s=' num2str(s)] ['X_u=' num2str(X_u)]})
+hold off
+% saveas(figure(150),'surgecoeffs.pdf')
 
-% Determine noget andet
+% Determine Y_v, K_v and N_v.
+z_g = 0.03;
+x_g = 0.03;
+figure(151)
+clf;
+hold on
+grid on
+x = 0:5;
+k = 0.1;
+s = 2.5;
+plot(x,k*exp(-s*x),'-p')
+Y_v = s * m
+K_v = s * -m * z_g
+N_v = s * m * x_g
+xlabel('Time [s]')
+ylabel('Velocity [m/s]')
+legend('Estimate')
+text(4,0.02,{['k=' num2str(k)] ['s=' num2str(s)] ['Y_v=' num2str(Y_v)] ['K_v=' num2str(K_v)] ['N_v=' num2str(N_v)]})
+hold off
+% saveas(figure(151),'swaycoeffs.pdf')
+
+
+% Determine Y_r, K_r and N_r
 
 
 
@@ -280,9 +315,35 @@ X_u = D
 
 
 
+% Determine Y_p and N_p
+figure(153)
+% From roll-regression
+% y = k*exp(-s*t)*(-cos(omega*t))+h;
+% Constants to fit
+clf;
+hold on
+k = 20;
+s = 0.007;
+omega = 0.103;
+h = 3;
+m = 13; %[kg]
 
+k1 = 20;
+s1 = 0.0059;
+omega1 = 0.103;
+h1 = 2;
+m = 13; %[kg]
 
+k2 = 20;
+s2 = (s+s1)/2;
+omega2 = 0.103;
+h2 = (h+h1)/2;
+m = 13; %[kg]
 
+t = 0:300;
+% plot(t,k.*exp(-s.*t).*(-cos(omega.*t))+h,'r',t,k1.*exp(-s1.*t).*(-cos(omega1.*t))+h1,'b',t,k2.*exp(-s2.*t).*(-cos(omega2.*t))+h2,'g')
+plot(diff(k2.*exp(-s2.*t).*(-cos(omega2.*t))+h2),'r')
+plot((k2.*s2.*exp(-s2.*t).*cos(omega2.*t)+k2.*exp(-s2.*t).*sin(omega2.*t).*omega2),'b')
 
 
 
