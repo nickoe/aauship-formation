@@ -95,7 +95,7 @@ class MyPlugin(Plugin):
         self._widget.lineEditDescription.setStyleSheet(
                 "background-color: rgb(0, 255, 0);")
         self.desc = self._widget.lineEditDescription.text()
-        line = str(self.starttime) + ',' + str(self.stoptime) + ',' + self.desc + "\n"
+        line = str(self.starttime) + ';' + str(self.stoptime) + ';' + self.desc + "\n"
         self.running = False
         print line
         self.log.write(line)
