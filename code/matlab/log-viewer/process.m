@@ -11,6 +11,7 @@ imudata = load([logpath,testname,'/imu.log']);
 echofile = fopen([logpath,testname,'/echo.log']);
 starttime = imudata(1,13); % Earliest timestamp
 annotatefile = fopen([logpath,testname,'/annotate1399289431.26.log'],'r');
+% annotatefile = fopen([logpath,testname,'/annotate1400061527.83.log'],'r');
 ctlfile = fopen([logpath,testname,'/ctl.log'],'r');
 
 annotate = textscan(annotatefile, '%f%f%s', 'Delimiter', ';');
@@ -83,7 +84,7 @@ gyro = imudata(:,2:4)*0.05; % Scale 0.05 degrees/sec
 accl = (imudata(:,5:7)*0.00333)*9.82;   %/333)*9.82; % Scale 3.33 mg (g is gravity, that is g-force)
 magn = imudata(:,8:10)*0.0005; % 0.5 mgauss
 temp = imudata(:,11)*0.14; % 0.14 degrees celcius 
-aux_adc = imudata(:,12)*0.806; % 0.mV
+aux_adc = imudata(:,12)*0.806; % 0.mV180/pi
 imutime = imudata(:,13)-starttime; % Seconds since start, periodic timing determined by imu
 
 % figure(2)
@@ -126,9 +127,10 @@ heading = atan2(-magn(:,2),magn(:,1))*180/pi;
 % plot(imutime,Azimuth)
 
 figure(50)
-bias = [(max(magn(:,1))-min(magn(:,1)))/2+min(magn(:,1)),...
-        (max(magn(:,2))-min(magn(:,2)))/2+min(magn(:,2)),...
-        (max(magn(:,3))-min(magn(:,3)))/2+min(magn(:,3))]
+bias = [0.2582 0.1225 -0.6860];
+% bias = [(max(magn(:,1))-min(magn(:,1)))/2+min(magn(:,1)),...
+%         (max(magn(:,2))-min(magn(:,2)))/2+min(magn(:,2)),...
+%         (max(magn(:,3))-min(magn(:,3)))/2+min(magn(:,3))]
 plot3(magn(:,1)-bias(1),magn(:,2)-bias(2),magn(:,3)-bias(3))
 xlabel('x');ylabel('y');zlabel('z');
 axis equal
@@ -142,7 +144,7 @@ grid on
 magnbias = [magn(:,1)-bias(1) magn(:,2)-bias(2) magn(:,3)-bias(3)];
 imu2beh(gyro, accl/9.82, magnbias, length(gyro));
 % imu2beh([gyro(:,1) -gyro(:,2) -gyro(:,3)], [accl(:,1) -accl(:,2) -accl(:,3)], [magn(:,1) -magn(:,2) -magn(:,3)], length(gyro));
-calc_beh_main('testfile.mat',false,true,true,false);
+beh = calc_beh_main('testfile.mat',false,true,true,false);
 
 %% Animate heading
 %     figure(42)
@@ -213,14 +215,21 @@ legend('Depth','Temperature')
 
 
 %% 
-figure(100)
+%figure(100)
 clf
+scale_imutime = 0.8305;
+offset_imutime = 205;
 hold on
-plot(ctl{3}-starttime, ctl{2},...
-     imutime,accl(:,1)*100,...
-     imutime,accl(:,2)*100,...
-     imutime,accl(:,3)*100,...
-     walltime-starttime,nmeaspeed*100,'.-k')
+plot(ctl{3}-starttime, ctl{2},'.-',...
+     imutime*scale_imutime+offset_imutime,accl(:,1)*100,...
+     imutime*scale_imutime+offset_imutime,accl(:,2)*100,...
+     imutime*scale_imutime+offset_imutime,accl(:,3)*100,...
+     (walltime-starttime)*scale_imutime+offset_imutime,nmeaspeed*100,'.-k',...
+     imutime*scale_imutime+offset_imutime,beh.heading)
+ plot((walltime(1057)-starttime)*scale_imutime+offset_imutime,nmeaspeed(1057)*100,'r*')
+
+% plot(ctl{3}-starttime, ctl{2}, imutime*0.865,heading(:,1),'.-k')
+
 legend('control inputs',...
       'accx', 'accy', 'accz',...
       'gps1 speed')
@@ -230,3 +239,63 @@ annotatefill(annotate{1}-diffad-starttime,annotate{2}-diffad-starttime,annotate{
 hold off
 xlabel('Time [s]')
 ylabel('Control inputs, not sorted by MsgID [-]')
+
+%%
+% Plotting speeds from nmeaspeed
+% Timediff from nmeasspeed to sample = 828
+% figure(42)
+
+% Determine X_u
+m = 13;
+clf;
+surge1 = nmeaspeed(1881-828+2:1901-828+2)*0.5144;
+surge2 = nmeaspeed(1916-828+1:1933-828+1)*0.5144;
+surge3 = nmeaspeed(1961-828:1975-828)*0.5144;
+surge4 = nmeaspeed(2022-828-3:2035-828-3)*0.5144;
+surge5 = nmeaspeed(2112-828-5:2126-828-5)*0.5144;
+surge6 = nmeaspeed(2205-828-5:2212-828-5)*0.5144;
+hold on
+grid on
+x = 0:27;
+plot(-3:(length(surge1)-4),surge1,'r');
+plot(-3:(length(surge2)-4),surge2,'g');
+plot(-3:(length(surge3)-4),surge3,'y');
+plot(-3:(length(surge4)-4),surge4,'b');
+plot(-3:(length(surge5)-4),surge5,'k');
+plot(-3:(length(surge6)-4),surge6,'c');
+k = 3.3*0.5144;
+s = 0.22;
+plot(x,k*exp(-s*x),'p')
+hold off
+D = s * m;
+X_u = D
+
+% Determine noget andet
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
