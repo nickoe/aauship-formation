@@ -313,8 +313,6 @@ hold off
 
 
 
-
-
 % Determine Y_p and N_p
 figure(153)
 % From roll-regression
@@ -327,24 +325,22 @@ s = 0.007;
 omega = 0.103;
 h = 3;
 m = 13; %[kg]
-
 k1 = 20;
 s1 = 0.0059;
 omega1 = 0.103;
 h1 = 2;
 m = 13; %[kg]
-
 k2 = 20;
 s2 = (s+s1)/2;
 omega2 = 0.103;
 h2 = (h+h1)/2;
 m = 13; %[kg]
-
 t = 0:300;
 % plot(t,k.*exp(-s.*t).*(-cos(omega.*t))+h,'r',t,k1.*exp(-s1.*t).*(-cos(omega1.*t))+h1,'b',t,k2.*exp(-s2.*t).*(-cos(omega2.*t))+h2,'g')
 plot(diff(k2.*exp(-s2.*t).*(-cos(omega2.*t))+h2),'r')
 plot((k2.*s2.*exp(-s2.*t).*cos(omega2.*t)+k2.*exp(-s2.*t).*sin(omega2.*t).*omega2),'b')
-
+Y_p = 2*m*s2
+K_p = 2*m*s2
 
 
 
