@@ -53,6 +53,7 @@ class LLI(object):
         while not rospy.is_shutdown():
             try:
                 data = self.qu.get(False)
+                print("Queue size:" + str(self.qu.qsize()) + "\r\n")
                 pub.publish(data['DevID'],
                             data['MsgID'],
                             (data['Data']),
