@@ -82,8 +82,8 @@ function res = calc_heading(bank, elevation, mx, my, mz, headingGT180, plotMagne
         
         heading_raw = rad2deg(heading_raw);
         plot(heading_raw);
-        min(heading_raw)
-        max(heading_raw)
+        min(heading_raw);
+        max(heading_raw);
         title('Uncorrected Heading');
         ylabel('Heading(deg)');
     end;

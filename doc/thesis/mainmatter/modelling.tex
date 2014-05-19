@@ -110,11 +110,12 @@ G = -
 \end{bmatrix}
 \end{align}
 
-This will be reduced to a 5 \ac{DOF} system due to the fact that the
-vessels buoyancy cannot be controlled as such. The vessel will always
-be on the water surface and this removes the degree of freedom which
+\subsection{Model reduction}
+The model will be reduced to a 5 \ac{DOF} system due to the fact that the
+vessel's buoyancy cannot be controlled as such. The vessel will always
+be on the water surface and this removes the degree a freedom which
 is the heave, the change of $z$ position of the vessel. A 5 \ac{DOF}
-system will be modelled as;
+system will be modelled as:
 \begin{align}
 M_{RB} =
 \begin{bmatrix}
@@ -124,6 +125,7 @@ m & 0 & 0 & mz_g & -my_g\\
 mz_g & 0 & -I_{yx} & I_y & -I_{yz}\\
 -my_g & mx_g & -I_{zx} & -I_{zy} & I_z
 \end{bmatrix}
+\label{eq:rigidbody}
 \end{align}
 and
 \begin{align}
@@ -149,7 +151,7 @@ G = -
 \end{bmatrix}
 \label{eq:restoreforce}
 \end{align}
-where the heave are neglected from the 6 \ac{DOF} system. In the principle could a 3 \ac{DOF} system be enough to make the control to the vessel and make it manoeuvre in the water, but as the scope is to exploit the sonar to map the seabed it would be beneficial to implement the roll and pitch as well and make the system as a 5 \ac{DOF}. The $G$ matrix has been reduced under the assumption that there exists yz symmetry, which is a good assumption based on the design of the vessel.
+where the heave are neglected from the 6 \ac{DOF} system. In the principle could a 3 \ac{DOF} system be enough to make the control to the vessel and make it manoeuvre in the water, but as the scope is to exploit the sonar to map the seabed it would be beneficial to implement the roll and pitch as well and make the system as a 5 \ac{DOF}. The $G$ matrix has been reduced under the assumption that there exists yz-symmetry, which is a good assumption based on the design of the vessel.
 
 \section{Identification of Hydrodynamic Derivatives}
 \label{sec:hydrocoeff}
@@ -162,9 +164,9 @@ The coefficients of the model needs to be determined before the model can be sim
 \begin{align}
 M_{RB} \dot \nu_r + D\nu_r + G\eta = \tau_{hyd} + \tau_{hs} + \tau_{wind} + \tau_{wave} + \tau
 \end{align}
-Since the tests will be performed in still water some of the forces can be neglected. The $\tau$ is the only force to be taken into account to perform the tests. This is the input to the vessel and a delimitation can be performed to make the system as \ref{eq:testsystem}, which is assumed while tests are performed:
+Since the tests will be performed in still water some of the forces can be neglected. This makes $\tau$, $\tau_{hyd}$ and $\tau_{hs}$ the only forces to be taken into account to perform the tests. This is the input to the vessel and the forces acting on the vessel while moving, and after reduction make the system as \ref{eq:testsystem}, which is assumed while tests are performed:
 \begin{align}
-M_{RB} \dot \nu_r + D\nu_r + G\eta = \tau
+M_{RB} \dot \nu_r + D\nu_r + G\eta = \tau_{hyd} + \tau_{hs} + \tau
 \label{eq:testsystem}
 \end{align}
 The system is modelled as a 5 \ac{DOF} system and the necessary coefficients are found in appendix \ref{app:damping}.

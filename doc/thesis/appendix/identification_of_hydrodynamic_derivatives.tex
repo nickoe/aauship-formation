@@ -215,13 +215,13 @@ steady state, as seen on figure~\vref{fig:harmonic-damping}. The
 damping must be determined by fitting \eqref{eq:kestcoswt} to the
 measured data, then this can be used to identify the coefficients for
 the second order differential equation. The procedure is illustrated by
-calculating it with the example of $Y_p$ and $K_\varphi$.
+calculating it with the example of $K_p$ and $K_\varphi$.
 
-The damping coefficient $Y_p$ can be found from the dynamic equation
+The damping coefficient $K_p$ can be found from the dynamic equation
 of roll by: \todo{Indtast (4.26)  et sted of referet til den herfra,
 med hensyn til $-K_\varphi$.}
 \begin{align}
-mZ_g\ddot \varphi - Y_p\dot \varphi - K_\varphi \varphi = 0
+I_x\dot p + K_pp + K_\varphi\varphi &= 0
 \label{eq:solveddyneq}
 \end{align}
 $\varphi$ is angle position of the vessel. This is the position that needs to follow the damping as seen on figure~\vref{fig:harmonic-damping}. This can be fit to a second order differential equation. The position of the angle can be expressed as:
@@ -283,29 +283,29 @@ Where:
 By comparing \ref{eq:parameterized} and \ref{eq:dampeq} it can be seen that:
 \begin{align}
 a &= 1\\
-b &= 2\zeta\omega_0 = \frac{Y_p}{m}\\
-c &= \omega_0^2 = \frac{K_\varphi}{m}
+b &= 2\zeta\omega_0 = \frac{K_p}{I_x}\\
+c &= \omega_0^2 = \frac{K_\varphi}{I_x}
 \end{align}
 From the fitting of data is two variables known:
 \begin{align}
 \sigma &= \zeta\omega_0\\
 \omega_d&=\omega_0\sqrt{1-\zeta^2}
 \end{align}
-This makes it possible to determine $Y_p$ by:
+This makes it possible to determine $K_p$ by:
 \begin{align}
-b &= 2\zeta\omega_0 = 2\sigma = \frac{Y_p}{m}\\
-Y_p &= 2\sigma m
+b &= 2\zeta\omega_0 = 2\sigma = \frac{K_p}{I_x}\\
+K_p &= 2\sigma I_x
 \end{align}
 The coefficient $K_\varphi$ can be determined by: 
 \begin{align}
 \omega_d &= \omega_0\sqrt{1-\zeta^2}\\
-\omega_d^2 &= \omega_0^2-(\zeta\omega_0)^2 = c - \sigma^2 = \frac{K_\varphi}{m}-\sigma^2\\
-K_\varphi &= \omega_d^2m+\sigma^2m
+\omega_d^2 &= \omega_0^2-(\zeta\omega_0)^2 = c - \sigma^2 = \frac{K_\varphi}{I_x}-\sigma^2\\
+K_\varphi &= \omega_d^2I_x+\sigma^2I_x
 \end{align}
 This makes the dynamic equation with roll as:
 \begin{align}
-mZ_g\ddot \varphi + Y_p\dot \varphi + K_\varphi\varphi = 0\\
-mZ_g\ddot \varphi + (2\sigma m)\dot \varphi + (\omega_d^2m+\sigma^2m)\varphi = 0
+I_x\ddot \varphi + K_p\dot\varphi + K_\varphi\varphi &= 0\\
+I_x\ddot \varphi + (2\sigma I_x)\dot \varphi + (\omega_d^2I_x+\sigma^2I_x)\varphi &= 0
 \label{eq:solveddyneq}
 \end{align}
 
@@ -556,16 +556,16 @@ The rigid body constants for the vessel can be found in table \ref{tab:constants
   Hydrodynamic\\Coefficient & Value \\
   \midrule
   $X_u$ & 2.86 \\
-  $Y_v$ & 2 \\
-  $K_v$ & 2 \\
-  $N_v$ & 2 \\
+  $Y_v$ & 32.5 \\
+  $K_v$ & -0.975 \\
+  $N_v$ & 0.975 \\
   $N_r$ & 2 \\
   $Y_r$ & 2 \\
   $K_r$ & 2 \\
-  $Y_p$ & 2 \\
-  $K_p$ & 0.1677 \\
-  $N_p$ & 2 \\
-  $M_q$ & 0.8497 \\
+  $Y_p$ & -0.00503 \\
+  $K_p$ & 0.00084 \\
+  $N_p$ & -0.00069 \\
+  $M_q$ & 0.0712 \\
 	\bottomrule
 \end{tabular}
 \caption{Results of fitted values and the calculated coefficients.}
@@ -578,8 +578,8 @@ The rigid body constants for the vessel can be found in table \ref{tab:constants
 	\toprule
   Restoring force\\Coefficient & Value \\
   \midrule
-  $K_\varphi$ & 0.1385 \\
-  $M_\theta$ & 0.1788 \\
+  $K_\varphi$ & 0.0007 \\
+  $M_\theta$ & 0.0150 \\
   	\bottomrule
 \end{tabular}
 \caption{Results of fitted values and the calculated coefficients.}

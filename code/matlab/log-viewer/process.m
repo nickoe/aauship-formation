@@ -5,6 +5,7 @@ set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
 set(gcf,'paperunits','centimeters')
 set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
 set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
+load inertia.mat
 
 %% Data files
 logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
@@ -336,11 +337,15 @@ omega2 = 0.103;
 h2 = (h+h1)/2;
 m = 13; %[kg]
 t = 0:300;
+I_zx = 0.0536;
+I_x = 0.0654;
 % plot(t,k.*exp(-s.*t).*(-cos(omega.*t))+h,'r',t,k1.*exp(-s1.*t).*(-cos(omega1.*t))+h1,'b',t,k2.*exp(-s2.*t).*(-cos(omega2.*t))+h2,'g')
 plot(diff(k2.*exp(-s2.*t).*(-cos(omega2.*t))+h2),'r')
 plot((k2.*s2.*exp(-s2.*t).*cos(omega2.*t)+k2.*exp(-s2.*t).*sin(omega2.*t).*omega2),'b')
-Y_p = 2*m*s2
-K_p = 2*m*s2
+Y_p = 2 * -m * z_g * s2
+K_p = 2 * I(1,1) * s2
+N_p = 2 * I(1,3) * s2
+
 
 
 
