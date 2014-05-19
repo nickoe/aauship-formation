@@ -1,7 +1,7 @@
 function [ output_args ] = headinf( x )
 %HEADINF Converts plus minus 180 degres to not be constrained
 %   Detailed explanation goes here
-    limit = 177;
+    limit = 172;
     rev   = 0;
     output_args = zeros(length(x),1);
     for i = 1:length(x)-1
@@ -14,4 +14,5 @@ function [ output_args ] = headinf( x )
             rev = rev - 360;
         end
     end
+    output_args(i+1) = x(i+1) + rev;
 end

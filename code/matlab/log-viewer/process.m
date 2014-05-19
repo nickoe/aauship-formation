@@ -232,16 +232,18 @@ plot(ctl{3}-starttime, ctl{2},'.-',...
      imutime*scale_imutime+offset_imutime,accl(:,2)*100,...
      imutime*scale_imutime+offset_imutime,accl(:,3)*100,...
      (walltime-starttime)*scale_imutime+offset_imutime,nmeaspeed*100,'.-k',...
-     imutime*scale_imutime+offset_imutime,beh.heading,...
+     imutime*scale_imutime+offset_imutime,headinf(beh.heading)*0.5,...
+     imutime(1:length(imutime)-1)*scale_imutime+offset_imutime,diff(headinf(beh.heading))*50,'m',...
      imutime*scale_imutime+offset_imutime,zgyro*75)
 
- plot((walltime(1057)-starttime)*scale_imutime+offset_imutime,nmeaspeed(1057)*100,'r*')
+plot((walltime(1057)-starttime)*scale_imutime+offset_imutime,nmeaspeed(1057)*100,'r*')
 
 % plot(ctl{3}-starttime, ctl{2}, imutime*0.865,heading(:,1),'.-k')
 
 legend('control inputs',...
       'accx', 'accy', 'accz',...
-      'gps1 speed')
+      'gps1 speed',...
+      'heading', 'diffhead', 'zgyro')
 %  ylim([-500 500])
 diffad=annotate{1}(1)-starttime-1870;
 annotatefill(annotate{1}-diffad-starttime,annotate{2}-diffad-starttime,annotate{3},-150,150)
@@ -257,12 +259,12 @@ figure(150)
 % Determine X_u
 m = 13;
 clf;
-surge1 = nmeaspeed(1881-828+2:1901-828+2)*0.5144;
-surge2 = nmeaspeed(1916-828+1:1933-828+1)*0.5144;
-surge3 = nmeaspeed(1961-828:1975-828)*0.5144;
-surge4 = nmeaspeed(2022-828-3:2035-828-3)*0.5144;
-surge5 = nmeaspeed(2112-828-5:2126-828-5)*0.5144;
-surge6 = nmeaspeed(2205-828-5:2212-828-5)*0.5144;
+surge1 = nmeaspeed(1881-828+2:1901-828+2)*0.5144;% knob til m/s, *0.5144
+surge2 = nmeaspeed(1916-828+1:1933-828+1)*0.5144;% knob til m/s, *0.5144
+surge3 = nmeaspeed(1961-828:1975-828)*0.5144;% knob til m/s, *0.5144
+surge4 = nmeaspeed(2022-828-3:2035-828-3)*0.5144;% knob til m/s, *0.5144
+surge5 = nmeaspeed(2112-828-5:2126-828-5)*0.5144;% knob til m/s, *0.5144
+surge6 = nmeaspeed(2205-828-5:2212-828-5)*0.5144;% knob til m/s, *0.5144
 hold on
 grid on
 x = 0:27;
@@ -284,7 +286,7 @@ text(25,0.4,{['k=' num2str(k)] ['s=' num2str(s)] ['X_u=' num2str(X_u)]})
 hold off
 % saveas(figure(150),'surgecoeffs.pdf')
 
-% Determine Y_v, K_v and N_v.
+%% Determine Y_v, K_v and N_v.
 z_g = 0.03;
 x_g = 0.03;
 figure(151)
@@ -306,15 +308,86 @@ hold off
 % saveas(figure(151),'swaycoeffs.pdf')
 
 
-% Determine Y_r, K_r and N_r
+%% Determine Y_r, K_r and N_r 1
+figure(151)
+clf;
+k = 0.9;
+s = 0.28;
+k1 = -1.6;
+s1 = 0.22;
+
+% min(find(imutime*scale_imutime+offset_imutime>3278))
+x1 = imutime(36763:36860)*scale_imutime+offset_imutime;
+x2 = imutime(37236:37344)*scale_imutime+offset_imutime;
+x3 = imutime(38248:38341)*scale_imutime+offset_imutime;
+x4 = imutime(39237:39344)*scale_imutime+offset_imutime;
+x5 = imutime(39898:40018)*scale_imutime+offset_imutime;
+x6 = imutime(40480:40589)*scale_imutime+offset_imutime;
+heading1 = headinf(beh.heading(36763:36861));
+heading2 = headinf(beh.heading(37236:37345));
+heading3 = headinf(beh.heading(38248:38342));
+heading4 = headinf(beh.heading(39237:39345));
+heading5 = headinf(beh.heading(39898:40019));
+heading6 = headinf(beh.heading(40480:40590));
+
+hold on
+plot(x1-x1(1),diff(heading1),'y')
+plot(x2-x2(1),diff(heading2),'g')
+plot(x3-x3(1),diff(heading3),'k')
+plot(x4-x4(1),diff(heading4),'c')
+plot(x5-x5(1),diff(heading5),'m')
+plot(x6-x6(1),diff(heading6)-0.5,'Color',[0.9 0.3 0.2])
+plot(x-x(1),k*exp(-s*(x-x(1)))-0.18,'b')
+plot(x-x(1),k1*exp(-s1*(x-x(1))),'r')
+
+xlabel('Time [s]')
+ylabel('Velocity [degree/s]')
+title('Propeller, cw and ccw')
+
+grid on
+hold off
+
+%% Determine Y_r, K_r and N_r 2
+figure(152)
+clf;
+k = 1.6;
+s = 0.25;
+k1 = -2;
+s1 = 0.2;
+
+% min(find(imutime*scale_imutime+offset_imutime>3278))
+x1 = imutime(29087:29189)*scale_imutime+offset_imutime;
+x2 = imutime(30283:30382)*scale_imutime+offset_imutime;
+x3 = imutime(32127:32220)*scale_imutime+offset_imutime;
+x4 = imutime(32537:32640)*scale_imutime+offset_imutime;
+x5 = imutime(33271:33328)*scale_imutime+offset_imutime;
+
+heading1 = headinf(beh.heading(29087:29190));
+heading2 = headinf(beh.heading(30283:30383));
+heading3 = headinf(beh.heading(32127:32221));
+heading4 = headinf(beh.heading(32537:32641));
+heading5 = headinf(beh.heading(33271:33329));
+
+hold on
+plot(x1-x1(1),diff(heading1),'y')
+plot(x2-x2(1),diff(heading2)-0.5,'g')
+plot(x3-x3(1),diff(heading3)-0.4,'k')
+plot(x4-x4(1),diff(heading4),'c')
+plot(x5-x5(1),diff(heading5)+0.2,'m')
+
+plot(x-x(1),k*exp(-s*(x-x(1)))-0.18,'b')
+plot(x-x(1),k1*exp(-s1*(x-x(1))),'r')
+
+xlabel('Time [s]')
+ylabel('Velocity [degree/s]')
+title('Bow thruster, cw and ccw')
+
+grid on
+hold off
 
 
 
-
-
-
-
-% Determine Y_p and N_p
+%% Determine Y_p and N_p
 figure(153)
 % From roll-regression
 % y = k*exp(-s*t)*(-cos(omega*t))+h;
