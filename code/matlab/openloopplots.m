@@ -17,16 +17,16 @@ MRB = [MRB(1:2,1:2) MRB(1:2,4:6)
 % CRB = m2c(MRB,nu) % rigid body Coriolis matrix, page 56 fossen
 
 % linear hydrodynamic damping
-% Xu = 2.86;
+% Xu =  2.86;
 % Yv = 32.5;
-% Yp = 
-% Yr =
-% Kv = 
-% Kp = 0.1677;
+% Yp = -0.00503
+% Yr
+% Kv = -0.975;
+% Kp =  0.1677;
 % Kr
-% Mq = 0.8497;
-% Nv
-% Np
+% Mq =  0.0712;
+% Nv =  0.975;
+% Np = -0.00084;
 % Nr
 
 % Data from TP-MB-shipmod.pdf
@@ -72,3 +72,5 @@ for i = 1:10
     xdot(:,i) = A*x(:,i) + B*tau
     x(:,i+1)=xdot(:,i)+x(:,i); % Euler integration, now assuming dt = 1, dt*xdot when not true
 end
+
+plot(x(1,:))
