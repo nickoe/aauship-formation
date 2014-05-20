@@ -1,6 +1,6 @@
 %% Simulation of AAUSHIP in open loop
 
-% clear all
+clear all
 r_g = [0.03 0 0.03]'; % location of CG with respect to CO
 % r_g = [-0.46 0 -3.54]'; % TP-MB-shipmod.pdf container ship
 I_g = [ 6.5406e-02  -1.2600e-02  -5.3593e-02
@@ -17,7 +17,7 @@ MRB = [ m*eye(3)     -m*Smtrx(r_g)
 MRB = [MRB(1:2,1:2) MRB(1:2,4:6)
        MRB(4:6,1:2) MRB(4:6,4:6)]; % 5DOF, without heave
     
-
+ 
 % CRB = m2c(MRB,nu) % rigid body Coriolis matrix, page 56 fossen
 
 % linear hydrodynamic damping
@@ -61,7 +61,7 @@ G(3,3) = K_phi;
 G(4,4) = M_theta;
 
 % Input forces
-% tau = [ 1 0 0 0 0]';
+tau = [ 0 0 0 0 0]';
 
 % Initial states
 x0 = [0     % Surge pos (x)
@@ -73,26 +73,25 @@ x0 = [0     % Surge pos (x)
       0     % Sway vel (v)
       1     % Roll vel (p)
       0     % Pitch vel (q)
-      0];   % Yaw vel (r)
+      0]';   % Yaw vel (r)
 
 % (7.219) fossen
 A = [zeros(5,5) eye(5)
      -inv(MRB)*G  -inv(MRB)*D];
 B = [zeros(5,5)
      inv(MRB)  ];
+ 
+stop = 100;
+x = zeros(stop,10);
+x(1,:) = x0;
+xdot = zeros(stop,10);
 
-% for i = 1:10
-%     xdot(:,i) = A*x(:,i) + B*tau;
-%     x(:,i+1)=xdot(:,i)+x(:,i); % Euler integration, now assuming dt = 1, dt*xdot when not true
-% end
+for i = 1:stop
+    xdot(i,:) = A*x(i,:)' + B*tau;
+    x(i+1,:)  = xdot(i,:) + x(i,:); % Euler integration, now assuming dt = 1, dt*xdot when not true
+end
 
-%%
-t = 0:0.01:400;
-u = zeros(5,length(t));
-C = eye(10,10);
-sys = ss(A,B,C,0);
-[y,t,x] = lsim(sys,u,t,x0);
-% plot(t,x(:,1), t,x(:,2), t,x(:,3))
+t = 1:i+1;
 subplot(2,1,1)
 plot(t,x(:,1), t,x(:,2), t,x(:,3));
 legend('surge pos', 'sway pos', 'roll pos')
@@ -100,3 +99,17 @@ legend('surge pos', 'sway pos', 'roll pos')
 subplot(2,1,2)
 plot(t,x(:,6), t,x(:,7), t,x(:,8));
 legend('surge vel', 'sway vel', 'roll vel')
+
+%%
+% t = 0:0.01:400;
+% u = zeros(5,length(t));
+% C = eye(10,10);
+% sys = ss(A,B,C,0);
+% [y,t,x] = lsim(sys,u,t,x0);
+% subplot(2,1,1)
+% plot(t,x(:,1), t,x(:,2), t,x(:,3));
+% legend('surge pos', 'sway pos', 'roll pos')
+% 
+% subplot(2,1,2)
+% plot(t,x(:,6), t,x(:,7), t,x(:,8));
+% legend('surge vel', 'sway vel', 'roll vel')

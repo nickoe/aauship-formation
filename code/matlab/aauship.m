@@ -15,8 +15,8 @@ function [ xdot ] = aauship( x, tau )
 %   State vector: x = [u v r x y psi]
 
 % Check of input and state dimensions
-if (length(x)  ~= 6),error('x-vector must have dimension 6!');end
-if (length(tau) ~= 2),error('tau-vector must have dimension 2!');end
+% if (length(x)  ~= 6),error('x-vector must have dimension 6!');end
+% if (length(tau) ~= 2),error('tau-vector must have dimension 2!');end
 
 theta = 10*pi/180; %[rad]
 m = 12; %[kg]
