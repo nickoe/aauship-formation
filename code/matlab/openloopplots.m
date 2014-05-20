@@ -1,10 +1,13 @@
 %% Simulation of AAUSHIP in open loop
 
-clear all
+% clear all
 r_g = [0.03 0 0.03]'; % location of CG with respect to CO
 I_g = [ 6.5406e-02  -1.2600e-02  -5.3593e-02
        -1.2600e-02   1.0892e+00  -1.0800e-03
        -5.3593e-02  -1.0800e-03   1.1068e+00]; % inertia tensor, calculated in inertia.m
+   I_g = [ 6.5406e-02  0 0
+       0   1.0892e+00  0
+       0 0   1.1068e+00];
 m   = 13;             % mass
 
 % rigid body mass matrix, page 53 fossen
@@ -37,16 +40,16 @@ Yr = 118.2;
 Kv = 25.0;
 Kp = -3.0;
 Kr = 0.8;
-Mq = 1;
+Mq = -1;
 Nv = -300;
 Np = -8.0;
 Nr = -290;
 
-D = [Xu  0  0  0  0
+D = -[Xu  0  0  0  0
       0 Yv Yp  0 Yr
       0 Kv Kp  0 Kr
       0  0  0 Mq  0
-      0 Nv Np  0 Nr];
+      0 Nv Np  0 Nr]*10^-5;
      
 
 % linear restoring forces matrix
@@ -60,17 +63,24 @@ G(4,4) = M_theta;
 tau = [ 1 0 0 0 0]';
 
 % Initial states
-x(:,1) = [0 0 0 0 0 0 0 0 0 0]';
+x0 = [0 0 0 0 0 2 0 0 0 0]';
 
 % (7.219) fossen
 A = [zeros(5,5) eye(5)
-     -inv(MRB)*G  -inv(MRB)*D] 
+     -inv(MRB)*G  -inv(MRB)*D];
 B = [zeros(5,5)
-     inv(MRB)  ]
+     inv(MRB)  ];
 
-for i = 1:10
-    xdot(:,i) = A*x(:,i) + B*tau
-    x(:,i+1)=xdot(:,i)+x(:,i); % Euler integration, now assuming dt = 1, dt*xdot when not true
-end
+% for i = 1:10
+%     xdot(:,i) = A*x(:,i) + B*tau;
+%     x(:,i+1)=xdot(:,i)+x(:,i); % Euler integration, now assuming dt = 1, dt*xdot when not true
+% end
 
-plot(x(1,:))
+%%
+t = 0:0.01:10;
+u = zeros(5,length(t));
+C = eye(10,10);
+sys = ss(A,B,C,0);
+[y,t,x] = lsim(sys,u,t,x0);
+% plot(t,x(:,1), t,x(:,2), t,x(:,3))
+plot(t,x(:,6), t,x(:,7), t,x(:,8))
