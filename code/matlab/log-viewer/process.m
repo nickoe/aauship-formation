@@ -283,9 +283,10 @@ X_u = D
 xlabel('Time [s]')
 ylabel('Velocity [m/s]')
 legend('Test 1', 'Test 2', 'Test 3', 'Test 4', 'Test 5', 'Test6', 'Regression')
+title('Surge tests')
 text(25,0.4,{['k=' num2str(k)] ['s=' num2str(s)] ['X_u=' num2str(X_u)]})
 hold off
-% saveas(figure(150),'surgecoeffs.pdf')
+saveas(figure(150),'surgecoeffs.pdf')
 
 %% Determine Y_v, K_v and N_v.
 z_g = 0.03;
@@ -304,13 +305,14 @@ N_v = s * m * x_g
 xlabel('Time [s]')
 ylabel('Velocity [m/s]')
 legend('Estimate')
-text(4,0.02,{['k=' num2str(k)] ['s=' num2str(s)] ['Y_v=' num2str(Y_v)] ['K_v=' num2str(K_v)] ['N_v=' num2str(N_v)]})
+title('Estimate of sway')
+text(4,0.035,{['k=' num2str(k)] ['s=' num2str(s)] ['Y_v=' num2str(Y_v)] ['K_v=' num2str(K_v)] ['N_v=' num2str(N_v)]})
 hold off
-% saveas(figure(151),'swaycoeffs.pdf')
+saveas(figure(151),'swaycoeffs.pdf')
 
 
 %% Plotting data for Y_r, K_r and N_r, propellor
-figure(151)
+figure(152)
 clf;
 k = 0.9;
 s = 0.28;
@@ -338,18 +340,22 @@ plot(x3-x3(1),diff(heading3),'k')
 plot(x4-x4(1),diff(heading4),'c')
 plot(x5-x5(1),diff(heading5),'m')
 plot(x6-x6(1),diff(heading6)-0.5,'Color',[0.9 0.3 0.2])
-plot(x-x(1),k*exp(-s*(x-x(1)))-0.18,'b')
-plot(x-x(1),k1*exp(-s1*(x-x(1))),'r')
+plot(x6-x6(1),k*exp(-s*(x6-x6(1)))-0.18,'b')
+plot(x6-x6(1),k1*exp(-s1*(x6-x6(1))),'r')
 
 xlabel('Time [s]')
 ylabel('Velocity [degree/s]')
-title('Propeller, cw and ccw')
+legend('Test 1', 'Test 2', 'Test 3', 'Test 4', 'Test 5', 'Test6', 'Regression1', 'Regression2')
+title('Yaw, Propeller, cw and ccw')
+text(10,-2,{['k=' num2str(k)] ['s=' num2str(s)] ['k1=' num2str(k1)] ['s1=' num2str(s1)]})
 
 grid on
 hold off
 
+saveas(figure(152),'yawcoeffspropellor.pdf')
+
 %% Plotting data for Y_r, K_r and N_r, bow thrusters
-figure(152)
+figure(153)
 clf;
 k = 1.6;
 s = 0.25;
@@ -376,15 +382,19 @@ plot(x3-x3(1),diff(heading3)-0.4,'k')
 plot(x4-x4(1),diff(heading4),'c')
 plot(x5-x5(1),diff(heading5)+0.2,'m')
 
-plot(x-x(1),k*exp(-s*(x-x(1)))-0.18,'b')
-plot(x-x(1),k1*exp(-s1*(x-x(1))),'r')
+plot(x5-x5(1),k*exp(-s*(x5-x5(1)))-0.18,'b')
+plot(x5-x5(1),k1*exp(-s1*(x5-x5(1))),'r')
 
 xlabel('Time [s]')
 ylabel('Velocity [degree/s]')
-title('Bow thruster, cw and ccw')
+legend('Test 1', 'Test 2', 'Test 3', 'Test 4', 'Test 5', 'Regression1', 'Regression2')
+title('Yaw, Bow thruster, cw and ccw')
+text(7,-6,{['k=' num2str(k)] ['s=' num2str(s)] ['k1=' num2str(k1)] ['s1=' num2str(s1)]})
 
 grid on
 hold off
+
+saveas(figure(153),'yawcoeffsbow.pdf')
 
 %%
 % Determine Y_r, K_r and N_r
@@ -398,7 +408,7 @@ K_r = s * -I(3,1)
 N_r = s * I(3,3)
 
 %% Determine Y_p and N_p
-figure(153)
+figure(154)
 % From roll-regression
 % y = k*exp(-s*t)*(-cos(omega*t))+h;
 % Constants to fit
@@ -425,10 +435,19 @@ m = 13; %[kg]
 t = 0:300;
 I_zx = 0.0536;
 I_x = 0.0654;
-
+grid on
 % plot(t,k.*exp(-s.*t).*(-cos(omega.*t))+h,'r',t,k1.*exp(-s1.*t).*(-cos(omega1.*t))+h1,'b',t,k2.*exp(-s2.*t).*(-cos(omega2.*t))+h2,'g')
 plot(diff(k2.*exp(-s2.*t).*(-cos(omega2.*t))+h2),'r')
 plot((k2.*s2.*exp(-s2.*t).*cos(omega2.*t)+k2.*exp(-s2.*t).*sin(omega2.*t).*omega2),'b')
+
+xlabel('Time [samples]')
+ylabel('Velocity [degree/s]')
+legend('Velocity from regression of position', 'Regression of velocity')
+title('Roll velocity')
+text(250,-1.25,{['k=' num2str(k2)] ['s=' num2str(s2)] ['omega=' num2str(omega2)]})
+
+saveas(figure(154),'rollcoeffsvel.pdf')
+
 Y_p = 2 * -m * z_g * s2
 K_p = 2 * I(1,1) * s2
 N_p = 2 * I(1,3) * s2
