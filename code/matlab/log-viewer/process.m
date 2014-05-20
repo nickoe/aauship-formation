@@ -43,7 +43,6 @@ lon = pos(2,:);
 % plot_google_map('maptype','satellite')
 % title('WGS84')
 
-
 %% Tangent plance coordinates xyz (not verified)
 % latrad = lat*pi/180;
 % lonrad = lon*pi/180;
@@ -62,7 +61,8 @@ lon = pos(2,:);
 % %index = 4;
 % %meanlat = latrad(1);
 % %meanlon = lonrad(1);
-%  meanlat = 57.015179789287792*pi/180;
+%  meanlat = 57.015179789287792*pi/1
+
 %  meanlon = 9.985062449450744*pi/180;
 % meanhei = hei(1);
 % % [a b c]=wgs842ecef(meanlat,meanlon,meanhei);
@@ -83,14 +83,15 @@ lon = pos(2,:);
 % plot(T(:,2),T(:,1))
 % title('Raw GPS log (localframe)')
 
-
 %% ADIS16405 Inertial Measurement Unit
 supply = imudata(:,1)*0.002418; % Scale 2.418 mV
 gyro = imudata(:,2:4)*0.05; % Scale 0.05 degrees/sec
 accl = (imudata(:,5:7)*0.00333)*9.82;   %/333)*9.82; % Scale 3.33 mg (g is gravity, that is g-force)
 magn = imudata(:,8:10)*0.0005; % 0.5 mgauss
 temp = imudata(:,11)*0.14; % 0.14 degrees celcius 
-aux_adc = imudata(:,12)*0.806; % 0.mV180/pi
+aux_adc = imudata(:,12)*0.806; % 0.mV
+
+180/pi
 imutime = imudata(:,13)-starttime; % Seconds since start, periodic timing determined by imu
 
 % figure(2)
@@ -116,6 +117,8 @@ imutime = imudata(:,13)-starttime; % Seconds since start, periodic timing determ
 % ylabel('[V, degC, V]')
 % xlabel('Time [s]')
 % legend('Supply','Temp','ADC')
+
+
 
 %% Heading
 % X_H = X*cos(pitch) + Y*sin(roll)*sin(pitch) - Z*cos(roll)*sin(pitch)
@@ -145,7 +148,6 @@ grid on
 % plot3(bias(1), bias(2), bias(3),'r*')
 % hold off
 
-
 %% MEMSENS stuff
 magnbias = [magn(:,1)-bias(1) magn(:,2)-bias(2) magn(:,3)-bias(3)];
 imu2beh(gyro, accl/9.82, magnbias, length(gyro));
@@ -163,7 +165,6 @@ beh = calc_beh_main('testfile.mat',false,true,true,false);
 %     pause(0.03)
 % end
 % hold off
-
 
 %% Echosounder data
 echo.depth.value=NaN;
@@ -308,7 +309,7 @@ hold off
 % saveas(figure(151),'swaycoeffs.pdf')
 
 
-%% Determine Y_r, K_r and N_r 1
+%% Plotting data for Y_r, K_r and N_r, propellor
 figure(151)
 clf;
 k = 0.9;
@@ -347,7 +348,7 @@ title('Propeller, cw and ccw')
 grid on
 hold off
 
-%% Determine Y_r, K_r and N_r 2
+%% Plotting data for Y_r, K_r and N_r, bow thrusters
 figure(152)
 clf;
 k = 1.6;
@@ -385,7 +386,16 @@ title('Bow thruster, cw and ccw')
 grid on
 hold off
 
+%%
+% Determine Y_r, K_r and N_r
 
+% s will be the average from the fittings from bow and propellor due to
+% they should be similar
+m = 13; %[kg]
+s = (0.25+0.2+0.28+0.22)/4;
+Y_r = s * m * x_g
+K_r = s * -I(3,1)
+N_r = s * I(3,3)
 
 %% Determine Y_p and N_p
 figure(153)
@@ -399,38 +409,26 @@ s = 0.007;
 omega = 0.103;
 h = 3;
 m = 13; %[kg]
+
 k1 = 20;
 s1 = 0.0059;
 omega1 = 0.103;
 h1 = 2;
 m = 13; %[kg]
+
 k2 = 20;
 s2 = (s+s1)/2;
 omega2 = 0.103;
 h2 = (h+h1)/2;
 m = 13; %[kg]
+
 t = 0:300;
 I_zx = 0.0536;
 I_x = 0.0654;
+
 % plot(t,k.*exp(-s.*t).*(-cos(omega.*t))+h,'r',t,k1.*exp(-s1.*t).*(-cos(omega1.*t))+h1,'b',t,k2.*exp(-s2.*t).*(-cos(omega2.*t))+h2,'g')
 plot(diff(k2.*exp(-s2.*t).*(-cos(omega2.*t))+h2),'r')
 plot((k2.*s2.*exp(-s2.*t).*cos(omega2.*t)+k2.*exp(-s2.*t).*sin(omega2.*t).*omega2),'b')
 Y_p = 2 * -m * z_g * s2
 K_p = 2 * I(1,1) * s2
 N_p = 2 * I(1,3) * s2
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

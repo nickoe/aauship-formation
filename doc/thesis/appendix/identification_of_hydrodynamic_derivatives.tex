@@ -535,14 +535,19 @@ The rigid body constants for the vessel can be found in table \ref{tab:constants
 	\toprule
   Coefficient & Value \\
   \midrule
-  $m$ & 2 \\
-  $x_g$ & 2 \\
-  $z_g$ & 2\\
-  $I_{xz}$ & 2 \\
-  $I_z$ & 2 \\
-  $I_y$ & 2 \\
-  $I_x$ & 2 \\
-  $I_{zx}$ & 2 \\
+  $m$ & 13 \\
+  $x_g$ & 0.03 \\
+  $y_g$ & 0\\
+  $z_g$ & 0.03\\
+  $I_{xz}$ & -0.05359 \\
+  $I_{zx}$ & -0.05359 \\
+  $I_{xy}$ & -0.01260 \\
+  $I_{yx}$ & -0.01260 \\
+  $I_{yz}$ & -0.00108 \\
+  $I_{zy}$ & -0.00108 \\
+  $I_z$ & 1.10675 \\
+  $I_y$ & 1.08921 \\
+  $I_x$ & 0.06541 \\
   \bottomrule
 \end{tabular}
 \caption{Rigid body mass matrix constants for $M_{RB}$}
@@ -559,9 +564,9 @@ The rigid body constants for the vessel can be found in table \ref{tab:constants
   $Y_v$ & 32.5 \\
   $K_v$ & -0.975 \\
   $N_v$ & 0.975 \\
-  $N_r$ & 2 \\
-  $Y_r$ & 2 \\
-  $K_r$ & 2 \\
+  $N_r$ & 0.26285 \\
+  $Y_r$ & 0.09263 \\
+  $K_r$ & 0.01273 \\
   $Y_p$ & -0.00503 \\
   $K_p$ & 0.00084 \\
   $N_p$ & -0.00069 \\
@@ -590,11 +595,11 @@ This makes the linear damping matrix as:
 \begin{align}
 D = -
 \begin{bmatrix}
-X_u & 0 & 0 & 0 & 0\\
-0 & Y_v & Y_p & 0 & Y_r\\
-0 & K_v & 0.1677 & 0 & K_r\\
-0 & 0 & 0 & 0.8497 & 0\\
-0 & N_v & N_p & 0 & N_r
+2.86 & 0 & 0 & 0 & 0\\
+0 & 32.5 & -0.00503 & 0 & 0.09263\\
+0 & -0.975 & 0.00084 & 0 & 0.01273\\
+0 & 0 & 0 & 0.0712 & 0\\
+0 & 0.975 & -0.00069 & 0 & 0.26285
 \end{bmatrix}
 \end{align}
 and the restoring for matrix as:
@@ -603,8 +608,8 @@ G = -
 \begin{bmatrix}
 0 & 0 & 0 & 0 & 0\\
 0 & 0 & 0 & 0 & 0\\
-0 & 0 & 0.1385 & 0 & 0\\
-0 & 0 & 0 & 0.1788 & 0\\
+0 & 0 & 0.0007 & 0 & 0\\
+0 & 0 & 0 & 0.0150 & 0\\
 0 & 0 & 0 & 0 & 0
 \end{bmatrix}
 \end{align}
@@ -612,11 +617,11 @@ and the rigid body matrix as:
 \begin{align}
 M_{RB} =
 \begin{bmatrix}
-m & 0 & 0 & mz_g & -my_g\\
-0 & m & -mz_g & 0 & mx_g\\
-0 & -mz_g & I_x & -I_{xy} & -I_{xz}\\
-mz_g & 0 & -I_{yx} & I_y & -I_{yz}\\
--my_g & mx_g & -I_{zx} & -I_{zy} & I_z
+13 & 0 & 0 & 13\cdot0.03 & -13\cdot0\\
+0 & 13 & -13\cdot0.03 & 0 & 13\cdot0.03\\
+0 & -13\cdot0.03 & 0.06541 & -0.01260 & -0.05359\\
+13\cdot0.03 & 0 & -0.01260 & 1.08921 & -0.00108\\
+-13\cdot0 & 13\cdot0.03 & -0.05359 & -0.00108 & 1.10675
 \end{bmatrix}
 \end{align}
 \section{Discussion}
