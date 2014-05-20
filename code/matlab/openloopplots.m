@@ -46,17 +46,17 @@ Nr =  0.26285;
 % Np = -8.0;
 % Nr = -290;
 
-D = -[Xu  0  0  0  0
+D = [Xu  0  0  0  0
        0 Yv Yp  0 Yr
        0 Kv Kp  0 Kr
        0  0  0 Mq  0
        0 Nv Np  0 Nr];
-     
+
 
 % linear restoring forces matrix
 G = zeros(5,5);
-K_phi   = -0.1385;
-M_theta = -0.1788;
+K_phi   = 0.0007;
+M_theta = 0.0150;
 G(3,3) = K_phi;
 G(4,4) = M_theta;
 
@@ -71,7 +71,7 @@ x0 = [0     % Surge pos (x)
       0     % Yaw pos (psi)
       1     % Surge vel (u)
       0     % Sway vel (v)
-      0     % Roll vel (p)
+      1     % Roll vel (p)
       0     % Pitch vel (q)
       0];   % Yaw vel (r)
 
@@ -87,10 +87,16 @@ B = [zeros(5,5)
 % end
 
 %%
-t = 0:0.01:4;
+t = 0:0.01:400;
 u = zeros(5,length(t));
 C = eye(10,10);
 sys = ss(A,B,C,0);
 [y,t,x] = lsim(sys,u,t,x0);
 % plot(t,x(:,1), t,x(:,2), t,x(:,3))
-plot(t,x(:,6), t,x(:,7), t,x(:,8))
+subplot(2,1,1)
+plot(t,x(:,1), t,x(:,2), t,x(:,3));
+legend('surge pos', 'sway pos', 'roll pos')
+
+subplot(2,1,2)
+plot(t,x(:,6), t,x(:,7), t,x(:,8));
+legend('surge vel', 'sway vel', 'roll vel')
