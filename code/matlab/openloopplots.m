@@ -2,12 +2,13 @@
 
 % clear all
 r_g = [0.03 0 0.03]'; % location of CG with respect to CO
+% r_g = [-0.46 0 -3.54]'; % TP-MB-shipmod.pdf container ship
 I_g = [ 6.5406e-02  -1.2600e-02  -5.3593e-02
        -1.2600e-02   1.0892e+00  -1.0800e-03
        -5.3593e-02  -1.0800e-03   1.1068e+00]; % inertia tensor, calculated in inertia.m
-   I_g = [ 6.5406e-02  0 0
-       0   1.0892e+00  0
-       0 0   1.1068e+00];
+%    I_g = [ 6.5406e-02  0 0
+%        0   1.0892e+00  0
+%        0 0   1.1068e+00];
 m   = 13;             % mass
 
 % rigid body mass matrix, page 53 fossen
@@ -20,36 +21,36 @@ MRB = [MRB(1:2,1:2) MRB(1:2,4:6)
 % CRB = m2c(MRB,nu) % rigid body Coriolis matrix, page 56 fossen
 
 % linear hydrodynamic damping
-% Xu =  2.86;
-% Yv = 32.5;
-% Yp = -0.00503
-% Yr
-% Kv = -0.975;
-% Kp =  0.1677;
-% Kr
-% Mq =  0.0712;
-% Nv =  0.975;
-% Np = -0.00084;
-% Nr
+Xu =  2.86;
+Yv = 32.5;
+Yp = -0.00503;
+Yr =  0.09263;
+Kv = -0.975;
+Kp =  0.00084;
+Kr =  0.01273;
+Mq =  0.0712;
+Nv =  0.975;
+Np = -0.00069;
+Nr =  0.26285;
 
 % Data from TP-MB-shipmod.pdf
-Xu = -226.2;
-Yv = -725.0;
-Yp = -3.4;
-Yr = 118.2;
-Kv = 25.0;
-Kp = -3.0;
-Kr = 0.8;
-Mq = -1;
-Nv = -300;
-Np = -8.0;
-Nr = -290;
+% Xu = -226.2;
+% Yv = -725.0;
+% Yp = -3.4;
+% Yr = 118.2;
+% Kv = 25.0;
+% Kp = -3.0;
+% Kr = 0.8;
+% Mq = -1;
+% Nv = -300;
+% Np = -8.0;
+% Nr = -290;
 
 D = -[Xu  0  0  0  0
-      0 Yv Yp  0 Yr
-      0 Kv Kp  0 Kr
-      0  0  0 Mq  0
-      0 Nv Np  0 Nr]*10^-5;
+       0 Yv Yp  0 Yr
+       0 Kv Kp  0 Kr
+       0  0  0 Mq  0
+       0 Nv Np  0 Nr];
      
 
 % linear restoring forces matrix
@@ -60,10 +61,19 @@ G(3,3) = K_phi;
 G(4,4) = M_theta;
 
 % Input forces
-tau = [ 1 0 0 0 0]';
+% tau = [ 1 0 0 0 0]';
 
 % Initial states
-x0 = [0 0 0 0 0 2 0 0 0 0]';
+x0 = [0     % Surge pos (x)
+      0     % Sway pos (y)
+      0     % Roll pos (phi)
+      0     % Pitch pos (theta)
+      0     % Yaw pos (psi)
+      1     % Surge vel (u)
+      0     % Sway vel (v)
+      0     % Roll vel (p)
+      0     % Pitch vel (q)
+      0];   % Yaw vel (r)
 
 % (7.219) fossen
 A = [zeros(5,5) eye(5)
@@ -77,7 +87,7 @@ B = [zeros(5,5)
 % end
 
 %%
-t = 0:0.01:10;
+t = 0:0.01:4;
 u = zeros(5,length(t));
 C = eye(10,10);
 sys = ss(A,B,C,0);
