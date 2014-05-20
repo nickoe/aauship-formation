@@ -81,35 +81,46 @@ A = [zeros(5,5) eye(5)
 B = [zeros(5,5)
      inv(MRB)  ];
  
-stop = 100;
+C = eye(10,10);
+
+sys = ss(A,B,C,0);
+sysd = c2d(sys,1,'zoh');
+Ad = sysd.a;
+Bd = sysd.b;
+
+stop = 400;
 x = zeros(stop,10);
 x(1,:) = x0;
 xdot = zeros(stop,10);
-
 for i = 1:stop
-    xdot(i,:) = A*x(i,:)' + B*tau;
-    x(i+1,:)  = xdot(i,:) + x(i,:); % Euler integration, now assuming dt = 1, dt*xdot when not true
+    x(i+1,:) = Ad*x(i,:)' + Bd*tau;
 end
 
-t = 1:i+1;
+figure(1)
 subplot(2,1,1)
+t = 1:i+1;
 plot(t,x(:,1), t,x(:,2), t,x(:,3));
+% plot(t,y(:,1), t,y(:,2), t,y(:,3));
 legend('surge pos', 'sway pos', 'roll pos')
 
 subplot(2,1,2)
 plot(t,x(:,6), t,x(:,7), t,x(:,8));
 legend('surge vel', 'sway vel', 'roll vel')
+title('wop')
 
 %%
-% t = 0:0.01:400;
+% figure(2)
+% t = 0:1:400;
 % u = zeros(5,length(t));
 % C = eye(10,10);
 % sys = ss(A,B,C,0);
-% [y,t,x] = lsim(sys,u,t,x0);
+% [y,t,x] = lsim(sysd,u,t,x0);
 % subplot(2,1,1)
 % plot(t,x(:,1), t,x(:,2), t,x(:,3));
+% % plot(t,y(:,1), t,y(:,2), t,y(:,3));
 % legend('surge pos', 'sway pos', 'roll pos')
 % 
 % subplot(2,1,2)
 % plot(t,x(:,6), t,x(:,7), t,x(:,8));
 % legend('surge vel', 'sway vel', 'roll vel')
+% title('lsim')
