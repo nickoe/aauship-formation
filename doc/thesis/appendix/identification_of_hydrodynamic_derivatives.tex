@@ -481,20 +481,37 @@ The parameters in pitch and roll is determined by fitting data to \textit{method
 
 \section{Results}
 \subsubsection{Surge test}
-\missingfigure{Maalinger af acceleration fra 0 til konstant hastighed
-+ Maaling af deceleration med 0 input fra konstant hastighed +
-regræssionskurve af disse}
+\begin{figure}[H]
+	\centering
+	\includegraphics{plot/surgecoeffs}
+	\caption{Surge tests with input on both thrusters.}
+	\label{fig:pbtest}
+\end{figure}
+
 \subsubsection{Sway test}
 While performing tests with sway it was rather difficult to get any reliable data from measurements. Weather conditions was almost perfect but there was a slight wind. This seemed from measurements to be enough to counteract the forces added by the bow thrusters. The vessel was not moving much over time, thus the measurements seems unreliable. Therefore is the parameters from sway approximated from observations of how fast the vessel was moving over time. The constants which needs to be approximated manually is $Y_\nu$, $K_\nu$ and $N_\nu$.
 
 it is assumed, from observations, that the vessel moves in sway with a constant velocity being $0.1\frac{m}{s}$. From this velocity it is estimated that the vessel was on hold after 1 second. This gives the following damping:
-\missingfigure{Maalinger af acceleration fra 0 til konstant hastighed
-+ Maaling af deceleration med 0 input fra konstant hastighed +
-regræssionskurve af disse}
+\begin{figure}[H]
+	\centering
+	\includegraphics{plot/swaycoeffs}
+	\caption{Estimated sway velocity. The performed tests did not give enough response amplitude to estimate this, so it is deducted from observations.}
+	\label{fig:swaycoeffs}
+\end{figure}
+
 \subsubsection{Yaw test}
-\missingfigure{Maalinger af acceleration fra 0 til konstant vinkel
-hastighed + Maaling af deceleration med 0 input fra konstant vinkel
-hastighed + regræssionskurve af disse}
+\begin{figure}[H]
+	\centering
+	\includegraphics{plot/yawcoeffsbow}
+	\caption{Yaw tests with bow thrusters, both cw and ccw.}
+	\label{fig:yaw1}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics{plot/yawcoeffspropellor}
+	\caption{Yaw tests with propellers, both cw and ccw.}
+	\label{fig:yaw2}
+\end{figure}
 
 \newpage
 \subsubsection{Pitch test}
@@ -524,6 +541,12 @@ hastighed + regræssionskurve af disse}
 	\includegraphics{plot/rrtest}
 	\caption{Roll right test with Vicon, Starboard side pushed down.}
 	\label{fig:rrtest}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics{plot/rollcoeffsvel}
+	\caption{Roll angular velocity, differentiated from the position regression.}
+	\label{fig:rollvel}
 \end{figure}
 
 
