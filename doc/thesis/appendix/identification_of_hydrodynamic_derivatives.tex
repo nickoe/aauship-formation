@@ -215,11 +215,10 @@ steady state, as seen on figure~\vref{fig:harmonic-damping}. The
 damping must be determined by fitting \eqref{eq:kestcoswt} to the
 measured data, then this can be used to identify the coefficients for
 the second order differential equation. The procedure is illustrated by
-calculating it with the example of $K_p$ and $K_\varphi$.
+calculating it with the example of $K_p$ and $K_\varphi$. The two coefficients from the restoring matrix is given in \ref{eq:restoreforce}.
 
-The damping coefficient $K_p$ can be found from the dynamic equation
-of roll by: \todo{Indtast (4.26)  et sted of referet til den herfra,
-med hensyn til $-K_\varphi$.}
+The damping coefficients $K_p$ and $K_\varphi$ can be found from the dynamic equation
+of roll by utilizing $M_{RB}$, $D$ and the restoring matrix $G$:
 \begin{align}
 I_x\dot p + K_pp + K_\varphi\varphi &= 0
 \label{eq:solveddyneq}
@@ -481,20 +480,37 @@ The parameters in pitch and roll is determined by fitting data to \textit{method
 
 \section{Results}
 \subsubsection{Surge test}
-\missingfigure{Maalinger af acceleration fra 0 til konstant hastighed
-+ Maaling af deceleration med 0 input fra konstant hastighed +
-regræssionskurve af disse}
+\begin{figure}[H]
+	\centering
+	\includegraphics{plot/surgecoeffs}
+	\caption{Surge tests with input on both thrusters.}
+	\label{fig:pbtest}
+\end{figure}
+
 \subsubsection{Sway test}
 While performing tests with sway it was rather difficult to get any reliable data from measurements. Weather conditions was almost perfect but there was a slight wind. This seemed from measurements to be enough to counteract the forces added by the bow thrusters. The vessel was not moving much over time, thus the measurements seems unreliable. Therefore is the parameters from sway approximated from observations of how fast the vessel was moving over time. The constants which needs to be approximated manually is $Y_\nu$, $K_\nu$ and $N_\nu$.
 
 it is assumed, from observations, that the vessel moves in sway with a constant velocity being $0.1\frac{m}{s}$. From this velocity it is estimated that the vessel was on hold after 1 second. This gives the following damping:
-\missingfigure{Maalinger af acceleration fra 0 til konstant hastighed
-+ Maaling af deceleration med 0 input fra konstant hastighed +
-regræssionskurve af disse}
+\begin{figure}[H]
+	\centering
+	\includegraphics{plot/swaycoeffs}
+	\caption{Estimated sway velocity. The performed tests did not give enough response amplitude to estimate this, so it is deducted from observations.}
+	\label{fig:swaycoeffs}
+\end{figure}
+
 \subsubsection{Yaw test}
-\missingfigure{Maalinger af acceleration fra 0 til konstant vinkel
-hastighed + Maaling af deceleration med 0 input fra konstant vinkel
-hastighed + regræssionskurve af disse}
+\begin{figure}[H]
+	\centering
+	\includegraphics{plot/yawcoeffsbow}
+	\caption{Yaw tests with bow thrusters, both cw and ccw.}
+	\label{fig:yaw1}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics{plot/yawcoeffspropellor}
+	\caption{Yaw tests with propellers, both cw and ccw.}
+	\label{fig:yaw2}
+\end{figure}
 
 \newpage
 \subsubsection{Pitch test}
@@ -525,10 +541,15 @@ hastighed + regræssionskurve af disse}
 	\caption{Roll right test with Vicon, Starboard side pushed down.}
 	\label{fig:rrtest}
 \end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics{plot/rollcoeffsvel}
+	\caption{Roll angular velocity, differentiated from the position regression.}
+	\label{fig:rollvel}
+\end{figure}
 
 
 The rigid body constants for the vessel can be found in table \ref{tab:constants} and the results from measurements and estimation can be found in table \ref{tab:dmatrix}.
-\todo{Disse skal måles op og sættes ind}
 \begin{table}[htbp]
 \centering
 \begin{tabular}{ccc}
@@ -624,8 +645,9 @@ M_{RB} =
 -13\cdot0 & 13\cdot0.03 & -0.05359 & -0.00108 & 1.10675
 \end{bmatrix}
 \end{align}
-\section{Discussion}
+\section{Discussion and conclusion}
+The tests regarding surge, sway and yaw have been performed in a lake, where wind could have had an influence on the measurement data. The disturbance from the wind would dominate most in the sway tests due to the lack of power from the bow thrusters. The wind was not of greater speed at the day of testing, but yet could make the vessel stand still during sway tests. Thus have the sway parameters been estimated from observations and not from trustworthy measurement data. The wind did not have any significant impact of measurements during surge and yaw tests.
 
+The pitch and roll tests have been made in a pool in a lab with Vicon system. These tests is not as precise as they could be, due to reflecting waves from the side of the pool. Though is the dampings determined from these data, but only from the first part of the data. Therefore is the regressions made to fit the first part of the data more than the later part of the data. Thus are these taken as approved regressions and a fair approximation of the angular positions.
 
-\section{Conclusion}
-
+The coefficients found are compared with coefficients from other models of ships to verify the operational signs. Almost all the signs of the coefficients are of the same operational sign, thus is the parameters approved. The coefficients with changed sign may arise from symmetry and asymmetry of the vessels compared.
