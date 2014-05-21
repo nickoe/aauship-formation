@@ -215,11 +215,10 @@ steady state, as seen on figure~\vref{fig:harmonic-damping}. The
 damping must be determined by fitting \eqref{eq:kestcoswt} to the
 measured data, then this can be used to identify the coefficients for
 the second order differential equation. The procedure is illustrated by
-calculating it with the example of $K_p$ and $K_\varphi$.
+calculating it with the example of $K_p$ and $K_\varphi$. The two coefficients from the restoring matrix is given in \ref{eq:restoreforce}.
 
-The damping coefficient $K_p$ can be found from the dynamic equation
-of roll by: \todo{Indtast (4.26)  et sted of referet til den herfra,
-med hensyn til $-K_\varphi$.}
+The damping coefficients $K_p$ and $K_\varphi$ can be found from the dynamic equation
+of roll by utilizing $M_{RB}$, $D$ and the restoring matrix $G$:
 \begin{align}
 I_x\dot p + K_pp + K_\varphi\varphi &= 0
 \label{eq:solveddyneq}
@@ -551,7 +550,6 @@ it is assumed, from observations, that the vessel moves in sway with a constant 
 
 
 The rigid body constants for the vessel can be found in table \ref{tab:constants} and the results from measurements and estimation can be found in table \ref{tab:dmatrix}.
-\todo{Disse skal måles op og sættes ind}
 \begin{table}[htbp]
 \centering
 \begin{tabular}{ccc}
@@ -647,8 +645,9 @@ M_{RB} =
 -13\cdot0 & 13\cdot0.03 & -0.05359 & -0.00108 & 1.10675
 \end{bmatrix}
 \end{align}
-\section{Discussion}
+\section{Discussion and conclusion}
+The tests regarding surge, sway and yaw have been performed in a lake, where wind could have had an influence on the measurement data. The disturbance from the wind would dominate most in the sway tests due to the lack of power from the bow thrusters. The wind was not of greater speed at the day of testing, but yet could make the vessel stand still during sway tests. Thus have the sway parameters been estimated from observations and not from trustworthy measurement data. The wind did not have any significant impact of measurements during surge and yaw tests.
 
+The pitch and roll tests have been made in a pool in a lab with Vicon system. These tests is not as precise as they could be, due to reflecting waves from the side of the pool. Though is the dampings determined from these data, but only from the first part of the data. Therefore is the regressions made to fit the first part of the data more than the later part of the data. Thus are these taken as approved regressions and a fair approximation of the angular positions.
 
-\section{Conclusion}
-
+The coefficients found are compared with coefficients from other models of ships to verify the operational signs. Almost all the signs of the coefficients are of the same operational sign, thus is the parameters approved. The coefficients with changed sign may arise from symmetry and asymmetry of the vessels compared.

@@ -290,10 +290,11 @@ text(25,0.4,{['k=' num2str(k)] ['s=' num2str(s)] ['X_u=' num2str(X_u)]})
 hold off
 saveas(figure(150),'surgecoeffs.pdf')
 
-%% Determine Y_v, K_v and N_v.
+%% Determine Y_v, K_v and N_v. Denne er blevet rettet lidt i, men er ikke opdateret til rapport, da der er lidt tvivl om dens rigtighed.
 z_g = 0.03;
 x_g = 0.03;
 figure(151)
+clf;
 set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
 set(gcf,'paperunits','centimeters')
 set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
@@ -302,7 +303,7 @@ hold on
 grid on
 x = 0:5;
 k = 0.1;
-s = 2.5;
+s = 1.5;
 plot(x,k*exp(-s*x),'o-','LineWidth',linewidth)
 Y_v = s * m
 K_v = s * -m * z_g
