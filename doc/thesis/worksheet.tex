@@ -1,23 +1,55 @@
 \input{preamble}
-\def\wkno{5}
+\def\wkno{6}
 \hypersetup{
   pdfsubject={Worksheet \#\wkno},
 }
+%\includeonly{mainmatter/sanity_check_on_model}
+\includeonly{appendix/identification_of_hydrodynamic_derivatives} 
 \begin{document}
 \author{14gr1034}
 \title{Worksheet \#\wkno}
 \date{\today}
 \maketitle
 \begin{center}
-\textit{This worksheet contains parts of the report. The list of
-contents and bibliography is included for reference. Included are a
-updated chapter for the test journal for parameter identification.
-The rest of the test for the appendix has been performed, data is not
-yet analysed.}
+\textit{This worksheet contains the appendix about the identification of the hydrodynamic derivatives with all the coefficients calculated.}
 \end{center}
 
-\includepdf[pages=7-8]{thesis}
-\includepdf[pages=41-53]{thesis}
-\includepdf[pages=65]{thesis}
+\frontmatter
+\include{frontmatter/frontpage}
+%\chapterstyle{nickoe}
+%\cleardoublepage
+\include{frontmatter/titlepage}
+\include{frontmatter/preface}
 
+%\cleardoublepage
+\tableofcontents
+\input{../manual/acronyms}
+
+\mainmatter
+\descpart{System design}{All the magic about the system}
+\include{mainmatter/introduction} % Talk specifically about the data from havnen?
+\include{mainmatter/formcontrol}
+\include{mainmatter/designs}
+\include{mainmatter/modelling}
+\include{mainmatter/thrust_allocation}
+
+\descpart{Simulation}{All the magic about the numerical part}
+\include{mainmatter/sanity_check_on_model}
+
+\cleardoublepage\descpart{Appendix}{%
+The appendix includes chapters which are important for the project, but not necessarily interesting to the reader of the report.}
+\appendix
+\include{appendix/ros}
+\include{appendix/identification_of_hydrodynamic_derivatives}
+\include{appendix/bollard_pull}
+\include{appendix/verification-of-attitude-with-a-camera}
+\include{appendix/manual}
+
+\backmatter
+\bibliographystyle{apalike}
+\bibliography{../manual/bib}
+\label{ch:litt}
+
+%\settocdepth{section}
+\listoftodos
 \end{document}
