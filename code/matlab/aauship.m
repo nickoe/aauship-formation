@@ -19,4 +19,3 @@ if (length(tau) ~= 5),error('tau-vector must have dimension 5!');end
 ss = load('ssaauship.mat');
 xdot = ss.Ad*x + ss.Bd*tau;
 end
-

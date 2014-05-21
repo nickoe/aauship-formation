@@ -1,6 +1,6 @@
 %% Simulation of AAUSHIP in open loop
 
-clear all
+% clear all
 r_g = [0.03 0 0.03]'; % location of CG with respect to CO
 % r_g = [-0.46 0 -3.54]'; % TP-MB-shipmod.pdf container ship
 I_g = [ 6.5406e-02  -1.2600e-02  -5.3593e-02
@@ -84,7 +84,7 @@ B = [zeros(5,5)
 C = eye(10,10);
 
 sys = ss(A,B,C,0);
-sysd = c2d(sys,1,'zoh');
+sysd = c2d(sys,0.1,'zoh');
 Ad = sysd.a;
 Bd = sysd.b;
 

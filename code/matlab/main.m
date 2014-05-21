@@ -28,8 +28,8 @@ track = [x(4:5,1)';track];
 % Main loop
 for i = 1:Nskip:N
 
-%     [xdot(:,i), U(i)] = mariner(x(:,i), rudderangle(i), 8); % SHIP
-    [xdot(1:6,i)] = aauship(x(1:6,i), [rudderangle(i);0]); % SHIP
+    [xdot(:,i), U(i)] = mariner(x(:,i), rudderangle(i), 8); % SHIP
+%     [xdot(1:6,i)] = aauship(x(1:6,i), [rudderangle(i);0]); % SHIP
 
     
     [headingdesired(i), wp_reached] = wp_gen(track(n,:),track(n+1,:),x(4:5,i)'); % WP Gen
@@ -52,11 +52,10 @@ for i = 1:Nskip:N
 end
 
 figure(1)
-% ship(x(4,:),x(5,:),rad2pipi(x(6,:)),'r');
+% ship(x(5,:),x(4,:),rad2pipi(x(6,:)),'r');
 % plot(x(5,:),x(4,:),'r.',[start(2),stop(2)]',[start(1),stop(1)]','b-o');
 plot(x(5,:),x(4,:),'r.',track(:,2),track(:,1),'b-o');
 
 ylabel('Northing [m]')
-
 xlabel('Easting [m]')
 axis equal
