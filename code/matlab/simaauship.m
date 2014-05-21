@@ -2,15 +2,19 @@
 
 clear all; clf;
 
-N = 1000;
+N = 500;
 x = zeros(N,10);
 x(1,:) = [0 0 0 0 0 2 0 0 0 0]';
 xdot = zeros(N,10);
-tau = [10 0 0 0 -0.05]';
+taus = [10 0 0 0 0.5]';
+tau = repmat(taus',N,1);
+taus = [10 0 0 0 -0.5]';
+tau(ceil(N/2)+1:N,:)  = repmat(taus',N/2,1);
+%% 
 NED = zeros(N,2);
 
 for k = 1:N
-    x(k+1,:) = aauship(x(k,:)', tau);
+    x(k+1,:) = aauship(x(k,:)', tau(k,:)');
     psi=x(k,5);
     Rz = [cos(psi) -sin(psi);
           sin(psi)  cos(psi)];
@@ -21,6 +25,7 @@ end
 
 %% Plot the results
 figure(1)
+clf
 for k = 1:10:N
     ship(NED(k,2),NED(k,1),-x(k,5)+pi/2,'y')
 end
@@ -31,3 +36,15 @@ ylabel('Northing [m]');
 grid on
 axis equal
 hold off
+
+figure(2)
+subplot(3,1,1)
+plot(0:N,x(:,6))
+ylabel('Surge speed [m/s]')
+subplot(3,1,2)
+plot(0:N,x(:,7))
+ylabel('Sway speed [m/s]')
+subplot(3,1,3)
+plot(0:N,x(:,10))
+ylabel('Yaw speed [rad/s]')
+xlabel('Time [s]')
