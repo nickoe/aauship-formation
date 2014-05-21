@@ -91,8 +91,6 @@ accl = (imudata(:,5:7)*0.00333)*9.82;   %/333)*9.82; % Scale 3.33 mg (g is gravi
 magn = imudata(:,8:10)*0.0005; % 0.5 mgauss
 temp = imudata(:,11)*0.14; % 0.14 degrees celcius 
 aux_adc = imudata(:,12)*0.806; % 0.mV
-
-180/pi
 imutime = imudata(:,13)-starttime; % Seconds since start, periodic timing determined by imu
 
 % figure(2)
