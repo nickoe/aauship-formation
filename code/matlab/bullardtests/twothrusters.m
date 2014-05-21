@@ -34,10 +34,15 @@ right_back_step = [100 120 140 160 180 200 220 240 260 280 300];
 right_back_force = [1.4 2.8 4.9 7.4 10.8 14 19.4 20.2 24.5 26 30];
 
 forward=figure(1)
+%set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
+set(gcf,'paperunits','centimeters')
+set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
+set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
 plot(both_step1,both_force1,both_step2,both_force2,left_step,left_force,right_step,right_force,left_step,left_force+right_force,n,sign(n) .* K_t * rho * D.^4 .* n.^2,'-*');
 xlabel('Motor input')
 ylabel('Force [N]')
 legend('Both thrusters, 1. test','Both thrusters, 2. test','Left thruster only','Right thruster only','Left and right thruster added','Propellor regression','Location','NorthWest')
+title('Forward thruster tests')
 
 rho = 1000;
 D = 45*10^-3;
@@ -45,10 +50,15 @@ n = [100 120 140 160 180 200 220 240 260 280 300];
 K_t = 0.09;
 
 backward=figure(2)
+%set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
+set(gcf,'paperunits','centimeters')
+set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
+set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
 plot(both_back_step,both_back_force,left_back_step,left_back_force,right_back_step,right_back_force,left_back_step,left_back_force+right_back_force,n,sign(n) .* K_t * rho * D.^4 .* n.^2,'-*');
 xlabel('Motor input')
 ylabel('Force [N]')
 legend('Both thrusters','Left thruster only','Right thruster only','Left and right thruster added','Propellor regression','Location','NorthWest')
+title('Backward thruster tests')
 
 saveas(forward,'forwardthrust.eps','psc2')
 saveas(backward,'backthrust.eps','psc2')
