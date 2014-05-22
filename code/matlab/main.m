@@ -28,7 +28,7 @@ track = [x(4:5,1)';track];
 % Main loop
 for i = 1:Nskip:N
 
-    [xdot(:,i), U(i)] = mariner(x(:,i), rudderangle(i), 8); % SHIP
+%     [xdot(:,i), U(i)] = mariner(x(:,i), rudderangle(i), 8); % SHIP
 %     [xdot(1:6,i)] = aauship(x(1:6,i), [rudderangle(i);0]); % SHIP
 
     
