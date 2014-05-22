@@ -1,8 +1,10 @@
 %% Simulation of AAUSHIP in open loop
 
 % clear all
-r_g = [0.03 0 0.03]'; % location of CG with respect to CO
+r_g = -[0.03 0 0.03]'; % location of CG with respect to CO
 % r_g = [-0.46 0 -3.54]'; % TP-MB-shipmod.pdf container ship
+% r_g = [0 0 0]'; % location of CG with respect to CO
+
 I_g = [ 6.5406e-02  -1.2600e-02  -5.3593e-02
        -1.2600e-02   1.0892e+00  -1.0800e-03
        -5.3593e-02  -1.0800e-03   1.1068e+00]; % inertia tensor, calculated in inertia.m
@@ -16,7 +18,8 @@ MRB = [ m*eye(3)     -m*Smtrx(r_g)
         m*Smtrx(r_g) I_g          ];
 MRB = [MRB(1:2,1:2) MRB(1:2,4:6)
        MRB(4:6,1:2) MRB(4:6,4:6)]; % 5DOF, without heave
-    
+% MRB(4,1) = 0;
+% MRB(1,4) = 0;
  
 % CRB = m2c(MRB,nu) % rigid body Coriolis matrix, page 56 fossen
 
@@ -96,17 +99,19 @@ for i = 1:stop
     x(i+1,:) = Ad*x(i,:)' + Bd*tau;
 end
 
-figure(1)
-subplot(2,1,1)
-t = 1:i+1;
-plot(t,x(:,1), t,x(:,2), t,x(:,3));
-% plot(t,y(:,1), t,y(:,2), t,y(:,3));
-legend('surge pos', 'sway pos', 'roll pos')
+% figure(1)
+% subplot(2,1,1)
+% t = 1:i+1;
+% plot(t,x(:,1), t,x(:,2), t,x(:,3));
+% % plot(t,y(:,1), t,y(:,2), t,y(:,3));
+% legend('surge pos', 'sway pos', 'roll pos')
+% 
+% subplot(2,1,2)
+% plot(t,x(:,6), t,x(:,7), t,x(:,8));
+% legend('surge vel', 'sway vel', 'roll vel')
+% title('wop')
 
-subplot(2,1,2)
-plot(t,x(:,6), t,x(:,7), t,x(:,8));
-legend('surge vel', 'sway vel', 'roll vel')
-title('wop')
+save('ssaauship.mat','Ad','Bd')
 
 %%
 % figure(2)
@@ -124,3 +129,4 @@ title('wop')
 % plot(t,x(:,6), t,x(:,7), t,x(:,8));
 % legend('surge vel', 'sway vel', 'roll vel')
 % title('lsim')
+
