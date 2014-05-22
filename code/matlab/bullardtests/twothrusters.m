@@ -38,7 +38,7 @@ forward=figure(1)
 set(gcf,'paperunits','centimeters')
 set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
 set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
-plot(both_step1,both_force1,both_step2,both_force2,left_step,left_force,right_step,right_force,left_step,left_force+right_force,n,sign(n) .* K_t * rho * D.^4 .* n.^2,'-*');
+plot(both_step1,both_force1,both_step2,both_force2,left_step,left_force,right_step,right_force,left_step,left_force+right_force);
 grid on
 xlabel('Motor input')
 ylabel('Force [N]')
@@ -57,7 +57,7 @@ backward=figure(2)
 set(gcf,'paperunits','centimeters')
 set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
 set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
-plot(both_back_step,both_back_force,left_back_step,left_back_force,right_back_step,right_back_force,left_back_step,left_back_force+right_back_force,n,sign(n) .* K_t * rho * D.^4 .* n.^2,'-*');
+plot(both_back_step,both_back_force,left_back_step,left_back_force,right_back_step,right_back_force,left_back_step,left_back_force+right_back_force);
 grid on
 xlabel('Motor input')
 ylabel('Force [N]')
