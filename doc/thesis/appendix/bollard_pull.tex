@@ -110,4 +110,6 @@ The first tests, utilizing the thrusters forward, was performed by applying a ro
 \end{table}
 
 \section{Discussion and conclusion}
-In both the forward and backward test comes one issue into account. When the vessel is applied with motor inputs above 200 will the ventilation at the propellers become too significant. The stern of the vessel will rises so much that
+The fitting maps from motor \ac{PWM} input to force output in $N$. When looking at the two first regressions at the forward motion it can be chosen to either use the first order fitting or the second order fitting. The coefficient of determination and the RMSE does not deviate much from the samples in either cases. Thus it is concluded that the first order fitting can be as good as the second order fitting, and the first order is chosen as fitting.
+
+When looking at the regression for the backward motion it can be seen, that the second order fitting estimates the $a$ coefficient of the fitting to be negative. This is due to the backward test. At a \ac{PWM} input above 160 is applied, the vessel starts to ventilate from the propellers. This makes the force, which the vessel's pulls with, be lesser than it actually would if it did not ventilate. Therefore is the first order also seen as the most reliable while going backwards.
