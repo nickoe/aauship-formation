@@ -44,6 +44,8 @@ xlabel('Motor input')
 ylabel('Force [N]')
 legend('Both thrusters, 1. test','Both thrusters, 2. test','Left thruster only','Right thruster only','Left and right thruster added','Propellor regression','Location','NorthWest')
 %title('Forward thruster tests')
+% TODO sammenlign nogle regresionskurver, bestem fejl vurder ud derfra hvad
+% der er bedst
 
 rho = 1000;
 D = 45*10^-3;

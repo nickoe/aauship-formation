@@ -1,4 +1,5 @@
 %% Simulation of aauship
+% TODO nonlinear stuff for simulation model
 
 clear all; clf;
 
@@ -6,8 +7,9 @@ N = 6000;
 x = zeros(N,10);
 x(1,:) = [0 0 0 0 0 0 0 0 0 0]';
 xdot = zeros(N,10);
-taus = [1 0 0 0 0]';
+taus = [1 0 0 0 0.005]';
 tau = repmat(taus',N,1);
+% tau(:,1) = (1:N)/600;
 taus = [10 0 0 0 0]';
 tau(ceil(N/2)+1:N,:)  = repmat(taus',N/2,1);
 %% 
@@ -26,15 +28,15 @@ end
 %% Plot the results
 figure(1)
 clf
-% for k = 1:10:N
-%     ship(NED(k,2),NED(k,1),-x(k,5)+pi/2,'y')
-% end
+for k = 1:10:N
+    ship(NED(k,2),NED(k,1),-x(k,5)+pi/2,'y')
+end
 hold on
 plot(NED(:,2),NED(:,1))
 xlabel('Easting [m]');
 ylabel('Northing [m]');
 grid on
-axis equal
+% axis equal
 hold off
 
 figure(2)
