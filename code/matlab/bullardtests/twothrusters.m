@@ -65,3 +65,11 @@ legend('Both thrusters','Left thruster only','Right thruster only','Left and rig
 saveas(forward,'forwardthrust.pdf')
 saveas(backward,'backthrust.pdf')
 
+R_1_1order = 0.9824
+RMSE = 2.3626
+R_1_2order = 0.9906
+RMSE = 1.8414
+R_2_1order = 0.9929
+RMSE = 1.1513
+R_2_2order = 0.9994
+RMSE= 0.3638
