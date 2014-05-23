@@ -28,6 +28,11 @@ l_{x1} & l_{x2} & -\sin(\alpha_3) l_{x3} & \sin(\alpha_4) l_{x4}
 \end{align}
 \citep{mss}
 
+
+For thrusters where the thrust characteristics do not map
+proportionally to forces, the computed $u$ values must be mapped
+to the relevant actuator commands.
+
 \begin{figure}[htbp]
 	\centering
 %\fbox{
@@ -58,3 +63,12 @@ arrows indicate positive thrust vector given positive input.}
 	\label{fig:thrust_allocation}
 \end{figure}
 
+
+\begin{figure}[htbp]
+\centering
+\includesvg{thrust_allocation_block}
+\caption{Block diagram showing the control allocation block in a
+feedback control system \citep[fig.12.25]{fossen}. The thrust
+allocation converts the computed control forces to actuator inputs.}
+\label{fig:thrust_allocation_block}
+\end{figure}

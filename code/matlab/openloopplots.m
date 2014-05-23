@@ -18,9 +18,7 @@ MRB = [ m*eye(3)     -m*Smtrx(r_g)
         m*Smtrx(r_g) I_g          ];
 MRB = [MRB(1:2,1:2) MRB(1:2,4:6)
        MRB(4:6,1:2) MRB(4:6,4:6)]; % 5DOF, without heave
-% MRB(4,1) = 0;
-% MRB(1,4) = 0;
- 
+
 % CRB = m2c(MRB,nu) % rigid body Coriolis matrix, page 56 fossen
 
 % linear hydrodynamic damping
@@ -29,9 +27,9 @@ Yv = 32.5;
 Yp = -0.00503;
 Yr =  0.09263;
 Kv = -0.975;
-Kp =  0.00084;
+Kp =  0.1094;
 Kr =  0.01273;
-Mq =  0.0712;
+Mq =  7.2030;
 Nv =  0.975;
 Np = -0.00069;
 Nr =  0.26285;
@@ -58,8 +56,8 @@ D = [Xu  0  0  0  0
 
 % linear restoring forces matrix
 G = zeros(5,5);
-K_phi   = 0.0007;
-M_theta = 0.0150;
+K_phi   = 6.9736;
+M_theta = 131.8316;
 G(3,3) = K_phi;
 G(4,4) = M_theta;
 

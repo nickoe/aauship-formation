@@ -3,7 +3,7 @@ function[heading, wp_reached] = wp_gen(wps,wpe,now)
 %   This calculates reference points for the path follower
 
 P_c = [now 0]; % [x y angle]
-wp_r = 900; % Waypoint Radius
+wp_r = 10; % Waypoint Radius
 wp_reached = 0; % Waypoint not reached
 v_i_len = 600; % length of intermediate vector
 
