@@ -490,7 +490,7 @@ The parameters in pitch and roll is determined by fitting data to \textit{method
 \subsubsection{Sway test}
 While performing tests with sway it was rather difficult to get any reliable data from measurements. Weather conditions was almost perfect but there was a slight wind. This seemed from measurements to be enough to counteract the forces added by the bow thrusters. The vessel was not moving much over time, thus the measurements seems unreliable. Therefore is the parameters from sway approximated from observations of how fast the vessel was moving over time. The constants which needs to be approximated manually is $Y_\nu$, $K_\nu$ and $N_\nu$.
 
-it is assumed, from observations, that the vessel moves in sway with a constant velocity being $0.1\frac{m}{s}$. From this velocity it is estimated that the vessel was on hold after 1 second. This gives the following damping:
+it is assumed, from observations, that the vessel moves in sway with a constant velocity being $0.1\frac{m}{s}$. From this velocity it is estimated that the vessel was on hold after a few seconds. This gives the following damping:
 \begin{figure}[H]
 	\centering
 	\includegraphics{plot/swaycoeffs}
@@ -526,6 +526,18 @@ it is assumed, from observations, that the vessel moves in sway with a constant 
 	\caption{Pitch test with Vicon, Stern pushed down.}
 	\label{fig:pstest}
 \end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics{plot/gns_pb}
+	\caption{Regression to the average from the bow pitch test. Coefficient of determination: $R^2 = 0.9729$.}
+	\label{fig:gnspb}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics{plot/gns_ps}
+	\caption{Regression to the average from the stern pitch test. Coefficient of determination: $R^2 = 0.9905$.}
+	\label{fig:gnsps}
+\end{figure}
 
 \newpage
 \subsubsection{Roll test}
@@ -543,11 +555,39 @@ it is assumed, from observations, that the vessel moves in sway with a constant 
 \end{figure}
 \begin{figure}[H]
 	\centering
-	\includegraphics{plot/rollcoeffsvel}
-	\caption{Roll angular velocity, differentiated from the position regression.}
-	\label{fig:rollvel}
+	\includegraphics{plot/gns_rl}
+	\caption{Regression to the average from the left roll test. Coefficient of determination: $R^2 = 0.9754$.}
+	\label{fig:gnsrl}
 \end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics{plot/gns_rr}
+	\caption{Regression to the average from the right roll test. Coefficient of determination: $R^2 = 0.9765$.}
+	\label{fig:gnsrr}
+\end{figure}
+% \begin{figure}[H]
+% 	\centering
+% 	\includegraphics{plot/rollcoeffsvel}
+% 	\caption{Roll angular velocity, differentiated from the position regression.}
+% 	\label{fig:rollvel}
+% \end{figure}
 
+The coefficients that are fitted can be found in table \ref{tab:avgfit}. It can be seen how well the fitting matches the data, and from this are the damping coefficients determined.
+\begin{table}[htbp]
+\centering
+\begin{tabular}{cccc}
+	\toprule
+  Test & $R^2$ & RMSE & Function\\
+  \midrule
+  Pitch, bow \ref{fig:gnspb} & 0.9729 & 0.4041 & $f(t) = -8.029*exp(-3.45*t)*(cos(10.29*t))+0.3544$\\
+  Pitch, stern \ref{fig:gnsps} & 0.9905 & 0.1721 & $f(t) = 5.492*exp(-3.163*t)*(cos(10.69*t))+0.7605$\\
+  Roll, left \ref{fig:gnsrl} & 0.9754 & 1.256 & $f(t) = 21.93*exp(-0.9482*t)*(cos(10.45*t))+2.734$\\
+  Roll, right \ref{fig:gnsrr} & 0.9765 & 1.133 & $f(t) = 21.43*exp(-0.7242*t)*(cos(10.13*t))+2.475$\\
+  \bottomrule
+\end{tabular}
+\caption{Coefficient of determination, Root Mean Square Error and the functions to the fittings.}
+\label{tab:avgfit}
+\end{table}
 
 The rigid body constants for the vessel can be found in table \ref{tab:constants} and the results from measurements and estimation can be found in table \ref{tab:dmatrix}.
 \begin{table}[htbp]
@@ -582,16 +622,16 @@ The rigid body constants for the vessel can be found in table \ref{tab:constants
   Hydrodynamic\\Coefficient & Value \\
   \midrule
   $X_u$ & 2.86 \\
-  $Y_v$ & 32.5 \\
+  $Y_v$ & -0.00503 \\
   $K_v$ & -0.975 \\
   $N_v$ & 0.975 \\
   $N_r$ & 0.26285 \\
   $Y_r$ & 0.09263 \\
   $K_r$ & 0.01273 \\
   $Y_p$ & -0.00503 \\
-  $K_p$ & 0.00084 \\
+  $K_p$ & 0.1094 \\
   $N_p$ & -0.00069 \\
-  $M_q$ & 0.0712 \\
+  $M_q$ & 7.2030 \\
 	\bottomrule
 \end{tabular}
 \caption{Results of fitted values and the calculated coefficients.}
@@ -604,8 +644,8 @@ The rigid body constants for the vessel can be found in table \ref{tab:constants
 	\toprule
   Restoring force\\Coefficient & Value \\
   \midrule
-  $K_\varphi$ & 0.0007 \\
-  $M_\theta$ & 0.0150 \\
+  $K_\varphi$ & 6.9736 \\
+  $M_\theta$ & 131.8316 \\
   	\bottomrule
 \end{tabular}
 \caption{Results of fitted values and the calculated coefficients.}
@@ -617,9 +657,9 @@ This makes the linear damping matrix as:
 D = -
 \begin{bmatrix}
 2.86 & 0 & 0 & 0 & 0\\
-0 & 32.5 & -0.00503 & 0 & 0.09263\\
-0 & -0.975 & 0.00084 & 0 & 0.01273\\
-0 & 0 & 0 & 0.0712 & 0\\
+0 & -0.00503 & -0.00503 & 0 & 0.09263\\
+0 & -0.975 & 0.1094 & 0 & 0.01273\\
+0 & 0 & 0 & 7.2030 & 0\\
 0 & 0.975 & -0.00069 & 0 & 0.26285
 \end{bmatrix}
 \end{align}
@@ -629,8 +669,8 @@ G = -
 \begin{bmatrix}
 0 & 0 & 0 & 0 & 0\\
 0 & 0 & 0 & 0 & 0\\
-0 & 0 & 0.0007 & 0 & 0\\
-0 & 0 & 0 & 0.0150 & 0\\
+0 & 0 & 6.9736 & 0 & 0\\
+0 & 0 & 0 & 131.8316 & 0\\
 0 & 0 & 0 & 0 & 0
 \end{bmatrix}
 \end{align}
