@@ -61,6 +61,7 @@ for k = 1:N
     if (wp_reached == 1)
         n = n+1;
         if n >= length(track)
+            es = k;
             break
         end
     end
@@ -100,7 +101,7 @@ end
 %     ship(NED(k,2),NED(k,1),pi/2-headingdesired(k),'y')
 % end
 hold on
-plot(track(:,2),track(:,1),'b-o', NED(:,2),NED(:,1),'-r')
+plot(track(:,2),track(:,1),'b-o', NED(1:es,2),NED(1:es,1),'-r')
 xlabel('Easting [m]');
 ylabel('Northing [m]');
 grid on
