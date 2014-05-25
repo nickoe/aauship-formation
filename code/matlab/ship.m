@@ -36,7 +36,7 @@ function [ output_args ] = ship( x, y, psi, color)
         end
         hold on
         fill(P(1,:),P(2,:),color);
-%         plot(x,y,'k+');
+        plot(x,y,'k+');
         hold off
     end
   

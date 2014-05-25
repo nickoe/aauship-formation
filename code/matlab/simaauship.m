@@ -86,8 +86,8 @@ for k = 1:N
 end
 
 %% Plot the results
-t = 0:0.1:N/10;
-tt = 0.01:0.1:N/10;
+t = 0:0.1:es/10-0.01;
+tt = 0.01:0.1:es/10;
 
 
 % figure(1)
@@ -108,31 +108,33 @@ grid on
 axis equal
 hold off
 
+% csvwrite('positions.csv',[NED(1:es,1:2) -x(1:es,5)+pi/2])
+
 % subplot(2,1,2)
 % plot(tt,heading,tt,headingdesired)
 
-% 
-% figure(2)
-% subplot(3,1,1)
-% plot(t,x(:,6))
-% ylabel('Surge speed [m/s]')
-% subplot(3,1,2)
-% plot(t,x(:,7))
-% ylabel('Sway speed [m/s]')
-% subplot(3,1,3)
-% plot(t,x(:,10))
-% ylabel('Yaw speed [rad/s]')
-% xlabel('Time [s]')
-% 
-% figure(3)
-% subplot(3,1,1)
-% plot(t,x(:,3))
-% ylabel('Rool angle [rad]')
-% subplot(3,1,2)
-% plot(t,x(:,4))
-% ylabel('Pitch angle [rad]')
-% subplot(3,1,3)
-% plot(t,x(:,5))
-% ylabel('Yaw angle [rad]')
-% xlabel('Time [s]')
+%%
+figure(2);clf;
+subplot(3,1,1)
+plot(t,x(1:es,6))
+ylabel('Surge speed [m/s]')
+subplot(3,1,2)
+plot(t,x(1:es,7))
+ylabel('Sway speed [m/s]')
+subplot(3,1,3)
+plot(t,x(1:es,10))
+ylabel('Yaw speed [rad/s]')
+xlabel('Time [s]')
+
+figure(3);clf;
+subplot(3,1,1)
+plot(t,x(1:es,3))
+ylabel('Rool angle [rad]')
+subplot(3,1,2)
+plot(t,x(1:es,4))
+ylabel('Pitch angle [rad]')
+subplot(3,1,3)
+plot(t,x(1:es,5))
+ylabel('Yaw angle [rad]')
+xlabel('Time [s]')
 
