@@ -4,7 +4,7 @@
 clear all; clf;
 
 %% Pre allocation of variables
-N = 3000;
+N = 4000;
 x = zeros(N,10);
 x(1,:) = [0 0 0 0 0 2 0 0 0 0]';
 xdot = zeros(N,10);
@@ -35,25 +35,29 @@ tau(ceil(N/2)+1:N,:)  = repmat(taus',N/2,1);
 %% Waypoints
 start = [100, 1000];
 stop = [-1000,1000];
-track = [100,0; 200,-300; 200,200]; %1000,1000; 1000,2000; 0,2010];
+track = [20,0; 30,-40; 40,0; 40,30]; %1000,1000; 1000,2000; 0,2010];
 track = [x(1:2,1)';track];
 n = 1;
 error = zeros(1,N);
 integral = zeros(1,N);
 derivative = zeros(1,N);
-Kp = 0.0001;
-Ki = 00.2;
-Kd = 0;
+Kp = 0.05;
+Ki = 0.5;
+Kd = 10.4;
 thrustdiff = zeros(1,N);
 heading = zeros(N,1);
+headingdesired = zeros(N,1);
 %% Simulation
-for k = 1:N
-%     x(k+1,:) = aauship(x(k,:)', ta);
+figure(1)
+clf
+hold on
 
+for k = 1:N
+%     x(k+1,:) = aauship(x(k,:)', ta); % Used fo thrust allocaiton testing
 
     % GNC
-%     x(k,1:2);
-    [headingdesired(k), wp_reached] = wp_gen(track(n,:),track(n+1,:),x(k,1:2)); % WP Gen
+%     NED(k,:)
+    [headingdesired(k), wp_reached] = wp_gen(track(n,:),track(n+1,:),NED(k,:)); % WP Gen
     if (wp_reached == 1)
         n = n+1;
         if n >= length(track)
@@ -67,7 +71,7 @@ for k = 1:N
     Rz = [cos(psi) -sin(psi);
           sin(psi)  cos(psi)];
     if k ~=  1
-    NED(k,:) = Rz*x(k,6:7)'*0.1 + NED(k-1,:)';
+    NED(k+1,:) = Rz*x(k,6:7)'*0.1 + NED(k-1,:)';
     heading(k) = x(k,10)*0.1 + heading(k-1);
     end
     
@@ -81,24 +85,31 @@ for k = 1:N
 end
 
 %% Plot the results
-figure(1)
-clf
-% for k = 1:10:N
-%     ship(NED(k,2),NED(k,1),-x(k,5)+pi/2,'y')
+t = 0:0.1:N/10;
+tt = 0.01:0.1:N/10;
+
+
+% figure(1)
+% clf
+% subplot(2,1,1)
+
+for k = 1:20:N
+    ship(NED(k,2),NED(k,1),-x(k,5)+pi/2,'y')
+end
+% for k = 1:20:N
+%     ship(NED(k,2),NED(k,1),pi/2-headingdesired(k),'y')
 % end
 hold on
-subplot(2,1,1)
-plot(track(:,2),track(:,1),'b-o', NED(:,2),NED(:,1),'r')
+plot(track(:,2),track(:,1),'b-o', NED(:,2),NED(:,1),'-r')
 xlabel('Easting [m]');
 ylabel('Northing [m]');
 grid on
 axis equal
 hold off
 
-subplot(2,1,2)
-plot(heading)
+% subplot(2,1,2)
+% plot(tt,heading,tt,headingdesired)
 
-t = 0:0.1:N/10;
 % 
 % figure(2)
 % subplot(3,1,1)
