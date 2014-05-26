@@ -37,14 +37,14 @@ tau(ceil(N/2)+1:N,:)  = repmat(taus',N/2,1);
 %% Waypoints
 start = [100, 1000];
 stop = [-1000,1000];
-track = [200,-100; 300,-400; 500,-400; 600,-200; 400,+300; 200,+500; 100,+1200];%600,0; 400,300; 400,3000]; %1000,1000; 1000,2000; 0,2010];
+track = [200,-100; 300,-400; 500,-400; 600,-200; 400,+300; 200,+500; 100,+1200]/10;%600,0; 400,300; 400,3000]; %1000,1000; 1000,2000; 0,2010];
 track = [x(1:2,1)';track];
 n = 1;
 error = zeros(1,N);
 integral = zeros(1,N);
 derivative = zeros(1,N);
-Kp = 0.8;
-Ki = 0.01;
+Kp = 0.08;
+Ki = 0.05;
 Kd = 5;
 thrustdiff = zeros(1,N);
 heading = zeros(N,1);
@@ -133,27 +133,27 @@ plot(tt,heading(1:es),tt,headingdesired(1:es))
 legend('ship heading','desired heading')
 
 %%
-figure(2);clf;
-subplot(3,1,1)
-plot(t,x(1:es,6))
-ylabel('Surge speed [m/s]')
-subplot(3,1,2)
-plot(t,x(1:es,7))
-ylabel('Sway speed [m/s]')
-subplot(3,1,3)
-plot(t,x(1:es,10))
-ylabel('Yaw speed [rad/s]')
-xlabel('Time [s]')
+% figure(2);clf;
+% subplot(3,1,1)
+% plot(t,x(1:es,6))
+% ylabel('Surge speed [m/s]')
+% subplot(3,1,2)
+% plot(t,x(1:es,7))
+% ylabel('Sway speed [m/s]')
+% subplot(3,1,3)
+% plot(t,x(1:es,10))
+% ylabel('Yaw speed [rad/s]')
+% xlabel('Time [s]')
 % 
-figure(3);clf;
-subplot(3,1,1)
-plot(t,x(1:es,3))
-ylabel('Rool angle [rad]')
-subplot(3,1,2)
-plot(t,x(1:es,4))
-ylabel('Pitch angle [rad]')
-subplot(3,1,3)
-plot(t,x(1:es,5))
-ylabel('Yaw angle [rad]')
-xlabel('Time [s]')
+% figure(3);clf;
+% subplot(3,1,1)
+% plot(t,x(1:es,3))
+% ylabel('Rool angle [rad]')
+% subplot(3,1,2)
+% plot(t,x(1:es,4))
+% ylabel('Pitch angle [rad]')
+% subplot(3,1,3)
+% plot(t,x(1:es,5))
+% ylabel('Yaw angle [rad]')
+% xlabel('Time [s]')
 
