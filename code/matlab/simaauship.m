@@ -4,17 +4,18 @@
 clear all; clf;
 
 %% Pre allocation of variables
-N = 4000;
+N = 40000;
 es = N;
 x = zeros(N,10);
 x(1,:) = [0 0 0 0 0 2 0 0 0 0]';
 xdot = zeros(N,10);
 NED = zeros(N,2);
+NED2 = zeros(N,2);
 
 taus = [1 0 0 0 0.005]';
 tau = repmat(taus',N,1);
 % tau(:,1) = (1:N)/600;
-taus = [12 0 0 0 0]';
+taus = [10 0 0 0 0]';
 tau(ceil(N/2)+1:N,:)  = repmat(taus',N/2,1);
 
 %% Thrust allocation 
@@ -36,15 +37,15 @@ tau(ceil(N/2)+1:N,:)  = repmat(taus',N/2,1);
 %% Waypoints
 start = [100, 1000];
 stop = [-1000,1000];
-track = [20,0; 30,-40; 40,0; 40,30]; %1000,1000; 1000,2000; 0,2010];
+track = [200,-100; 300,-400; 500,-400; 600,-200; 400,+300; 200,+500; 100,+1200];%600,0; 400,300; 400,3000]; %1000,1000; 1000,2000; 0,2010];
 track = [x(1:2,1)';track];
 n = 1;
 error = zeros(1,N);
 integral = zeros(1,N);
 derivative = zeros(1,N);
-Kp = 0.05;
-Ki = 0.5;
-Kd = 10.4;
+Kp = 0.8;
+Ki = 0.01;
+Kd = 5;
 thrustdiff = zeros(1,N);
 heading = zeros(N,1);
 headingdesired = zeros(N,1);
@@ -52,7 +53,8 @@ headingdesired = zeros(N,1);
 figure(1)
 clf
 hold on
-
+rev = 0;
+limit = 3.07;
 for k = 1:N
 %     x(k+1,:) = aauship(x(k,:)', ta); % Used fo thrust allocaiton testing
 
@@ -67,18 +69,33 @@ for k = 1:N
         end
     end
 
-    tau(k,:)=[6 0 0 0 thrustdiff(k)];
+    tau(k,:)=[8 0 0 0 thrustdiff(k)];
     x(k+1,:) = aauship(x(k,:)', tau(k,:)');
     psi=x(k,5);
     Rz = [cos(psi) -sin(psi);
           sin(psi)  cos(psi)];
     if k ~=  1
-    NED(k+1,:) = Rz*x(k,6:7)'*0.1 + NED(k-1,:)';
-    heading(k) = x(k,10)*0.1 + heading(k-1);
+    NED(k+1,:) = Rz*x(k,6:7)'*0.1 + NED(k,:)';
+    heading(k) = x(k,10)'*0.1 + heading(k-1);
+    
+%    psi=x(k,5);
+%     Rz = [cos(psi) -sin(psi);
+%           sin(psi)  cos(psi)];
+%     NED2(k+1,:) = Rz*x(k,6:7)';
+    
+%     if (headingdesired(k-1) >= limit) && (headingdesired(k) <= -limit)
+% %       disp('up')
+%         rev = rev + 2*pi;
+%     elseif (headingdesired(k-1) <= -limit) && (headingdesired(k) >= limit)
+% %       disp('down')
+%         rev = rev - 2*pi;
+%     end
+%         headingdesired(k) = headingdesired(k) + rev;
     end
     
+
     
-    error(k) = headingdesired(k) -heading(k);
+    error(k) = headingdesired(k) - heading(k);
     integral(k) = integral(k) + error(k);
     if k~=1
     derivative(k) = error(k) - error(k-1);
@@ -91,11 +108,11 @@ t = 0:0.1:es/10-0.01;
 tt = 0.01:0.1:es/10;
 
 
-% figure(1)
-% clf
-% subplot(2,1,1)
+figure(1)
+clf
+subplot(2,1,1)
 
-for k = 1:20:N
+for k = 1:200:N
     ship(NED(k,2),NED(k,1),-x(k,5)+pi/2,'y')
 end
 % for k = 1:20:N
@@ -111,32 +128,32 @@ hold off
 
 % csvwrite('positions.csv',[NED(1:es,1:2) -x(1:es,5)+pi/2])
 
-% subplot(2,1,2)
-% plot(tt,heading,tt,headingdesired)
-% legend('ship heading','desired heading')
+subplot(2,1,2)
+plot(tt,heading(1:es),tt,headingdesired(1:es))
+legend('ship heading','desired heading')
 
 %%
-% figure(2);clf;
-% subplot(3,1,1)
-% plot(t,x(1:es,6))
-% ylabel('Surge speed [m/s]')
-% subplot(3,1,2)
-% plot(t,x(1:es,7))
-% ylabel('Sway speed [m/s]')
-% subplot(3,1,3)
-% plot(t,x(1:es,10))
-% ylabel('Yaw speed [rad/s]')
-% xlabel('Time [s]')
+figure(2);clf;
+subplot(3,1,1)
+plot(t,x(1:es,6))
+ylabel('Surge speed [m/s]')
+subplot(3,1,2)
+plot(t,x(1:es,7))
+ylabel('Sway speed [m/s]')
+subplot(3,1,3)
+plot(t,x(1:es,10))
+ylabel('Yaw speed [rad/s]')
+xlabel('Time [s]')
 % 
-% figure(3);clf;
-% subplot(3,1,1)
-% plot(t,x(1:es,3))
-% ylabel('Rool angle [rad]')
-% subplot(3,1,2)
-% plot(t,x(1:es,4))
-% ylabel('Pitch angle [rad]')
-% subplot(3,1,3)
-% plot(t,x(1:es,5))
-% ylabel('Yaw angle [rad]')
-% xlabel('Time [s]')
+figure(3);clf;
+subplot(3,1,1)
+plot(t,x(1:es,3))
+ylabel('Rool angle [rad]')
+subplot(3,1,2)
+plot(t,x(1:es,4))
+ylabel('Pitch angle [rad]')
+subplot(3,1,3)
+plot(t,x(1:es,5))
+ylabel('Yaw angle [rad]')
+xlabel('Time [s]')
 
