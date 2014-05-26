@@ -5,6 +5,7 @@ clear all; clf;
 
 %% Pre allocation of variables
 N = 4000;
+es = N;
 x = zeros(N,10);
 x(1,:) = [0 0 0 0 0 2 0 0 0 0]';
 xdot = zeros(N,10);
@@ -112,6 +113,7 @@ hold off
 
 % subplot(2,1,2)
 % plot(tt,heading,tt,headingdesired)
+% legend('ship heading','desired heading')
 
 %%
 % figure(2);clf;
