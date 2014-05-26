@@ -114,27 +114,27 @@ hold off
 % plot(tt,heading,tt,headingdesired)
 
 %%
-figure(2);clf;
-subplot(3,1,1)
-plot(t,x(1:es,6))
-ylabel('Surge speed [m/s]')
-subplot(3,1,2)
-plot(t,x(1:es,7))
-ylabel('Sway speed [m/s]')
-subplot(3,1,3)
-plot(t,x(1:es,10))
-ylabel('Yaw speed [rad/s]')
-xlabel('Time [s]')
-
-figure(3);clf;
-subplot(3,1,1)
-plot(t,x(1:es,3))
-ylabel('Rool angle [rad]')
-subplot(3,1,2)
-plot(t,x(1:es,4))
-ylabel('Pitch angle [rad]')
-subplot(3,1,3)
-plot(t,x(1:es,5))
-ylabel('Yaw angle [rad]')
-xlabel('Time [s]')
+% figure(2);clf;
+% subplot(3,1,1)
+% plot(t,x(1:es,6))
+% ylabel('Surge speed [m/s]')
+% subplot(3,1,2)
+% plot(t,x(1:es,7))
+% ylabel('Sway speed [m/s]')
+% subplot(3,1,3)
+% plot(t,x(1:es,10))
+% ylabel('Yaw speed [rad/s]')
+% xlabel('Time [s]')
+% 
+% figure(3);clf;
+% subplot(3,1,1)
+% plot(t,x(1:es,3))
+% ylabel('Rool angle [rad]')
+% subplot(3,1,2)
+% plot(t,x(1:es,4))
+% ylabel('Pitch angle [rad]')
+% subplot(3,1,3)
+% plot(t,x(1:es,5))
+% ylabel('Yaw angle [rad]')
+% xlabel('Time [s]')
 
