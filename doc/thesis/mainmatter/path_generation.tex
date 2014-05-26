@@ -16,6 +16,22 @@ straight line segments, and the corners can be handled in a specific
 way such that the physical constraints of the ship manoeuvring ability
 is considered to generate feasible paths.
 
+The here is basically two ways to consider a lawn mover pattern. The
+one is the have the area of interest be covered only by straight line
+segments and the end connected with a turning maneouver outside the
+area of interest as show on figure~\vref{fig:lawn-straight-inside} or
+with all manoeuvers constrained inside the area of interest as
+illustrated on figure~\vref{fig:lawn-all-inside}.
+
+\begin{figure}[htbp]
+	\centering
+	\subfloat[Only straight lines\label{fig:lawn-straight-inside}]{\includesvg{lawn_straight_inside}}
+	\qquad
+	\subfloat[All paths constrained\label{fig:lawn-all-inside}]{\includesvg{lawn_all_inside}}
+	\caption{Comparison of two ways to cover an area with a lawn mower
+	pattern.}
+\end{figure}
+
 \section{Dubins Path}
 
 
