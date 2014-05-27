@@ -49,6 +49,7 @@ Kd = 5;
 thrustdiff = zeros(1,N);
 heading = zeros(N,1);
 headingdesired = zeros(N,1);
+
 %% Simulation
 figure(1)
 clf
@@ -59,7 +60,6 @@ for k = 1:N
 %     x(k+1,:) = aauship(x(k,:)', ta); % Used fo thrust allocaiton testing
 
     % GNC
-%     NED(k,:)
     [headingdesired(k), wp_reached] = wp_gen(track(n,:),track(n+1,:),NED(k,:)); % WP Gen
     if (wp_reached == 1)
         n = n+1;
@@ -69,36 +69,24 @@ for k = 1:N
         end
     end
 
+    % Computed control input
     tau(k,:)=[8 0 0 0 thrustdiff(k)];
+    
+    % Simulation
     x(k+1,:) = aauship(x(k,:)', tau(k,:)');
     psi=x(k,5);
     Rz = [cos(psi) -sin(psi);
           sin(psi)  cos(psi)];
     if k ~=  1
-    NED(k+1,:) = Rz*x(k,6:7)'*0.1 + NED(k,:)';
-    heading(k) = x(k,10)'*0.1 + heading(k-1);
-    
-%    psi=x(k,5);
-%     Rz = [cos(psi) -sin(psi);
-%           sin(psi)  cos(psi)];
-%     NED2(k+1,:) = Rz*x(k,6:7)';
-    
-%     if (headingdesired(k-1) >= limit) && (headingdesired(k) <= -limit)
-% %       disp('up')
-%         rev = rev + 2*pi;
-%     elseif (headingdesired(k-1) <= -limit) && (headingdesired(k) >= limit)
-% %       disp('down')
-%         rev = rev - 2*pi;
-%     end
-%         headingdesired(k) = headingdesired(k) + rev;
+        NED(k+1,:) = Rz*x(k,6:7)'*0.1 + NED(k,:)';
+        heading(k) = x(k,10)'*0.1 + heading(k-1);
     end
     
-
-    
+    % PID
     error(k) = headingdesired(k) - heading(k);
     integral(k) = integral(k) + error(k);
     if k~=1
-    derivative(k) = error(k) - error(k-1);
+        derivative(k) = error(k) - error(k-1);
     end
     thrustdiff(k+1) = Kp*error(k) + Ki*integral(k) + Kd*derivative(k);
 end
