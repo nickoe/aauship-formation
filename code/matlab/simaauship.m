@@ -4,10 +4,10 @@
 clear all; clf;
 
 %% Pre allocation of variables
-N = 40000;
+N = 6000;
 es = N;
 x = zeros(N,10);
-x(1,:) = [0 0 0 0 0 2 0 0 0 0]';
+x(1,:) = [0 0 0 0 -pi 2 0 0 0 0]';
 xdot = zeros(N,10);
 NED = zeros(N,2);
 NED2 = zeros(N,2);
@@ -38,6 +38,12 @@ tau(ceil(N/2)+1:N,:)  = repmat(taus',N/2,1);
 start = [100, 1000];
 stop = [-1000,1000];
 track = [200,-100; 300,-400; 500,-400; 600,-200; 400,+300; 200,+500; 100,+1200]/10;%600,0; 400,300; 400,3000]; %1000,1000; 1000,2000; 0,2010];
+track = [65 20
+    60 150
+    0 190
+    -100 200
+    -400 190
+    -400 400];
 track = [x(1:2,1)';track];
 n = 1;
 error = zeros(1,N);
@@ -53,9 +59,11 @@ headingdesired = zeros(N,1);
 %% Simulation
 figure(1)
 clf
+subplot(3,1,1)
 hold on
 rev = 0;
 limit = 3.07;
+heading(1) = x(1,5);
 for k = 1:N
 %     x(k+1,:) = aauship(x(k,:)', ta); % Used fo thrust allocaiton testing
 
@@ -70,20 +78,29 @@ for k = 1:N
     end
 
     % Computed control input
-    tau(k,:)=[8 0 0 0 thrustdiff(k)];
+    tau(k,:)=[6 0 0 0 thrustdiff(k)];
     
     % Simulation
     x(k+1,:) = aauship(x(k,:)', tau(k,:)');
     psi=x(k,5);
     Rz = [cos(psi) -sin(psi);
           sin(psi)  cos(psi)];
+    
     if k ~=  1
+%      if (headingdesired(k-1) >= limit) && (headingdesired(k) <= -limit)
+%  %       disp('up')
+%          rev = rev + 2*pi;
+%      elseif (headingdesired(k-1) <= -limit) && (headingdesired(k) >= limit)
+%  %       disp('down')
+%          rev = rev - 2*pi;
+%      end
+%          headingdesired(k) = headingdesired(k) + rev;
         NED(k+1,:) = Rz*x(k,6:7)'*0.1 + NED(k,:)';
-        heading(k) = x(k,10)'*0.1 + heading(k-1);
+        heading(k) = (x(k,10)'*0.1 + heading(k-1));
     end
     
     % PID
-    error(k) = headingdesired(k) - heading(k);
+    error(k) = rad2pipi(headingdesired(k)  - heading(k));
     integral(k) = integral(k) + error(k);
     if k~=1
         derivative(k) = error(k) - error(k-1);
@@ -96,16 +113,16 @@ t = 0:0.1:es/10-0.01;
 tt = 0.01:0.1:es/10;
 
 
-figure(1)
-clf
-subplot(3,1,1)
+% figure(1)
+% clf
+% subplot(3,1,1)
 
-for k = 1:200:N
-    ship(NED(k,2),NED(k,1),-x(k,5)+pi/2,'y')
-end
 % for k = 1:20:N
-%     ship(NED(k,2),NED(k,1),pi/2-headingdesired(k),'y')
+%     ship(NED(k,2),NED(k,1),-x(k,5)+pi/2,'y')
 % end
+for k = 1:20:N
+    ship(NED(k,2),NED(k,1),pi/2-headingdesired(k),'y')
+end
 hold on
 plot(track(:,2),track(:,1),'b-o', NED(1:es,2),NED(1:es,1),'-r')
 xlabel('Easting [m]');
@@ -121,7 +138,9 @@ plot(tt,heading(1:es),tt,headingdesired(1:es))
 legend('ship heading','desired heading')
 
 subplot(3,1,3)
-plot(t,cte(1:es))
+% plot(t,cte(1:es))
+plot(t,error(1:es))
+
 
 %%
 % figure(2);clf;
