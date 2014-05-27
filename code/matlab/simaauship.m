@@ -60,7 +60,7 @@ for k = 1:N
 %     x(k+1,:) = aauship(x(k,:)', ta); % Used fo thrust allocaiton testing
 
     % GNC
-    [headingdesired(k), wp_reached] = wp_gen(track(n,:),track(n+1,:),NED(k,:)); % WP Gen
+    [headingdesired(k), wp_reached, cte(k)] = wp_gen(track(n,:),track(n+1,:),NED(k,:)); % WP Gen
     if (wp_reached == 1)
         n = n+1;
         if n >= length(track)
@@ -98,7 +98,7 @@ tt = 0.01:0.1:es/10;
 
 figure(1)
 clf
-subplot(2,1,1)
+subplot(3,1,1)
 
 for k = 1:200:N
     ship(NED(k,2),NED(k,1),-x(k,5)+pi/2,'y')
@@ -116,9 +116,12 @@ hold off
 
 % csvwrite('positions.csv',[NED(1:es,1:2) -x(1:es,5)+pi/2])
 
-subplot(2,1,2)
+subplot(3,1,2)
 plot(tt,heading(1:es),tt,headingdesired(1:es))
 legend('ship heading','desired heading')
+
+subplot(3,1,3)
+plot(t,cte(1:es))
 
 %%
 % figure(2);clf;

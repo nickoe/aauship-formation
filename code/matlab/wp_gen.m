@@ -1,9 +1,9 @@
-function[heading, wp_reached] = wp_gen(wps,wpe,now)
+function[heading, wp_reached, cte] = wp_gen(wps,wpe,now)
 %%WP_GEN Waypoint Generator
 %   This calculates reference points for the path follower
 
 P_c = [now 0]; % [x y angle]
-wp_r = 10; % Waypoint Radius
+wp_r = 5; % Waypoint Radius
 wp_reached = 0; % Waypoint not reached
 v_i_len = 7; % length of intermediate vector
 
@@ -36,4 +36,10 @@ end
 % heading = 2*pi-asin(( P_ref(1)-P_c(1) ) / sqrt( (P_ref(1)-P_c(1))  ^2 + (P_ref(2)-P_c(2))^2 ));
 heading = atan2(v_ref(2),v_ref(1));
 
+%% CrossTrackError % MOD = HYP*SIN(A)
+a = norm(now-wps);
+b = norm(wpe-wps);
+vinkel = (acos((now-wps)*(wpe-wps)'/(a*b)));
+% vinkeligrader = vinkel*180/pi;
+cte = a*sin(vinkel);
 end
