@@ -4,14 +4,12 @@
 clear all; clf;
 
 %% Pre allocation of variables
-N = 60000;
+N = 4000;
 es = N;
 x = zeros(N,10);
-x(1,:) = [0 0 0 0 -pi 2 0 0 0 0]';
+x(1,:) = [0 0 0 0 pi/4 2 0 0 0 0]';
 xdot = zeros(N,10);
 NED = zeros(N,2);
-NED2 = zeros(N,2);
-
 taus = [1 0 0 0 0.005]';
 tau = repmat(taus',N,1);
 % tau(:,1) = (1:N)/600;
@@ -43,9 +41,9 @@ n = 1;
 error = zeros(1,N);
 integral = zeros(1,N);
 derivative = zeros(1,N);
-Kp = 0.08;
-Ki = 0.05;
-Kd = 5;
+Kp = 0.8;
+Ki = 0.1;
+Kd = 42;
 thrustdiff = zeros(1,N);
 heading = zeros(N,1);
 headingdesired = zeros(N,1);
@@ -53,7 +51,6 @@ headingdesired = zeros(N,1);
 %% Simulation
 figure(1)
 clf
-subplot(3,1,1)
 hold on
 rev = 0;
 limit = 3.07;
@@ -113,14 +110,15 @@ tt = 0.01:0.1:es/10;
 % clf
 % subplot(3,1,1)
 
-for k = 1:100:N
-    ship(NED(k,2),NED(k,1),-x(k,5)+pi/2,'y')
+for k = 1:79:es
+    ship(NED(k,2),NED(k,1),-x(k+1,5)+pi/2,'y')
 end
 % for k = 1:100:N
 %     ship(NED(k,2),NED(k,1),pi/2-headingdesired(k),'y')
 % end
 hold on
 plot(track(:,2),track(:,1),'b-o', NED(1:es,2),NED(1:es,1),'-r')
+plot(track(n,2),track(n,1),'ro')
 xlabel('Easting [m]');
 ylabel('Northing [m]');
 grid on
@@ -129,17 +127,18 @@ hold off
 
 % csvwrite('positions.csv',[NED(1:es,1:2) -x(1:es,5)+pi/2])
 
-subplot(3,1,2)
-plot(tt,heading(1:es),tt,headingdesired(1:es))
-legend('ship heading','desired heading')
-
-subplot(3,1,3)
-plot(t,cte(1:es))
-% plot(t,error(1:es))
+% figure(2)
+% subplot(2,1,1)
+% plot(tt,heading(1:es),tt,headingdesired(1:es))
+% legend('ship heading','desired heading')
+% 
+% subplot(2,1,2)
+% plot(t,cte(1:es))
+% % plot(t,error(1:es))
 
 
 %%
-% figure(2);clf;
+% figure(3);clf;
 % subplot(3,1,1)
 % plot(t,x(1:es,6))
 % ylabel('Surge speed [m/s]')
@@ -151,7 +150,7 @@ plot(t,cte(1:es))
 % ylabel('Yaw speed [rad/s]')
 % xlabel('Time [s]')
 % 
-% figure(3);clf;
+% figure(4);clf;
 % subplot(3,1,1)
 % plot(t,x(1:es,3))
 % ylabel('Rool angle [rad]')
