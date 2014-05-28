@@ -30,7 +30,7 @@ P_ref = v_ref + now;
 %% Calculate if waypoint is reached
 dist = sqrt((P_c(1)-wpe(1))^2+(P_c(2)-wpe(2))^2);
 if dist < wp_r
-    wp_reached = 1
+    wp_reached = 1;
 end
 
 %% Calculate heading

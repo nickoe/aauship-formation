@@ -37,36 +37,8 @@ tau(ceil(N/2)+1:N,:)  = repmat(taus',N/2,1);
 %% Waypoints
 start = [100, 1000];
 stop = [-1000,1000];
-track = [200,-100; 300,-400; 500,-400; 600,-200; 400,+300; 200,+500; 100,+1200]/10;%600,0; 400,300; 400,3000]; %1000,1000; 1000,2000; 0,2010];
-% track = [65 20
-%     60 150
-%     0 190
-%     -100 200
-%     -400 190
-%     -400 400];
-track = [    40    40
-   660    40
-   660    80
-    40    80
-    40   120
-   660   120
-   660   160
-    40   160
-    40   200
-   660   200
-   660   240
-    40   240
-    40   280
-   660   280
-   660   320
-    40   320
-    40   360
-   660   360
-   660   400
-    40   400
-    40   440
-   660   440];
-track = [x(1:2,1)';track];
+track = load('track.mat');
+track = [x(1:2,1)';track.allwps];
 n = 1;
 error = zeros(1,N);
 integral = zeros(1,N);
@@ -118,6 +90,8 @@ for k = 1:N
 %      end
 %          headingdesired(k) = headingdesired(k) + rev;
         NED(k+1,:) = Rz*x(k,6:7)'*0.1 + NED(k,:)';
+%         NED(k+1,1:2) = NED(k+1,1:2) +
+%         (diag([1.0035,1.0035])*randn(2,1))'; Her er lige lidt støj
         heading(k) = (x(k,10)'*0.1 + heading(k-1));
     end
     
@@ -160,8 +134,8 @@ plot(tt,heading(1:es),tt,headingdesired(1:es))
 legend('ship heading','desired heading')
 
 subplot(3,1,3)
-% plot(t,cte(1:es))
-plot(t,error(1:es))
+plot(t,cte(1:es))
+% plot(t,error(1:es))
 
 
 %%
