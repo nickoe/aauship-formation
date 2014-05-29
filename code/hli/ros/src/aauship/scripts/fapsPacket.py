@@ -166,6 +166,7 @@ class Handler(threading.Thread):
             return [True, packet]
         else: # I am not sure what the purpose of this else block with the try section is
             try:
+                print("Hic sunt leones")
                 index = packet.index(0x24)
                 if index == len(packet)-1:
                     tempc = self.connection.read(1)
@@ -180,6 +181,7 @@ class Handler(threading.Thread):
                     packet.append(tempc)
 
                 del packet[0:index+1]
+                print("Hic sunt dracones")
                 return self.parser(packet)
             except:
                 return [False,packet]

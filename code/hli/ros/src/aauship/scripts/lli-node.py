@@ -48,7 +48,8 @@ class LLI(object):
         pub = rospy.Publisher('samples', Faps)
         sub = rospy.Subscriber('lli_input', LLIinput, self.callback)
         rospy.init_node('lli')
-        r = rospy.Rate(100) # Rate in Hz
+        r = rospy.Rate(100) # Rate in Hz, maybe try a faster rate than
+        # 100 to fix the buffering issue
 
         while not rospy.is_shutdown():
             try:
