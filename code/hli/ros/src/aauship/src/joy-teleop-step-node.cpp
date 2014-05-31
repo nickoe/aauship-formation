@@ -1,6 +1,5 @@
 #include "ros/ros.h"
 #include "sensor_msgs/Joy.h"
-#include "aauship/Faps.h"
 #include "aauship/LLIinput.h"
 #include <std_msgs/Float32.h>
 
