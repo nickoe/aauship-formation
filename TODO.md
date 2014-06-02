@@ -7,7 +7,7 @@ Formationskontrol med mindst to aauships
 	- To måder: indivuduelle paths eller formation?
 	- Det skal funke til sommer!
 	- Bestem os for hvad for noget formation vi vil lave, læs papers igennem (formation eller individuelle paths)
-
+ 
 Opgavelisten
 ------------
 * Generer en path (NEDPRIORITERET) [Brug manuelle arrays med paths for nu]

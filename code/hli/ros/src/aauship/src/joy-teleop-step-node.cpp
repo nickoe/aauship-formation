@@ -1,6 +1,5 @@
 #include "ros/ros.h"
 #include "sensor_msgs/Joy.h"
-#include "aauship/Faps.h"
 #include "aauship/LLIinput.h"
 #include <std_msgs/Float32.h>
 
@@ -200,7 +199,7 @@ public:
           if (msg->buttons[i] == 0 && button_state[i] == 0) break;
           button_state[i] = 1;
 
-          printf("cross right %d\n", vel_left);
+          printf("cross right %f\n", vel_left);
           msg2.DevID = 10;
 
           msg2.MsgID = 5;

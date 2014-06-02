@@ -38,4 +38,10 @@ Remember to add the soruces to your shell i.e.
 
 Install pynmea with `pip install pynmea`
 
+Connectivity
+------------
+Connect initially to wireless network with nm
+nmcli dev wifi connect <name> password <password>
 
+Connect to a network profile already set up
+nmcli con up id <idofprofile>
