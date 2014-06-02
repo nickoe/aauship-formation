@@ -30,59 +30,70 @@ The different types of coordination and control algorithms within centralized an
 	\item [Behaviour Based Methods]
 	The behavioural based model employs several behaviours for each of the agents and the final control used to control the formation is derived from a weighting of the relative importance of each of the behaviours. This could for instance be navigational behaviours to enable a navigation to be the main goal while avoiding hazards and stay in formation. So if one agent needs to avoid a collision with an obstacle the rest of the group should not take this into account. Only that single ship needs to leave the formation and get back into formation again.
 	\item [Leader-Follower Approaches]
-	Applying leader-follower methods designates one agent as being the leader and the rest of the agents as followers. The following agents need to position themselves relative to the leader and maintain a desired relative position to the leader. This makes the simplicity to this method, but there is no feedback from the followers to the leader and thus makes that a disadvantage. Within leader-follower methods it is possible to enable changes in the shape of the team. Separation-separation and separation-bearing are two popular leader-follower formation controls, where the followers stay at specified separation and bearing from their designated leader. Within this method it is possible to split the group up into several smaller groups with their individual designated leader.
+	Applying leader-follower methods designates one agent as being the leader and the rest of the agents as followers. The following agents need to position themselves relative to the leader and maintain a desired relative position to the leader. This makes the simplicity to this method, but there is no feedback from the followers to the leader and thus makes that a disadvantage. Separation-separation and separation-bearing are two popular leader-follower formation controls, where the followers stay at specified separation and bearing from their designated leader. Within this method it is possible to split the group up into several smaller groups with their individual designated leader.
 	\item [Potential Field Approach]
-	Potential field approaches assigns potentials to agents to make a weighting between them. This weighting could for instance determine the relative distances between the agents. This is usually used when following a virtual leader, such that this process is only made relative to the agents within the structure. This method can make ensure a collision free formation when every agent has been assigned their potential weighting respectively. In this method obstacles can be included and have assigned potentials as well. This will become a avoidance radius from the specific object.
+	Potential field approaches assigns potentials to agents to make a weighting between them. This weighting could for instance determine the relative distances between the agents. This is usually used when following a virtual leader, such that this process is only made relative to the agents within the structure. This method can make ensure a collision free formation when every agent has been assigned their potential weighting respectively. In this method obstacles can be included and have assigned potentials as well. This will become an avoidance radius from the specific object.
 	\item [Graph Theory Approaches]
 	When applying the graph theory method one assign every agent as a node and assign connections between the nodes. In graph theory this is denoted vertices and edges. The study with graph theory is mainly concentrated of the formation itself and related to changes within the structure. This can be related to the structure within a tree-structure which is used when assigning the formations in graph theory manor. This can be applied as communication analysis for the agents and consensus analysis can be of benefit. The edges between the nodes symbolizes the possible connections thus communication between them. The nodes that are connected are denoted as neighbours and are capable of communicating.
 \end{description}
 
 \section{Motivation and the AAUSHIP project}
-These above mentioned theories makes the basis for the formation control within the scope of this project. This thesis will utilise formation control and extensions to manoeuvre agents through a specified area.
+These above mentioned theories makes the basis for the formation control within the scope of this project. This thesis will utilise formation control and extensions to manoeuvre agents through a specified area for surveying purposes.
 
-The port of Aalborg would like Aalborg University to help them to expand their options of improving the conditions of the Limfjord. One of their tasks is to map the seabed of the Limfjord. This would be preferable when they want to improve the conditions of the Limfjord. The port of Aalborg wants to make of a profile of the slopes of the channel in the Limfjord. This will help them guide larger cargo ships to port while using the autonomous ships as guidance.
+The port of Aalborg would like Aalborg University to help them to expand their options of improving the conditions of the Limfjord. One of their tasks is to map the seabed of the Limfjord to get bathymetry data. This will help them guide larger cargo ships to port while using the autonomous ships as guidance.
 
 Another aspect from the port of Aalborg is a task to escort larger ships with cargo into the port of Aalborg. This is done by a pilot whom needs to sail out to incoming larger cargo ships and escort them safely into port. The pilot does this in a pilot boat which is controlled manually by the pilot. The port of Aalborg would like this process to become autonomous such that an autonomous boat can sail to the cargo ship and to some extend take over the control and guide the cargo ship into port. The system to do this implies that the port of Aalborg needs an autonomous ship which can perform this task.
 
 The mapping itself can be done by one ship or by more. For the moment one of the ships from the port of Aalborg, which is manned, and covers the mapping of the closer part of the Limfjord ($\approx$ 65 km). This is only done every third year, but mapping around Hals Barre (a sandbar \todo{slet efterfølgende kommentar igen engang}and not a beach bar) at the end of the Limfjord is a more critical place and is mapped every third month.
 
-If the port of Aalborg had admitted an autonomous ship, which could sail out and do the mapping by itself, t ey would see to map the outer part of the Limfjord more often to be able to deliver more precise seabed mappings to incoming ships. Due to the autonomous system with boats would the port be able to take measurements more often of the complete fjord and therefore more favourable than only having measurements each third year. \cite{portofaalborg}.
+If the port of Aalborg had an autonomous ship fleet at their disposal, which could sail out and do the mapping autonoumously, they would get updated bathymetry maps with a higher update frequency than they have currently.  \cite{portofaalborg}.
 
 \subsection{The mission}
 Within the scope of this project the robots will be unmanned ships,
 \ac{ASV}. The ship's main purpose will be to map the seabed by using
-sonars. When one ship need to do this alone, and due to the range of
-the sonar, the time spend could be improved. The sonar scanning would
+sonars to obtain bathymetry data. When one ship need to do this alone, and due to the range of
+the sonar, the time spend could be improved by using multiple ships. The sonar scanning would
 be done as seen on figure~\vref{fig:concept-art}.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.48\textwidth]{fig/conseptart-single}
-	\includegraphics[width=0.48\textwidth]{fig/conseptart-formation}
-	\caption{Concept drawings of ship scanning a sea floor. Left is a
-	single ship, right is a fleet of ships in formation.}
+	\subfloat[One ship\label{fig:concept-art1}]{\includegraphics[width=0.48\textwidth]{fig/conseptart-single}}
+	\ % One forced space to seperate figures
+	\subfloat[Thee ships\label{fig:concept-art3}]{\includegraphics[width=0.48\textwidth]{fig/conseptart-formation}}
+	\caption{Comparison of two ways to cover an area with a lawn mower
+	pattern.}
 	\label{fig:concept-art}
 \end{figure}
 
-When only one ship need to map a complete seabed this process could
+When only one ship (figure~\vref{fig:concept-art1}) need to map a complete seabed this process could
 take up much time dependent on the area that need to be covered. The
 time spend could be improved to make this mapping more efficient. One
-way of optimizing the time used is to add more ships to help map the
+way of optimizing the time used is to add more ships (figure~\vref{fig:concept-art3}) to help map the
 seabed. To make the process of this as optimal as possible it could be
 of benefit to implement formation control in the specific assignment.
-This could be done in several ways, but is mostly thought of in a
-rigid formation, such that the formation maps the same area of the
-seabed the whole time. The idea can be seen on
-figure~\vref{fig:concept-art}.
 
-The distances between the ships would be determined by how far the sonars could reach the seabed. There should be some overlap of the maps from each sonar but still as little as possible. The specific formation could be a simple line or it could be more advanced formations. This does not have any relevant impact of how the mappings of the seabed would be due to the subsequent processing of the collected data from the maps. Different formations of ships can be seen on figure~\vref{fig:diffforms}.
+%This could be done in several ways, but is mostly thought of in a
+%rigid formation, such that the formation maps the same area of the
+%seabed the whole time. The idea can be seen on
+%figure~\vref{fig:concept-art}.
+
+\subsection{Approaches on formation control}
+When performing this kind of surveying with multiple ships, it is important to take note of the kind of sensor it uses and the coverage that it provides. Initially the port of Aalborg used single beam echo sounders, but have in recent years turned over to multibeam sonars for their survey boat, which has improved their resolution and time for a survey. But they still wishes to improve the update rate, by i.e. using fairly low cost autonomous ships.
+
+\missingfigure{Picture of the port of Aalborg's survey boat.}
+
+This does not have any relevant impact of how the mappings of the seabed would be due to the subsequent processing of the collected data from the maps.
+
+Different formations of ships can be seen on figure~\vref{fig:diffforms}.
 \begin{figure}[htbp]
 	\centering
 	\includesvg[width=0.5\textwidth]{diffforms}
 	\caption{Different formations which the \ac{ASV}s can make.}
 	\label{fig:diffforms}
 \end{figure}
+
 The formation of the ships may not need to be strictly rigid. Situations could appear where it would be of benefit to change the ship's formation. If the formation need to avoid an obstacle and one or more ships needs to go faster or slower, which leads to a change in the formation, it might be of benefit to regroup the formation which is faster to reach. An example can be seen on figure~\vref{fig:avoid}.
+
 \begin{figure}[htbp]
 	\centering
 	\includesvg[width=0.5\textwidth]{form_avoid}
@@ -93,8 +104,9 @@ The formation of the ships may not need to be strictly rigid. Situations could a
 When doing the formation control it is important to figure out what one
 want to achieve, and depending on the strategy and the formation type
 some things are to be considered as requirements regarding how the
-formation should work. In this discussion lawnmower patterns are considered. In this work two ships are considered for simplicity, but it should be extensible to n-number of ships. The lawnmower patterns will suit well for the mapping of a seabed where one or more ships are to sail from shore to shore in a fjord.
+formation should work. In this discussion lawnmower patterns are considered. In this work thee ships are considered for simplicity, but it should be extensible to n-number of ships. The lawnmower patterns will suit well for the mapping of a seabed where one or more ships are to sail from shore to shore in a fjord.
 
+\subsubsection{Initialisation}
 When looking at the specific task several things needs to be taken into account. When starting the mission, the ships may start at positions that is not in the desired formation. It might be of importance that the ships are in
 formation when they start tracking the desired track. Therefore some
 attention must be given on how to make the ships initialize this
