@@ -14,10 +14,10 @@ I_g = [ 6.5406e-02  -1.2600e-02  -5.3593e-02
 m   = 13;             % mass
 
 % rigid body mass matrix, page 53 fossen
-MRB = [ m*eye(3)     -m*Smtrx(r_g)
+MRB_6dof = [ m*eye(3)     -m*Smtrx(r_g)
         m*Smtrx(r_g) I_g          ];
-MRB = [MRB(1:2,1:2) MRB(1:2,4:6)
-       MRB(4:6,1:2) MRB(4:6,4:6)]; % 5DOF, without heave
+MRB = [MRB_6dof(1:2,1:2) MRB_6dof(1:2,4:6)
+       MRB_6dof(4:6,1:2) MRB_6dof(4:6,4:6)]; % 5DOF, without heave
 
 % CRB = m2c(MRB,nu) % rigid body Coriolis matrix, page 56 fossen
 
@@ -109,7 +109,7 @@ end
 % legend('surge vel', 'sway vel', 'roll vel')
 % title('wop')
 
-save('ssaauship.mat','Ad','Bd')
+save('ssaauship.mat','Ad','Bd','MRB','D','r_g')
 
 %%
 % figure(2)
