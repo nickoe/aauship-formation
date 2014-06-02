@@ -18,6 +18,9 @@
 *.toc
 *.tdo
 *.eps
+*.ilg
+*.nlo
+*.nls
 
 # Hardware files
 *.bak
