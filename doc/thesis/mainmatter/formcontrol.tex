@@ -3,12 +3,11 @@
 
 %\head{Formation control in general is concerned with simultaneous control of dynamic systems. These systems is often referred to as agents where the objective of these is to maintain a static reference to a specified object. This object could be another agent witch then would be referred to as the leader. The other agents objective will then be to stay in the relative position to the leader within a static formation.}
 
-
 The theory of formation control in general is widely applied. It is usually applied in assignments regarding control of robots which needs to be placed relative to each other. Depending on the given task of the robots, and which type of robots are in focus, the formation can be utilized in different ways \cite{muv-survey1}.
 
 The robots can also be of various types: Driving vehicles, helicopters, aeroplanes, ships etc. which can be both manned and unmanned. The tasks that these robots needs to fulfill can vary greatly. Robots in groups in general have many purposes such as vacuum cleaning robots, who needs to clean a rather large area or flying swarm robots like quadcoptors who can make different kinds of assignments. When quadcoptors work as a combined group they could lift a certain amount of payload to achieve their goal as a group, or they could work individually in a network to do several smaller tasks. An example of how quadcoptors are working together can be examined at \citep{ethswarm}.
 
-All these robots are in the terminology of \cite{muv-survey} are called \textit{agents}. These agents move either individually or in formation. This formation can be rigid or be flexible. If the agents move in rigid formation they will keep their relative positions to each other and must not diverge from the formation. The formation could also be flexible which sometimes is preferable. If the distances between three agents on line are large, and an obstacle needs to be avoided, only one of the agents needs to move from this obstacle if the formation is flexible. This can be seen on figure~\vref{fig:form_avoid_right}.
+All the robots in the terminology of \cite{muv-survey} are called \textit{agents}. These agents move either individually or in formation. This formation can be rigid or be flexible. If the agents move in rigid formation they will keep their relative positions to each other and must not diverge from the formation. The formation could also be flexible which sometimes is preferable. If the distances between three agents on line are large, and an obstacle needs to be avoided, only one of the agents needs to move from this obstacle if the formation is flexible. This can be seen on figure~\vref{fig:form_avoid_right}.
 \begin{figure}[htbp]
 	\centering
 	\includesvg[width=0.5\textwidth]{form_avoid_right}
