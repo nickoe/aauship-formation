@@ -1,33 +1,20 @@
-\chapter{Simulation Model}
-\head{This section will describe the model that is used for simulation
-of the system, as a replacement for testing on the real ship.}
+\chapter{Simulation Model} \head{This section will describe the model
+that is used for simulation of the system, as a replacement for
+testing on the real ship.}
 
-To make a model for simulation model, it is needed to emulate the
-real sensor outputs with noise imposed onto the signals. Using a
-\ac{LTI} state space model based on the unified model \vref{eq:totmodel}
-is constructed as \vref{eq:ss} as defined by \citep[p. 175]{fossen}.
+To make a model for simulation model, it is needed to emulate the real
+sensor outputs with noise imposed onto the signals. Using a \ac{LTI}
+state space model based on the unified model \vref{eq:totmodel} is
+constructed as \vref{eq:ss} as defined by \citep[p. 175]{fossen}.
 
-\begin{subequations}
-\begin{align}
-\dot x &=  A x + B u + E w \\
-A &=
-\begin{bmatrix}
-0 & I\\
-	-M^{-1}G & -M^{-1}D
-\end{bmatrix}, \quad
-B = 
-\begin{bmatrix}
-	0 \\
-	M^{-1}
-\end{bmatrix}, \quad
-E =
-\begin{bmatrix}
-0 \\
-M^{-1}
-\end{bmatrix}
-\end{align}
-\label{eq:ss}
-\end{subequations}
+\begin{subequations} \begin{align} \dot x &=  A x + B u + E w \\ A &=
+		\begin{bmatrix} 0 & I\\ -M^{-1}G & -M^{-1}D \end{bmatrix}, \quad B
+		= \begin{bmatrix} 0 \\ M^{-1} \end{bmatrix}, \quad E =
+		\begin{bmatrix} 0 \\ M^{-1} \end{bmatrix} \end{align}
+	\label{eq:ss} \end{subequations}
+
+The matrix $E$ describes the sea state and vector $w$ is the
+represents the process noise.
 
 \nomenclature{$x_n, y_n$}{Position in the \acs{NED}-frame, usually
 computed from a \acs{GPS}}
