@@ -5,7 +5,7 @@ set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
 set(gcf,'paperunits','centimeters')
 set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
 set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
-% load inertia.mat
+load('../inertia.mat')
 linewidth = 1;
 %% Data files
 logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';

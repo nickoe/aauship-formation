@@ -159,3 +159,5 @@ Iyz = 0 + m1*y1*z1 ...
 I = [Ixx -Ixy -Ixz;
      -Ixy Iyy -Iyz;
      -Ixz -Iyz Izz]
+ 
+save('inertia.mat','I')
