@@ -53,9 +53,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.9482426"
-     inkscape:cx="206.00862"
-     inkscape:cy="6.3724703"
+     inkscape:zoom="11.167316"
+     inkscape:cx="128.44176"
+     inkscape:cy="133.97272"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -82,7 +82,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -99,7 +99,7 @@
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;marker-end:url(#Arrow2Mend)" />
     <g
        id="g3052"
-       transform="translate(205.65453,-84.999706)">
+       transform="translate(65.65453,-84.999706)">
       <text
          xml:space="preserve"
          style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
@@ -135,17 +135,17 @@
        sodipodi:linespacing="125%"
        id="text3069"
        y="922.36096"
-       x="445"
+       x="305"
        style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
        xml:space="preserve"><tspan
          id="tspan3071"
          style="font-size:13px"
          y="922.36096"
-         x="445"
+         x="305"
          sodipodi:role="line">$x_n, y_n$</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;marker-end:url(#Arrow2Mend)"
-       d="m 90.492678,922.36096 238.999992,0"
+       d="m 90.492678,922.36096 98.999992,0"
        id="path3112"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -186,20 +186,20 @@
     <text
        xml:space="preserve"
        style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
-       x="104.4927"
-       y="937.36096"
+       x="105"
+       y="934.36096"
        id="text3265"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="104.4927"
-         y="937.36096"
+         x="105"
+         y="934.36096"
          style="font-size:13px"
          id="tspan3267">$U$</tspan></text>
     <path
-       sodipodi:nodetypes="cccc"
+       sodipodi:nodetypes="cccccc"
        inkscape:connector-curvature="0"
        id="path3269"
-       d="M 90.492678,937.36096 225,937.36095 l 0.49267,90.00005 108.28362,0"
+       d="M 90.492678,937.36096 155,937.36095 l 0,20 70,0 0.49267,70.00005 108.28362,0"
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;marker-end:url(#Arrow2Mend)" />
     <g
        transform="translate(114.28362,20.000231)"
@@ -299,50 +299,50 @@
     <text
        sodipodi:linespacing="125%"
        id="text3319"
-       y="971.36096"
+       y="969.36096"
        x="105"
        style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
        xml:space="preserve"><tspan
          id="tspan3321"
          style="font-size:13px"
-         y="971.36096"
+         y="969.36096"
          x="105"
          sodipodi:role="line">$a$</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
        x="105"
-       y="984.36096"
+       y="982.36096"
        id="text3323"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          x="105"
-         y="984.36096"
+         y="982.36096"
          style="font-size:13px"
          id="tspan3325">$m$</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3327"
-       y="996.36096"
+       y="994.36096"
        x="105"
        style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
        xml:space="preserve"><tspan
          id="tspan3329"
          style="font-size:13px"
-         y="996.36096"
+         y="994.36096"
          x="105"
          sodipodi:role="line">$\omega$</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3392"
-       y="920.36096"
-       x="127.4927"
+       y="919.36096"
+       x="124"
        style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
        xml:space="preserve"><tspan
          id="tspan3394"
          style="font-size:13px"
-         y="920.36096"
-         x="127.4927"
+         y="919.36096"
+         x="124"
          sodipodi:role="line">lat, lon</tspan></text>
     <g
        transform="translate(199.49267,-84.999764)"
@@ -393,26 +393,26 @@
     <text
        xml:space="preserve"
        style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
-       x="439.49268"
-       y="1022.361"
+       x="440"
+       y="1019.361"
        id="text3412"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="439.49268"
-         y="1022.361"
+         x="440"
+         y="1019.361"
          style="font-size:13px"
          id="tspan3414">$u$</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3416"
-       y="1035.3608"
-       x="439.49268"
+       y="1032.361"
+       x="440"
        style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
        xml:space="preserve"><tspan
          id="tspan3418"
          style="font-size:13px"
-         y="1035.3608"
-         x="439.49268"
+         y="1032.361"
+         x="440"
          sodipodi:role="line">$v$</tspan></text>
     <g
        id="g3420"
@@ -463,37 +463,37 @@
     <text
        xml:space="preserve"
        style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
-       x="350.49268"
-       y="974.36102"
+       x="351"
+       y="971.36096"
        id="text3436"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="350.49268"
-         y="974.36102"
+         x="351"
+         y="971.36096"
          style="font-size:13px"
          id="tspan3438">$\phi$</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3440"
-       y="987.36102"
-       x="350.49268"
+       y="984.36096"
+       x="351"
        style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
        xml:space="preserve"><tspan
          id="tspan3442"
          style="font-size:13px"
-         y="987.36102"
-         x="350.49268"
+         y="984.36096"
+         x="351"
          sodipodi:role="line">$\theta$</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
-       x="350.49268"
-       y="999.36102"
+       x="351"
+       y="996.36096"
        id="text3444"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="350.49268"
-         y="999.36102"
+         x="351"
+         y="996.36096"
          style="font-size:13px"
          id="tspan3446">$\psi$</tspan></text>
     <rect
@@ -523,7 +523,7 @@
          sodipodi:role="line">$x$</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;marker-end:url(#Arrow2Mend)"
-       d="m 335.49267,999.36101 47,0 0,-41.00005 -7,0 0.0502,-10.75888"
+       d="m 335.49267,999.36101 47,0 0,-41.00005 -147,0 0.0502,-10.75888"
        id="path4242"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
@@ -551,5 +551,57 @@
          y="1042.361"
          style="font-size:13px"
          id="tspan4317">$p, q, r$</tspan></text>
+    <g
+       transform="translate(205,-84.999824)"
+       id="g5123">
+      <text
+         sodipodi:linespacing="125%"
+         id="text5125"
+         y="1012.3608"
+         x="170"
+         style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
+         xml:space="preserve"><tspan
+           id="tspan5127"
+           style="font-size:13px"
+           y="1012.3608"
+           x="170"
+           sodipodi:role="line">NED to</tspan></text>
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path5129"
+         d="m 125,997.36078 90,0 0,35.00002 -90,0 z"
+         style="fill:none;stroke:#000000;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0" />
+      <text
+         xml:space="preserve"
+         style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
+         x="170"
+         y="1027.3607"
+         id="text5131"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="170"
+           y="1027.3607"
+           style="font-size:13px"
+           id="tspan5133">BODY</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;marker-end:url(#Arrow2Mend)"
+       d="M 280.65454,930.36101 328,930.36095"
+       id="path5135"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
+       x="445"
+       y="922.36096"
+       id="text5137"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="445"
+         y="922.36096"
+         style="font-size:13px"
+         id="tspan5139">$x_b, y_b$</tspan></text>
   </g>
 </svg>
