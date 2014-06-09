@@ -2,4 +2,54 @@
 \head{This section will describe the model that is used for simulation
 of the system, as a replacement for testing on the real ship.}
 
+To make a model for simulation model, it is needed to emulate the
+real sensor outputs with noise imposed onto the signals. Using a
+\ac{LTI} state space model based on the unified model \vref{eq:totmodel}
+is constructed as \vref{eq:ss} as defined by \citep[p. 175]{fossen}.
 
+\begin{subequations}
+\begin{align}
+\dot x &=  A x + B u + E w \\
+A &=
+\begin{bmatrix}
+0 & I\\
+	-M^{-1}G & -M^{-1}D
+\end{bmatrix}, \quad
+B = 
+\begin{bmatrix}
+	0 \\
+	M^{-1}
+\end{bmatrix}, \quad
+E =
+\begin{bmatrix}
+0 \\
+M^{-1}
+\end{bmatrix}
+\end{align}
+\label{eq:ss}
+\end{subequations}
+
+\nomenclature{$x_n, y_n$}{Position in the \acs{NED}-frame, usually
+computed from a \acs{GPS}}
+\nomenclature{$a_x, a_y, a_z$}{Linear accelerations from accelerometer}
+\nomenclature{$m_x, m_y, m_z$}{Magnetic field from magnetometer}
+\nomenclature{$\omega_x, \omega_y, \omega_z$}{Angular velocity from rate gyro}
+\nomenclature{$\psi$}{Heading of ship}
+
+\section{Sensor Measurements to State Vector}
+For the control system it is needed to convert the sensor measurements
+to the system state vector, such that the control system can be
+designed. Figure~\vref{fig:intermediate-calc} shows the computation
+flow to determine this. It shall be noted that the \ac{GPS} and
+\ac{IMU} blocks has the sensor noise in them.
+
+Now that the state vector is present an state observer can be used to
+filter the measurements.
+
+\begin{figure}
+	\centering
+	\includesvg{intermediate-sensor-calculations-block}
+	\caption{Block diagram over the computation of system states from
+	raw sensor measurements.}
+	\label{fig:intermediate-calc}
+\end{figure}
