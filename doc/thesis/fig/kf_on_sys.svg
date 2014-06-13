@@ -39,9 +39,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="203.88471"
-     inkscape:cy="55.048961"
+     inkscape:zoom="16"
+     inkscape:cx="201.97873"
+     inkscape:cy="103.13985"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -508,15 +508,15 @@
     <text
        xml:space="preserve"
        style="font-size:6px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="200"
-       y="182.36218"
+       x="197"
+       y="182.36217"
        id="text3761-5-25-3-9-7"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="200"
-         y="182.36218"
+         x="197"
+         y="182.36217"
          id="tspan3765-9-47-43-4-7"
-         style="font-size:6px">$\hat z_{k}$</tspan></text>
+         style="font-size:6px">$\hat z_{k}^-$</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:6px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
@@ -643,5 +643,16 @@
        inkscape:connector-curvature="0"
        transform="translate(-33.035156,9.8688594)"
        sodipodi:nodetypes="ccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:6px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="310"
+       y="245.36217"
+       id="text4208-0-03-7"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4210-84-7-8"
+         x="310"
+         y="245.36217">$+$</tspan></text>
   </g>
 </svg>

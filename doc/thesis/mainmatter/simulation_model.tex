@@ -79,9 +79,32 @@ normal distribution of this should suffice. \todo{Is this good enough
 or even correct? We have nonlinearities.}
 
 \section{Kalman Filter design}
+
+A \ac{KF} is one of the observers that can be applied to estimate the state vector. This is done to filter the measurements from the vessel and smooth these. If the measurements are too noisy, such that the vessel changes direction suddenly, but should be surging forward, a filter can predict the modelled direction and compare this to the measurement. This would work as a low pass filter and make the changes in the measurements smaller with respect to the model predictions.
+
+The \ac{KF} comprises the deterministic part of the model which estimates the state vector. This is corrected by means of measurements, to make the final estimated state vector. The process is modelled as seen on figure ~\ref{fig:blockkf} where the \ac{KF} is included.
+
 \begin{figure}
 	\centering
 	\includesvg{kf_on_sys}
 	\caption{Block diagram of kalman filter estimating the state vector.}
 	\label{fig:blockkf}
 \end{figure}
+
+The \ac{KF} prediction and update can be written as:
+\begin{itemize}
+\item Prediction
+\begin{align}
+\hat x_{k}^- &= \Phi_{k}\ \hat x_{k-1}^- + G_{k}\ u_{k-1}\nonumber\\
+\hat z_{k}^- &= H_{k}\ \hat x_{k}^-\nonumber\\
+P_{k}^- &= \Phi_{k}\ P_{k-1}^-\ \Phi_{k}^T + Q_{k}\nonumber
+\end{align}
+
+\item Update
+\begin{align}
+K_{k} &= P_{k}^- H_{k}^T(H_{k} P_{k}^- H_{k}^T+R_{k})^{-1}\nonumber\\
+\hat x_{k}^+ &= \hat x_{k}^- + K_{k}(z_{k}-\hat z_{k}^-)\nonumner\\
+P_{k}^+ &= (I-K_{k}\ H_{k})P_{k}^-\nonumber
+\end{align}
+\end{itemize}
+where $P$ is the correlation matrix, $Q$ is a measure of how much the model is to be trusted and $R$ is a measure of how much the measurement are to be trusted.
