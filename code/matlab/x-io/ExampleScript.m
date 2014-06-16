@@ -27,7 +27,15 @@ clc;                                % clear the command terminal
 
 %% Import and plot sensor data
 
-load('ExampleData.mat');
+% load('ExampleData.mat');
+
+load('../log-viewer/testfile.mat');
+Accelerometer = output_args(:,5:7);
+Gyroscope = output_args(:,2:4);
+Magnetometer = output_args(:,8:10);
+time = 0:0.1:length(Accelerometer)/10-0.1;
+
+%%
 
 figure('Name', 'Sensor Data');
 axis(1) = subplot(3,1,1);
@@ -64,14 +72,19 @@ linkaxes(axis, 'x');
 
 %% Process sensor data through algorithm
 
-AHRS = MadgwickAHRS('SamplePeriod', 1/256, 'Beta', 0.1);
+% AHRS = MadgwickAHRS('SamplePeriod', 1/256, 'Beta', 0.1);
 % AHRS = MahonyAHRS('SamplePeriod', 1/256, 'Kp', 0.5);
 
-quaternion = zeros(length(time), 4);
+% AHRS = MadgwickAHRS('SamplePeriod', 1/10, 'Beta', 1.1);
+AHRS = MahonyAHRS('SamplePeriod', 1/10, 'Kp', 4.2, 'Ki', 1);
+
+quaternion = NaN(length(time), 4);
+tic
 for t = 1:length(time)
     AHRS.Update(Gyroscope(t,:) * (pi/180), Accelerometer(t,:), Magnetometer(t,:));	% gyroscope units must be radians
     quaternion(t, :) = AHRS.Quaternion;
 end
+toc
 
 %% Plot algorithm output as Euler angles
 % The first and third Euler angles in the sequence (phi and psi) become
@@ -83,13 +96,13 @@ euler = quatern2euler(quaternConj(quaternion)) * (180/pi);	% use conjugate for s
 
 figure('Name', 'Euler Angles');
 hold on;
-plot(time, euler(:,1), 'r');
-plot(time, euler(:,2), 'g');
-plot(time, euler(:,3), 'b');
+plot(time, euler(:,1), '.-r');
+plot(time, euler(:,2), '.-g');
+plot(time, -euler(:,3), '.-b');
 title('Euler angles');
 xlabel('Time (s)');
 ylabel('Angle (deg)');
-legend('\phi', '\theta', '\psi');
+legend('phi', 'theta', 'psi');
 hold off;
 
 %% End of script
