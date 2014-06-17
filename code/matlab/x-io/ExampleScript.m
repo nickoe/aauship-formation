@@ -32,8 +32,20 @@ clc;                                % clear the command terminal
 load('../log-viewer/testfile.mat');
 Accelerometer = output_args(:,5:7);
 Gyroscope = output_args(:,2:4);
+Gyroscope = [Gyroscope(:,1)+4.6 Gyroscope(:,2)+16.15 Gyroscope(:,3)+5.4];
 Magnetometer = output_args(:,8:10);
+% Magnetometer = [Magnetometer(:,1) Magnetometer(:,2) Magnetometer(:,3)];
 time = 0:0.1:length(Accelerometer)/10-0.1;
+
+% N = 1000;
+% Accelerometer = randn(N,3)*3.6226e-06; % Standard variance
+% mb = [0.1298 -0.0065 -0.0445]+[-0.0385   -0.0190   -0.0120]; % Magnetometer field
+% Magnetometer = (randn(N,3)*1.3210e-05); % Standard variance
+% Magnetometer = [Magnetometer(:,1)+mb(1) Magnetometer(:,2)+mb(2) Magnetometer(:,3)+mb(3)];
+% Gyroscope = randn(N,3)*0.0974; % Allan variance
+% time = 0:0.1:length(Accelerometer)/10-0.1;
+
+
 
 %%
 
@@ -75,8 +87,9 @@ linkaxes(axis, 'x');
 % AHRS = MadgwickAHRS('SamplePeriod', 1/256, 'Beta', 0.1);
 % AHRS = MahonyAHRS('SamplePeriod', 1/256, 'Kp', 0.5);
 
-% AHRS = MadgwickAHRS('SamplePeriod', 1/10, 'Beta', 1.1);
-AHRS = MahonyAHRS('SamplePeriod', 1/10, 'Kp', 4.2, 'Ki', 1);
+AHRS = MadgwickAHRS('SamplePeriod', 1/10, 'Beta', 0.1);
+% AHRS = MahonyAHRS('SamplePeriod', 1/10, 'Kp', 15.4, 'Ki', 0);
+% AHRS = MahonyAHRS('SamplePeriod', 1/10, 'Kp', 1 , 'Ki', 0);
 
 quaternion = NaN(length(time), 4);
 tic

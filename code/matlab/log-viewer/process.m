@@ -8,8 +8,12 @@ set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
 % load inertia.mat
 linewidth = 1;
 %% Data files
+% logpath = '~/aauship-formation/code/hli/ros/src/aauship/scripts/';
+% testname = 'logs';
+% logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
+% testname = 'magnetometertest-lab2';
 logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
-testname = 'magnetometertest-lab2';
+testname = 'magnetometertest-lab6/test02';
 
 %% Data files
 gps1file = fopen([logpath,testname,'/gps1.log']);
@@ -87,6 +91,9 @@ supply = imudata(:,1)*0.002418; % Scale 2.418 mV
 gyro = imudata(:,2:4)*0.05; % Scale 0.05 degrees/sec
 accl = (imudata(:,5:7)*0.00333)*9.82;   %/333)*9.82; % Scale 3.33 mg (g is gravity, that is g-force)
 magn = imudata(:,8:10)*0.0005; % 0.5 mgauss
+% magn(17,:) = [0 0 0];
+% magn(196,:) = [0 0 0];
+% magn(1400,:) = [0 0 0];
 temp = imudata(:,11)*0.14; % 0.14 degrees celcius 
 aux_adc = imudata(:,12)*0.806; % 0.mV
 imutime = imudata(:,13)-starttime; % Seconds since start, periodic timing determined by imu
@@ -131,9 +138,11 @@ heading = atan2(-magn(:,2),magn(:,1))*180/pi;
 % title('Heading calculated with atan2, not corrected for pitch or roll')
 % % subplot(2,1,1)
 % plot(imutime,Azimuth)
-
+%%
 figure(50)
-bias = [0.2582 0.1225 -0.6860];
+% bias = [0.2582 0.1225 -0.6860];
+% bias = [0 0 0];
+bias = [0.28 0.15 -0.18]; % magnetometertest-lab6, on office chair
 % bias = [(max(magn(:,1))-min(magn(:,1)))/2+min(magn(:,1)),...
 %         (max(magn(:,2))-min(magn(:,2)))/2+min(magn(:,2)),...
 %         (max(magn(:,3))-min(magn(:,3)))/2+min(magn(:,3))]
@@ -144,6 +153,36 @@ grid on
 % hold on
 % plot3(bias(1), bias(2), bias(3),'r*')
 % hold off
+
+%
+xcb = 0;
+ycb = 0;
+zcb = 0;
+r = 0.5;
+xc = xcb-r:0.01:xcb+r;
+yc = ycb - real(sqrt((r^2 - xc.^2 + 2 * xcb .* xc - xcb.^2)));
+
+figure(51)
+subplot(311)
+plot(magn(:,1)-bias(1),magn(:,2)-bias(2),xc,yc,xc,-yc+2*ycb,xcb,ycb,'r*')
+xlabel('x')
+ylabel('y')
+axis equal
+grid on
+subplot(312)
+plot(magn(:,1)-bias(1),magn(:,3)-bias(3),xc,yc,xc,-yc+2*ycb,xcb,ycb,'r*')
+xlabel('x')
+ylabel('z')
+axis equal
+grid on
+subplot(313)
+plot(magn(:,2)-bias(2),magn(:,3)-bias(3),xc,yc,xc,-yc+2*ycb,xcb,ycb,'r*')
+xlabel('y')
+ylabel('z')
+axis equal
+grid on
+
+
 
 %% MEMSENS stuff
 magnbias = [magn(:,1)-bias(1) magn(:,2)-bias(2) magn(:,3)-bias(3)];
