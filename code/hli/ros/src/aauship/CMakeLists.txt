@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   genmsg
   message_generation
+	tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -110,13 +111,17 @@ catkin_package(
 ## Your package locations should be listed before other locations
 # include_directories(include)
 include_directories(
-  ${catkin_INCLUDE_DIRS}
+  include
+	${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a cpp library
 # add_library(aauship
 #   src/${PROJECT_NAME}/aauship.cpp
 # )
+add_library(aauship
+	src/test.cpp
+)
 
 ## Declare a cpp executable
 # add_executable(aauship_node src/aauship_node.cpp)
@@ -132,8 +137,14 @@ include_directories(
 
 #add_executable(joy-teleop-node src/joy-teleop-node.cpp)
 #target_link_libraries(joy-teleop-node  ${catkin_LIBRARIES})
-add_executable(joy-teleop-step-node src/joy-teleop-step-node.cpp)
-target_link_libraries(joy-teleop-step-node  ${catkin_LIBRARIES})
+#add_executable(joy-teleop-step-node src/joy-teleop-step-node.cpp)
+#target_link_libraries(joy-teleop-step-node  ${catkin_LIBRARIES})
+add_executable(ahrs-mahony-node src/ahrs-mahony-node.cpp)
+target_link_libraries(ahrs-mahony-node ${catkin_LIBRARIES})
+
+#add_executable(MahonyAHRS src/MahonyAHRS.cpp)
+#target_link_libraries(MahonyAHRS ${catkin_LIBRARIES})
+
 
 #############
 ## Install ##
