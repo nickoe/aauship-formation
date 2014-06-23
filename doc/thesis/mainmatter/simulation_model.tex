@@ -80,7 +80,7 @@ or even correct? We have nonlinearities.}
 
 \section{Kalman Filter design}
 
-A \ac{KF} is one of the observers that can be applied to estimate the state vector. This is done to filter the measurements from the vessel and smooth these. If the measurements are too noisy, such that the vessel changes direction suddenly, but should be surging forward, a filter can predict the modelled direction and compare this to the measurement. This would work as a low pass filter and make the changes in the measurements smaller with respect to the model predictions.
+A \ac{KF} is one type of observer that can be applied to estimate the state vector. This is done to filter the measurements from the vessel and smooth these. If the measurements are too noisy, such that the vessel changes direction suddenly, but should be surging forward, a filter can predict the modelled direction and compare this to the measurement. This would work as a low pass filter and make the changes in the measurements smaller with respect to the model predictions.
 
 The \ac{KF} comprises the deterministic part of the model which estimates the state vector. This is corrected by means of measurements, to make the final estimated state vector. The process is modelled as seen on figure ~\ref{fig:blockkf} where the \ac{KF} is included.
 
