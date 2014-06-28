@@ -14,7 +14,7 @@
 // in rviz.
 
 // Construct filter
-AHRS u;
+AHRS u(1,1,1,1);
 
 void chatterCallback(const aauship::ADIS16405::ConstPtr& msg)
 {
@@ -26,8 +26,6 @@ void chatterCallback(const aauship::ADIS16405::ConstPtr& msg)
 	transform.setRotation(q);
 	tfbc.sendTransform( tf::StampedTransform(transform, ros::Time::now(), "map", "bar"));
 
-	u.foo = 6;
-  ROS_INFO("I heard: [%f]", u.foo);
 }
 
 int main(int argc, char **argv)
