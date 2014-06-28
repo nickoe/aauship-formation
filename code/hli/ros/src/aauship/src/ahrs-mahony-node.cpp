@@ -14,7 +14,7 @@
 // in rviz.
 
 // Construct filter
-AHRS u(1,1,1,1);
+AHRS u(8.8,0.5,8.8,0.5);
 
 void adisCallback(const aauship::ADIS16405::ConstPtr& msg)
 {
