@@ -260,3 +260,44 @@ float AHRS::invSqrt(float x) {
 	y = y * (1.5f - (halfx * y * y));
 	return y;
 }
+
+void AHRS::calculateEulerAngles(void)
+{
+    eulerAngleX  =  atan2(2 * (q0*q1 + q2*q3), 1 - 2 *(q1*q1 + q2*q2));
+    eulerAngleY =   asin(2 * (q0*q2 - q1*q3));
+    eulerAngleZ   =  atan2(2 * (q0*q3 + q1*q2), 1 - 2 *(q2*q2 + q3*q3));  
+}
+
+float AHRS::getEulerAngles(int axes)
+{
+    switch(axes)
+    {
+        case 0: return eulerAngleX;
+        case 1: return eulerAngleY;
+        case 2: return eulerAngleZ;
+    }
+    return 0;
+}
+
+float AHRS::getQuaternions(int axes)
+{
+    switch(axes)
+    {
+        case 0: return q0;
+        case 1: return q1;
+        case 2: return q2;
+        case 3: return q3;
+    }
+    return 0;
+}
+
+void AHRS::setTuning(float kpA, float kiA, float kpM, float kiM)
+{
+    KpA = kpA;
+    KiA = kiA;
+    KpM = kpM;
+    KiM = kiM;
+}
+
+
+

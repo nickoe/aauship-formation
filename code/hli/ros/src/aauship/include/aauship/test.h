@@ -44,15 +44,15 @@ private:
     
 public:
     AHRS(float,float,float,float);
-//    void initAHRS(float,float,float,float,float,float); 
     void MahonyAHRSupdate(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz);
     void MahonyAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay, float az);
     float invSqrt(float x);
-//    void setTuning(float,float,float,float);
+    void setTuning(float,float,float,float);
 //    float getCorrectedRate(int);
-//    float getEulerAngles(int);
+    float getEulerAngles(int);
+    float getQuaternions(int);
 //    void reset(void);
-//    void calculateEulerAngles(void);
+    void calculateEulerAngles(void);
 //    float getError(int);
 };
 
