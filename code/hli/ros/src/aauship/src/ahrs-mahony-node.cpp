@@ -2,29 +2,28 @@
 #include "aauship/ADIS16405.h"
 #include <tf/transform_broadcaster.h>
 #include <visualization_msgs/Marker.h>
-//extern "C" {
-//	#include "aauship/MahonyAHRS.h"
-//}
 #include <aauship/test.h>
 
-//
 // This node shall read imu measurements and use an AHRS filter to
 // calculate attitude and publish such that it can render something
 // in rviz.
 
 // Construct filter
-AHRS u(8.8, 0.5);
+AHRS u(8.8, 0.5, 10);
 
 void adisCallback(const aauship::ADIS16405::ConstPtr& msg)
 {
   /* AHRS update */
   u.MahonyAHRSupdate(msg->xgyro, msg->ygyro, msg->zgyro, msg->xaccl, msg->yaccl, msg->zaccl, msg->xmagn, msg->ymagn, msg->zmagn);
-//  ROS_INFO("Quaternions: [%.3f, %.3f, %.3f, %0.3f]", u.getQuaternions(0), u.getQuaternions(1), u.getQuaternions(2), u.getQuaternions(3));
-  u.calculateEulerAngles();
-  ROS_INFO("Euler anglessss: [%.3f, %.3f, %.3f]", u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
-  ROS_INFO("getTuning: [%.3f, %.3f]", u.getTuning(0), u.getTuning(1));
   
-  /* Publist rviz information */
+  /* AHRS debug output */
+  ROS_INFO("Quaternions: [%.3f, %.3f, %.3f, %0.3f]", u.getQuaternions(1), u.getQuaternions(2), u.getQuaternions(3), u.getQuaternions(0));
+  u.calculateEulerAngles();
+//  ROS_INFO("Euler angles: [%.3f, %.3f, %.3f]", u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
+//  ROS_INFO("getTuning: [%.3f, %.3f]", u.getTuning(0), u.getTuning(1));
+//  ROS_INFO("sampleFreq: [%.3f]", u.getSampleFreq());
+  
+  /* Publish rviz information */
   static tf::TransformBroadcaster tfbc;
   tf::Transform transform;
   transform.setOrigin( tf::Vector3(0,0,0) );

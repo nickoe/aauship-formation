@@ -8,6 +8,7 @@
 // Date			Author			Notes
 // 29/09/2011	SOH Madgwick    Initial release
 // 02/10/2011	SOH Madgwick	Optimised for reduced CPU load
+// 29/06/2014   Nick Østergaard Convert to C++ for use with ROS.org
 //
 //=====================================================================================================
 #ifndef MahonyAHRS_h
@@ -17,6 +18,7 @@ class AHRS{
 private:
     volatile float twoKp;											// 2 * proportional gain (Kp)
     volatile float twoKi;											// 2 * integral gain (Ki)
+    float sampleFreq;			// sample frequency in Hz
 //    float KpA;                    // proportional gain (Kp)
 //    float KiA;                    // integral gain (Ki)
 //    float KpM;                    // proportional gain (Kp)
@@ -43,15 +45,15 @@ private:
     float magY;
     float magZ;
     
-
-    
 public:
-    AHRS(float,float);
+    AHRS(float,float,float);
     void MahonyAHRSupdate(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz);
     void MahonyAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay, float az);
     float invSqrt(float x);
     void setTuning(float,float);
     float getTuning(int);
+    float getSampleFreq( void );
+    void setSampleFreq(float);
     float getEulerAngles(int);
     float getQuaternions(int);
     void calculateEulerAngles(void);

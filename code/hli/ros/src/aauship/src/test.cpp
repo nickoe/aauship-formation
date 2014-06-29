@@ -8,24 +8,14 @@
 // Date			Author			Notes
 // 29/09/2011	SOH Madgwick    Initial release
 // 02/10/2011	SOH Madgwick	Optimised for reduced CPU load
+// 29/06/2014   Nick Østergaard Convert to C++ for use with ROS.org
 //
 //=====================================================================================================
 
 //---------------------------------------------------------------------------------------------------
 // Header files
 #include "aauship/test.h"
-//#include "../include/aauship/test.h"
-//#include "../include/MahonyAHRS.h"
 #include <math.h>
-
-//---------------------------------------------------------------------------------------------------
-// Definitions
-
-#define sampleFreq	10.0f			// sample frequency in Hz
-//#define twoKpDef	(2.0f * 0.5f)	// 2 * proportional gain
-//#define twoKiDef	(2.0f * 0.0f)	// 2 * integral gain
-//#define twoKpDef	(2.0f * 8.5f)	// 2 * proportional gain
-//#define twoKiDef	(2.0f * 0.0f)	// 2 * integral gain
 
 //---------------------------------------------------------------------------------------------------
 // Variable definitions
@@ -41,10 +31,11 @@ float invSqrt(float x);
 
 //---------------------------------------------------------------------------------------------------
 // Constructor
-AHRS::AHRS(float kp, float ki) {
+AHRS::AHRS(float kp, float ki, float fs) {
     twoKp = kp;// 2 * proportional gain (Kp)
     twoKi = ki;// 2 * integral gain (Ki)
-
+	sampleFreq = fs;
+	
 //	KpA = kpa;                        // proportional gain
 //	KiA = kia;                        // integral gain
 
@@ -308,6 +299,17 @@ void AHRS::setTuning(float kp, float ki)
 {
     twoKp = kp;
     twoKi = ki;
+}
+
+
+float AHRS::getSampleFreq( void )
+{
+    return sampleFreq;
+}
+
+void AHRS::setSampleFreq(float fs)
+{
+    sampleFreq = fs;
 }
 
 
