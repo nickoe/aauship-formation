@@ -32,7 +32,7 @@ void adisCallback(const aauship::ADIS16405::ConstPtr& msg)
   tf::Quaternion q;
   q.setRPY(u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
   transform.setRotation(q);
-  tfbc.sendTransform( tf::StampedTransform(transform, ros::Time::now(), "map", "bar"));
+  tfbc.sendTransform( tf::StampedTransform(transform, ros::Time::now(), "map", "boat"));
 }
 
 // Used to configure the filter

@@ -134,10 +134,10 @@ add_library(aauship
 #   ${catkin_LIBRARIES}
 # )
 
-#add_executable(joy-teleop-node src/joy-teleop-node.cpp)
-#target_link_libraries(joy-teleop-node  ${catkin_LIBRARIES})
-#add_executable(joy-teleop-step-node src/joy-teleop-step-node.cpp)
-#target_link_libraries(joy-teleop-step-node  ${catkin_LIBRARIES})
+add_executable(joy-teleop-node src/joy-teleop-node.cpp)
+target_link_libraries(joy-teleop-node  ${catkin_LIBRARIES})
+add_executable(joy-teleop-step-node src/joy-teleop-step-node.cpp)
+target_link_libraries(joy-teleop-step-node  ${catkin_LIBRARIES})
 add_executable(ahrs-mahony-node src/ahrs-mahony-node.cpp)
 target_link_libraries(ahrs-mahony-node aauship ${catkin_LIBRARIES})
 
