@@ -15,11 +15,12 @@
 
 class AHRS{
 private:
- 
-    float KpA;                    // proportional gain (Kp)
-    float KiA;                    // integral gain (Ki)
-    float KpM;                    // proportional gain (Kp)
-    float KiM;                    // integral gain (Ki)
+    volatile float twoKp;											// 2 * proportional gain (Kp)
+    volatile float twoKi;											// 2 * integral gain (Ki)
+//    float KpA;                    // proportional gain (Kp)
+//    float KiA;                    // integral gain (Ki)
+//    float KpM;                    // proportional gain (Kp)
+//    float KiM;                    // integral gain (Ki)
     float q0, q1, q2, q3;            // quaternion of sensor frame relative to auxiliary frame
  
     float integralFBx;                // integral error terms scaled by Ki
@@ -42,18 +43,22 @@ private:
     float magY;
     float magZ;
     
+
+    
 public:
-    AHRS(float,float,float,float);
+    AHRS(float,float);
     void MahonyAHRSupdate(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz);
     void MahonyAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay, float az);
     float invSqrt(float x);
-    void setTuning(float,float,float,float);
-//    float getCorrectedRate(int);
+    void setTuning(float,float);
+    float getTuning(int);
     float getEulerAngles(int);
     float getQuaternions(int);
-//    void reset(void);
     void calculateEulerAngles(void);
+    
 //    float getError(int);
+//    void reset(void);
+//    float getCorrectedRate(int);
 };
 
 #endif

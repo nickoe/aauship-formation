@@ -13,22 +13,24 @@
 // in rviz.
 
 // Construct filter
-AHRS u(8.8,0.5,8.8,0.5);
+AHRS u(8.8, 0.5);
 
 void adisCallback(const aauship::ADIS16405::ConstPtr& msg)
 {
   /* AHRS update */
-  u.calculateEulerAngles();
   u.MahonyAHRSupdate(msg->xgyro, msg->ygyro, msg->zgyro, msg->xaccl, msg->yaccl, msg->zaccl, msg->xmagn, msg->ymagn, msg->zmagn);
 //  ROS_INFO("Quaternions: [%.3f, %.3f, %.3f, %0.3f]", u.getQuaternions(0), u.getQuaternions(1), u.getQuaternions(2), u.getQuaternions(3));
-  ROS_INFO("Euler angles: [%.3f, %.3f, %.3f]", u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
+  u.calculateEulerAngles();
+  ROS_INFO("Euler anglessss: [%.3f, %.3f, %.3f]", u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
+  ROS_INFO("getTuning: [%.3f, %.3f]", u.getTuning(0), u.getTuning(1));
   
   /* Publist rviz information */
   static tf::TransformBroadcaster tfbc;
   tf::Transform transform;
-  transform.setOrigin( tf::Vector3(-2,-2,-2) );
-  tf::Quaternion q(u.getQuaternions(3),u.getQuaternions(0),u.getQuaternions(1),u.getQuaternions(2));
-//  q.setRPY(0,0,1);
+  transform.setOrigin( tf::Vector3(0,0,0) );
+//  tf::Quaternion q(u.getQuaternions(0),u.getQuaternions(1),u.getQuaternions(2),u.getQuaternions(3));
+  tf::Quaternion q;
+  q.setRPY(u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
   transform.setRotation(q);
   tfbc.sendTransform( tf::StampedTransform(transform, ros::Time::now(), "map", "bar"));
 }

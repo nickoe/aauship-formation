@@ -22,14 +22,15 @@
 // Definitions
 
 #define sampleFreq	10.0f			// sample frequency in Hz
-#define twoKpDef	(2.0f * 0.5f)	// 2 * proportional gain
-#define twoKiDef	(2.0f * 0.0f)	// 2 * integral gain
+//#define twoKpDef	(2.0f * 0.5f)	// 2 * proportional gain
+//#define twoKiDef	(2.0f * 0.0f)	// 2 * integral gain
+//#define twoKpDef	(2.0f * 8.5f)	// 2 * proportional gain
+//#define twoKiDef	(2.0f * 0.0f)	// 2 * integral gain
 
 //---------------------------------------------------------------------------------------------------
 // Variable definitions
 
-volatile float twoKp = twoKpDef;											// 2 * proportional gain (Kp)
-volatile float twoKi = twoKiDef;											// 2 * integral gain (Ki)
+
 volatile float q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;					// quaternion of sensor frame relative to auxiliary frame
 volatile float integralFBx = 0.0f,  integralFBy = 0.0f, integralFBz = 0.0f;	// integral error terms scaled by Ki
 
@@ -40,12 +41,15 @@ float invSqrt(float x);
 
 //---------------------------------------------------------------------------------------------------
 // Constructor
-AHRS::AHRS(float kpa, float kia,float kpm, float kim) {
-	KpA = kpa;                        // proportional gain
-	KiA = kia;                        // integral gain
+AHRS::AHRS(float kp, float ki) {
+    twoKp = kp;// 2 * proportional gain (Kp)
+    twoKi = ki;// 2 * integral gain (Ki)
 
-	KpM = kpm;                        // proportional gain
-	KiM = kim;                        // integral gain
+//	KpA = kpa;                        // proportional gain
+//	KiA = kia;                        // integral gain
+
+//	KpM = kpm;                        // proportional gain
+//	KiM = kim;                        // integral gain
 
 	q0 = 1.0;                                // quaternion of sensor frame relative to auxiliary frame
 	q1 = 0.0;
@@ -71,7 +75,6 @@ AHRS::AHRS(float kpa, float kia,float kpm, float kim) {
 	magX = 0.0;
 	magY = 0.0;
 	magZ = 0.0;
-
 }
 
 //====================================================================================================
@@ -291,12 +294,20 @@ float AHRS::getQuaternions(int axes)
     return 0;
 }
 
-void AHRS::setTuning(float kpA, float kiA, float kpM, float kiM)
+float AHRS::getTuning(int idx)
 {
-    KpA = kpA;
-    KiA = kiA;
-    KpM = kpM;
-    KiM = kiM;
+    switch(idx)
+    {
+        case 0: return twoKp;
+        case 1: return twoKi;
+    }
+    return 0;
+}
+
+void AHRS::setTuning(float kp, float ki)
+{
+    twoKp = kp;
+    twoKi = ki;
 }
 
 
