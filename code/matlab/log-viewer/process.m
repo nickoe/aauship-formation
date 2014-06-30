@@ -11,9 +11,10 @@ linewidth = 1;
 % logpath = '~/aauship-formation/code/hli/ros/src/aauship/scripts/';
 % testname = 'logs';
 % logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
-% testname = 'magnetometertest-lab2';
+testname = 'magnetometertest-lab2';
 logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
-testname = 'magnetometertest-lab6/test02';
+% testname = 'magnetometertest-lab6/test02';
+% testname = 'statictest-lab';
 
 %% Data files
 gps1file = fopen([logpath,testname,'/gps1.log']);
