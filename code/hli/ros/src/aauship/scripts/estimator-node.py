@@ -117,8 +117,8 @@ class Estimator(object):
 
         rospy.init_node('estimator')
         rospy.Subscriber('samples', Faps, self.callback)
-        self.pub_imu = rospy.Publisher('imu', ADIS16405)
-        self.pub_attitude = rospy.Publisher('attitude',Attitude)
+        self.pub_imu = rospy.Publisher('imu', ADIS16405, queue_size=10)
+        self.pub_attitude = rospy.Publisher('attitude',Attitude, queue_size=10)
         rospy.spin() # Keeps the node running untill stopped
         print("\nClosing log files")
         self.imulog.close()
