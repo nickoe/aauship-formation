@@ -238,6 +238,7 @@ void AHRS::MahonyAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay,
 //---------------------------------------------------------------------------------------------------
 // Fast inverse square-root
 // See: http://en.wikipedia.org/wiki/Fast_inverse_square_root
+/*
 float AHRS::invSqrt(float x) {
 	float halfx = 0.5f * x;
 	float y = x;
@@ -246,13 +247,20 @@ float AHRS::invSqrt(float x) {
 	y = *(float*)&i;
 	y = y * (1.5f - (halfx * y * y));
 	return y;
+}*/
+
+float AHRS::invSqrt(float x){
+//   uint32_t i = 0x5F1F1412 - (*(uint32_t*)&x >> 1);
+   unsigned int i = 0x5F1F1412 - (*(unsigned int*)&x >> 1);
+   float tmp = *(float*)&i;
+   return tmp * (1.69000231f - 0.714158168f * x * tmp * tmp);
 }
 
 void AHRS::calculateEulerAngles(void)
 {
-    eulerAngleX  =  atan2(2 * (q0*q1 + q2*q3), 1 - 2 *(q1*q1 + q2*q2));
-    eulerAngleY =   asin(2 * (q0*q2 - q1*q3));
-    eulerAngleZ   =  atan2(2 * (q0*q3 + q1*q2), 1 - 2 *(q2*q2 + q3*q3));  
+    eulerAngleX = atan2(2 * (q0*q1 + q2*q3), 1 - 2 *(q1*q1 + q2*q2));
+    eulerAngleY =  asin(2 * (q0*q2 - q1*q3));
+    eulerAngleZ = atan2(2 * (q0*q3 + q1*q2), 1 - 2 *(q2*q2 + q3*q3));  
 }
 
 float AHRS::getEulerAngles(int axes)
@@ -304,6 +312,4 @@ void AHRS::setSampleFreq(float fs)
 {
     sampleFreq = fs;
 }
-
-
 
