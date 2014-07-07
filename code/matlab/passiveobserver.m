@@ -6,57 +6,62 @@
 clc; clear all; clf;
 
 % SImulation parameters
-N = 901;
+N = 900;
 h = 0.1; % Sampling time
 
-% System Matrices:
-mass = 405;
-
+% System matrices
 ss = load('ssaauship.mat');
 
-MRB = ss.MRB
-D = ss.D
-% D = diag(ones(1,5));
-% D = [D(1:2,1:2) zeros(2,1) D(1:2,3:5)
-%         zeros(1,6)
-%         D(3:5,1:2) zeros(3,1) D(3:5,3:5)]
-i_MRB = inv(MRB)
+% MRB = ss.MRB;
+% MRB = [MRB(1:2,1:2) MRB(1:2,5);...
+%        MRB(5,1:2) MRB(5,5)];
 
-rbg = ss.r_g'
+% D = ss.D;
+% D = [D(1:2,1:2) D(1:2,5);...
+%        D(5,1:2) D(5,5)];
 
-H_6dof = [eye(3) Smtrx(rbg)';...
-     zeros(3,3) eye(3)];
+% Example 11.6 page 318 in Fossen
+MRB = [5.3122*10^6 0 0;
+       0 8.2831*10^6 0;
+       0 0 3.7454*10^9];
+D = [5.0242*10^4 0 0;
+     0 2.7229*10^5 -4.393*10^6;
+     0 -4.3933*10^6 4.1894*10^8]; 
 
+i_MRB = inv(MRB);
+rbg = ss.r_g';
+
+H_6dof  = [eye(3) Smtrx(rbg)';...
+           zeros(3,3) eye(3)];
 Ht_6dof = [eye(3) zeros(3,3);...
-     Smtrx(rbg) eye(3)];
+           Smtrx(rbg) eye(3)];
 
-H = [H_6dof(1:2,1:2) H_6dof(1:2,4:6)
-       H_6dof(4:6,1:2) H_6dof(4:6,4:6)]; % 5DOF, without heave,
-   
-Ht = [Ht_6dof(1:2,1:2) Ht_6dof(1:2,4:6)
-       Ht_6dof(4:6,1:2) Ht_6dof(4:6,4:6)]; % 5DOF, without heave
+H  = [H_6dof(1:2,1:2) H_6dof(1:2,6)
+      H_6dof(6,1:2) H_6dof(6,6)]; % 3DOF
+Ht = [Ht_6dof(1:2,1:2) Ht_6dof(1:2,6)
+      Ht_6dof(6,1:2) Ht_6dof(6,6)]; % 3DOF
 
 % iM_t = inv(Ht)*inv(Ht*(MRB)*H);
 % eta_d = [8 3 2 0 0 0.5]';
 
-eta = zeros(N,5);
-dot_est_eta = zeros(N,5);
-est_eta = zeros(N,5);
-dot_est_b = zeros(N,5);
-est_b = zeros(N,5);
-dot_est_nu = zeros(N,5);
-est_nu = zeros(N,5);
-est_nu(1,:) = [0 0 0 0 pi/4];
-err_y = zeros(N,5);
+eta = zeros(N,3);
+dot_est_eta = zeros(N,3);
+est_eta = zeros(N,3);
+dot_est_b = zeros(N,3);
+est_b = zeros(N,3);
+dot_est_nu = zeros(N,3);
+est_nu = zeros(N,3);
+est_nu(1,:) = [0 0 pi/4];
+err_y = zeros(N,3);
 % est_rotD = zeros(2,2,N);
 % est_pos = zeros(2,N);
-R = zeros(5,5);
-Rt = zeros(5,5);
+R = zeros(3,3);
+Rt = zeros(3,3);
 
-k2 = diag([1.1 1.1 1.1 1.1 1.1])*10;
-k4 = diag([0.1 0.1 0.01 0.01 0.01])*10;
+k2 = diag([1.1 1.1 1.1])*10;
+k4 = diag([0.1 0.1 0.01])*10;
 k3 = 0.1*k4;
-T = diag([100 100 100 100 100]);
+T = diag([1000 1000 1000]);
 
 % Eta0 = [0 0 0 0 (45*pi/180)];
 % tau = [0 0 0 0 0]';
@@ -72,7 +77,7 @@ x = zeros(N,10);
 x(1,:) = [0 0 0 0 pi/4 6 0 0 0 0]';
 xdot = zeros(N,10);
 NED = zeros(N,2);
-taus = [5 0 0 0 5]';
+taus = [500 0 0 0 3]';
 tau = repmat(taus',N,1);
 % tau(:,1) = (1:N)/600;
 % taus = [10 0 0 0 0]';
@@ -83,7 +88,7 @@ heading = zeros(N,1);
     for k = 1:N-1;
     % Simulation of vessel
     x(k+1,:) = aauship(x(k,:)', tau(k,:)');
-    eta(k+1,:) = x(k+1,1:5);
+    eta(k+1,:) = [x(k+1,1:2) x(k+1,5)];
 %     psi=x(k,5);
 %     Rz = [cos(psi) -sin(psi);
 %           sin(psi)  cos(psi)];
@@ -99,21 +104,24 @@ heading = zeros(N,1);
         est_eta(k+1,:) = est_eta(k,:)' + h*dot_est_eta(k+1,:)';
         dot_est_b(k+1,:) = 0; % -T\est_b(:,k) + k3*err_y(:,k);
         est_b(k+1,:) = 0; % est_b(:,k) + h*dot_est_b(:,k+1);
-        dot_est_nu(k+1,:) = -i_MRB*D*est_nu(k,:)' + i_MRB*Rt*est_b(k+1,:)' + i_MRB*tau(k,:)' + i_MRB*Rt*k4*err_y(k,:)';
+        dot_est_nu(k+1,:) = -i_MRB*D*est_nu(k,:)' + i_MRB*Rt*est_b(k+1,:)' ...
+                          +  i_MRB*[tau(k,1:2) tau(k,5)]' + i_MRB*Rt*k4*err_y(k,:)';
         est_nu(k+1,:) = est_nu(k,:)' + h*dot_est_nu(k+1,:)';
 
         err_y(k+1,:) = eta(k+1,:)' - est_eta(k+1,:)';
         
-        [R,R1,R2] = eulerang(0,0,est_nu(k+1,5));
+        [R,R1,R2] = eulerang(0,0,est_nu(k+1,3));
 %         Rt = R';
-        R = [R1 zeros(3,2);
-              zeros(2,3) diag(ones(1,2))];
+%         R = [R1 zeros(3,2);
+%               zeros(2,3) diag(ones(1,2))];
+        R = R1;
         Rt = R';
     end
     end
     
     figure(1)
     plot(err_y)
+    legend('error x','error y', 'error yaw (psi)')
     
     figure(2)
     plot(est_eta(:,2),est_eta(:,1))
