@@ -49,7 +49,8 @@ faps_process.c \
 spi.c \
 adis16405.c \
 crc16.c \
-i2cmaster.S
+twimaster.c
+#i2cmaster.S
 ARCH = avr-
 CC = $(ARCH)gcc
 OBJDUMP = $(ARCH)objdump

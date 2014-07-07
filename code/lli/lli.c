@@ -68,6 +68,9 @@ int main (void)
 	char s[64];
 	char rmc[256];
 
+  char adclower = 0;
+  char adcupper = 0; 
+
 	awake_flag = 0;
 
 	#ifdef RF_TEST_IDX
@@ -117,6 +120,7 @@ int main (void)
 		c2 = uart2_getc();
 		c3 = uart3_getc();
 
+
 		// Stop motors when connection is lost
 		if (awake_flag > AWAKE_THRESHOLD) {
 			pwm_set_duty(RC1, 0 );
@@ -142,6 +146,27 @@ int main (void)
 			#endif
 			PORTL ^= (1<<LED2);
 			tx_counter -= TX_READY;
+
+
+    /* THIS I2C CODE SHALL BE PUT INTO FAPS_PROCESS.C FOR REAL IMPLEMENTATION */
+    // MCP3428 general call reset
+    i2c_start(0x00+I2C_WRITE);     // set general call address
+    i2c_write(0x06);               // issue general call reset
+    i2c_stop();                    // set stop conditon = release bus
+
+    // MCP3428 read data addr 0x010
+    i2c_start(0xD4+I2C_READ);      // set adc address for reading
+    adcupper = i2c_readAck();      // read 2nd byte (upper data byte)
+    adclower = i2c_readNak();      // read 3rd byte (lower data byte)
+    i2c_stop();                    // set stop conditon = release bus
+
+    // MCP3428 read data addr 0x100
+    i2c_start(0xD8+I2C_READ);      // set adc address for reading
+    adcupper = i2c_readAck();      // read 2nd byte (upper data byte)
+    adclower = i2c_readNak();      // read 3rd byte (lower data byte)
+    i2c_stop();                    // set stop conditon = release bus
+
+
 		}
 
 
