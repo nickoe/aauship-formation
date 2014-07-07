@@ -22,6 +22,12 @@ void adisCallback(const aauship::ADIS16405::ConstPtr& msg)
 		    (msg->xaccl*0.00333), (msg->yaccl*0.00333), (msg->zaccl*0.00333),
 //		     msg->xmagn*0.0005-0.28, msg->ymagn*0.0005-0.15, msg->zmagn*0.0005-(-0.18));
 		     msg->xmagn, msg->ymagn, msg->zmagn);
+
+  p.MadgwickAHRSupdate((msg->xgyro*0.05-1.65)*3.1415/180, (msg->ygyro*0.05+16.15)*3.1415/180, (msg->zgyro*0.05+5.4)*3.1415/180,
+		    (msg->xaccl*0.00333), (msg->yaccl*0.00333), (msg->zaccl*0.00333),
+//		     msg->xmagn*0.0005-0.28, msg->ymagn*0.0005-0.15, msg->zmagn*0.0005-(-0.18));
+		     msg->xmagn, msg->ymagn, msg->zmagn);
+
 //0.28 0.15 -0.18
   printf("gyro [% f, % f, % f]\r\n", (msg->xgyro*0.05-1.65)*3.1415/180, (msg->ygyro*0.05+16.15)*3.1415/180, (msg->zgyro*0.05+5.4)*3.1415/180);
   printf("accl [% f, % f, % f]\r\n", (msg->xaccl*0.00333), (msg->yaccl*0.00333), (msg->zaccl*0.00333));
@@ -39,7 +45,10 @@ void adisCallback(const aauship::ADIS16405::ConstPtr& msg)
   static tf::TransformBroadcaster tfbc;
   tf::Transform transform;
   transform.setOrigin( tf::Vector3(0,0,0) );
-  tf::Quaternion q(u.getQuaternions(1),u.getQuaternions(2),u.getQuaternions(3),u.getQuaternions(0));
+
+//  tf::Quaternion q(u.getQuaternions(1),u.getQuaternions(2),u.getQuaternions(3),u.getQuaternions(0));
+  tf::Quaternion q(p.getQuaternions(1),p.getQuaternions(2),p.getQuaternions(3),p.getQuaternions(0));
+
 //  tf::Quaternion q;
 //  q.setRPY(u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
   transform.setRotation(q);

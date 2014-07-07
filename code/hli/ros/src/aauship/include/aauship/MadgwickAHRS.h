@@ -29,10 +29,10 @@ public:
     float getTuning(int);
     float getSampleFreq( void );
     void setSampleFreq(float);
-    float getEulerAngles(int);
+    float getEulerAngles(int);*/
     float getQuaternions(int);
-    void calculateEulerAngles(void);
-    */
+//    void calculateEulerAngles(void);
+    
 };
 
 #endif

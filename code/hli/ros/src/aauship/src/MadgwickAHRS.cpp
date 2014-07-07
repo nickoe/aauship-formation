@@ -222,3 +222,16 @@ float MadgwickAHRS::invSqrt(float x){
    return tmp * (1.69000231f - 0.714158168f * x * tmp * tmp);
 }
 
+
+float MadgwickAHRS::getQuaternions(int axes)
+{
+    switch(axes)
+    {
+        case 0: return q0;
+        case 1: return q1;
+        case 2: return q2;
+        case 3: return q3;
+    }
+    return 0;
+}
+
