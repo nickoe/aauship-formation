@@ -87,7 +87,7 @@ for k = 1:N
 %      end
 %          headingdesired(k) = headingdesired(k) + rev;
         NED(k+1,:) = Rz*x(k,6:7)'*0.1 + NED(k,:)';
-        NED(k+1,1:2) = NED(k+1,1:2) + (diag([1.0035,1.0035])*randn(2,1)/10)';
+%         NED(k+1,1:2) = NED(k+1,1:2) + (diag([1.0035,1.0035])*randn(2,1)/10)';
         heading(k) = (x(k,10)'*0.1 + heading(k-1));
     end
     
