@@ -119,7 +119,7 @@ include_directories(
 #   src/${PROJECT_NAME}/aauship.cpp
 # )
 add_library(aauship
-  src/test.cpp
+  src/MahonyAHRS.cpp
 )
 
 ## Declare a cpp executable

@@ -8,45 +8,67 @@
 // Date			Author			Notes
 // 29/09/2011	SOH Madgwick    Initial release
 // 02/10/2011	SOH Madgwick	Optimised for reduced CPU load
+// 29/06/2014   Nick Østergaard Convert to C++ for use with ROS.org
 //
 //=====================================================================================================
 
 //---------------------------------------------------------------------------------------------------
 // Header files
-
-//#include "MahonyAHRS.h"
-#include "../include/MahonyAHRS.h"
+#include "aauship/test.h"
 #include <math.h>
-
-//---------------------------------------------------------------------------------------------------
-// Definitions
-
-#define sampleFreq	512.0f			// sample frequency in Hz
-#define twoKpDef	(2.0f * 0.5f)	// 2 * proportional gain
-#define twoKiDef	(2.0f * 0.0f)	// 2 * integral gain
-
-//---------------------------------------------------------------------------------------------------
-// Variable definitions
-
-volatile float twoKp = twoKpDef;											// 2 * proportional gain (Kp)
-volatile float twoKi = twoKiDef;											// 2 * integral gain (Ki)
-volatile float q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;					// quaternion of sensor frame relative to auxiliary frame
-volatile float integralFBx = 0.0f,  integralFBy = 0.0f, integralFBz = 0.0f;	// integral error terms scaled by Ki
 
 //---------------------------------------------------------------------------------------------------
 // Function declarations
 
 float invSqrt(float x);
 
+//---------------------------------------------------------------------------------------------------
+// Constructor
+AHRS::AHRS(float kp, float ki, float fs) {
+    twoKp = kp;// 2 * proportional gain (Kp)
+    twoKi = ki;// 2 * integral gain (Ki)
+	sampleFreq = fs;
+	
+//	KpA = kpa;                        // proportional gain
+//	KiA = kia;                        // integral gain
+
+//	KpM = kpm;                        // proportional gain
+//	KiM = kim;                        // integral gain
+
+	q0 = 1.0;                                // quaternion of sensor frame relative to auxiliary frame
+	q1 = 0.0;
+	q2 = 0.0;
+	q3 = 0.0;
+
+	integralFBx = 0.0;                        // integral error terms scaled by Ki
+	integralFBy = 0.0;
+	integralFBz = 0.0;
+
+	correctedRateVectorX = 0.0;
+	correctedRateVectorY = 0.0;
+	correctedRateVectorZ = 0.0;
+
+	eulerAngleX = 0.0;
+	eulerAngleY = 0.0;
+	eulerAngleZ = 0.0;
+
+	ex = 0.0;
+	ey = 0.0;
+	ez = 0.0;
+
+	magX = 0.0;
+	magY = 0.0;
+	magZ = 0.0;
+}
+
 //====================================================================================================
 // Functions
 
 //---------------------------------------------------------------------------------------------------
 // AHRS algorithm update
-
-void MahonyAHRSupdate(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz) {
+void AHRS::MahonyAHRSupdate(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz) {
 	float recipNorm;
-    float q0q0, q0q1, q0q2, q0q3, q1q1, q1q2, q1q3, q2q2, q2q3, q3q3;  
+	float q0q0, q0q1, q0q2, q0q3, q1q1, q1q2, q1q3, q2q2, q2q3, q3q3;  
 	float hx, hy, bx, bz;
 	float halfvx, halfvy, halfvz, halfwx, halfwy, halfwz;
 	float halfex, halfey, halfez;
@@ -147,8 +169,7 @@ void MahonyAHRSupdate(float gx, float gy, float gz, float ax, float ay, float az
 
 //---------------------------------------------------------------------------------------------------
 // IMU algorithm update
-
-void MahonyAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay, float az) {
+void AHRS::MahonyAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay, float az) {
 	float recipNorm;
 	float halfvx, halfvy, halfvz;
 	float halfex, halfey, halfez;
@@ -217,8 +238,8 @@ void MahonyAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay, float
 //---------------------------------------------------------------------------------------------------
 // Fast inverse square-root
 // See: http://en.wikipedia.org/wiki/Fast_inverse_square_root
-
-float invSqrt(float x) {
+/*
+float AHRS::invSqrt(float x) {
 	float halfx = 0.5f * x;
 	float y = x;
 	long i = *(long*)&y;
@@ -226,8 +247,69 @@ float invSqrt(float x) {
 	y = *(float*)&i;
 	y = y * (1.5f - (halfx * y * y));
 	return y;
+}*/
+
+float AHRS::invSqrt(float x){
+//   uint32_t i = 0x5F1F1412 - (*(uint32_t*)&x >> 1);
+   unsigned int i = 0x5F1F1412 - (*(unsigned int*)&x >> 1);
+   float tmp = *(float*)&i;
+   return tmp * (1.69000231f - 0.714158168f * x * tmp * tmp);
 }
 
-//====================================================================================================
-// END OF CODE
-//====================================================================================================
+void AHRS::calculateEulerAngles(void)
+{
+    eulerAngleX = atan2(2 * (q0*q1 + q2*q3), 1 - 2 *(q1*q1 + q2*q2));
+    eulerAngleY =  asin(2 * (q0*q2 - q1*q3));
+    eulerAngleZ = atan2(2 * (q0*q3 + q1*q2), 1 - 2 *(q2*q2 + q3*q3));  
+}
+
+float AHRS::getEulerAngles(int axes)
+{
+    switch(axes)
+    {
+        case 0: return eulerAngleX;
+        case 1: return eulerAngleY;
+        case 2: return eulerAngleZ;
+    }
+    return 0;
+}
+
+float AHRS::getQuaternions(int axes)
+{
+    switch(axes)
+    {
+        case 0: return q0;
+        case 1: return q1;
+        case 2: return q2;
+        case 3: return q3;
+    }
+    return 0;
+}
+
+float AHRS::getTuning(int idx)
+{
+    switch(idx)
+    {
+        case 0: return twoKp;
+        case 1: return twoKi;
+    }
+    return 0;
+}
+
+void AHRS::setTuning(float kp, float ki)
+{
+    twoKp = kp;
+    twoKi = ki;
+}
+
+
+float AHRS::getSampleFreq( void )
+{
+    return sampleFreq;
+}
+
+void AHRS::setSampleFreq(float fs)
+{
+    sampleFreq = fs;
+}
+
