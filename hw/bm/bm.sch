@@ -2467,24 +2467,24 @@ Wire Wire Line
 	10650 3600 10650 3300
 Wire Wire Line
 	10350 3750 10350 3300
-Text Notes 9450 2550 0    40   ~ 0
+Text Notes 9450 2275 0    40   ~ 0
 If the bus lines are twisted-pairs, each bus line\nmust be twisted with a V SS return. Alternatively,\nthe SCL line can be twisted with a V SS return,\nand the SDA line twisted with a V DD return. In\nthe latter case, capacitors must be used to\ndecouple the V DD line to the V SS line at both\nends of the twisted pairs.\n\nExcerpt from page 60 of UM10204
-Text Notes 9450 1950 0    60   Italic 12
+Text Notes 9450 1675 0    60   Italic 12
 Note on I²C wiring
 Wire Notes Line
-	9400 1950 11000 1950
+	9400 1675 11000 1675
 Wire Notes Line
-	11000 1950 11000 2550
+	11000 1675 11000 2275
 Wire Notes Line
-	11000 2550 9400 2550
+	11000 2275 9400 2275
 Wire Notes Line
-	9400 2550 9400 1850
+	9400 2275 9400 1575
 Wire Notes Line
-	9400 1850 10300 1850
+	9400 1575 10300 1575
 Wire Notes Line
-	10300 1850 10450 1950
+	10300 1575 10450 1675
 Wire Notes Line
-	9500 2550 9500 2950
+	9500 2275 9500 2950
 Wire Notes Line
 	9500 2950 9650 2950
 Wire Notes Line
@@ -2492,9 +2492,15 @@ Wire Notes Line
 Wire Notes Line
 	9650 2950 9600 3000
 Wire Notes Line
-	10500 2750 10500 2550
+	10500 2275 10500 2750
 Wire Notes Line
 	10500 2750 10450 2700
 Wire Notes Line
 	10500 2750 10550 2700
+Text Notes 10075 2825 1    60   ~ 0
+Half blue\nFull blue\nFull brown\nHalf brown
+Text Notes 10175 3450 1    60   ~ 0
+SCL
+Text Notes 9700 3450 1    60   ~ 0
+SDA
 $EndSCHEMATC
