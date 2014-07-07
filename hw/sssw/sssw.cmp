@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2014-02-09 BZR 4680)-product date = søn 09 feb 2014 16:51:37 CET
+Cmp-Mod V01 Created by Cvpcb (2014-06-12 BZR 4941)-kicad   date = Fri 13 Jun 2014 15:04:25 CEST
 
 BeginCmp
 TimeStamp = /52F7A220;
@@ -11,7 +11,7 @@ BeginCmp
 TimeStamp = /52F7A037;
 Reference = P1;
 ValeurCmp = INPUT;
-IdModule  = Pin_Arrays:PIN_ARRAY_2X1;
+IdModule  = Pin_Headers:Pin_Header_Angled_1x02;
 EndCmp
 
 BeginCmp
@@ -32,7 +32,7 @@ BeginCmp
 TimeStamp = /52F79D2B;
 Reference = Q1;
 ValeurCmp = SUP85;
-IdModule  = ;
+IdModule  = Transistors_TO-220:TO-220_FET-GDS_Horizontal_LargePads;
 EndCmp
 
 BeginCmp

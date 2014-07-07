@@ -80,12 +80,12 @@ $EndComp
 $Comp
 L GND #PWR1
 U 1 1 52F7A074
-P 4950 3350
-F 0 "#PWR1" H 4950 3350 30  0001 C CNN
-F 1 "GND" H 4950 3280 30  0001 C CNN
-F 2 "" H 4950 3350 60  0000 C CNN
-F 3 "" H 4950 3350 60  0000 C CNN
-	1    4950 3350
+P 4950 3150
+F 0 "#PWR1" H 4950 3150 30  0001 C CNN
+F 1 "GND" H 4950 3080 30  0001 C CNN
+F 2 "" H 4950 3150 60  0000 C CNN
+F 3 "" H 4950 3150 60  0000 C CNN
+	1    4950 3150
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -130,7 +130,7 @@ F 1 "ACTIVATE" V 4550 3950 40  0000 C CNN
 F 2 "" H 4500 3950 60  0000 C CNN
 F 3 "" H 4500 3950 60  0000 C CNN
 	1    4500 3950
-	-1   0    0    -1  
+	-1   0    0    1   
 $EndComp
 $Comp
 L GND #PWR2
@@ -181,8 +181,6 @@ $EndComp
 Wire Wire Line
 	4850 3250 5900 3250
 Wire Wire Line
-	4950 3250 4950 3350
-Wire Wire Line
 	4850 3050 6500 3050
 Wire Wire Line
 	5400 3850 6100 3850
@@ -210,11 +208,17 @@ Wire Wire Line
 Connection ~ 5750 3850
 Wire Wire Line
 	5750 4950 5750 4850
-Connection ~ 4950 3250
 Wire Notes Line
 	7050 2900 7050 3700
 Wire Notes Line
 	7050 3700 4300 3700
 Wire Wire Line
 	6100 3850 6100 3550
+Wire Wire Line
+	4950 3050 4950 3150
+Connection ~ 4950 3050
+Text Notes 7100 3250 0    60   ~ 0
+Female\nbullets
+Text Notes 4250 3250 2    60   ~ 0
+Male\nbullets
 $EndSCHEMATC
