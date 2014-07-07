@@ -14,7 +14,7 @@
 #ifndef MahonyAHRS_h
 #define MahonyAHRS_h
 
-class AHRS{
+class MahonyAHRS{
 private:
     volatile float twoKp;											// 2 * proportional gain (Kp)
     volatile float twoKi;											// 2 * integral gain (Ki)
@@ -46,7 +46,7 @@ private:
     float magZ;
     
 public:
-    AHRS(float,float,float);
+    MahonyAHRS(float,float,float);
     void MahonyAHRSupdate(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz);
     void MahonyAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay, float az);
     float invSqrt(float x);

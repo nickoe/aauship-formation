@@ -3,6 +3,7 @@
 #include <tf/transform_broadcaster.h>
 #include <visualization_msgs/Marker.h>
 #include <aauship/MahonyAHRS.h>
+#include <aauship/MadgwickAHRS.h>
 
 // This node shall read imu measurements and use an AHRS filter to
 // calculate attitude and publish such that it can render something
@@ -10,7 +11,8 @@
 
 // Construct filter
 //AHRS u(8.8, 0.1, 10);
-AHRS u(8, 0.4, 12);
+MahonyAHRS u(8, 0.4, 12);
+MadgwickAHRS p(3,12);
 
 void adisCallback(const aauship::ADIS16405::ConstPtr& msg)
 {

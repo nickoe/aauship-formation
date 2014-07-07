@@ -120,6 +120,7 @@ include_directories(
 # )
 add_library(aauship
   src/MahonyAHRS.cpp
+  src/MadgwickAHRS.cpp
 )
 
 ## Declare a cpp executable

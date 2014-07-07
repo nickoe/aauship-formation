@@ -14,7 +14,7 @@
 
 //---------------------------------------------------------------------------------------------------
 // Header files
-#include "aauship/test.h"
+#include "aauship/MahonyAHRS.h"
 #include <math.h>
 
 //---------------------------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ float invSqrt(float x);
 
 //---------------------------------------------------------------------------------------------------
 // Constructor
-AHRS::AHRS(float kp, float ki, float fs) {
+MahonyAHRS::MahonyAHRS(float kp, float ki, float fs) {
     twoKp = kp;// 2 * proportional gain (Kp)
     twoKi = ki;// 2 * integral gain (Ki)
 	sampleFreq = fs;
@@ -66,7 +66,7 @@ AHRS::AHRS(float kp, float ki, float fs) {
 
 //---------------------------------------------------------------------------------------------------
 // AHRS algorithm update
-void AHRS::MahonyAHRSupdate(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz) {
+void MahonyAHRS::MahonyAHRSupdate(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz) {
 	float recipNorm;
 	float q0q0, q0q1, q0q2, q0q3, q1q1, q1q2, q1q3, q2q2, q2q3, q3q3;  
 	float hx, hy, bx, bz;
@@ -169,7 +169,7 @@ void AHRS::MahonyAHRSupdate(float gx, float gy, float gz, float ax, float ay, fl
 
 //---------------------------------------------------------------------------------------------------
 // IMU algorithm update
-void AHRS::MahonyAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay, float az) {
+void MahonyAHRS::MahonyAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay, float az) {
 	float recipNorm;
 	float halfvx, halfvy, halfvz;
 	float halfex, halfey, halfez;
@@ -239,7 +239,7 @@ void AHRS::MahonyAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay,
 // Fast inverse square-root
 // See: http://en.wikipedia.org/wiki/Fast_inverse_square_root
 /*
-float AHRS::invSqrt(float x) {
+float MahonyAHRS::invSqrt(float x) {
 	float halfx = 0.5f * x;
 	float y = x;
 	long i = *(long*)&y;
@@ -249,21 +249,22 @@ float AHRS::invSqrt(float x) {
 	return y;
 }*/
 
-float AHRS::invSqrt(float x){
+// http://diydrones.com/forum/topics/madgwick-imu-ahrs-and-fast-inverse-square-root?id=705844%3ATopic%3A1018435&page=1#comments
+float MahonyAHRS::invSqrt(float x){
 //   uint32_t i = 0x5F1F1412 - (*(uint32_t*)&x >> 1);
    unsigned int i = 0x5F1F1412 - (*(unsigned int*)&x >> 1);
    float tmp = *(float*)&i;
    return tmp * (1.69000231f - 0.714158168f * x * tmp * tmp);
 }
 
-void AHRS::calculateEulerAngles(void)
+void MahonyAHRS::calculateEulerAngles(void)
 {
     eulerAngleX = atan2(2 * (q0*q1 + q2*q3), 1 - 2 *(q1*q1 + q2*q2));
     eulerAngleY =  asin(2 * (q0*q2 - q1*q3));
     eulerAngleZ = atan2(2 * (q0*q3 + q1*q2), 1 - 2 *(q2*q2 + q3*q3));  
 }
 
-float AHRS::getEulerAngles(int axes)
+float MahonyAHRS::getEulerAngles(int axes)
 {
     switch(axes)
     {
@@ -274,7 +275,7 @@ float AHRS::getEulerAngles(int axes)
     return 0;
 }
 
-float AHRS::getQuaternions(int axes)
+float MahonyAHRS::getQuaternions(int axes)
 {
     switch(axes)
     {
@@ -286,7 +287,7 @@ float AHRS::getQuaternions(int axes)
     return 0;
 }
 
-float AHRS::getTuning(int idx)
+float MahonyAHRS::getTuning(int idx)
 {
     switch(idx)
     {
@@ -296,19 +297,19 @@ float AHRS::getTuning(int idx)
     return 0;
 }
 
-void AHRS::setTuning(float kp, float ki)
+void MahonyAHRS::setTuning(float kp, float ki)
 {
     twoKp = kp;
     twoKi = ki;
 }
 
 
-float AHRS::getSampleFreq( void )
+float MahonyAHRS::getSampleFreq( void )
 {
     return sampleFreq;
 }
 
-void AHRS::setSampleFreq(float fs)
+void MahonyAHRS::setSampleFreq(float fs)
 {
     sampleFreq = fs;
 }
