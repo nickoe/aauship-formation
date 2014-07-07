@@ -90,6 +90,10 @@ lon = pos(2,:);
 %% ADIS16405 Inertial Measurement Unit
 supply = imudata(:,1)*0.002418; % Scale 2.418 mV
 gyro = imudata(:,2:4)*0.05; % Scale 0.05 degrees/sec
+gyro(:,1) = gyro(:,1)-1.65;
+gyro(:,2) = gyro(:,2)+16.15;
+gyro(:,3) = gyro(:,3)+5.4;
+%+4.6 Gyroscope(:,2)+16.15 Gyroscope(:,3)+5.4
 accl = (imudata(:,5:7)*0.00333)*9.82;   %/333)*9.82; % Scale 3.33 mg (g is gravity, that is g-force)
 magn = imudata(:,8:10)*0.0005; % 0.5 mgauss
 % magn(17,:) = [0 0 0];
@@ -104,7 +108,7 @@ imutime = imudata(:,13)-starttime; % Seconds since start, periodic timing determ
 % plot(imutime, gyro)
 % title('Gyrometer')
 % ylabel('[degrees/sec]')
-% legend('X','Y','Z')
+% legend('X','Y','Z') 
 % 
 % subplot(4,1,2)
 % plot(imutime, accl)
