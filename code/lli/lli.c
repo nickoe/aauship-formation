@@ -28,6 +28,7 @@
 #include "spi.h"
 #include "adis16405.h"
 #include "i2cmaster.h"
+#include "mcp3428.h"
 
 
 volatile int adis_ready_counter=0;
@@ -68,11 +69,7 @@ int main (void)
 	char s[64];
 	char rmc[256];
 
-  unsigned char adclower = 0;
-  unsigned char adcupper = 0;
-  int16_t adcmeas = 0;
-  unsigned char i2cstatus = 3;
-  char str[16];
+  char str[16];  // String used for debugging via e.q. uart2_puts(itoa(mpc_read(BANK1, 4), str, 10));
 
 	awake_flag = 0;
 
@@ -93,6 +90,8 @@ int main (void)
 	pwm_init();
 	spiInit();
 	i2c_init();
+  mcp_general_call_reset(BANK1);
+  mcp_general_call_reset(BANK2);
 
 	/* Initialize UARTS */
   uart_init( UART_BAUD_SELECT(UART_BAUD_RATE,F_CPU) ); // USB connection
@@ -150,50 +149,16 @@ int main (void)
 			PORTL ^= (1<<LED2);
 			tx_counter -= TX_READY;
 
-    if (i2cstatus == 3) uart2_puts("First time\r\n");
-    /* THIS I2C CODE SHALL BE PUT INTO FAPS_PROCESS.C FOR REAL IMPLEMENTATION */
+/* THIS I2C CODE SHALL BE PUT INTO FAPS_PROCESS.C FOR REAL IMPLEMENTATION */
+uart2_puts(itoa(mcp_read(BANK1, 1), str, 10));
+uart2_puts("\r\n");
+uart2_puts(itoa(mcp_read(BANK1, 2), str, 10));
+uart2_puts("\r\n");
+uart2_puts(itoa(mcp_read(BANK1, 3), str, 10));
+uart2_puts("\r\n");
+uart2_puts(itoa(mcp_read(BANK1, 4), str, 10));
+uart2_puts("\r\n");
 
-/*
-    // MCP3428 general call reset
-    i2cstatus = i2c_start(0xD4+I2C_WRITE);     // set general call address
-    if (i2cstatus == 0) uart2_puts("0 device accessible\r\n");
-    if (i2cstatus == 1) uart2_puts("1 failed to access device\r\n");
-    i2c_write(0x06);               // issue general call reset
-    i2c_stop();                    // set stop conditon = release bus
-
-    // MCP3428 general call reset
-    i2cstatus = i2c_start(0xD8+I2C_WRITE);     // set general call address
-    if (i2cstatus == 0) uart2_puts("0 device accessible\r\n");
-    if (i2cstatus == 1) uart2_puts("1 failed to access device\r\n");
-    i2c_write(0x06);               // issue general call reset
-    i2c_stop();                    // set stop conditon = release bus
-*/
-
-/*
-    // MCP3428 read data addr 0x010
-    i2c_start(0xD4+I2C_READ);      // set adc address for reading
-    adcupper = i2c_readAck();      // read 2nd byte (upper data byte)
-    adclower = i2c_readNak();      // read 3rd byte (lower data byte)
-    i2c_stop();                    // set stop conditon = release bus
-//    if (i2cstatus == 0) { uart2_puts("0 write successful\r\n"); }
-//    if (i2cstatus == 1) { uart2_puts("1 write failed\r\n"); }
-*/
-
-    // config
-    i2c_start(0xD8+I2C_WRITE); // 0xD8 is the starboard connector
-    i2c_write(0b10011000);
-
-    // MCP3428 read data addr 0x100
-    i2cstatus = i2c_start(0xD8+I2C_READ);      // set adc address for reading
-    adcupper = i2c_readAck();      // read 2nd byte (upper data byte)
-    adclower = i2c_readNak();      // read 3rd byte (lower data byte)
-    i2c_stop();                    // set stop conditon = release bus
-
-    if (i2cstatus == 0) { uart2_puts("0 write successful\r\n"); }
-    if (i2cstatus == 1) { uart2_puts("1 write failed\r\n"); }
-    adcmeas = adcupper << 8 | adclower;
-    uart2_puts(itoa(adcmeas, str, 10));
-    uart2_puts("\r\n");
 
 		}
 
