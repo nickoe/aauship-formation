@@ -29,7 +29,7 @@
  @param   bank (BANK1 or BANK2)
  @retval  0 device accessible
  @retval  1 failed to access device
- */
+*/
 uint8_t mcp_general_call_reset(uint8_t bank);
 
 /**
