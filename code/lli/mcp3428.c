@@ -20,12 +20,6 @@ uint8_t mcp_general_call_reset(uint8_t bank) {
   return s;
 }
 
-/**
- @brief Read ADC channel
-
- @param   bank (1 or 2) and channel number (1, 2, 3 or 4)
- @retval  measured value as int16_t
- */
 int16_t mcp_read(uint8_t bank, uint8_t ch) {
   uint8_t adcupper = 0;
   uint8_t adclower = 0;
@@ -42,6 +36,4 @@ int16_t mcp_read(uint8_t bank, uint8_t ch) {
 
   return (adcupper << 8 | adclower);
 }
-
-
 

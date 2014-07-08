@@ -2,12 +2,17 @@
 #define MCP3428_H
 /**
  * @file
- * @author Nick Østergaard
+ * @defgroup sensor MCP3428
+ * @code #include <mcp3428.h> @endcode
+ * @author Nick Østergaard nickoe@es.aau.dk
  *
+ * @brief MCP3428 interface functions
  * @section DESCRIPTION
  * This is the header file for the MCP3428 interface used for
  * the battery monitor (BM).
  */
+
+/**@{*/
 
 #define MCP3428addr 0xD0  // General ADC address
 #define BANK1       0xD8  // Starboard connector
@@ -17,6 +22,9 @@
 
 /**
  @brief MCP3428 general call reset
+
+ Used to manually make a power on reset, strictly not nessesary, but it probably
+ good to do after i2c initialization.
 
  @param   bank (BANK1 or BANK2)
  @retval  0 device accessible
@@ -31,5 +39,7 @@ uint8_t mcp_general_call_reset(uint8_t bank);
  @retval  measured value as int16_t
  */
 int16_t mcp_read(uint8_t bank, uint8_t ch);
+
+/**@}*/
 
 #endif // MCP3428_H 
