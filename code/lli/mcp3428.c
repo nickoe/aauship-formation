@@ -25,6 +25,7 @@ int16_t mcp_read(uint8_t bank, uint8_t ch) {
   uint8_t adclower = 0;
 
   // Config
+  // PGA = 1, Resolution = 16 bits (15 SPS), Conversion mode = One shot
   i2c_start(bank+I2C_WRITE);
   i2c_write(0b10001000);         // See page 18 in the MCP3428 datasheet
 
