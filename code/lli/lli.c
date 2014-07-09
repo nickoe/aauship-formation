@@ -152,13 +152,13 @@ int main (void)
 /* THIS I2C CODE SHALL BE PUT INTO FAPS_PROCESS.C FOR REAL IMPLEMENTATION */
 uart2_puts(itoa(mcp_read(BANK1, CH1), str, 10));
 uart2_puts("\t");
-_delay_ms(16); // 1/SPS ms delay is needed for the conversion time
+_delay_ms(CT); // 1/SPS ms delay is needed for the conversion time
 uart2_puts(itoa(mcp_read(BANK1, CH2), str, 10));
 uart2_puts("\t");
-_delay_ms(16);
+_delay_ms(CT);
 uart2_puts(itoa(mcp_read(BANK1, CH3), str, 10));
 uart2_puts("\t");
-_delay_ms(16);
+_delay_ms(CT);
 uart2_puts(itoa(mcp_read(BANK1, CH4), str, 10));
 uart2_puts("\r\n");
 

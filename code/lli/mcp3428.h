@@ -21,6 +21,10 @@
 #define CH2         0x01  // Channel 2
 #define CH3         0x02  // Channel 3
 #define CH4         0x03  // Channel 4
+//#define SPS          240  // 12 bits 1 mV/LSB
+#define SPS           60  // 14 bits 250 μV/LSB
+//#define SPS           15  // 16 bits 62.5 μV/LSB
+#define CT          1000/SPS // Conversion time
 
 /* Function prototypes */
 
