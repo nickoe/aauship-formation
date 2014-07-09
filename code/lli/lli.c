@@ -150,13 +150,16 @@ int main (void)
 			tx_counter -= TX_READY;
 
 /* THIS I2C CODE SHALL BE PUT INTO FAPS_PROCESS.C FOR REAL IMPLEMENTATION */
-uart2_puts(itoa(mcp_read(BANK1, 1), str, 10));
-uart2_puts("\r\n");
-uart2_puts(itoa(mcp_read(BANK1, 2), str, 10));
-uart2_puts("\r\n");
-uart2_puts(itoa(mcp_read(BANK1, 3), str, 10));
-uart2_puts("\r\n");
-uart2_puts(itoa(mcp_read(BANK1, 4), str, 10));
+uart2_puts(itoa(mcp_read(BANK1, CH1), str, 10));
+uart2_puts("\t");
+_delay_ms(16); // 1/SPS ms delay is needed for the conversion time
+uart2_puts(itoa(mcp_read(BANK1, CH2), str, 10));
+uart2_puts("\t");
+_delay_ms(16);
+uart2_puts(itoa(mcp_read(BANK1, CH3), str, 10));
+uart2_puts("\t");
+_delay_ms(16);
+uart2_puts(itoa(mcp_read(BANK1, CH4), str, 10));
 uart2_puts("\r\n");
 
 

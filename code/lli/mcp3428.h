@@ -17,6 +17,10 @@
 #define MCP3428addr 0xD0  // General ADC address
 #define BANK1       0xD8  // Starboard connector
 #define BANK2       0xD4  // Port connector
+#define CH1         0x00  // Channel 1
+#define CH2         0x01  // Channel 2
+#define CH3         0x02  // Channel 3
+#define CH4         0x03  // Channel 4
 
 /* Function prototypes */
 
