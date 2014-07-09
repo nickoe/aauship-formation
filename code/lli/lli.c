@@ -27,6 +27,8 @@
 #include "pwm.h"
 #include "spi.h"
 #include "adis16405.h"
+#include "i2cmaster.h"
+#include "mcp3428.h"
 
 
 volatile int adis_ready_counter=0;
@@ -67,6 +69,8 @@ int main (void)
 	char s[64];
 	char rmc[256];
 
+  char str[16];  // String used for debugging via e.q. uart2_puts(itoa(mpc_read(BANK1, 4), str, 10));
+
 	awake_flag = 0;
 
 	#ifdef RF_TEST_IDX
@@ -84,6 +88,9 @@ int main (void)
 	/* Initialize peripherals */
 	pwm_init();
 	spiInit();
+	i2c_init();
+  mcp_general_call_reset(BANK1);
+  mcp_general_call_reset(BANK2);
 
 	/* Initialize UARTS */
   uart_init( UART_BAUD_SELECT(UART_BAUD_RATE,F_CPU) ); // USB connection
@@ -114,6 +121,7 @@ int main (void)
 		c2 = uart2_getc();
 		c3 = uart3_getc();
 
+
 		// Stop motors when connection is lost
 		if (awake_flag > AWAKE_THRESHOLD) {
 			pwm_set_duty(RC1, 0 );
@@ -139,6 +147,35 @@ int main (void)
 			#endif
 			PORTL ^= (1<<LED2);
 			tx_counter -= TX_READY;
+
+/* THIS I2C CODE SHALL BE PUT INTO FAPS_PROCESS.C FOR REAL IMPLEMENTATION */
+uart2_puts("BANK1:\t");
+uart2_puts(itoa(mcp_read(BANK1, CH1), str, 10));
+uart2_puts("\t");
+_delay_ms(CT); // 1/SPS ms delay is needed for the conversion time
+uart2_puts(itoa(mcp_read(BANK1, CH2), str, 10));
+uart2_puts("\t");
+_delay_ms(CT);
+uart2_puts(itoa(mcp_read(BANK1, CH3), str, 10));
+uart2_puts("\t");
+_delay_ms(CT);
+uart2_puts(itoa(mcp_read(BANK1, CH4), str, 10));
+uart2_puts("\r\n");
+
+uart2_puts("BANK2:\t");
+uart2_puts(itoa(mcp_read(BANK2, CH1), str, 10));
+uart2_puts("\t");
+_delay_ms(CT); // 1/SPS ms delay is needed for the conversion time
+uart2_puts(itoa(mcp_read(BANK2, CH2), str, 10));
+uart2_puts("\t");
+_delay_ms(CT);
+uart2_puts(itoa(mcp_read(BANK2, CH3), str, 10));
+uart2_puts("\t");
+_delay_ms(CT);
+uart2_puts(itoa(mcp_read(BANK2, CH4), str, 10));
+uart2_puts("\r\n");
+
+
 		}
 
 

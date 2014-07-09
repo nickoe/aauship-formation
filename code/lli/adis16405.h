@@ -3,7 +3,7 @@
 
 /**
  * @file
- * @defgroup adis ADIS16405
+ * @defgroup sensor ADIS16405
  * @code #include <adis16405.h> @endcode
  * @author Nick Østergaard nickoe@es.aau.dk
  * @author Simon Als Nielsen
