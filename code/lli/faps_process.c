@@ -24,7 +24,7 @@ int process(msg_t *msg)
 	int i = 0;
 
 	int16_t meas = 0;
-	uint8_t data[2];
+	uint8_t bmdata[16];
 
 	switch (msg->devid) {
 		// GENERAL LLI
@@ -84,16 +84,39 @@ int process(msg_t *msg)
 					uart2_puts("\r\n");
 */
 
+					meas = mcp_read(BANK1, CH1);
+					bmdata[0] = meas >> 8;
+					bmdata[1] = meas;
+					_delay_ms(CT);
+					meas = mcp_read(BANK1, CH2);
+					bmdata[2] = meas >> 8;
+					bmdata[3] = meas;
+					_delay_ms(CT);
+					meas = mcp_read(BANK1, CH3);
+					bmdata[4] = meas >> 8;
+					bmdata[5] = meas;
+					_delay_ms(CT);
+					meas = mcp_read(BANK1, CH4);
+					bmdata[6] = meas >> 8;
+					bmdata[7] = meas;
 
-
+					meas = mcp_read(BANK2, CH1);
+					bmdata[8] = meas >> 8;
+					bmdata[9] = meas;
+					_delay_ms(CT);
 					meas = mcp_read(BANK2, CH2);
-					uart2_puts(meas, str, 10);
-					uart2_puts("\r\n");
+					bmdata[10] = meas >> 8;
+					bmdata[11] = meas;
+					_delay_ms(CT);
+					meas = mcp_read(BANK2, CH3);
+					bmdata[12] = meas >> 8;
+					bmdata[13] = meas;
+					_delay_ms(CT);
+					meas = mcp_read(BANK2, CH4);
+					bmdata[14] = meas >> 8;
+					bmdata[15] = meas;
 
-					data[0] = meas >> 8;
-					data[1] = meas;
-
-          hli_send(package(2, 0, 13, data), 2);
+          hli_send(package(16, 0, 13, bmdata), 16);
 					return;
 			}
 

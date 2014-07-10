@@ -61,9 +61,18 @@ class packetParser():
         try:
             if(ord(packet['DevID']) == 0): # LLI data
                 if(ord(packet['MsgID']) == 13): # Battery monitor sample
-                    print(packet['Data'])
                     print(hex( ord(packet['Data'][0]) << 8 | ord(packet['Data'][1]) ))
+                    print("BANK1:\t")
                     print(ord(packet['Data'][0]) << 8 | ord(packet['Data'][1]))
+                    print(ord(packet['Data'][2]) << 8 | ord(packet['Data'][3]))
+                    print(ord(packet['Data'][4]) << 8 | ord(packet['Data'][5]))
+                    print(ord(packet['Data'][6]) << 8 | ord(packet['Data'][7]))
+                    print("BANK2:\t")
+                    print(ord(packet['Data'][8]) << 8 | ord(packet['Data'][9]))
+                    print(ord(packet['Data'][10]) << 8 | ord(packet['Data'][11]))
+                    print(ord(packet['Data'][12]) << 8 | ord(packet['Data'][13]))
+                    print(ord(packet['Data'][14]) << 8 | ord(packet['Data'][15]))
+
 
             if(ord(packet['DevID']) == 20): # IMU data
                 if(ord(packet['MsgID']) == 14): # Burst read reduced
