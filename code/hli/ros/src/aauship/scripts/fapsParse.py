@@ -69,26 +69,18 @@ class packetParser():
             if(ord(packet['DevID']) == 0): # LLI data
                 if(ord(packet['MsgID']) == 13): # Battery monitor sample
                     print("BANK1:\t")
-                    self.bank1[0] = (ord(packet['Data'][0]) << 8 | ord(packet['Data'][1]))*(0.00025*3.0/1.43)
-                    self.bank1[1] = (ord(packet['Data'][2]) << 8 | ord(packet['Data'][3]))*(0.00025*3.0/1.43)
-                    self.bank1[2] = (ord(packet['Data'][4]) << 8 | ord(packet['Data'][5]))*(0.00025*3.0/1.43)
-                    self.bank1[3] = (ord(packet['Data'][6]) << 8 | ord(packet['Data'][7]))*(0.00025*3.0/1.43)
+                    self.bank1[0] = (ord(packet['Data'][0]) << 8 | ord(packet['Data'][1]))*(0.25*3.0/1.43)
+                    self.bank1[1] = (ord(packet['Data'][2]) << 8 | ord(packet['Data'][3]))*(0.25*3.0/1.43)
+                    self.bank1[2] = (ord(packet['Data'][4]) << 8 | ord(packet['Data'][5]))*(0.25*3.0/1.43)
+                    self.bank1[3] = (ord(packet['Data'][6]) << 8 | ord(packet['Data'][7]))*(0.25*3.0/1.43)
                     print(self.bank1)
-                    self.bank1[0] = self.bank1[0]*150.0-540
-                    self.bank1[1] = self.bank1[1]*150.0-540
-                    self.bank1[2] = self.bank1[2]*150.0-540
-                    self.bank1[3] = self.bank1[3]*150.0-540
 
                     print("BANK2:\t")
-                    self.bank2[0] = (ord(packet['Data'][8]) << 8 | ord(packet['Data'][9]))*(0.00025*3.0/1.43)
-                    self.bank2[1] = (ord(packet['Data'][10]) << 8 | ord(packet['Data'][11]))*(0.00025*3.0/1.43)
-                    self.bank2[2] = (ord(packet['Data'][12]) << 8 | ord(packet['Data'][13]))*(0.00025*3.0/1.43)
-                    self.bank2[3] = (ord(packet['Data'][14]) << 8 | ord(packet['Data'][15]))*(0.00025*3.0/1.43)
+                    self.bank2[0] = (ord(packet['Data'][8]) << 8 | ord(packet['Data'][9]))*(0.25*3.0/1.43)
+                    self.bank2[1] = (ord(packet['Data'][10]) << 8 | ord(packet['Data'][11]))*(0.25*3.0/1.43)
+                    self.bank2[2] = (ord(packet['Data'][12]) << 8 | ord(packet['Data'][13]))*(0.25*3.0/1.43)
+                    self.bank2[3] = (ord(packet['Data'][14]) << 8 | ord(packet['Data'][15]))*(0.25*3.0/1.43)
                     print(self.bank2)
-                    self.bank2[0] = self.bank2[0]*150.0-540
-                    self.bank2[1] = self.bank2[1]*150.0-540
-                    self.bank2[2] = self.bank2[2]*150.0-540
-                    self.bank2[3] = self.bank2[3]*150.0-540
 
                     if min(self.bank1) < 0:
                         self.bank1 = [0.0, 0.0, 0.0, 0.0]

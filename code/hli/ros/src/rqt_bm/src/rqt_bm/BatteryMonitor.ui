@@ -35,29 +35,65 @@
          </item>
          <item>
           <widget class="QProgressBar" name="progressBar11">
+           <property name="minimum">
+            <number>3600</number>
+           </property>
+           <property name="maximum">
+            <number>4700</number>
+           </property>
            <property name="value">
-            <number>0</number>
+            <number>3600</number>
+           </property>
+           <property name="format">
+            <string>%v mV</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QProgressBar" name="progressBar12">
+           <property name="minimum">
+            <number>3600</number>
+           </property>
+           <property name="maximum">
+            <number>4700</number>
+           </property>
            <property name="value">
-            <number>0</number>
+            <number>3600</number>
+           </property>
+           <property name="format">
+            <string>%v mV</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QProgressBar" name="progressBar13">
+           <property name="minimum">
+            <number>3600</number>
+           </property>
+           <property name="maximum">
+            <number>4700</number>
+           </property>
            <property name="value">
-            <number>0</number>
+            <number>3600</number>
+           </property>
+           <property name="format">
+            <string>%v mV</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QProgressBar" name="progressBar14">
+           <property name="minimum">
+            <number>3600</number>
+           </property>
+           <property name="maximum">
+            <number>4700</number>
+           </property>
            <property name="value">
-            <number>0</number>
+            <number>3600</number>
+           </property>
+           <property name="format">
+            <string>%v mV</string>
            </property>
           </widget>
          </item>
@@ -74,29 +110,68 @@
          </item>
          <item>
           <widget class="QProgressBar" name="progressBar21">
+           <property name="minimum">
+            <number>3600</number>
+           </property>
+           <property name="maximum">
+            <number>4700</number>
+           </property>
            <property name="value">
-            <number>0</number>
+            <number>3600</number>
+           </property>
+           <property name="format">
+            <string>%v mV</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QProgressBar" name="progressBar22">
+           <property name="minimum">
+            <number>3600</number>
+           </property>
+           <property name="maximum">
+            <number>4700</number>
+           </property>
            <property name="value">
-            <number>0</number>
+            <number>3600</number>
+           </property>
+           <property name="format">
+            <string>%v mV</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QProgressBar" name="progressBar23">
+           <property name="minimum">
+            <number>3600</number>
+           </property>
+           <property name="maximum">
+            <number>4700</number>
+           </property>
            <property name="value">
-            <number>0</number>
+            <number>3600</number>
+           </property>
+           <property name="format">
+            <string>%v mV</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QProgressBar" name="progressBar24">
+           <property name="minimum">
+            <number>3600</number>
+           </property>
+           <property name="maximum">
+            <number>4700</number>
+           </property>
            <property name="value">
-            <number>0</number>
+            <number>3600</number>
+           </property>
+           <property name="invertedAppearance">
+            <bool>false</bool>
+           </property>
+           <property name="format">
+            <string>%v mV</string>
            </property>
           </widget>
          </item>
