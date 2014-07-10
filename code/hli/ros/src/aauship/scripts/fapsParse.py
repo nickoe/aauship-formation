@@ -7,6 +7,9 @@ from math import pi, atan
 import gpsfunctions
 import time
 
+import rospy
+from aauship.msg import *
+
 ## Packet Parser
 #
 # This parses the packets to identify messages and decodes them for the logs
@@ -53,7 +56,11 @@ class packetParser():
         self.gpsinvalid = 0
         self.accconst = 0.003333333333333
         self.gyroconst = 0.05*pi/180
+
+        self.pub_bm = rospy.Publisher('bm', BatteryMonitor, queue_size=1)
         
+        self.bank1 = [0.0, 0.0, 0.0, 0.0]
+        self.bank2 = [0.0, 0.0, 0.0, 0.0]
         pass
             
     def parse(self,packet):
@@ -61,17 +68,26 @@ class packetParser():
         try:
             if(ord(packet['DevID']) == 0): # LLI data
                 if(ord(packet['MsgID']) == 13): # Battery monitor sample
-                    print(hex( ord(packet['Data'][0]) << 8 | ord(packet['Data'][1]) ))
                     print("BANK1:\t")
-                    print(ord(packet['Data'][0]) << 8 | ord(packet['Data'][1]))
-                    print(ord(packet['Data'][2]) << 8 | ord(packet['Data'][3]))
-                    print(ord(packet['Data'][4]) << 8 | ord(packet['Data'][5]))
-                    print(ord(packet['Data'][6]) << 8 | ord(packet['Data'][7]))
+                    self.bank1[0] = (ord(packet['Data'][0]) << 8 | ord(packet['Data'][1]))*(0.00025*3.0/1.43)*150.0-540
+                    self.bank1[1] = (ord(packet['Data'][2]) << 8 | ord(packet['Data'][3]))*(0.00025*3.0/1.43)*150.0-540
+                    self.bank1[2] = (ord(packet['Data'][4]) << 8 | ord(packet['Data'][5]))*(0.00025*3.0/1.43)*150.0-540
+                    self.bank1[3] = (ord(packet['Data'][6]) << 8 | ord(packet['Data'][7]))*(0.00025*3.0/1.43)*150.0-540
+                    print(self.bank2)
                     print("BANK2:\t")
-                    print(ord(packet['Data'][8]) << 8 | ord(packet['Data'][9]))
-                    print(ord(packet['Data'][10]) << 8 | ord(packet['Data'][11]))
-                    print(ord(packet['Data'][12]) << 8 | ord(packet['Data'][13]))
-                    print(ord(packet['Data'][14]) << 8 | ord(packet['Data'][15]))
+                    self.bank2[0] = (ord(packet['Data'][8]) << 8 | ord(packet['Data'][9]))*(0.00025*3.0/1.43)*150.0-540
+                    self.bank2[1] = (ord(packet['Data'][10]) << 8 | ord(packet['Data'][11]))*(0.00025*3.0/1.43)*150.0-540
+                    self.bank2[2] = (ord(packet['Data'][12]) << 8 | ord(packet['Data'][13]))*(0.00025*3.0/1.43)*150.0-540
+                    self.bank2[3] = (ord(packet['Data'][14]) << 8 | ord(packet['Data'][15]))*(0.00025*3.0/1.43)*150.0-540
+                    print(self.bank2)
+                    if min(self.bank1) < 0:
+                        self.bank1 = [0.0, 0.0, 0.0, 0.0]
+
+                    if min(self.bank2) < 0:
+                        self.bank2 = [0.0, 0.0, 0.0, 0.0]
+
+                    if not rospy.is_shutdown():
+                        self.pub_bm.publish(self.bank1,self.bank2)
 
 
             if(ord(packet['DevID']) == 20): # IMU data

@@ -61,9 +61,6 @@ class MyPlugin(Plugin):
         self._widget.pushButtonSample.pressed.connect(self._sample)
         self._widget.checkBox.pressed.connect(self._pooling)
 
-        # Progress bars
-        self._widget.progressBar11.setValue(42)
-
         #4.20v = 100%
         #4.03v = 76%
         #3.86v = 52%
