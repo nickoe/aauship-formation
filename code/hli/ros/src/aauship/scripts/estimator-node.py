@@ -90,7 +90,7 @@ class Estimator(object):
         head = self.yaw(self.imu['xmagn'],self.imu['ymagn'],self.imu['zmagn'],pr['pitch'],pr['roll'])
 
         self.pub_attitude.publish(pr['pitch'],pr['roll'],head)
-        print(head)
+#        print(head)
 
         self.stat = 0 # Used for callback debugging
 

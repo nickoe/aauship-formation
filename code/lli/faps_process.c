@@ -2,9 +2,13 @@
 #include "faps_process.h"
 #include "pwm.h"
 #include <avr/io.h>
+#include <util/delay.h>
 #include "config.h"
 #include "crc16.h"
 #include <string.h>
+#include "mcp3428.h"
+
+char str[16];  // String used for debugging via e.q. uart2_puts(itoa(mpc_read(BANK1, 4), str, 10));
 
 
 int awake_flag;
@@ -18,6 +22,9 @@ int process(msg_t *msg)
     char buildinfo[sizeof(buildtime)+sizeof(gitcommit)];
 	int16_t duty = 0;
 	int i = 0;
+
+	int16_t meas = 0;
+	uint8_t data[2];
 
 	switch (msg->devid) {
 		// GENERAL LLI
@@ -46,6 +53,48 @@ int process(msg_t *msg)
 					grs_send(package(sizeof(buildinfo), 0x00, 0x09, buildinfo),sizeof(buildinfo));
 					hli_send(package(sizeof(buildinfo), 0x00, 0x09, buildinfo),sizeof(buildinfo));
 					break;
+				case 12:
+					/* Sampling the battery monitor */
+
+/*
+					uart2_puts("BANK1:\t");
+					uart2_puts(itoa(mcp_read(BANK1, CH1), str, 10));
+					uart2_puts("\t");
+					_delay_ms(CT); // 1/SPS ms delay is needed for the conversion time
+					uart2_puts(itoa(mcp_read(BANK1, CH2), str, 10));
+					uart2_puts("\t");
+					_delay_ms(CT);
+					uart2_puts(itoa(mcp_read(BANK1, CH3), str, 10));
+					uart2_puts("\t");
+					_delay_ms(CT);
+					uart2_puts(itoa(mcp_read(BANK1, CH4), str, 10));
+					uart2_puts("\r\n");
+
+					uart2_puts("BANK2:\t");
+					uart2_puts(itoa(mcp_read(BANK2, CH1), str, 10));
+					uart2_puts("\t");
+					_delay_ms(CT); // 1/SPS ms delay is needed for the conversion time
+					uart2_puts(itoa(mcp_read(BANK2, CH2), str, 10));
+					uart2_puts("\t");
+					_delay_ms(CT);
+					uart2_puts(itoa(mcp_read(BANK2, CH3), str, 10));
+					uart2_puts("\t");
+					_delay_ms(CT);
+					uart2_puts(itoa(mcp_read(BANK2, CH4), str, 10));
+					uart2_puts("\r\n");
+*/
+
+
+
+					meas = mcp_read(BANK2, CH2);
+					uart2_puts(meas, str, 10);
+					uart2_puts("\r\n");
+
+					data[0] = meas >> 8;
+					data[1] = meas;
+
+          hli_send(package(2, 0, 13, data), 2);
+					return;
 			}
 
 		// ACTUATORS

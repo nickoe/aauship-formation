@@ -69,8 +69,6 @@ int main (void)
 	char s[64];
 	char rmc[256];
 
-  char str[16];  // String used for debugging via e.q. uart2_puts(itoa(mpc_read(BANK1, 4), str, 10));
-
 	awake_flag = 0;
 
 	#ifdef RF_TEST_IDX
@@ -147,34 +145,6 @@ int main (void)
 			#endif
 			PORTL ^= (1<<LED2);
 			tx_counter -= TX_READY;
-
-/* THIS I2C CODE SHALL BE PUT INTO FAPS_PROCESS.C FOR REAL IMPLEMENTATION */
-uart2_puts("BANK1:\t");
-uart2_puts(itoa(mcp_read(BANK1, CH1), str, 10));
-uart2_puts("\t");
-_delay_ms(CT); // 1/SPS ms delay is needed for the conversion time
-uart2_puts(itoa(mcp_read(BANK1, CH2), str, 10));
-uart2_puts("\t");
-_delay_ms(CT);
-uart2_puts(itoa(mcp_read(BANK1, CH3), str, 10));
-uart2_puts("\t");
-_delay_ms(CT);
-uart2_puts(itoa(mcp_read(BANK1, CH4), str, 10));
-uart2_puts("\r\n");
-
-uart2_puts("BANK2:\t");
-uart2_puts(itoa(mcp_read(BANK2, CH1), str, 10));
-uart2_puts("\t");
-_delay_ms(CT); // 1/SPS ms delay is needed for the conversion time
-uart2_puts(itoa(mcp_read(BANK2, CH2), str, 10));
-uart2_puts("\t");
-_delay_ms(CT);
-uart2_puts(itoa(mcp_read(BANK2, CH3), str, 10));
-uart2_puts("\t");
-_delay_ms(CT);
-uart2_puts(itoa(mcp_read(BANK2, CH4), str, 10));
-uart2_puts("\r\n");
-
 
 		}
 

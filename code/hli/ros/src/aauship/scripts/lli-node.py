@@ -25,12 +25,10 @@ class LLI(object):
         tmp = []
         tmp = struct.pack('>h', data.Data )
 
-	if ord(data.DevID) == 10:
+        if data.DevID == 10:
             self.ctllog.write(str(ord(data.MsgID)) + ',' + str(data.Data) + ',' + str(time.time()) + "\r\n")
-        self.packet.lli_send(self.packet.package(tmp,data.DevID,data.MsgID))
 
-        #rospy.loginfo(data.data)
-        pass
+        self.packet.lli_send(self.packet.package(tmp,data.DevID,data.MsgID))
 
     def run(self):
         self.qu = Queue.Queue()
@@ -54,7 +52,7 @@ class LLI(object):
         while not rospy.is_shutdown():
             try:
                 data = self.qu.get(False)
-                print("Queue size:" + str(self.qu.qsize()) + "\r\n")
+#                print("Queue size:" + str(self.qu.qsize()) + "\r\n")
                 pub.publish(data['DevID'],
                             data['MsgID'],
                             (data['Data']),

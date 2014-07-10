@@ -64,7 +64,6 @@ class MyPlugin(Plugin):
         # Progress bars
         self._widget.progressBar11.setValue(42)
 
-
         #4.20v = 100%
         #4.03v = 76%
         #3.86v = 52%
@@ -78,14 +77,30 @@ class MyPlugin(Plugin):
         self.now = rospy.get_time()
 #        self._widget.labelTimestamp.setText(str(self.now))
         self.running = False
+
+        # Topic stuff
+        self._sub = rospy.Subscriber( "bm", BatteryMonitor, self._update)
+        self._pub = rospy.Publisher( "lli_input", LLIinput, queue_size=1)
        
         # Open log file
 #        self.log = open("logs/bm" + str(rospy.get_time()) + ".log", 'w', 1)
+
 
     def _get_time(self):
         self.now = rospy.get_time()
 #        self._widget.labelTimestamp.setText(str(self.now))
         return self.now
+
+    def _update(self, data):
+        print(data)
+        self._widget.progressBar11.setValue(data.bank1[0])
+        self._widget.progressBar12.setValue(data.bank1[1])
+        self._widget.progressBar13.setValue(data.bank1[2])
+        self._widget.progressBar14.setValue(data.bank1[3])
+        self._widget.progressBar21.setValue(data.bank2[0])
+        self._widget.progressBar22.setValue(data.bank2[1])
+        self._widget.progressBar23.setValue(data.bank2[2])
+        self._widget.progressBar24.setValue(data.bank2[3])
   
     def _pooling(self):
 
@@ -98,12 +113,18 @@ class MyPlugin(Plugin):
 
     def _sample(self):
         print("Sampled")
+        # Publish 24 00 00 0C 13 37 to the lli-input topic
+        # This requests battery monitor samples
+        self._pub.publish(0, 12, 0, 0.0)
 
     def shutdown_plugin(self):
         # TODO unregister all publishers here
-        #if self._pub_pid is not None:
-        #    self._pub_pid.unregister()
-        #    self._pub_pid = None
+        if self._pub is not None:
+            self._pub.unregister()
+            self._pub = None
+        if self._sub is not None:
+            self._sub.unregister()
+            self._sub = None
         #self.log.close()
         pass
 

@@ -212,6 +212,8 @@ class Handler(threading.Thread):
             while (data >> 8*length) > 0:              #Divide data into bytes
                 num.append((data >> (8*length)) & 255) #Append bytewise
                 length = length+1                      #Increment length of data
+                print(length)
+                print("FOOOOOO")
             for i in reversed(num): #Append the data to the dat array in reverse, due to endianness
                 dat.append(i)
         

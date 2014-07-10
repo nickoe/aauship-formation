@@ -59,6 +59,11 @@ class packetParser():
     def parse(self,packet):
         #print packet
         try:
+            if(ord(packet['DevID']) == 0): # LLI data
+                if(ord(packet['MsgID']) == 13): # Battery monitor sample
+                    print(packet['Data'])
+                    print(hex( ord(packet['Data'][0]) << 8 | ord(packet['Data'][1]) ))
+                    print(ord(packet['Data'][0]) << 8 | ord(packet['Data'][1]))
 
             if(ord(packet['DevID']) == 20): # IMU data
                 if(ord(packet['MsgID']) == 14): # Burst read reduced
@@ -148,7 +153,7 @@ class packetParser():
                     #print "IMU BURST!"
                     pass
                 elif(ord(packet['MsgID']) == 13): # Burst read
-                    print "Burst read"
+#                    print "Burst read"
                     measurements = []
                     for i in range(len(packet['Data'])):
                         if ((i & 1) == 1):
@@ -256,9 +261,6 @@ class packetParser():
                     self.plog.write(str(msgnr))
                     self.plog.write("\n")
 
-
-            elif (ord(packet['DevID']) == 0): # LLI data
-                print "LLI IS COMMING TO TOWN**************************"
             else:
                 #print packet
                 print "gfoo"

@@ -36,28 +36,28 @@
          <item>
           <widget class="QProgressBar" name="progressBar11">
            <property name="value">
-            <number>24</number>
+            <number>0</number>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QProgressBar" name="progressBar12">
            <property name="value">
-            <number>24</number>
+            <number>0</number>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QProgressBar" name="progressBar13">
            <property name="value">
-            <number>24</number>
+            <number>0</number>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QProgressBar" name="progressBar14">
            <property name="value">
-            <number>24</number>
+            <number>0</number>
            </property>
           </widget>
          </item>
@@ -75,28 +75,28 @@
          <item>
           <widget class="QProgressBar" name="progressBar21">
            <property name="value">
-            <number>24</number>
+            <number>0</number>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QProgressBar" name="progressBar22">
            <property name="value">
-            <number>24</number>
+            <number>0</number>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QProgressBar" name="progressBar23">
            <property name="value">
-            <number>24</number>
+            <number>0</number>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QProgressBar" name="progressBar24">
            <property name="value">
-            <number>24</number>
+            <number>0</number>
            </property>
           </widget>
          </item>
