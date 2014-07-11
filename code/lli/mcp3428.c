@@ -21,19 +21,22 @@ uint8_t mcp_general_call_reset(uint8_t bank) {
 }
 
 int16_t mcp_read(uint8_t bank, uint8_t ch) {
-  uint8_t adcupper = 0;
-  uint8_t adclower = 0;
+  uint8_t s = 0;                     // status indicator
+  uint8_t adcupper = 0;              // upper byte
+  uint8_t adclower = 0;              // lower byte
 
   // Config
   // PGA = 1, Resolution = 16 bits (15 SPS), Conversion mode = One shot
-  i2c_start(bank+I2C_WRITE);
-  i2c_write(0b10000100 | ch << 5);         // See page 18 in the MCP3428 datasheet
+  s = i2c_start(bank+I2C_WRITE);
+  if (s == 0) i2c_write(0b10000100 | ch << 5);         // See page 18 in the MCP3428 datasheet
 
   // MCP3428 read data addr
-  i2c_start(bank+I2C_READ);      // set adc address for reading
-  adcupper = i2c_readAck();      // read 2nd byte (upper data byte)
-  adclower = i2c_readNak();      // read 3rd byte (lower data byte)
-  i2c_stop();                    // set stop conditon = release bus
+  s = i2c_start(bank+I2C_READ);      // set adc address for reading
+  if (s == 0) {                      // this prevents the following in blocking execution
+    adcupper = i2c_readAck();        // read 2nd byte (upper data byte)
+    adclower = i2c_readNak();        // read 3rd byte (lower data byte)
+    i2c_stop();                      // set stop conditon = release bus
+  }
 
   return (adcupper << 8 | adclower);
 }
