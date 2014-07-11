@@ -61,8 +61,8 @@ class Estimator(object):
 
         self.stat = self.stat + 1 # Used for callback debugging
         if self.stat > 1:     
-            print "WARNING: This could be bad; Estimator gets a callback before it has finished the last one."
-            print "self.stat = " + str(self.stat)
+            print("WARNING: This could be bad; Estimator gets a callback before it has finished the last one.")
+            print("self.stat = " + str(self.stat))
 
         #print "Running parser"
         tmp = {'DevID':str(data.DevID), 'MsgID':str(data.MsgID),'Data': (data.Data)}
