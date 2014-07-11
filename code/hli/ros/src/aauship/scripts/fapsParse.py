@@ -82,15 +82,33 @@ class packetParser():
                     self.bank2[3] = (ord(packet['Data'][14]) << 8 | ord(packet['Data'][15]))*(0.25*3.0/1.43)
                     print(self.bank2)
 
-                    if min(self.bank1) < 3600:
-                        self.bank1 = [3600.0, 3600.0, 3600.0, 3600.0]
-                    if min(self.bank2) < 0:
-                        self.bank2 = [3600.0, 3600.0, 3600.0, 3600.0]
-                    if max(self.bank1) > 3700:
-                        self.bank1 = [4200.0, 4200.0, 4200.0, 4200.0]
-                    if max(self.bank2) > 3700:
-                        self.bank2 = [4200.0, 4200.0, 4200.0, 4200.0]
 
+                    # Measured offsets
+                    self.bank1[0] = self.bank1[0]+97.33
+                    self.bank1[1] = self.bank1[1]+143.67
+                    self.bank1[2] = self.bank1[2]+138.67
+                    self.bank1[3] = self.bank1[3]+124.33
+
+                    self.bank2[0] = self.bank2[0]+111.33
+                    self.bank2[1] = self.bank2[1]+130.67
+                    self.bank2[2] = self.bank2[2]+143.67
+                    self.bank2[3] = self.bank2[3]+111.33
+
+
+
+                    '''
+                    if min(self.bank1) < 3600.0:
+                        self.bank1 = [3600.0, 3600.0, 3600.0, 3600.0]
+
+                    if min(self.bank2) < 3600.0:
+                        self.bank2 = [3600.0, 3600.0, 3600.0, 3600.0]
+
+                    if max(self.bank1) > 4200.0:
+                        self.bank1 = [4200.0, 4200.0, 4200.0, 4200.0]
+
+                    if max(self.bank2) > 4200.0:
+                        self.bank2 = [4200.0, 4200.0, 4200.0, 4200.0]
+                    '''
                     if not rospy.is_shutdown():
                         self.pub_bm.publish(self.bank1,self.bank2)
 
