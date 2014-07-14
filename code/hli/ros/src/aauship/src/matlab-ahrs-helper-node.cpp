@@ -25,7 +25,7 @@ void adisCallback(const geometry_msgs::Transform::ConstPtr& msg)
 //  tf::Quaternion q;
 //  q.setRPY(u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
   transform.setRotation(q);
-  tfbc.sendTransform( tf::StampedTransform(transform, ros::Time::now(), "map", "boat"));
+  tfbc.sendTransform( tf::StampedTransform(transform, ros::Time::now(), "map", "boat_link"));
 }
 
 
