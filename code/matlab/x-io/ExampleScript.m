@@ -28,7 +28,8 @@ clc;                                % clear the command terminal
 %%
 clear all
 % node = rosmatlab.node('ahrs_matlab', 'http://aauship:11311');
-node = rosmatlab.node('ahrs_matlab', 'http://t410-arch:11311');
+% node = rosmatlab.node('ahrs_matlab', 'http://t410-arch:11311');
+node = rosmatlab.node('ahrs_matlab', 'http://localhost:11311');
 
 % pub = node.addPublisher('test', 'std_msgs/String');
 % msg = rosmatlab.message('std_msgs/String', node);

@@ -32,7 +32,9 @@ class Estimator(object):
                     'zmagn':0.0,
                     'temp':0.0,
                     'adc':0.0}
-        self.magnbias = {'x':0.25825, 'y':0.1225, 'z':-0.686}
+        #self.magnbias = {'x':0.25825, 'y':0.1225, 'z':-0.686}
+        #self.magnbias = {'x':0.28, 'y':0.15, 'z':-0.18}
+        self.magnbias = {'x':0, 'y':0, 'z':0}
 
 
     def pitchroll(self,ax,ay,az):
@@ -71,9 +73,9 @@ class Estimator(object):
         self.imu['xgyro'] = numpy.asscalar(self.samples[1,0])*0.05
         self.imu['ygyro'] = numpy.asscalar(self.samples[2,0])*0.05
         self.imu['zgyro'] = numpy.asscalar(self.samples[3,0])*0.05
-        self.imu['xaccl'] = numpy.asscalar(self.samples[4,0])*9.82
-        self.imu['yaccl'] = numpy.asscalar(self.samples[5,0])*9.82
-        self.imu['zaccl'] = numpy.asscalar(self.samples[6,0])*9.82
+        self.imu['xaccl'] = numpy.asscalar(self.samples[4,0])*9.82*0.00333
+        self.imu['yaccl'] = numpy.asscalar(self.samples[5,0])*9.82*0.00333
+        self.imu['zaccl'] = numpy.asscalar(self.samples[6,0])*9.82*0.00333
         self.imu['xmagn'] = numpy.asscalar(self.samples[7,0])*0.0005-self.magnbias['x']
         self.imu['ymagn'] = numpy.asscalar(self.samples[8,0])*0.0005-self.magnbias['y']
         self.imu['zmagn'] = numpy.asscalar(self.samples[9,0])*0.0005-self.magnbias['z']
