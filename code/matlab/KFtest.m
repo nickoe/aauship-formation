@@ -1,4 +1,4 @@
-%% Kalman Filter Implementation
+%% Linear Kalman Filter Implementation
 
 clear all;
 
@@ -34,3 +34,10 @@ for k = 1:N-1
 end    
 
 plot(x_hat')
+
+%% Extended Kalman Filter Implementation
+
+clear all;
+
+
+

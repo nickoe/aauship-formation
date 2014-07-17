@@ -11,7 +11,7 @@
 
 // Construct filter
 MahonyAHRS u(8, 0.4, 12);
-MadgwickAHRS p(3,12);
+MadgwickAHRS p(1,12);
 
 void adisCallback(const aauship::ADIS16405::ConstPtr& msg)
 {
@@ -22,8 +22,8 @@ void adisCallback(const aauship::ADIS16405::ConstPtr& msg)
 //		     msg->xmagn*0.0005-0.28, msg->ymagn*0.0005-0.15, msg->zmagn*0.0005-(-0.18));
 		     msg->xmagn, msg->ymagn, msg->zmagn);
 
-  p.MadgwickAHRSupdate((msg->xgyro-1.65)*3.1415/180, (msg->ygyro+16.15)*3.1415/180, (msg->zgyro+5.4)*3.1415/180,
-		    (msg->xaccl), (msg->yaccl), (msg->zaccl),
+  p.MadgwickAHRSupdate((msg->xgyro)*3.1415/180, (msg->ygyro)*3.1415/180, (msg->zgyro)*3.1415/180,
+		    (-msg->xaccl), (-msg->yaccl), (-msg->zaccl),
 //		     msg->xmagn*0.0005-0.28, msg->ymagn*0.0005-0.15, msg->zmagn*0.0005-(-0.18));
 		     msg->xmagn, msg->ymagn, msg->zmagn);
 
