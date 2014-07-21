@@ -1,0 +1,73 @@
+\section{Kalman Filter design}
+
+A \ac{KF} is one type of observer that can be applied to estimate the state vector. This is done to filter the measurements from the vessel and smooth these. If the measurements are too noisy, such that the vessel changes direction suddenly, but should be surging forward, a filter can predict the modelled direction and compare this to the measurement. This can be implemented as a low pass filter to make the changes in the measurements smaller with respect to the model predictions.
+
+The \ac{KF} comprises the deterministic part of the model which estimates the state vector. This is corrected by means of measurements to estimate the final state vector. The process is modelled as seen on figure ~\ref{fig:blockkf} where the \ac{KF} is included.
+
+\begin{figure}
+	\centering
+	\includesvg{kf_on_sys}
+	\caption{Block diagram of kalman filter estimating the state vector.}
+	\label{fig:blockkf}
+\end{figure}
+
+Here does the upper part of the figure represent the process, which can both be a simulated model or the real vessel with measurements. The lower part is the \ac{KF} which takes in the measurements and estimates the new state vector based on these measurements.
+
+The \ac{KF} prediction and update can be written as:
+\begin{itemize}
+\item Prediction
+\begin{align}
+\hat x_{k}^- &= \Phi_{k}\ \hat x_{k-1}^- + G_{k}\ u_{k-1}\nonumber\\
+\hat z_{k}^- &= H_{k}\ \hat x_{k}^-\nonumber\\
+P_{k}^- &= \Phi_{k}\ P_{k-1}^-\ \Phi_{k}^T + Q_{k}\nonumber
+\end{align}
+
+\item Update
+\begin{align}
+K_{k} &= P_{k}^- H_{k}^T(H_{k} P_{k}^- H_{k}^T+R_{k})^{-1}\nonumber\\
+\hat x_{k}^+ &= \hat x_{k}^- + K_{k}(z_{k}-\hat z_{k}^-)\nonumber\\
+P_{k}^+ &= (I-K_{k}\ H_{k})P_{k}^-\nonumber
+\end{align}
+\end{itemize}
+where $P_{k}^-$ is the covariance propagation, $P_{k}^+$ is the update of covariance propagation, $Q$ is a covariance matrix with sensor variances and $R$ is a covariance matrix with model variances. $Q$ is a measure of how much the model is to be trusted. If the variance of the sensors are high this will imply that the model are to be trusted more than the noisy sensor measurements. These variances can sometimes be measured directly at the sensors and used in the $Q$ matrix. This leaves the $R$ matrix as the only design matrix left. $R$ is a measure of how much the measurement are to be trusted. If the variance of the model are high it might be better to trust the actual measurements.
+
+Linear \ac{KF} design:
+\begin{itemize}
+\item Prediction
+\begin{align}
+\hat x_k^- &= \Phi\ \hat x_{k-1}^- + G u_k \\
+P_k^- &= \Phi\ P_{k-1}^- \Phi^T + Q_{k}
+\end{align}
+
+\item Update
+\begin{align}
+\tilde y_k &= z_k - H_k\ \hat x_k^-\\
+S_k &= H_k\ P_k^-H_k^T + R_k\\
+K_k &= P_k^-H_k^TS_k^-\\
+\hat x_k^+ &= x_k^- + K_k \tilde y_k\\
+P_k^+ &= (I - K_k H_k) P_k^-
+\end{align}
+\end{itemize}
+
+Extended \ac{KF} design:
+\begin{itemize}
+\item Prediction
+\begin{align}
+\hat x_k^- &= f(\hat x_{k-1}^-,u_{k-1})\\
+P_k^- &= F_{k-1}P_{k-1}^-F_{k-1}^T+Q_{k-1}
+\end{align}
+
+\item Update
+\begin{align}
+\tilde y_k &= z_k - h(\hat x_k^-)\\
+S_k &= H_k\ P_k^-H_k^T + R_k\\
+K_k &= P_k^-H_k^TS_k^-\\
+\hat x_k^+ &= x_k^- + K_k \tilde y_k\\
+P_k^+ &= (I - K_k H_k) P_k^-
+\end{align}
+\end{itemize}
+where the state transition and observation matrices are defined by their jacobians:
+\begin{align}
+F_{k-1} &= \left.\frac{\delta f}{\delta x}\right|_{\hat x_{k-1}^-,u_{k-1}}\\
+H_k &= \left.\frac{\delta h}{\delta x}\right|_{\hat x_{k}^-}
+\end{align}
