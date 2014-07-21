@@ -67,9 +67,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.8964848"
-     inkscape:cx="117.77859"
-     inkscape:cy="166.64784"
+     inkscape:zoom="1.9741212"
+     inkscape:cx="145.66001"
+     inkscape:cy="99.563202"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -83,7 +83,9 @@
      fit-margin-top="2"
      fit-margin-left="2"
      fit-margin-right="2"
-     fit-margin-bottom="2">
+     fit-margin-bottom="2"
+     inkscape:snap-global="true"
+     inkscape:snap-nodes="true">
     <inkscape:grid
        type="xygrid"
        id="grid2985"
@@ -102,7 +104,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -876,24 +878,28 @@
        id="path5825"
        cx="350"
        cy="872.36102"
-       r="2" />
+       r="2"
+       d="m 352,872.36102 a 2,2 0 0 1 -2,2 2,2 0 0 1 -2,-2 2,2 0 0 1 2,-2 2,2 0 0 1 2,2 z" />
     <circle
        style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path5825-3"
        cx="105"
        cy="887.36102"
-       r="2" />
+       r="2"
+       d="m 107,887.36102 a 2,2 0 0 1 -2,2 2,2 0 0 1 -2,-2 2,2 0 0 1 2,-2 2,2 0 0 1 2,2 z" />
     <circle
        style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path5825-6"
        cx="105"
        cy="912.36102"
-       r="2" />
+       r="2"
+       d="m 107,912.36102 a 2,2 0 0 1 -2,2 2,2 0 0 1 -2,-2 2,2 0 0 1 2,-2 2,2 0 0 1 2,2 z" />
     <circle
        style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path5825-0"
        cx="350"
        cy="917.36102"
-       r="2" />
+       r="2"
+       d="m 352,917.36102 a 2,2 0 0 1 -2,2 2,2 0 0 1 -2,-2 2,2 0 0 1 2,-2 2,2 0 0 1 2,2 z" />
   </g>
 </svg>
