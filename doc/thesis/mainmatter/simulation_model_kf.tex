@@ -1,4 +1,5 @@
 \section{Kalman Filter design}
+\label{sec:kfdesign}
 
 A \ac{KF} is one type of observer that can be applied to estimate the state vector. This is done to filter the measurements from the vessel and smooth these. If the measurements are too noisy, such that the vessel changes direction suddenly, but should be surging forward, a filter can predict the modelled direction and compare this to the measurement. This can be implemented as a low pass filter to make the changes in the measurements smaller with respect to the model predictions.
 
@@ -11,7 +12,7 @@ The \ac{KF} comprises the deterministic part of the model which estimates the st
 	\label{fig:blockkf}
 \end{figure}
 
-Here does the upper part of the figure represent the process, which can both be a simulated model or the real vessel with measurements. The lower part is the \ac{KF} which takes in the measurements and estimates the new state vector based on these measurements.
+Here does the upper part of the figure represent the process, which can both be a simulated model or the real vessel with measurements. The lower part is the \ac{KF} which takes in the measurements and estimates the new state vector based on these measurements. The \ac{KF} can be of different types: \ac{LKF}, \ac{EKF} or \ac{UKF}.
 
 The \ac{KF} prediction and update can be written as:
 \begin{itemize}
@@ -31,7 +32,7 @@ P_{k}^+ &= (I-K_{k}\ H_{k})P_{k}^-\nonumber
 \end{itemize}
 where $P_{k}^-$ is the covariance propagation, $P_{k}^+$ is the update of covariance propagation, $Q$ is a covariance matrix with sensor variances and $R$ is a covariance matrix with model variances. $Q$ is a measure of how much the model is to be trusted. If the variance of the sensors are high this will imply that the model are to be trusted more than the noisy sensor measurements. These variances can sometimes be measured directly at the sensors and used in the $Q$ matrix. This leaves the $R$ matrix as the only design matrix left. $R$ is a measure of how much the measurement are to be trusted. If the variance of the model are high it might be better to trust the actual measurements.
 
-Linear \ac{KF} design:
+\ac{LKF} design:
 \begin{itemize}
 \item Prediction
 \begin{align}
@@ -49,7 +50,7 @@ P_k^+ &= (I - K_k H_k) P_k^-
 \end{align}
 \end{itemize}
 
-Extended \ac{KF} design:
+\ac{EKF} design:
 \begin{itemize}
 \item Prediction
 \begin{align}
