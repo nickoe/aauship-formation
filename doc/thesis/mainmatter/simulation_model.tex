@@ -38,7 +38,7 @@ computed from a \acs{GPS}}
 \nomenclature{$a_x, a_y, a_z$}{Linear accelerations from accelerometer}
 \nomenclature{$m_x, m_y, m_z$}{Magnetic field from magnetometer}
 \nomenclature{$\omega_x, \omega_y, \omega_z$}{Angular velocity from rate gyro}
-\nomenclature{$\psi$}{Heading of ship}
+\nomenclature{$\psi$}{Heading angle (yaw)}
 
 \section{Sensor Measurements to State Vector}
 For the control system it is needed to convert the sensor measurements
@@ -79,4 +79,47 @@ to compute the variances on the state vector it is needed to make
 multiple simulations where this bias is different also. A normalized
 normal distribution of this should suffice. \todo{Is this good enough
 or even correct? We have nonlinearities.}
+
+\section{\acs{SOG} to body frame velocities}
+The \acl{SOG} block on the figure~\vref{fig:intermediate-calc} is used to calculate the body frame velocities in surge $u$ and sway $v$, which in turn is filtered by the Kalman filter described in section~\vref{sec:kfdesign}. The block on the diagram uses the \ac{SOG} from the \ac{GPS} which is the course angle relative to true north, we denote this the course angle $\chi$. Which is the sum of the heading and sidelip.
+\nomenclature{$\chi$}{Course angle}
+\nomenclature{$\beta$}{Sideslip angle}
+\nomenclature{$U$}{Course speed}
+\begin{align}
+\chi = \psi + \beta \quad \Rightarrow  \quad \beta = \chi - \psi
+\end{align}
+
+To calculate the body frame velocites the rotation matrix around $z$ is used. It is enough to use this one basic rotaiton, becasue this is on the 2D system ($x,y$) in the \ac{NED} frame.
+
+\begin{align}
+R_{z} (\psi) =
+\begin{bmatrix}
+\cos(\psi) & -\sin(\psi)\\
+\sin(\psi) & \cos(\psi)
+\end{bmatrix}
+\label{eq:Rz}
+\end{align}
+First the course speed magnitude $U$ can be calculated in \ac{NED} by the following computation, where we assuem the course speed is a vector
+\begin{align}
+U_n = R_{z} (\psi)
+\begin{bmatrix}
+U \\ 0 
+\end{bmatrix}
+\end{align}
+which is the same as
+\begin{align}
+U_n =
+\begin{bmatrix}
+\cos(\chi) \\
+\sin(\chi)
+\end{bmatrix}
+U
+\end{align}
+Now this can be rotated into the \ac{BODY} frame, using the same rotation matrix \vref{eq:Rz}, but with the sidelip angle instead of the course angle. Such that:
+\begin{align}
+U_b = \begin{bmatrix}
+u \\ v
+\end{bmatrix}
+= R_z (\beta) U_n
+\end{align}
 
