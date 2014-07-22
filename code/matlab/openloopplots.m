@@ -88,6 +88,7 @@ sys = ss(A,B,C,0);
 sysd = c2d(sys,0.1,'zoh');
 Ad = sysd.a;
 Bd = sysd.b;
+Cd = sysd.c;
 
 stop = 400;
 x = zeros(stop,10);
@@ -109,7 +110,7 @@ end
 % legend('surge vel', 'sway vel', 'roll vel')
 % title('wop')
 
-save('ssaauship.mat','Ad','Bd','MRB','D','r_g')
+save('ssaauship.mat','Ad','Bd','Cd','MRB','D','r_g')
 
 %%
 % figure(2)

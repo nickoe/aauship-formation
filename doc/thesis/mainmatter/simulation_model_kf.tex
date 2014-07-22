@@ -46,7 +46,7 @@ P_k^+ &= (I - K_k H_k) P_k^-
 %P_{k}^+ &= (I-K_{k}\ H_{k})P_{k}^-\nonumber
 %\end{align}
 %\end{itemize}
-where $P_{k}^-$ is the covariance propagation, $P_{k}^+$ is the update of covariance propagation, $Q$ is a covariance matrix with sensor variances and $R$ is a covariance matrix with model variances. $Q$ is a measure of how much the model is to be trusted. If the variance of the sensors are high this will imply that the model are to be trusted more than the noisy sensor measurements. These variances can sometimes be measured directly at the sensors and used in the $Q$ matrix. This leaves the $R$ matrix as the only design matrix left. $R$ is a measure of how much the measurement are to be trusted. If the variance of the model are high it might be better to trust the actual measurements.
+where $P_{k}^-$ is the covariance propagation, $P_{k}^+$ is the update of covariance propagation, $Q$ is a covariance matrix with sensor variances and $R$ is a covariance matrix with model variances. $Q$ is a measure of how much the model is to be trusted. If the variance of the sensors are high this will imply that the model are to be trusted more than the noisy sensor measurements. These variances can sometimes be measured directly at the sensors and used in the $Q$ matrix. This leaves the $R$ matrix as the only design matrix left. $R$ is a measure of how much the measurement are to be trusted. If the variance of the model are high it might be better to trust the actual measurements. $z_k$ is the measurements from the sensors and $y_k$ is the difference between the measurements and the predicted stave vector, $\hat x_k^-$. $S_k$ is the covariance matrix of the residual with the variance of the model included. $K_k$ is the optimal Kalman gain, in a MMSE sense. 
 
 The above mentioned \ac{KF} can only be applied on linear systems and transitions. Therefore is this not suited at the AAUSHIP. The position from the \ac{GPS} and the acceleration measurements needs to be rotated with a rotational matrix, which leads to non-linearities in the system. This can be seen on figure \vref{fig:intermediate-calc}. This entails that a \ac{LKF} cannot be used and an \ac{EKF} can be suited. The \ac{EKF} is used to linearise the non-linear terms in the system around the current estimate. In this case it will linearise the transition around the current measurements from the sensors to estimate the true output. The \ac{EKF} can be formulated in discrete form with the prediction and an update as:
 \begin{itemize}
@@ -69,4 +69,57 @@ where the state transition and observation matrices are defined by their respect
 \begin{align}
 F_{k-1} &= \left.\frac{\delta f}{\delta x}\right|_{\hat x_{k-1}^-,u_{k-1}}\\
 H_k &= \left.\frac{\delta h}{\delta x}\right|_{\hat x_{k}^-}
+\end{align}
+
+The input is given of the forces applied to the vessel:
+\begin{align}
+u(k) = \tau =
+\begin{bmatrix}
+X\\
+Y\\
+0\\
+0\\
+N
+\end{bmatrix}
+\end{align}
+These are the forces that can be applied by the thrusters mounted at the vessel. It should be noted that the pitch and roll are not as input, since these should be treated as model variations.
+
+
+\begin{align}
+H_k =
+\begin{bmatrix}
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & \frac{\delta}{\delta u} & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & \frac{\delta}{\delta v} & 0 & 0 & 0
+\end{bmatrix}
+\end{align}
+
+\begin{align}
+G = \text{The 10-by-5 matrix from the discrete model, named 'Bd'}
+\label{eq:gmatrix}
+\end{align}
+The matrix from \ref{eq:gmatrix} takes the forces in X, Y and N as input, and neglects inputs in $\phi$ and $\theta$. The forces in $\phi$ and $\theta$ are outputs from the system that makes the vessel change in pitch and roll.
+
+\begin{align}
+P_k^- &= F_k\ P_{k-1}^-F^T + Q_k\\
+\text{dim}(P_k^-) &= [10x10]\cdot [10x10]\cdot [10x10]^T + [10x10]
+\end{align}
+
+\begin{align}
+P_k^+ &= (I - K_k\ H_k)P_k^-\\
+\text{dim}(P_k^+) &= ([10x10] - [10x7]\cdot [7x10])\cdot [10x10]
+\end{align}
+
+\begin{align}
+S_k &= H\ P\ H^T + R\\
+\text{dim}(S_k) &= [7x10]\cdot [10x10]\cdot [7x10]^T + [10x10]
+\end{align}
+
+\begin{align}
+K_k &= P\ H^T\ S^{-1}\\
+\text{dim}(K_k) &= [10x10]\cdot [7x10]^T\cdot [7x7]^{-1}
 \end{align}
