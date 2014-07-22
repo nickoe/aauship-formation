@@ -27,8 +27,8 @@ extern uint8_t rmc_idx;
  * are using 57600, which works, but we have slow IMU sampling. Should
  * be good enough so far.
  */
-//#define UART_BAUD_RATE   115200
-#define UART_BAUD_RATE    57600
+#define UART_BAUD_RATE   115200
+//#define UART_BAUD_RATE    57600
 // APC220/RF7020 radio
 #define UART2_BAUD_RATE   38400
 // UP-501 GPS
@@ -88,8 +88,8 @@ extern uint8_t rmc_idx;
 
 /* Defines sample rate from the ADIS16405 bt counting interrupt ticks
  * from sample ready pin on device */
-#define ADIS_READY 164 // 10 Hz
-//#define ADIS_READY 82 // 20Hz
+//#define ADIS_READY 164 // 10 Hz
+#define ADIS_READY 82 // 20Hz
 //#define ADIS_READY 42 // 40Hz
 
 /* A hacky timer used to be able to send data in bulk, such the radio
