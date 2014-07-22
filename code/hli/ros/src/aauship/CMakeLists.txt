@@ -142,6 +142,8 @@ add_executable(joy-teleop-step-node src/joy-teleop-step-node.cpp)
 target_link_libraries(joy-teleop-step-node  ${catkin_LIBRARIES})
 add_executable(ahrs-mahony-node src/ahrs-mahony-node.cpp)
 target_link_libraries(ahrs-mahony-node aauship ${catkin_LIBRARIES})
+add_executable(ahrs-madgwick-node src/ahrs-madgwick-node.cpp)
+target_link_libraries(ahrs-madgwick-node aauship ${catkin_LIBRARIES})
 add_executable(matlab-ahrs-helper-node src/matlab-ahrs-helper-node.cpp)
 target_link_libraries(matlab-ahrs-helper-node  ${catkin_LIBRARIES})
 

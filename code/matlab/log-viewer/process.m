@@ -8,12 +8,12 @@ set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
 % load inertia.mat
 linewidth = 1;
 %% Data files
-% logpath = '~/uni/aauship-formation/code/hli/ros/src/aauship/scripts/';
-% testname = 'logs';
+logpath = '~/aauship-formation/code/hli/ros/src/aauship/scripts/';
+testname = 'logs';
 % logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 % testname = 'magnetometertest-lab2';
-logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
-testname = 'magnetometertest-lab6/test02';
+% logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
+% testname = 'magnetometertest-lab6/test02';
 % testname = 'statictest-lab';
 
 %% Data files
@@ -90,9 +90,9 @@ lon = pos(2,:);
 %% ADIS16405 Inertial Measurement Unit
 supply = imudata(:,1)*0.002418; % Scale 2.418 mV
 gyro = imudata(:,2:4)*0.05; % Scale 0.05 degrees/sec
-gyro(:,1) = gyro(:,1);
-gyro(:,2) = gyro(:,2);
-gyro(:,3) = gyro(:,3);
+gyro(:,1) = gyro(:,1)-0.2888;
+gyro(:,2) = gyro(:,2)-0.1282;
+gyro(:,3) = gyro(:,3)-0.3322;
 %+4.6 Gyroscope(:,2)+16.15 Gyroscope(:,3)+5.4
 accl = (imudata(:,5:7)*0.00333)*9.82;   %/333)*9.82; % Scale 3.33 mg (g is gravity, that is g-force)
 magn = imudata(:,8:10)*0.0005; % 0.5 mgauss
@@ -103,12 +103,13 @@ temp = imudata(:,11)*0.14; % 0.14 degrees celcius
 aux_adc = imudata(:,12)*0.806; % 0.mV
 imutime = imudata(:,13)-starttime; % Seconds since start, periodic timing determined by imu
 
-% figure(2)
+figure(2)
+clf
 % subplot(4,1,1)
-% plot(imutime, gyro)
-% title('Gyrometer')
-% ylabel('[degrees/sec]')
-% legend('X','Y','Z') 
+plot(imutime, gyro)
+title('Gyrometer')
+ylabel('[degrees/sec]')
+legend('X','Y','Z') 
 % 
 % subplot(4,1,2)
 % plot(imutime, accl)

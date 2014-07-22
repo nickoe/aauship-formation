@@ -10,12 +10,12 @@
 // in rviz.
 
 // Construct filter
-MahonyAHRS u(18, 0.1, 22);
+MadgwickAHRS p(1,12);
 
 void adisCallback(const aauship::ADIS16405::ConstPtr& msg)
 {
   /* AHRS update */
-  u.MahonyAHRSupdate((msg->xgyro-0.2888)*3.1415/180, (msg->ygyro-0.1282)*3.1415/180, (msg->zgyro-0.3322)*3.1415/180,
+  p.MadgwickAHRSupdate((msg->xgyro-0.2888)*3.1415/180, (msg->ygyro-0.1282)*3.1415/180, (msg->zgyro-0.3322)*3.1415/180,
 		    (-msg->xaccl), (-msg->yaccl), (-msg->zaccl),
 //		     msg->xmagn*0.0005-0.28, msg->ymagn*0.0005-0.15, msg->zmagn*0.0005-(-0.18));
 		     msg->xmagn, msg->ymagn, msg->zmagn);
@@ -24,8 +24,8 @@ void adisCallback(const aauship::ADIS16405::ConstPtr& msg)
   printf("accl [% f, % f, % f]\r\n", (msg->xaccl), (msg->yaccl), (msg->zaccl));
   printf("magn [% f, % f, % f]\r\n", msg->xmagn, msg->ymagn, msg->zmagn);
   
-  /* Mahony filter results */
-  tf::Quaternion q(u.getQuaternions(1),u.getQuaternions(2),u.getQuaternions(3),u.getQuaternions(0));
+  /* Madgwick filter results */
+  tf::Quaternion q(p.getQuaternions(1),p.getQuaternions(2),p.getQuaternions(3),p.getQuaternions(0));
 
   /* Publish rviz transform information */
   static tf::TransformBroadcaster tfbc;
@@ -45,7 +45,7 @@ void ahrsCallback(const aauship::ADIS16405::ConstPtr& msg)
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "ahrs_mahony");
+  ros::init(argc, argv, "ahrs_madgwick");
   ros::NodeHandle adis;
   ros::Subscriber adissub = adis.subscribe("imu", 1, adisCallback);
   ros::NodeHandle ahrs;
