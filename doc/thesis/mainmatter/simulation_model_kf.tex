@@ -71,7 +71,7 @@ F_{k-1} &= \left.\frac{\delta f}{\delta x}\right|_{\hat x_{k-1}^-,u_{k-1}}\\
 H_k &= \left.\frac{\delta h}{\delta x}\right|_{\hat x_{k}^-}
 \end{align}
 
-The input is given of the forces applied to the vessel:
+The input is given by the forces applied to the vessel:
 \begin{align}
 u(k) = \tau =
 \begin{bmatrix}
@@ -82,8 +82,7 @@ Y\\
 N
 \end{bmatrix}
 \end{align}
-These are the forces that can be applied by the thrusters mounted at the vessel. It should be noted that the pitch and roll are not as input, since these should be treated as model variations.
-
+These are the forces that can be applied by the thrusters mounted at the vessel. It should be noted that the pitch and roll are not set as input, since no thrusters can control these, and should be treated as model variations.
 
 \begin{align}
 H_k =
@@ -99,27 +98,40 @@ H_k =
 \end{align}
 
 \begin{align}
-G = \text{The 10-by-5 matrix from the discrete model, named 'Bd'}
+G = \text{The 10-by-5 matrix from the discrete model, named '$Bd$'}
 \label{eq:gmatrix}
 \end{align}
-The matrix from \ref{eq:gmatrix} takes the forces in X, Y and N as input, and neglects inputs in $\phi$ and $\theta$. The forces in $\phi$ and $\theta$ are outputs from the system that makes the vessel change in pitch and roll.
+The matrix from \ref{eq:gmatrix} takes the forces in $X$, $Y$ and $N$ as input, and neglects inputs in $\phi$ and $\theta$. The forces in $\phi$ and $\theta$ are outputs from the system that makes the vessel change in pitch and roll. It is the same matrix used in the discrete model of the vessel, from the standard state space representation:
+\begin{align}
+\dot x = Ax + Bu
+\end{align}
+where the $G$ matrix is represented as the $B$ matrix.
 
+The dimensions of the different matrices used are checked as a type of sanity check and verify that the matrices are in correct size.
+
+The covariance propagation matrix through the system, the uncertainty of the estimated state, is given by:
 \begin{align}
 P_k^- &= F_k\ P_{k-1}^-F^T + Q_k\\
 \text{dim}(P_k^-) &= [10x10]\cdot [10x10]\cdot [10x10]^T + [10x10]
 \end{align}
 
+
+The posteriori error covariance matrix, the update, is given by:
 \begin{align}
 P_k^+ &= (I - K_k\ H_k)P_k^-\\
 \text{dim}(P_k^+) &= ([10x10] - [10x7]\cdot [7x10])\cdot [10x10]
 \end{align}
+which is a measure of the estimated accuracy of the state estimate.
 
+Adding a middle calculation as the residual covariance:
 \begin{align}
 S_k &= H\ P\ H^T + R\\
 \text{dim}(S_k) &= [7x10]\cdot [10x10]\cdot [7x10]^T + [10x10]
 \end{align}
 
+The updated Kalman Gain:
 \begin{align}
 K_k &= P\ H^T\ S^{-1}\\
 \text{dim}(K_k) &= [10x10]\cdot [7x10]^T\cdot [7x7]^{-1}
 \end{align}
+witch is optimal in a MMSE sense.
