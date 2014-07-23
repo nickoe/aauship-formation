@@ -25,7 +25,7 @@ class LLI(object):
         tmp = []
         tmp = struct.pack('>h', data.Data )
 
-        if data.DevID == 10:
+        if data.DevID == 10: # Actuators
             self.ctllog.write(str(ord(data.MsgID)) + ',' + str(data.Data) + ',' + str(time.time()) + "\r\n")
 
         self.packet.lli_send(self.packet.package(tmp,data.DevID,data.MsgID))

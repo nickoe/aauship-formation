@@ -81,18 +81,23 @@ class Estimator(object):
         self.imu['zmagn'] = numpy.asscalar(self.samples[9,0])*0.0005-self.magnbias['z']
         self.imu['temp'] = numpy.asscalar(self.samples[10,0])*0.14
         self.imu['adc'] = numpy.asscalar(self.samples[11,0])*0.806
-        self.pub_imu.publish(
-            self.imu['supply'],
-            self.imu['xgyro'],self.imu['ygyro'],self.imu['zgyro'],
-            self.imu['xaccl'],self.imu['yaccl'],self.imu['zaccl'],
-            self.imu['xmagn'],self.imu['ymagn'],self.imu['zmagn'],
-            self.imu['temp'],self.imu['adc'])
+
+        # Wildpoint detection on IMU samples
+        # We can use  the value of the ADC on the IMU to detect wildpoints. It is tied to ground.
+        if self.imu['adc'] < 1.0:
+            self.pub_imu.publish(
+                self.imu['supply'],
+                self.imu['xgyro'],self.imu['ygyro'],self.imu['zgyro'],
+                self.imu['xaccl'],self.imu['yaccl'],self.imu['zaccl'],
+                self.imu['xmagn'],self.imu['ymagn'],self.imu['zmagn'],
+                self.imu['temp'],self.imu['adc'])
+        else:
+            rospy.logwarn("Wildpoint detected")
         
         pr = self.pitchroll(self.imu['xaccl'],self.imu['yaccl'],self.imu['zaccl'])
         head = self.yaw(self.imu['xmagn'],self.imu['ymagn'],self.imu['zmagn'],pr['pitch'],pr['roll'])
 
         self.pub_attitude.publish(pr['pitch'],pr['roll'],head)
-#        print(head)
 
         self.stat = 0 # Used for callback debugging
 

@@ -45,7 +45,7 @@ void ahrsCallback(const aauship::ADIS16405::ConstPtr& msg)
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "ahrs_madgwick");
+  ros::init(argc, argv, "ahrs_madgwick_node");
   ros::NodeHandle adis;
   ros::Subscriber adissub = adis.subscribe("imu", 1, adisCallback);
   ros::NodeHandle ahrs;
