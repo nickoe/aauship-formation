@@ -39,9 +39,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="152.47245"
-     inkscape:cy="113.88357"
+     inkscape:zoom="5.6568543"
+     inkscape:cx="246.07083"
+     inkscape:cy="112.49491"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -491,14 +491,14 @@
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6px;line-height:125%;font-family:Sans;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        x="235"
-       y="186.36217"
+       y="185.65508"
        id="text3761-5-25-3-9-7"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          x="235"
-         y="186.36217"
+         y="185.65508"
          id="tspan3765-9-47-43-4-7"
-         style="font-size:6px">$ \mathbf{\bar z}_{k}^-$</tspan></text>
+         style="font-size:6px">$\bar{\mathbf{x}}_k^-$</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6px;line-height:125%;font-family:Sans;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
