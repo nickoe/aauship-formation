@@ -579,10 +579,10 @@ The coefficients that are fitted can be found in table \ref{tab:avgfit}. It can 
 	\toprule
   Test & $R^2$ & RMSE & Function\\
   \midrule
-  Pitch, bow \ref{fig:gnspb} & 0.9729 & 0.4041 & $f(t) = -8.029*exp(-3.45*t)*(cos(10.29*t))+0.3544$\\
-  Pitch, stern \ref{fig:gnsps} & 0.9905 & 0.1721 & $f(t) = 5.492*exp(-3.163*t)*(cos(10.69*t))+0.7605$\\
-  Roll, left \ref{fig:gnsrl} & 0.9754 & 1.256 & $f(t) = 21.93*exp(-0.9482*t)*(cos(10.45*t))+2.734$\\
-  Roll, right \ref{fig:gnsrr} & 0.9765 & 1.133 & $f(t) = 21.43*exp(-0.7242*t)*(cos(10.13*t))+2.475$\\
+  Pitch, bow \ref{fig:gnspb} & 0.9729 & 0.4041 & $f(t) = -8.029 \exp(-3.45 t) \cos(10.29 t)+0.3544$\\
+  Pitch, stern \ref{fig:gnsps} & 0.9905 & 0.1721 & $f(t) = 5.492 \exp(-3.163 t) \cos(10.69 t)+0.7605$\\
+  Roll, left \ref{fig:gnsrl} & 0.9754 & 1.256 & $f(t) = 21.93 \exp(-0.9482 t) \cos(10.45 t)+2.734$\\
+  Roll, right \ref{fig:gnsrr} & 0.9765 & 1.133 & $f(t) = 21.43 \exp(-0.7242 t) \cos(10.13 t)+2.475$\\
   \bottomrule
 \end{tabular}
 \caption{Coefficient of determination, Root Mean Square Error and the functions to the fittings.}
@@ -592,23 +592,15 @@ The coefficients that are fitted can be found in table \ref{tab:avgfit}. It can 
 The rigid body constants for the vessel can be found in table \ref{tab:constants} and the results from measurements and estimation can be found in table \ref{tab:dmatrix}.
 \begin{table}[htbp]
 \centering
-\begin{tabular}{ccc}
+\begin{tabular}{cccccc}
 	\toprule
-  Coefficient & Value \\
+  Coefficient & Value & Coefficient & Value & Coefficient & Value  \\
   \midrule
-  $m$ & 13 \\
-  $x_g$ & 0.03 \\
-  $y_g$ & 0\\
-  $z_g$ & 0.03\\
-  $I_{xz}$ & -0.05359 \\
-  $I_{zx}$ & -0.05359 \\
-  $I_{xy}$ & -0.01260 \\
-  $I_{yx}$ & -0.01260 \\
-  $I_{yz}$ & -0.00108 \\
-  $I_{zy}$ & -0.00108 \\
-  $I_z$ & 1.10675 \\
-  $I_y$ & 1.08921 \\
-  $I_x$ & 0.06541 \\
+  $m$ & 13 & $I_{zx}$ & -0.05359 & $I_z$ & 1.10675\\
+  $x_g$ & 0.03 & $I_{xy}$ & -0.01260 & $I_y$ & 1.08921 \\
+  $y_g$ & 0 &  $I_{yx}$ & -0.01260 & $I_x$ & 0.06541\\
+  $z_g$ & 0.03 & $I_{yz}$ & -0.00108 &\\
+  $I_{xz}$ & -0.05359 & $I_{zy}$ & -0.00108 & \\
   \bottomrule
 \end{tabular}
 \caption{Rigid body mass matrix constants for $M_{RB}$}
@@ -617,24 +609,17 @@ The rigid body constants for the vessel can be found in table \ref{tab:constants
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{ccc}
-	\toprule
-  Hydrodynamic\\Coefficient & Value \\
+\begin{tabular}{cccccc}
+  \toprule
+  Coefficient & Value & Coefficient & Value & Coefficient & Value \\
   \midrule
-  $X_u$ & 2.86 \\
-  $Y_v$ & -0.00503 \\
-  $K_v$ & -0.975 \\
-  $N_v$ & 0.975 \\
-  $N_r$ & 0.26285 \\
-  $Y_r$ & 0.09263 \\
-  $K_r$ & 0.01273 \\
-  $Y_p$ & -0.00503 \\
-  $K_p$ & 0.1094 \\
-  $N_p$ & -0.00069 \\
-  $M_q$ & 7.2030 \\
+  $X_u$ & 2.86 & $N_r$ & 0.26285 & $K_p$ & 0.1094 \\
+  $Y_v$ & -0.00503 & $Y_r$ & 0.09263 & $N_p$ & -0.00069 \\
+  $K_v$ & -0.975 & $K_r$ & 0.01273 & $M_q$ & 7.2030 \\
+  $N_v$ & 0.975 & $Y_p$ & -0.00503 &\\
 	\bottomrule
 \end{tabular}
-\caption{Results of fitted values and the calculated coefficients.}
+\caption{Results of fitted values and the calculated hydrodynamic coefficients.}
 \label{tab:dmatrix}
 \end{table}
 
@@ -648,7 +633,7 @@ The rigid body constants for the vessel can be found in table \ref{tab:constants
   $M_\theta$ & 131.8316 \\
   	\bottomrule
 \end{tabular}
-\caption{Results of fitted values and the calculated coefficients.}
+\caption{Results of fitted values and the calculated restoring coefficients.}
 \label{tab:gmatrix}
 \end{table}
 

@@ -28,10 +28,10 @@ P_k^- &= \Phi\ P_{k-1}^- \Phi^\top + Q_{k}
 \end{align}
 \item Update
 \begin{align}
-\tilde y_k &= z_k - H_k\ \hat x_k^-\\
+\bar{\mathbf{z}}_k &= z_k - H_k\ \hat x_k^-\\
 S_k &= H_k\ P_k^-H_k^\top + R_k\\
 K_k &= P_k^-H_k^\top S_k^-\\
-\hat x_k^+ &= x_k^- + K_k \tilde y_k\\
+\hat x_k^+ &= x_k^- + K_k \bar{\mathbf{z}}_k\\
 P_k^+ &= (I - K_k H_k) P_k^-
 \end{align}
 \end{itemize}
@@ -50,7 +50,7 @@ P_k^+ &= (I - K_k H_k) P_k^-
 %P_{k}^+ &= (I-K_{k}\ H_{k})P_{k}^-\nonumber
 %\end{align}
 %\end{itemize}
-Where $P_{k}^-$ is the covariance propagation, $P_{k}^+$ is the update of covariance propagation, $Q$ is a covariance matrix with sensor variances and $R$ is a covariance matrix with model variances. $Q$ is a measure of how much the model is to be trusted. If the variance of the sensors are high this will imply that the model are to be trusted more than the noisy sensor measurements. These variances can sometimes be measured directly at the sensors and used in the $Q$ matrix. This leaves the $R$ matrix as the only design matrix left. $R$ is a measure of how much the measurement are to be trusted. If the variance of the model are high it might be better to trust the actual measurements. $z_k$ is the measurements from the sensors and $y_k$ is the difference between the measurements and the predicted state vector, $\hat x_k^-$. $S_k$ is the covariance matrix of the residual with the variance of the model included. $K_k$ is the optimal Kalman gain, in a \ac{MMSE} sense. 
+Where $P_{k}^-$ is the covariance propagation, $P_{k}^+$ is the update of covariance propagation, $Q$ is a covariance matrix with sensor variances and $R$ is a covariance matrix with model variances. $Q$ is a measure of how much the model is to be trusted. If the variance of the sensors are high this will imply that the model are to be trusted more than the noisy sensor measurements. These variances can sometimes be measured directly at the sensors and used in the $Q$ matrix. This leaves the $R$ matrix as the only design matrix left. $R$ is a measure of how much the measurement are to be trusted. If the variance of the model are high it might be better to trust the actual measurements. $z_k$ is the measurements from the sensors and $\bar{\mathbf{z}}_k$ is the difference between the measurements and the predicted state vector, $\hat x_k^-$. $S_k$ is the covariance matrix of the residual with the variance of the model included. $K_k$ is the optimal Kalman gain, in a \ac{MMSE} sense. 
 
 The above mentioned \ac{KF} can only be applied on linear systems and transitions. Therefore is this not suited at the AAUSHIP. The position from the \ac{GPS} and the acceleration measurements needs to be rotated with a rotational matrix, which leads to non-linearities in the system. This can be seen on figure \vref{fig:intermediate-calc}. This entails that a \ac{LKF} cannot be used and an \ac{EKF} can be suited. The \ac{EKF} is used to linearise the non-linear terms in the system around the current estimate. In this case it will linearise the transition around the current measurements from the sensors to estimate the true output. The \ac{EKF} can be formulated in discrete form with the prediction and an update as:
 \begin{itemize}\tightlist
@@ -61,10 +61,10 @@ P_k^- &= F_{k-1}P_{k-1}^-F_{k-1}^\top+Q_{k-1}
 \end{align}
 \item Update
 \begin{align}
-\tilde y_k &= z_k - h(\hat x_k^-)\\
+\bar{\mathbf{z}}_k &= z_k - h(\hat x_k^-)\\
 S_k &= H_k\ P_k^-H_k^\top + R_k\\
 K_k &= P_k^-H_k^\top S_k^-\\
-\hat x_k^+ &= x_k^- + K_k \tilde y_k\\
+\hat x_k^+ &= x_k^- + K_k \bar{\mathbf{z}}_k\\
 P_k^+ &= (I - K_k H_k) P_k^-
 \end{align}
 \end{itemize}
@@ -74,16 +74,13 @@ F_{k-1} &= \left.\frac{\delta f}{\delta x}\right|_{\hat x_{k-1}^-,u_{k-1}}\\
 H_k &= \left.\frac{\delta h}{\delta x}\right|_{\hat x_{k}^-}
 \end{align}
 
-The input is given by the forces applied to the vessel:
+\subsection{\acl{KF} in the case of AAUSHIP}
+The input is given by the forces applied to the vessel. On AAUSHIP with the two twin properllers and two side thrusters as illustrated in seciton~\vref{sec:thrust_allocation}, this will result in forces in the surge and sway direction as well as a torque around yaw, the roll and pitch torques are neglected, such that the input vector becomes $u_k$.
 \begin{align}
-u(k) = \tau =
+u_k = \tau =
 \begin{bmatrix}
-X\\
-Y\\
-0\\
-0\\
-N
-\end{bmatrix}
+X & Y & 0 & 0 & N
+\end{bmatrix}^\top
 \end{align}
 These are the forces that can be applied by the thrusters mounted at the vessel. It should be noted that the pitch and roll are not set as input, since no thrusters can control these, and should be treated as model variations.
 
@@ -112,10 +109,10 @@ where the $G$ matrix is represented as the $B$ matrix.
 
 The dimensions of the different matrices used are checked as a type of sanity check and verify that the matrices are in correct size.
 
-The covariance propagation matrix through the system, the uncertainty of the estimated state, is given by:
+The covariance propagation matrix, the uncertainty of the estimated state, is given by:
 \begin{align}
-P_k^- &= F_k\ P_{k-1}^-F^T + Q_k\\
-\text{dim}(P_k^-) &= [10 \times 10]\cdot [10 \times 10]\cdot [10 \times 10]^T + [10 \times 10]
+P_k^- &= F_k\ P_{k-1}^-F^\top + Q_k\\
+\text{dim}(P_k^-) &= [10 \times 10]\cdot [10 \times 10]\cdot [10 \times 10]^\top + [10 \times 10]
 \end{align}
 The posteriori error covariance matrix, the update, is given by:
 \begin{align}
@@ -124,12 +121,12 @@ P_k^+ &= (I - K_k\ H_k)P_k^-\\
 \end{align}
 which is a measure of the estimated accuracy of the state estimate. Adding a middle calculation as the residual covariance:
 \begin{align}
-S_k &= H\ P\ H^T + R\\
-\text{dim}(S_k) &= [7 \times 10]\cdot [10x10]\cdot [7 \times 10]^T + [10 \times 10]
+S_k &= H\ P\ H^\top + R\\
+\text{dim}(S_k) &= [7 \times 10]\cdot [10x10]\cdot [7 \times 10]^\top + [10 \times 10]
 \end{align}
 The updated Kalman Gain:
 \begin{align}
-K_k &= P\ H^T\ S^{-1}\\
-\text{dim}(K_k) &= [10 \times 10]\cdot [7 \times 10]^T\cdot [7 \times 7]^{-1}
+K_k &= P\ H^\top\ S^{-1}\\
+\text{dim}(K_k) &= [10 \times 10]\cdot [7 \times 10]^\top\cdot [7 \times 7]^{-1}
 \end{align}
-witch is optimal in a MMSE sense.
+witch is optimal in a \ac{MMSE} sense.
