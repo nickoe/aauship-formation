@@ -1,6 +1,21 @@
 \section{Kalman Filter design}
 \label{sec:kfdesign}
 
+\nomenclature{$\boldsymbol\Phi$}{State transistion matrix of a discrete linear dynamic system}
+\nomenclature{$\mathbf G$}{Input matrix}
+\nomenclature{$\mathbf H$}{Measurement sensitivity matrix defining the linear relationship between the state of the dynamic system and the measurements that can be made}
+\nomenclature{$\mathbf K$}{Kalman gain matrix}
+\nomenclature{$\mathbf u$}{Input vector}
+\nomenclature{$\mathbf x$}{State vector of a linear dynamic system}
+\nomenclature{$\hat{\mathbf{x}}$}{Estimated state vector}
+\nomenclature{$\mathbf{z}$}{Measurement vector}
+\nomenclature{$\mathbf{w}$}{Process noise vector}
+\nomenclature{$\mathbf{v}$}{Measurement noise vector}
+\nomenclature{$\mathbf R$}{Covariance matrix of observational (measurement) uncertainty}
+\nomenclature{$\mathbf P$}{Covariance matrix of state estimation uncertainty}
+\nomenclature{$\mathbf Q$}{Covariance matrix of process noise in the system state dynamics}
+
+
 A \ac{KF} is a type of observer that can be applied to estimate the state vector. This is done to filter the measurements from the vessel and smooth these. If the measurements are too noisy, such that the vessel changes direction suddenly, but should be surging forward, a filter can predict the modelled direction and compare this to the measurement.
 
 The \ac{KF} comprises the deterministic part \todo{Determinisitc part? nick} of the model which estimates the state vector. This is corrected by means of measurements to estimate the final state vector.
