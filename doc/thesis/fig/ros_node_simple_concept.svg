@@ -13,7 +13,7 @@
    height="177.16534"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.48+devel r13445 custom"
    sodipodi:docname="ros_node_simple_concept.svg">
   <defs
      id="defs4">
@@ -39,17 +39,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.3711122"
-     inkscape:cx="145.55522"
-     inkscape:cy="-10.611946"
+     inkscape:zoom="5.4844488"
+     inkscape:cx="152.4472"
+     inkscape:cy="80.100294"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      units="cm"
      inkscape:window-width="1436"
      inkscape:window-height="861"
-     inkscape:window-x="1920"
-     inkscape:window-y="290"
+     inkscape:window-x="0"
+     inkscape:window-y="18"
      inkscape:window-maximized="0">
     <inkscape:grid
        type="xygrid"
@@ -93,7 +93,7 @@
            id="tspan3815">Node</tspan></text>
       <path
          transform="translate(0,875.19552)"
-         d="m 268.81729,108.16534 a 43.817287,16.961531 0 1 1 -87.63458,0 43.817287,16.961531 0 1 1 87.63458,0 z"
+         d="M 268.81729,108.16534 A 43.817287,16.961531 0 0 1 225,125.12687 43.817287,16.961531 0 0 1 181.18271,108.16534 43.817287,16.961531 0 0 1 225,91.203806 43.817287,16.961531 0 0 1 268.81729,108.16534 Z"
          sodipodi:ry="16.961531"
          sodipodi:rx="43.817287"
          sodipodi:cy="108.16534"
@@ -102,21 +102,6 @@
          style="fill:none;stroke:#000000;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
          sodipodi:type="arc" />
     </g>
-    <text
-       sodipodi:linespacing="125%"
-       id="text3022"
-       y="962.36084"
-       x="140"
-       style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
-       xml:space="preserve"><tspan
-         y="962.36084"
-         x="140"
-         id="tspan3024"
-         sodipodi:role="line">\small{\textsl{Multiple nodes publish}}</tspan><tspan
-         id="tspan3052"
-         y="976.11084"
-         x="140"
-         sodipodi:role="line" /></text>
     <text
        xml:space="preserve"
        style="font-size:11px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
@@ -186,7 +171,7 @@
          sodipodi:cy="108.16534"
          sodipodi:rx="43.817287"
          sodipodi:ry="16.961531"
-         d="m 268.81729,108.16534 a 43.817287,16.961531 0 1 1 -87.63458,0 43.817287,16.961531 0 1 1 87.63458,0 z"
+         d="M 268.81729,108.16534 A 43.817287,16.961531 0 0 1 225,125.12687 43.817287,16.961531 0 0 1 181.18271,108.16534 43.817287,16.961531 0 0 1 225,91.203806 43.817287,16.961531 0 0 1 268.81729,108.16534 Z"
          transform="translate(0,875.19552)" />
     </g>
     <g
@@ -206,7 +191,7 @@
            id="tspan3831">Node</tspan></text>
       <path
          transform="translate(0,875.19552)"
-         d="m 268.81729,108.16534 c 0,9.36759 -19.61767,16.96153 -43.81729,16.96153 -24.19962,0 -43.81729,-7.59394 -43.81729,-16.96153 0,-9.367598 19.61767,-16.961534 43.81729,-16.961534 24.19962,0 43.81729,7.593936 43.81729,16.961534 z"
+         d="M 268.81729,108.16534 A 43.817287,16.961531 0 0 1 225,125.12687 43.817287,16.961531 0 0 1 181.18271,108.16534 43.817287,16.961531 0 0 1 225,91.203806 43.817287,16.961531 0 0 1 268.81729,108.16534 Z"
          sodipodi:ry="16.961531"
          sodipodi:rx="43.817287"
          sodipodi:cy="108.16534"
@@ -232,7 +217,7 @@
            id="tspan3839">Node</tspan></text>
       <path
          transform="translate(0,875.19552)"
-         d="m 268.81729,108.16534 a 43.817287,16.961531 0 1 1 -87.63458,0 43.817287,16.961531 0 1 1 87.63458,0 z"
+         d="M 268.81729,108.16534 A 43.817287,16.961531 0 0 1 225,125.12687 43.817287,16.961531 0 0 1 181.18271,108.16534 43.817287,16.961531 0 0 1 225,91.203806 43.817287,16.961531 0 0 1 268.81729,108.16534 Z"
          sodipodi:ry="16.961531"
          sodipodi:rx="43.817287"
          sodipodi:cy="108.16534"
@@ -264,7 +249,7 @@
          sodipodi:cy="108.16534"
          sodipodi:rx="43.817287"
          sodipodi:ry="16.961531"
-         d="m 268.81729,108.16534 a 43.817287,16.961531 0 1 1 -87.63458,0 43.817287,16.961531 0 1 1 87.63458,0 z"
+         d="M 268.81729,108.16534 A 43.817287,16.961531 0 0 1 225,125.12687 43.817287,16.961531 0 0 1 181.18271,108.16534 43.817287,16.961531 0 0 1 225,91.203806 43.817287,16.961531 0 0 1 268.81729,108.16534 Z"
          transform="translate(0,875.19552)" />
     </g>
     <g
@@ -325,7 +310,7 @@
          sodipodi:cy="108.16534"
          sodipodi:rx="43.817287"
          sodipodi:ry="16.961531"
-         d="m 268.81729,108.16534 a 43.817287,16.961531 0 1 1 -87.63458,0 43.817287,16.961531 0 1 1 87.63458,0 z"
+         d="M 268.81729,108.16534 A 43.817287,16.961531 0 0 1 225,125.12687 43.817287,16.961531 0 0 1 181.18271,108.16534 43.817287,16.961531 0 0 1 225,91.203806 43.817287,16.961531 0 0 1 268.81729,108.16534 Z"
          transform="translate(0,875.19552)" />
     </g>
     <path
@@ -423,5 +408,16 @@
        id="path4267"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:11px;line-height:125%;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+       x="140"
+       y="962.36084"
+       id="text6459"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan6461"
+         x="140"
+         y="962.36084">\small{\textsl{Multiple nodes publish}}</tspan></text>
   </g>
 </svg>
