@@ -39,9 +39,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4"
-     inkscape:cx="317.49452"
-     inkscape:cy="67.948108"
+     inkscape:zoom="2"
+     inkscape:cx="152.47245"
+     inkscape:cy="173.88357"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -227,7 +227,7 @@
        id="rect3852-1"
        width="30"
        height="29.99999"
-       x="151"
+       x="105"
        y="107.36221" />
     <text
        xml:space="preserve"
@@ -244,12 +244,12 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6px;line-height:125%;font-family:Sans;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-       x="166"
+       x="120"
        y="127.36218"
        id="text3761-5-93"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="166"
+         x="120"
          y="127.36218"
          id="tspan3765-9-7"
          style="font-size:6px">$\Phi$</tspan></text>
@@ -258,18 +258,18 @@
        id="rect3852-51-2"
        width="30"
        height="29.99999"
-       x="151"
-       y="57.362194" />
+       x="171"
+       y="107.3622" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6px;line-height:125%;font-family:Sans;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-       x="166"
-       y="77.362183"
+       x="186"
+       y="127.36218"
        id="text3761-5-2-9"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="166"
-         y="77.362183"
+         x="186"
+         y="127.36218"
          id="tspan3765-9-66-8"
          style="font-size:6px">\Large{$^1/_z$}</tspan></text>
     <circle
@@ -298,13 +298,13 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
-       d="m 96,72.362174 55,8e-6"
+       d="m 96,72.362174 135,8e-6"
        id="path4115"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
-       d="m 181,72.362182 50,3e-6"
+       d="m 171,122.36218 -34,0"
        id="path4117"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -328,13 +328,13 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
-       d="m 196,72.362169 0,50.000001 -15,10e-6"
+       d="m 216,72.362169 0,50.000001 -15,10e-6"
        id="path4141"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
-       d="m 151,122.36218 -65,0 0,-40.000006"
+       d="m 105,122.36218 -19,0 0,-40.000006"
        id="path4143"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc" />
@@ -355,7 +355,7 @@
          x="-14"
          y="62.36216"
          id="tspan3765-9-47-9"
-         style="font-size:11.25px">$\mathbf{u}_k$</tspan></text>
+         style="font-size:11.25px">$\mathbf{u}_{k-1}$</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
        d="m 86,42.362183 0,20"
@@ -377,7 +377,7 @@
          x="86"
          y="37.362183"
          id="tspan3765-9-47-43"
-         style="font-size:11.25px">$w_k$</tspan></text>
+         style="font-size:11.25px">$w_{k-1}$</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:11.25px;line-height:125%;font-family:Sans;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
@@ -466,13 +466,13 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6px;line-height:125%;font-family:Sans;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-       x="206"
-       y="64.362183"
+       x="154"
+       y="116.36218"
        id="text3761-5-25-8-3"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="206"
-         y="64.362183"
+         x="154"
+         y="116.36218"
          id="tspan3765-9-47-5-4"
          style="font-size:6px">$\mathbf{x}_{k-1}$</tspan></text>
     <text
