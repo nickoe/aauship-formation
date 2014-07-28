@@ -23,8 +23,8 @@ z_k &= H_k x_k + v_k
 \begin{itemize}\tightlist
 \item Prediction
 \begin{align}
-\hat x_k^- &= \Phi\ \hat x_{k-1}^- + G u_k \\
-P_k^- &= \Phi\ P_{k-1}^- \Phi^\top + Q_{k}
+\hat x_k^- &= \Phi_{k-1}\ \hat x_{k-1}^+ + G u_{k-1} \\
+P_k^- &= \Phi_{k-1}P_{k-1}^- \Phi_{k-1}^\top + Q_{k-1}
 \end{align}
 \item Update
 \begin{align}
@@ -84,28 +84,8 @@ X & Y & 0 & 0 & N
 \end{align}
 These are the forces that can be applied by the thrusters mounted at the vessel. It should be noted that the pitch and roll are not set as input, since no thrusters can control these, and should be treated as model variations.
 
-\begin{align}
-H_k =
-\begin{bmatrix}
-1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & \frac{\delta}{\delta u} & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & \frac{\delta}{\delta v} & 0 & 0 & 0
-\end{bmatrix}
-\end{align}
-
-\begin{align}
-G = \text{The 10-by-5 matrix from the discrete model, named '$Bd$'}
-\label{eq:gmatrix}
-\end{align}
-The matrix from \ref{eq:gmatrix} takes the forces in $X$, $Y$ and $N$ as input, and neglects inputs in $\phi$ and $\theta$. The forces in $\phi$ and $\theta$ are outputs from the system that makes the vessel change in pitch and roll. It is the same matrix used in the discrete model of the vessel, from the standard state space representation:
-\begin{align}
-\dot x = Ax + Bu
-\end{align}
-where the $G$ matrix is represented as the $B$ matrix.
+$G$ is the $10 \times 5$ matrix from the discretised $B$ matrix from equation~\vref{eq:ss}.
+The $G$ matrix takes the forces in $X$, $Y$ and $N$ as input, and neglects inputs in $\phi$ and $\theta$. The forces in $\phi$ and $\theta$ are outputs from the system that makes the vessel change in pitch and roll.
 
 The dimensions of the different matrices used are checked as a type of sanity check and verify that the matrices are in correct size.
 
@@ -130,3 +110,19 @@ K_k &= P\ H^\top\ S^{-1}\\
 \text{dim}(K_k) &= [10 \times 10]\cdot [7 \times 10]^\top\cdot [7 \times 7]^{-1}
 \end{align}
 witch is optimal in a \ac{MMSE} sense.
+
+
+
+\begin{align}
+H_k =
+\begin{bmatrix}
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & \frac{\delta}{\delta u} & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & \frac{\delta}{\delta v} & 0 & 0 & 0
+\end{bmatrix}
+\end{align}
+
