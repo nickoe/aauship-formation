@@ -67,9 +67,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.9741212"
-     inkscape:cx="145.66001"
-     inkscape:cy="99.563202"
+     inkscape:zoom="5.5836579"
+     inkscape:cx="399.00316"
+     inkscape:cy="102.80363"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -104,7 +104,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -586,7 +586,7 @@
     </g>
     <g
        id="g5659"
-       transform="translate(0,-20)">
+       transform="translate(-20,-20)">
       <g
          id="g3114-4"
          transform="translate(205,-144.99976)">
@@ -642,20 +642,20 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 350,917.36094 0,-12"
+       d="m 330,917.36094 0,-12"
        id="path4237"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Mend-4)"
-       d="m 105,-23.267726 0,-25 214.89851,-0.202637 0.0254,-19.485402 10.3294,0.18569"
+       d="m 105,-23.267726 0,-25 194.89851,-0.202637 0.0254,-19.485402 10.3294,0.18569"
        id="path4241"
        inkscape:connector-curvature="0"
        transform="translate(0,910.62867)"
        sodipodi:nodetypes="ccccc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Mend-4)"
-       d="m 370,842.36094 5,0 0,-19.99998 10,0"
+       d="m 350,842.36094 25,0 0,-19.99998 10,0"
        id="path4243"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc" />
@@ -738,25 +738,25 @@
          sodipodi:role="line">$y_n$</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 350,899.36094 0,-9"
+       d="m 330,899.36094 0,-9"
        id="path4237-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Mend-4)"
-       d="m 350,884.36094 0,-31"
+       d="m 330,884.36094 0,-31"
        id="path4237-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 350,884.36094 c 3.97359,10e-6 4.21583,6.00001 0,6"
+       d="m 330,884.36094 c 3.97359,10e-6 4.21583,6.00001 0,6"
        id="path5853-4"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 350,899.36094 c 3.97359,10e-6 4.21583,6.00001 0,6"
+       d="m 330,899.36094 c 3.97359,10e-6 4.21583,6.00001 0,6"
        id="path5853-45"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -876,10 +876,9 @@
     <circle
        style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path5825"
-       cx="350"
+       cx="330"
        cy="872.36102"
-       r="2"
-       d="m 352,872.36102 a 2,2 0 0 1 -2,2 2,2 0 0 1 -2,-2 2,2 0 0 1 2,-2 2,2 0 0 1 2,2 z" />
+       r="2" />
     <circle
        style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path5825-3"
@@ -897,9 +896,20 @@
     <circle
        style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path5825-0"
-       cx="350"
+       cx="330"
        cy="917.36102"
-       r="2"
-       d="m 352,917.36102 a 2,2 0 0 1 -2,2 2,2 0 0 1 -2,-2 2,2 0 0 1 2,-2 2,2 0 0 1 2,2 z" />
+       r="2" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text4294"
+       y="853.84039"
+       x="371.03067"
+       style="font-style:normal;font-weight:normal;font-size:11px;line-height:125%;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         id="tspan4296"
+         style="font-size:13px"
+         y="853.84039"
+         x="371.03067"
+         sodipodi:role="line">$a_x, a_y$</tspan></text>
   </g>
 </svg>

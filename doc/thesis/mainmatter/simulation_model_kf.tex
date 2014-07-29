@@ -1,6 +1,8 @@
 \section{Kalman Filter design}
 \label{sec:kfdesign}
 
+\subsection{The \acl{KF}}
+
 \nomenclature{$\boldsymbol\Phi$}{State transistion matrix of a discrete linear dynamic system}
 \nomenclature{$\mathbf G$}{Input matrix}
 \nomenclature{$\mathbf H$}{Measurement sensitivity matrix defining the linear relationship between the state of the dynamic system and the measurements that can be made}
@@ -25,7 +27,7 @@ The \ac{KF} is drawn as a block diagram as seen on figure~\vref{fig:blockkf} ill
 \begin{figure}
 	\centering
 	\includesvg{kf_on_sys}
-	\caption{Block diagram of kalman filter resulting in the state estimate $\hat x_k^+$.}
+	\caption{Block diagram of a \acl{LKF} resulting in the state estimate $\hat x_k^+$.}
 	\label{fig:blockkf}
 \end{figure}
 
@@ -50,24 +52,9 @@ K_k &= P_k^-H_k^\top S_k^-\\
 P_k^+ &= (I - K_k H_k) P_k^-
 \end{align}
 \end{itemize}
-%\begin{itemize}
-%\item Prediction
-%\begin{align}
-%\hat x_{k}^- &= \Phi_{k}\ \hat x_{k-1}^- + G_{k}\ u_{k-1}\nonumber\\
-%\hat z_{k}^- &= H_{k}\ \hat x_{k}^-\nonumber\\
-%P_{k}^- &= \Phi_{k}\ P_{k-1}^-\ \Phi_{k}^T + Q_{k}\nonumber
-%\end{align}
-%
-%\item Update
-%\begin{align}
-%K_{k} &= P_{k}^- H_{k}^T(H_{k} P_{k}^- H_{k}^T+R_{k})^{-1}\nonumber\\
-%\hat x_{k}^+ &= \hat x_{k}^- + K_{k}(z_{k}-\hat z_{k}^-)\nonumber\\
-%P_{k}^+ &= (I-K_{k}\ H_{k})P_{k}^-\nonumber
-%\end{align}
-%\end{itemize}
 Where $P_{k}^-$ is the covariance propagation, $P_{k}^+$ is the update of covariance propagation, $Q$ is a covariance matrix with sensor variances and $R$ is a covariance matrix with model variances. $Q$ is a measure of how much the model is to be trusted. If the variance of the sensors are high this will imply that the model are to be trusted more than the noisy sensor measurements. These variances can sometimes be measured directly at the sensors and used in the $Q$ matrix. This leaves the $R$ matrix as the only design matrix left. $R$ is a measure of how much the measurement are to be trusted. If the variance of the model are high it might be better to trust the actual measurements. $z_k$ is the measurements from the sensors and $\bar{\mathbf{z}}_k$ is the difference between the measurements and the predicted state vector, $\hat x_k^-$. $S_k$ is the covariance matrix of the residual with the variance of the model included. $K_k$ is the optimal Kalman gain, in a \ac{MMSE} sense. 
 
-The above mentioned \ac{KF} can only be applied on linear systems and transitions. Therefore is this not suited at the AAUSHIP. The position from the \ac{GPS} and the acceleration measurements needs to be rotated with a rotational matrix, which leads to non-linearities in the system. This can be seen on figure \vref{fig:intermediate-calc}. This entails that a \ac{LKF} cannot be used and an \ac{EKF} can be suited. The \ac{EKF} is used to linearise the non-linear terms in the system around the current estimate. In this case it will linearise the transition around the current measurements from the sensors to estimate the true output. The \ac{EKF} can be formulated in discrete form with the prediction and an update as:
+The above mentioned \ac{LKF} can only be applied on linear systems and transitions. Therefore is this not suited at the AAUSHIP. The position from the \ac{GPS} and the acceleration measurements needs to be rotated with a rotational matrix, which leads to non-linearities in the system. This can be seen on figure \vref{fig:intermediate-calc}. This entails that a \ac{LKF} cannot be used and an \ac{EKF} can be suited. The \ac{EKF} is used to linearise the non-linear terms in the system around the current estimate. In this case it will linearise the transition around the current measurements from the sensors to estimate the true output. The \ac{EKF} can be formulated in discrete form with the prediction and an update as:
 \begin{itemize}\tightlist
 \item Prediction
 \begin{align}
@@ -92,15 +79,17 @@ H_k &= \left.\frac{\delta h}{\delta x}\right|_{\hat x_{k}^-}
 \subsection{\acl{KF} in the case of AAUSHIP}
 The input is given by the forces applied to the vessel. On AAUSHIP with the two twin properllers and two side thrusters as illustrated in seciton~\vref{sec:thrust_allocation}, this will result in forces in the surge and sway direction as well as a torque around yaw, the roll and pitch torques are neglected, such that the input vector becomes $u_k$.
 \begin{align}
-u_k = \tau =
+u_k = \tau_k =
 \begin{bmatrix}
 X & Y & 0 & 0 & N
 \end{bmatrix}^\top
 \end{align}
 These are the forces that can be applied by the thrusters mounted at the vessel. It should be noted that the pitch and roll are not set as input, since no thrusters can control these, and should be treated as model variations.
 
-$G$ is the $10 \times 5$ matrix from the discretised $B$ matrix from equation~\vref{eq:ss}.
+$G$ is a $10 \times 5$ matrix from the discretised $B$ matrix from equation~\vref{eq:ss}. \todo{Should we use $\Gamma$ for $G$ as in done in other sources (e.g. fossen), such that the input matrix is not confused with the restorin force matrix from fossen?}
 The $G$ matrix takes the forces in $X$, $Y$ and $N$ as input, and neglects inputs in $\phi$ and $\theta$. The forces in $\phi$ and $\theta$ are outputs from the system that makes the vessel change in pitch and roll.
+
+$\boldsymbol \Phi$ is a $10 \times 10$ from the discretised $A$ matrix from equation~\vref{eq:ss}.
 
 The dimensions of the different matrices used are checked as a type of sanity check and verify that the matrices are in correct size.
 
@@ -117,7 +106,7 @@ P_k^+ &= (I - K_k\ H_k)P_k^-\\
 which is a measure of the estimated accuracy of the state estimate. Adding a middle calculation as the residual covariance:
 \begin{align}
 S_k &= H\ P\ H^\top + R\\
-\text{dim}(S_k) &= [7 \times 10]\cdot [10x10]\cdot [7 \times 10]^\top + [10 \times 10]
+\text{dim}(S_k) &= [7 \times 10]\cdot [10 \times 10]\cdot [7 \times 10]^\top + [10 \times 10]
 \end{align}
 The updated Kalman Gain:
 \begin{align}
@@ -126,8 +115,23 @@ K_k &= P\ H^\top\ S^{-1}\\
 \end{align}
 witch is optimal in a \ac{MMSE} sense.
 
+State vector
+\begin{align}
+\hat{\mathbf x}=
+\begin{bmatrix}
+x & y & \phi & \theta &\psi & u & v & p & q & r
+\end{bmatrix}^\top
+\end{align}
 
+Measurement vector
+\begin{align}
+\mathbf z=
+\begin{bmatrix}
+x & y & \psi & u & v & a_x & a_y
+\end{bmatrix}^\top
+\end{align}
 
+Measurement matrix
 \begin{align}
 H_k =
 \begin{bmatrix}
@@ -140,4 +144,30 @@ H_k =
 0 & 0 & 0 & 0 & 0 & 0 & \frac{\delta}{\delta v} & 0 & 0 & 0
 \end{bmatrix}
 \end{align}
+
+
+Covariance matrix of observational (measurement) uncertainty
+\begin{align}
+R_k =
+\begin{bmatrix}
+? & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & ? & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & ? & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & ? & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & ? & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & ? & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & ? & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & ? & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & ? & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & ?
+\end{bmatrix}
+\end{align}
+
+Covariance matrix of process noise in the system state dynamics
+\begin{align}
+Q_k = \diag{
+\sigma_{x_n}^2, \sigma_{y_n}^2 , ?, ?, ?, ?, ?, \sigma_p^2, \sigma_q^2, \sigma_r^2}
+\end{align}
+
+\todo{What about $\mathbf w$ and $\mathbf v$?}
 
