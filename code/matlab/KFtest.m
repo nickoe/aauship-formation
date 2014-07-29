@@ -1,39 +1,39 @@
 %% Linear Kalman Filter Implementation
-
-clear all;
-
-load('ssaauship.mat');
-PHI = Ad;
-DELTA = Bd;
-
-N = 100;
-states = 10;
-Q = eye(states)*0.01;
-varians = [0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1]';
-R = diag([varians*1.5]);
-x_bar = zeros(states,N);
-x_hat = zeros(states,N);
-P_bar = zeros(states,states,N);
-H = diag([0 0 0 0 0 0 0 1 1 1]);
-u = zeros(5,N);
-x = zeros(states,N);
-
-for k = 1:N-1
-%     y(:,k) = x_bar(:,k) + randn(10,1)*0.1;
-    x_dot(:,k) = Ad*x(:,k) + Bd*u(:,k);
-    
-    y(:,k) = x_dot(:,k)+randn(10,1 );
-    K(:,:,k) = P_bar(:,:,k)*H'* inv((H*P_bar(:,:,k)*H' + R));
-    x_hat(:,k) = x_bar(:,k) + K(:,:,k)* (y(:,k) - H*x_hat(:,k));
-    P_hat(:,:,k) = (eye(states) - K(:,:,k)*H)*P_bar(:,:,k);
-    
-    x_bar(:,k+1) = PHI*x_hat(:,k) + DELTA*u(:,k);
-    P_bar(:,:,k+1) = PHI*P_hat(:,:,k)*PHI' + Q;
-    
-    x(:,k+1) = x(:,k) + 0.1*x_dot(:,k);
-end    
-
-%plot(x_hat')
+% 
+% clear all;
+% 
+% load('ssaauship.mat');
+% PHI = Ad;
+% DELTA = Bd;
+% 
+% N = 100;
+% states = 10;
+% Q = eye(states)*0.01;
+% varians = [0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1]';
+% R = diag([varians*1.5]);
+% x_bar = zeros(states,N);
+% x_hat = zeros(states,N);
+% P_bar = zeros(states,states,N);
+% H = diag([0 0 0 0 0 0 0 1 1 1]);
+% u = zeros(5,N);
+% x = zeros(states,N);
+% 
+% for k = 1:N-1
+% %     y(:,k) = x_bar(:,k) + randn(10,1)*0.1;
+%     x_dot(:,k) = Ad*x(:,k) + Bd*u(:,k);
+%     
+%     y(:,k) = x_dot(:,k)+randn(10,1 );
+%     K(:,:,k) = P_bar(:,:,k)*H'* inv((H*P_bar(:,:,k)*H' + R));
+%     x_hat(:,k) = x_bar(:,k) + K(:,:,k)* (y(:,k) - H*x_hat(:,k));
+%     P_hat(:,:,k) = (eye(states) - K(:,:,k)*H)*P_bar(:,:,k);
+%     
+%     x_bar(:,k+1) = PHI*x_hat(:,k) + DELTA*u(:,k);
+%     P_bar(:,:,k+1) = PHI*P_hat(:,:,k)*PHI' + Q;
+%     
+%     x(:,k+1) = x(:,k) + 0.1*x_dot(:,k);
+% end    
+% 
+% %plot(x_hat')
 
 %% Extended Kalman Filter Implementation
 
@@ -45,24 +45,37 @@ load('ssaauship.mat');
 PHI = Ad;
 G = Bd;
 
-N = 100;
+N = 300;
 
 states = 10;
 x_hat = zeros(states,N);
 P_minus = zeros(states,states,N);
-u = [10 0 0 0 0]';
+u = [0 0 0 0 0]';
 x = zeros(states,N);
 x_minus = zeros(states,N);
 
-varians = [0.1 0.1 0.1 0.1 0.1 0.1 0.1]';
-R = diag([varians*1.5]);
+% Process noise
+w = [3 3 3.4182e-006 3.1662e-006 13.5969e-006 0.1 0.1 332^-6 332^-6 332^-6]';
+% w = zeros(10,1);
 
-Q = diag([0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1]);
+% Measurement noise
+% v = [3 3 13.5969e-006 0.1 0.1 0.0524 0.0524]';
+v = zeros(7,1);
 
-for k = 2:N-1
+jeppe = [1 1  0.1 0.1 0.1 0.1 0.1]';
+R = diag(jeppe*1.5);
+Q = diag(w);
+
+
+
+NED = zeros(2,N);
+heading(1) = x(1,5);
+
+for k = 2:N
 
 % Model state vector
-x(:,k) = Ad * x(:,k-1) + Bd * u;
+% x(:,k) = Ad * x(:,k-1) + Bd * u;
+x(:,k) = Ad * x(:,k-1) + Bd * u + w;
 
 %H(:,:,k) = h(k)-h(k-1);
 H(:,:,k) = [1 0 0 0 0 0 0 0 0 0;
@@ -74,7 +87,7 @@ H(:,:,k) = [1 0 0 0 0 0 0 0 0 0;
             0 0 0 0 0 0 (x(7,k)-x(7,k-1)) 0 0 0];
 
 % Add noise, making measurements
-z(:,k) = H(:,:,k)*x(:,k) + randn(7,1)*1;
+z(:,k) = H(:,:,k)*x(:,k) + randn(1,7)*v;
         
 % Update
 y_tilde(:,k) = z(:,k) - H(:,:,k)*x_minus(:,k);
@@ -89,37 +102,35 @@ P_minus(:,:,k+1) = PHI*P_minus(:,:,k)*PHI + Q;
 
 %x(:,k+1) = x(:,k) + 0.1*x_hat(:,k);
 
+
+
+
+psi=x_hat(5,k);
+Rz = [cos(psi) -sin(psi);
+      sin(psi)  cos(psi)];
+      
+NED(:,k+1) = Rz*x_hat(6:7,k)*0.1 + NED(:,k);
+% heading(k) = (x(10,k)'*0.1 + heading(k-1));
 end
 
+
+
+
 figure(1)
-plot(x_hat(1,:),x_hat(2,:))
+plot(x_hat(1,:),x_hat(2,:), x(1,:),x(2,:))
+% plot(NED(1,:),NED(2,:))
 xlabel('easting [m]'); ylabel('northing [m]')
+legend('x_{hat}', 'x')
 axis equal;
 
 figure(2)
-plot(x_hat(3,:))
-title('Phi');
-
-figure(3)
-plot(x_hat(4,:))
-title('u speed')
-
-figure(4)
-plot(x_hat(5,:))
-title('v speed')
+plot(1:N, x_hat(5,:), 1:N,x(5,:) )
+legend('Psi_{hat}', 'Psi');
 
 figure(5)
-plot(x_hat(6,:))
-title('ax')
+plot(1:N,x_hat(6,:), 1:N,x_hat(7,:))
+legend('u', 'v')
 
-figure(6)
-plot(x_hat(7,:))
-title('ay')
-
-figure(7)
-plot(x(1,:),x(2,:))
-xlabel('easting [m]'); ylabel('northing [m]');
-axis equal;
 
 
 
