@@ -47,7 +47,7 @@ P_k^- &= \Phi_{k-1}P_{k-1}^- \Phi_{k-1}^\top + Q_{k-1}
 \begin{align}
 \bar{\mathbf{z}}_k &= z_k - H_k\ \hat x_k^-\\
 S_k &= H_k\ P_k^-H_k^\top + R_k\\
-K_k &= P_k^-H_k^\top S_k^-\\
+K_k &= P_k^-H_k^\top S_k^{-1}\\
 \hat x_k^+ &= x_k^- + K_k \bar{\mathbf{z}}_k\\
 P_k^+ &= (I - K_k H_k) P_k^-
 \end{align}
@@ -65,7 +65,7 @@ P_k^- &= F_{k-1}P_{k-1}^-F_{k-1}^\top+Q_{k-1}
 \begin{align}
 \bar{\mathbf{z}}_k &= z_k - h(\hat x_k^-)\\
 S_k &= H_k\ P_k^-H_k^\top + R_k\\
-K_k &= P_k^-H_k^\top S_k^-\\
+K_k &= P_k^-H_k^\top S_k^{-1}\\
 \hat x_k^+ &= x_k^- + K_k \bar{\mathbf{z}}_k\\
 P_k^+ &= (I - K_k H_k) P_k^-
 \end{align}

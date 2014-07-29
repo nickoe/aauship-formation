@@ -103,13 +103,45 @@ temp = imudata(:,11)*0.14; % 0.14 degrees celcius
 aux_adc = imudata(:,12)*0.806; % 0.mV
 imutime = imudata(:,13)-starttime; % Seconds since start, periodic timing determined by imu
 
+% Wild point detection
+tst = 0;
+for ll = 1:length(aux_adc)
+    if ( (aux_adc(ll) > 3.1) || (aux_adc(ll) < 0) )
+%         gyro(ll,:)
+        gyro(ll,:) = [0 0 0];
+        tst = tst +1 ;
+    end
+    
+%     if ( (gyro(ll,1) > 10) || (gyro(ll,1) < -10) )
+% %         gyro(ll,:)
+%         gyro(ll,:) = [0 0 0];
+%         tst = tst +1 ;
+%     end
+%     
+%     if ( (gyro(ll,2) > 10) || (gyro(ll,2) < -10) )
+% %         gyro(ll,:)
+%         gyro(ll,:) = [0 0 0];
+%         tst = tst +1 ;
+%     end
+%     
+%     if ( (gyro(ll,3) > 10) || (gyro(ll,3) < -10) )
+% %         gyro(ll,:)
+%         gyro(ll,:) = [0 0 0];
+%         tst = tst +1 ;
+%     end
+end
+tst
+
+
+%
 figure(2)
 clf
 % subplot(4,1,1)
-plot(imutime, gyro)
+plot(imutime, gyro, '-', imutime, aux_adc, '.-')
 title('Gyrometer')
 ylabel('[degrees/sec]')
 legend('X','Y','Z') 
+
 % 
 % subplot(4,1,2)
 % plot(imutime, accl)

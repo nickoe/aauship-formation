@@ -45,7 +45,7 @@ load('ssaauship.mat');
 PHI = Ad;
 G = Bd;
 
-N = 300;
+N = 200;
 
 states = 10;
 x_hat = zeros(states,N);
@@ -117,11 +117,16 @@ end
 
 
 figure(1)
-plot(x_hat(1,:),x_hat(2,:), x(1,:),x(2,:))
+plot(x_hat(1,:),x_hat(2,:),'.-', x(1,:),x(2,:),'.-')
 % plot(NED(1,:),NED(2,:))
 xlabel('easting [m]'); ylabel('northing [m]')
 legend('x_{hat}', 'x')
 axis equal;
+
+% for k = 1:N
+%     k
+%     ship(x_hat(1,:),x_hat(2,:),-x_hat(5,:)+pi/2,'y')
+% end
 
 figure(2)
 plot(1:N, x_hat(5,:), 1:N,x(5,:) )
