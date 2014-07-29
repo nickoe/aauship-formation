@@ -20,12 +20,16 @@ void adisCallback(const aauship::ADIS16405::ConstPtr& msg)
 //		     msg->xmagn*0.0005-0.28, msg->ymagn*0.0005-0.15, msg->zmagn*0.0005-(-0.18));
 		     msg->xmagn, msg->ymagn, msg->zmagn);
 
-  printf("gyro [% f, % f, % f]\r\n", (msg->xgyro-0.2888)*3.1415/180, (msg->ygyro-0.1282)*3.1415/180, (msg->zgyro-0.3322)*3.1415/180);
-  printf("accl [% f, % f, % f]\r\n", (msg->xaccl), (msg->yaccl), (msg->zaccl));
-  printf("magn [% f, % f, % f]\r\n", msg->xmagn, msg->ymagn, msg->zmagn);
+//  printf("gyro [% f, % f, % f]\r\n", (msg->xgyro-0.2888)*3.1415/180, (msg->ygyro-0.1282)*3.1415/180, (msg->zgyro-0.3322)*3.1415/180);
+//  printf("accl [% f, % f, % f]\r\n", (msg->xaccl), (msg->yaccl), (msg->zaccl));
+//  printf("magn [% f, % f, % f]\r\n", msg->xmagn, msg->ymagn, msg->zmagn);
   
   /* Mahony filter results */
   tf::Quaternion q(u.getQuaternions(1),u.getQuaternions(2),u.getQuaternions(3),u.getQuaternions(0));
+
+  u.calculateEulerAngles();
+  printf("%.3f, %.3f, %.3f\r\n", u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
+// ROS_INFO("Euler angles: [%.3f, %.3f, %.3f]", u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
 
   /* Publish rviz transform information */
   static tf::TransformBroadcaster tfbc;
