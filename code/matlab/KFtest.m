@@ -45,17 +45,17 @@ load('ssaauship.mat');
 PHI = Ad;
 G = Bd;
 
-N = 20500;
+N = 205;
 
 states = 10;
 x_hat_plus = zeros(states,N);
 P_minus = zeros(states,states,N);
-u = [20 0 0 0 30]';
+u = [20 0 0 0 -0.5]';
 x = zeros(states,N);
 x_hat_minus = zeros(states,N);
 
 % Process noise
-w = [3 3 3.4182e-006 3.1662e-006 13.5969e-006 0.1 0.1 332^-6 332^-6 332^-6]';
+w = [1 1 3.4182e-006 3.1662e-006 13.5969e-006 0.1 0.1 332^-6 332^-6 332^-6]';
 % w = zeros(10,1);
 
 % Measurement noise
@@ -63,12 +63,13 @@ v = [3 3 13.5969e-006 0.1 0.1 0.0524 0.0524]';
 % v = zeros(7,1);
 
 jeppe = [1 1  0.1 0.1 0.1 0.1 0.1]';
-R = diag(jeppe*1.5);
+R = diag(jeppe*5655.5);
 Q = diag(w);
 
 
 
 NED = zeros(2,N);
+NED_noisy = zeros(2,N);
 heading(1) = x(1,5);
 
 for k = 2:N
@@ -76,7 +77,7 @@ for k = 2:N
 % Model state vector
 % x(:,k) = Ad * x(:,k-1) + Bd * u;
 x(:,k) = Ad * x(:,k-1) + Bd * u;
-x(k,:) = aauship(x(k-1,:)', u');
+x(:,k) = aauship(x(:,k-1), u);
 
 x_noisy(:,k) = x(:,k) + randn(1,10)*w;
 
@@ -110,11 +111,16 @@ P_minus(:,:,k+1) = PHI*P_minus(:,:,k)*PHI + Q;
 
 
 
+psi=x(5,k);
+Rz = [cos(psi) -sin(psi);
+      sin(psi)  cos(psi)];
+
+      
+NED(:,k+1) = Rz*x(6:7,k)*0.1 + NED(:,k);
 psi=x_hat_plus(5,k);
 Rz = [cos(psi) -sin(psi);
       sin(psi)  cos(psi)];
-      
-NED(:,k+1) = Rz*x_hat_plus(6:7,k)*0.1 + NED(:,k);
+NED_noisy(:,k+1) = Rz*x_hat_plus(6:7,k)*0.1 + NED_noisy(:,k);
 % heading(k) = (x(10,k)'*0.1 + heading(k-1));
 end
 
@@ -122,8 +128,8 @@ end
 
 
 figure(1)
-plot(x_hat_plus(1,:),x_hat_plus(2,:),'.-', x(1,:),x(2,:),'.-')
-% plot(NED(1,:),NED(2,:))
+% plot(x_hat_plus(1,:),x_hat_plus(2,:),'.-', x(1,:),x(2,:),'.-')
+plot(NED(1,:),NED(2,:),NED_noisy(1,:),NED_noisy(2,:))
 xlabel('easting [m]'); ylabel('northing [m]')
 legend('x_{hat}', 'x')
 axis equal;
@@ -138,8 +144,8 @@ plot(1:N, x_hat_plus(5,:), 1:N,x(5,:) )
 legend('Psi_{hat}', 'Psi');
 
 figure(5)
-plot(1:N,x_hat_plus(6,:), 1:N,x_hat_plus(7,:))
-legend('u', 'v')
+plot(1:N,x_hat_plus(6,:), 1:N,x_hat_plus(7,:), 1:N,x(6,:), 1:N,x(7,:))
+legend('u_hat', 'v_hat','u', 'v')
 
 
 
