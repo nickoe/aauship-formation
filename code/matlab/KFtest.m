@@ -50,16 +50,16 @@ N = 200;
 states = 10;
 x_hat_plus = zeros(states,N);
 P_minus = zeros(states,states,N);
-u = [5 0 0 0 -0.1]';
+u = [50 0 0 0 -0.1]';
 x = zeros(states,N);
 x_hat_minus = zeros(states,N);
 
 % Process noise
-w = [0.5 0.5 3.4182e-006 3.1662e-006 13.5969e-006 0.1 0.1 332^-6 332^-6 332^-6]';
+w = [0.001 0.001 0.0001 0.01 0.001 0.1 0.1 0.0001 0.01 0.001]';
 % w = zeros(10,1);
 
 % Measurement noise
-v = [1.5 1.5 13.5969e-006 0.1 0.1 0.0524 0.0524]';
+v = [5 5 13.5969e-006 0.1 0.1 0.0524 0.0524]';
 % v = zeros(7,1);
 
 % jeppe = [1 1 1 1 1 1 1]';
@@ -102,7 +102,8 @@ P_plus(:,:,k) = (eye(10) - K(:,:,k)*H(:,:,k)) *P_minus(:,:,k)* (eye(10) - K(:,:,
 % Prediction
 % x_hat_minus(:,k) = PHI*x_hat_plus(:,k-1) + G*u;
 % P_minus(:,:,k) = PHI*P_minus(:,:,k-1)*PHI + Q;
-x_hat_minus(:,k+1) = PHI*x_hat_plus(:,k) + G*u;
+% x_hat_minus(:,k+1) = PHI*x_hat_plus(:,k) + G*u;
+x_hat_minus(:,k+1) = aauship(x_hat_plus(:,k),u);
 P_minus(:,:,k+1) = PHI*P_plus(:,:,k)*PHI + Q;
 
 %x(:,k+1) = x(:,k) + 0.1*x_hat(:,k);
@@ -110,23 +111,23 @@ P_minus(:,:,k+1) = PHI*P_plus(:,:,k)*PHI + Q;
 
 
 
-psi=x(5,k);
-Rz = [cos(psi) -sin(psi);
-      sin(psi)  cos(psi)];
-
-      
-NED(:,k+1) = Rz*x(6:7,k)*0.1 + NED(:,k);
-psi=x_hat_plus(5,k);
-Rz = [cos(psi) -sin(psi);
-      sin(psi)  cos(psi)];
-NED_noisy(:,k+1) = Rz*x_hat_plus(6:7,k)*0.1 + NED_noisy(:,k);
+% % psi=x(5,k);
+% % Rz = [cos(psi) -sin(psi);
+% %       sin(psi)  cos(psi)];
+% % 
+% %       
+% % NED(:,k+1) = Rz*x(6:7,k)*0.1 + NED(:,k);
+% % psi=x_hat_plus(5,k);
+% % Rz = [cos(psi) -sin(psi);
+% %       sin(psi)  cos(psi)];
+% % NED_noisy(:,k+1) = Rz*x_hat_plus(6:7,k)*0.1 + NED_noisy(:,k);
 % heading(k) = (x(10,k)'*0.1 + heading(k-1));
 end
 
 
 figure(1)
-% plot(x_hat_plus(1,:),x_hat_plus(2,:),'.-', x(1,:),x(2,:),'.-')
-plot(NED(1,:),NED(2,:),NED_noisy(1,:),NED_noisy(2,:))
+plot( x(1,:),x(2,:),'.-', x_hat_plus(1,:),x_hat_plus(2,:),'.-')
+% plot(NED(1,:),NED(2,:),NED_noisy(1,:),NED_noisy(2,:))
 xlabel('easting [m]'); ylabel('northing [m]')
 legend('x', 'x_{hat}')
 axis equal;
