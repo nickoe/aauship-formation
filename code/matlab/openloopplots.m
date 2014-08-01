@@ -84,8 +84,10 @@ B = [zeros(5,5)
  
 C = eye(10,10);
 
+ts= 0.1; % sample time
+
 sys = ss(A,B,C,0);
-sysd = c2d(sys,0.1,'zoh');
+sysd = c2d(sys,ts,'zoh');
 Ad = sysd.a;
 Bd = sysd.b;
 Cd = sysd.c;
@@ -98,34 +100,34 @@ for i = 1:stop
     x(i+1,:) = Ad*x(i,:)' + Bd*tau;
 end
 
-% figure(1)
-% subplot(2,1,1)
-% t = 1:i+1;
-% plot(t,x(:,1), t,x(:,2), t,x(:,3));
-% % plot(t,y(:,1), t,y(:,2), t,y(:,3));
-% legend('surge pos', 'sway pos', 'roll pos')
-% 
-% subplot(2,1,2)
-% plot(t,x(:,6), t,x(:,7), t,x(:,8));
-% legend('surge vel', 'sway vel', 'roll vel')
-% title('wop')
+figure(1)
+subplot(2,1,1)
+t = 1:i+1;
+plot(t,x(:,1), t,x(:,2), t,x(:,3));
+% plot(t,y(:,1), t,y(:,2), t,y(:,3));
+legend('surge pos', 'sway pos', 'roll pos')
+
+subplot(2,1,2)
+plot(t,x(:,6), t,x(:,7), t,x(:,8));
+legend('surge vel', 'sway vel', 'roll vel')
+title('wop')
 
 save('ssaauship.mat','Ad','Bd','Cd','MRB','D','r_g')
 
 %%
-% figure(2)
-% t = 0:1:400;
-% u = zeros(5,length(t));
-% C = eye(10,10);
-% sys = ss(A,B,C,0);
-% [y,t,x] = lsim(sysd,u,t,x0);
-% subplot(2,1,1)
-% plot(t,x(:,1), t,x(:,2), t,x(:,3));
-% % plot(t,y(:,1), t,y(:,2), t,y(:,3));
-% legend('surge pos', 'sway pos', 'roll pos')
-% 
-% subplot(2,1,2)
-% plot(t,x(:,6), t,x(:,7), t,x(:,8));
-% legend('surge vel', 'sway vel', 'roll vel')
-% title('lsim')
+figure(2)
+t = 0:ts:400;
+u = zeros(5,length(t));
+C = eye(10,10);
+sys = ss(A,B,C,0);
+[y,t,x] = lsim(sysd,u,t,x0);
+subplot(2,1,1)
+plot(t,x(:,1), t,x(:,2), t,x(:,3));
+% plot(t,y(:,1), t,y(:,2), t,y(:,3));
+legend('surge pos', 'sway pos', 'roll pos')
+
+subplot(2,1,2)
+plot(t,x(:,6), t,x(:,7), t,x(:,8));
+legend('surge vel', 'sway vel', 'roll vel')
+title('lsim')
 

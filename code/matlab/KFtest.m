@@ -137,12 +137,12 @@ axis equal;
 % end
 
 figure(2)
-plot(1:N,x_hat_plus(5,:), 1:N,x(5,:) )
-legend('Psi_{hat}', 'Psi');
+plot(1:N,x_noisy(5,:), 1:N,x_hat_plus(5,:), 1:N,x(5,:) )
+legend('Psi_{noisy}', 'Psi_{hat}', 'Psi');
 
 figure(5)
-plot(1:N,x_hat_plus(6,:), 1:N,x_hat_plus(7,:), 1:N,x(6,:), 1:N,x(7,:))
-legend('u_{hat}', 'v_{hat}','u', 'v')
+plot(1:N,x_noisy(6,:), 1:N,x_noisy(7,:), 1:N,x_hat_plus(6,:), 1:N,x_hat_plus(7,:), 1:N,x(6,:), 1:N,x(7,:))
+legend('u_{noisy}', 'u_{noisy}', 'u_{hat}', 'v_{hat}','u', 'v')
 
 
 
