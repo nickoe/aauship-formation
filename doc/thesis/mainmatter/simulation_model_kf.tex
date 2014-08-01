@@ -24,13 +24,8 @@ The \ac{KF} comprises the deterministic part \todo{Determinisitc part? nick} of 
 
 The \ac{KF} is drawn as a block diagram as seen on figure~\vref{fig:blockkf} illustrating both the process and the \ac{KF} together. The upper part represent the process, which can both be a simulated model or the real vessel with measurements, here it is a linear state space model. The lower part is the \ac{KF} which takes in the measurements and estimates the new state vector based on these measurements. The \ac{KF} can be of different types: \ac{LKF}, \ac{EKF} or \ac{UKF}. The figure illustrates the \ac{LKF}. Choosing between these types of filters depends on the type of model used and the application. 
 
-\begin{figure}
-	\centering
-	\includesvg{kf_on_sys}
-	\caption{Block diagram of a \acl{LKF} resulting in the state estimate $\hat x_k^+$.}
-	\label{fig:blockkf}
-\end{figure}
 
+\subsection{\acl{LKF}}
 The process model is the usual state space model in discrete form as:
 \begin{align}
 x_k &= \Phi_{k-1} x_{k-1} + G u_{k-1} + w_{k-1}\\
@@ -52,6 +47,14 @@ K_k &= P_k^-H_k^\top S_k^{-1}\\
 P_k^+ &= (I - K_k H_k) P_k^-
 \end{align}
 \end{itemize}
+
+\begin{figure}
+	\centering
+	\includesvg{kf_on_sys}
+	\caption{Block diagram of a \acl{LKF} resulting in the state estimate $\hat x_k^+$.}
+	\label{fig:blockkf}
+\end{figure}
+
 Where $P_{k}^-$ is the covariance propagation, $P_{k}^+$ is the update of covariance propagation, $Q$ is a covariance matrix with sensor variances and $R$ is a covariance matrix with model variances. $Q$ is a measure of how much the model is to be trusted. If the variance of the sensors are high this will imply that the model are to be trusted more than the noisy sensor measurements. These variances can sometimes be measured directly at the sensors and used in the $Q$ matrix. This leaves the $R$ matrix as the only design matrix left. $R$ is a measure of how much the measurement are to be trusted. If the variance of the model are high it might be better to trust the actual measurements. $z_k$ is the measurements from the sensors and $\bar{\mathbf{z}}_k$ is the difference between the measurements and the predicted state vector, $\hat x_k^-$. $S_k$ is the covariance matrix of the residual with the variance of the model included. $K_k$ is the optimal Kalman gain, in a \ac{MMSE} sense. 
 
 \subsection{\acl{EKF}}
@@ -73,12 +76,12 @@ P_k^+ &= (I - K_k H_k) P_k^-
 \end{itemize}
 where the state transition and observation matrices are defined by their respective jacobians:
 \begin{align}
-F_{k-1} &= \left.\frac{\delta f}{\delta x}\right|_{\hat x_{k-1}^-,u_{k-1}}\\
-H_k &= \left.\frac{\delta h}{\delta x}\right|_{\hat x_{k}^-}
+F_{k-1} &= \left.\frac{\partial f}{\partial x}\right|_{\hat x_{k-1}^-,u_{k-1}}\\
+H_k &= \left.\frac{\partial h}{\partial x}\right|_{\hat x_{k}^-}
 \end{align}
 
 \subsection{\acl{KF} in the case of AAUSHIP}
-The input is given by the forces applied to the vessel. On AAUSHIP with the two twin properllers and two side thrusters as illustrated in seciton~\vref{sec:thrust_allocation}, this will result in forces in the surge and sway direction as well as a torque around yaw, the roll and pitch torques are neglected, such that the input vector becomes $u_k$.
+The input is given by the forces applied to the vessel. On AAUSHIP with the two twin properllers and two side thrusters as illustrated in seciton~\vref{sec:thrust_allocation}, this will result in forces in the surge and sway direction as well as a torque around yaw, the roll and pitch torques are neglected, such that the input vector $u_k$ becomes.
 \begin{align}
 u_k = \tau_k =
 \begin{bmatrix}
@@ -87,10 +90,10 @@ X & Y & 0 & 0 & N
 \end{align}
 These are the forces that can be applied by the thrusters mounted at the vessel. It should be noted that the pitch and roll are not set as input, since no thrusters can control these, and should be treated as model variations.
 
-$G$ is a $10 \times 5$ matrix from the discretised $B$ matrix from equation~\vref{eq:ss}. \todo{Should we use $\Gamma$ for $G$ as in done in other sources (e.g. fossen), such that the input matrix is not confused with the restorin force matrix from fossen?}
+The discrete input matrix $G$ is a $10 \times 5$ matrix from the discretised $B$ matrix from equation~\vref{eq:ss}. \todo{Should we use $\Gamma$ for $G$ as in done in other sources (e.g. fossen), such that the input matrix is not confused with the restorin force matrix from fossen?}
 The $G$ matrix takes the forces in $X$, $Y$ and $N$ as input, and neglects inputs in $\phi$ and $\theta$. The forces in $\phi$ and $\theta$ are outputs from the system that makes the vessel change in pitch and roll.
 
-$\boldsymbol \Phi$ is a $10 \times 10$ from the discretised $A$ matrix from equation~\vref{eq:ss}.
+The discrete system $\boldsymbol \Phi$ is a $10 \times 10$ from the discretised $A$ matrix from equation~\vref{eq:ss}.
 
 The dimensions of the different matrices used are checked as a type of sanity check and verify that the matrices are in correct size.
 
@@ -120,7 +123,7 @@ State vector
 \begin{align}
 \hat{\mathbf x}=
 \begin{bmatrix}
-x & y & \phi & \theta &\psi & u & v & p & q & r
+x_n & y_n & \phi & \theta &\psi & u & v & p & q & r
 \end{bmatrix}^\top
 \end{align}
 
@@ -128,7 +131,7 @@ Measurement vector
 \begin{align}
 \mathbf z=
 \begin{bmatrix}
-x & y & \psi & u & v & a_x & a_y
+x_n & y_n & \psi & u & v & a_x & a_y
 \end{bmatrix}^\top
 \end{align}
 
@@ -141,32 +144,22 @@ H_k =
 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & \frac{\delta}{\delta u} & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & \frac{\delta}{\delta v} & 0 & 0 & 0
+0 & 0 & 0 & 0 & 0 & \frac{\partial}{\partial u} & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & \frac{\partial}{\partial v} & 0 & 0 & 0
 \end{bmatrix}
 \end{align}
 
 
 Covariance matrix of observational (measurement) uncertainty
 \begin{align}
-R_k =
-\begin{bmatrix}
-? & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & ? & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & ? & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & ? & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & ? & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & ? & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & ? & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & ? & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & ? & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & ?
-\end{bmatrix}
+R_k = \diag{\mathbf{v}} =
+\diag{
+?, ?, ?, ?, ?, ?, ?}
 \end{align}
 
 Covariance matrix of process noise in the system state dynamics
 \begin{align}
-Q_k = \diag{
+Q_k = \diag{\mathbf{w}} = \diag{
 \sigma_{x_n}^2, \sigma_{y_n}^2 , ?, ?, ?, ?, ?, \sigma_p^2, \sigma_q^2, \sigma_r^2}
 \end{align}
 
