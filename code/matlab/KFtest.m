@@ -45,28 +45,27 @@ load('ssaauship.mat');
 PHI = Ad;
 G = Bd;
 
-N = 205;
+N = 200;
 
 states = 10;
 x_hat_plus = zeros(states,N);
 P_minus = zeros(states,states,N);
-u = [20 0 0 0 -0.5]';
+u = [5 0 0 0 -0.1]';
 x = zeros(states,N);
 x_hat_minus = zeros(states,N);
 
 % Process noise
-w = [1 1 3.4182e-006 3.1662e-006 13.5969e-006 0.1 0.1 332^-6 332^-6 332^-6]';
+w = [0.5 0.5 3.4182e-006 3.1662e-006 13.5969e-006 0.1 0.1 332^-6 332^-6 332^-6]';
 % w = zeros(10,1);
 
 % Measurement noise
-v = [3 3 13.5969e-006 0.1 0.1 0.0524 0.0524]';
+v = [1.5 1.5 13.5969e-006 0.1 0.1 0.0524 0.0524]';
 % v = zeros(7,1);
 
-jeppe = [1 1  0.1 0.1 0.1 0.1 0.1]';
-R = diag(jeppe*5655.5);
+% jeppe = [1 1 1 1 1 1 1]';
+% R = diag(jeppe*500);
+R = diag(v);
 Q = diag(w);
-
-
 
 NED = zeros(2,N);
 NED_noisy = zeros(2,N);
@@ -76,10 +75,9 @@ for k = 2:N
 
 % Model state vector
 % x(:,k) = Ad * x(:,k-1) + Bd * u;
-x(:,k) = Ad * x(:,k-1) + Bd * u;
 x(:,k) = aauship(x(:,k-1), u);
-
-x_noisy(:,k) = x(:,k) + randn(1,10)*w;
+noise(:,k) = randn(10,1).*w;
+x_noisy(:,k) = x(:,k) + noise(:,k);
 
 %H(:,:,k) = h(k)-h(k-1);
 H(:,:,k) = [1 0 0 0 0 0 0 0 0 0;
@@ -91,20 +89,21 @@ H(:,:,k) = [1 0 0 0 0 0 0 0 0 0;
             0 0 0 0 0 0 (x_noisy(7,k)-x_noisy(7,k-1)) 0 0 0];
 
 % Add noise, making measurements
-z(:,k) = H(:,:,k)*x_noisy(:,k) + randn(1,7)*v;
+z(:,k) = H(:,:,k)*x_noisy(:,k) + randn(7,1).*v;
         
 % Update
 z_hat(:,k) = z(:,k) - H(:,:,k)*x_hat_minus(:,k);
 S(:,:,k) = H(:,:,k)*P_minus(:,:,k)*H(:,:,k)' + R;
 K(:,:,k) = P_minus(:,:,k)*H(:,:,k)'*inv(S(:,:,k));
 x_hat_plus(:,k) = x_hat_minus(:,k) + K(:,:,k)* z_hat(:,k);
-P_plus(:,:,k) = (eye(10) - K(:,:,k)*H(:,:,k))*P_minus(:,:,k);
+% P_plus(:,:,k) = (eye(10) - K(:,:,k)*H(:,:,k))*P_minus(:,:,k);
+P_plus(:,:,k) = (eye(10) - K(:,:,k)*H(:,:,k)) *P_minus(:,:,k)* (eye(10) - K(:,:,k)*H(:,:,k))' + K(:,:,k)*R*K(:,:,k)';
 
 % Prediction
 % x_hat_minus(:,k) = PHI*x_hat_plus(:,k-1) + G*u;
 % P_minus(:,:,k) = PHI*P_minus(:,:,k-1)*PHI + Q;
 x_hat_minus(:,k+1) = PHI*x_hat_plus(:,k) + G*u;
-P_minus(:,:,k+1) = PHI*P_minus(:,:,k)*PHI + Q;
+P_minus(:,:,k+1) = PHI*P_plus(:,:,k)*PHI + Q;
 
 %x(:,k+1) = x(:,k) + 0.1*x_hat(:,k);
 
@@ -125,13 +124,11 @@ NED_noisy(:,k+1) = Rz*x_hat_plus(6:7,k)*0.1 + NED_noisy(:,k);
 end
 
 
-
-
 figure(1)
 % plot(x_hat_plus(1,:),x_hat_plus(2,:),'.-', x(1,:),x(2,:),'.-')
 plot(NED(1,:),NED(2,:),NED_noisy(1,:),NED_noisy(2,:))
 xlabel('easting [m]'); ylabel('northing [m]')
-legend('x_{hat}', 'x')
+legend('x', 'x_{hat}')
 axis equal;
 
 % for k = 1:N
@@ -140,12 +137,12 @@ axis equal;
 % end
 
 figure(2)
-plot(1:N, x_hat_plus(5,:), 1:N,x(5,:) )
+plot(1:N,x_hat_plus(5,:), 1:N,x(5,:) )
 legend('Psi_{hat}', 'Psi');
 
 figure(5)
 plot(1:N,x_hat_plus(6,:), 1:N,x_hat_plus(7,:), 1:N,x(6,:), 1:N,x(7,:))
-legend('u_hat', 'v_hat','u', 'v')
+legend('u_{hat}', 'v_{hat}','u', 'v')
 
 
 
