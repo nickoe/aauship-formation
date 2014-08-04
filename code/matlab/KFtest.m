@@ -71,8 +71,10 @@ NED = zeros(2,N);
 NED_noisy = zeros(2,N);
 heading(1) = x(1,5);
 
-for k = 2:N
+gpsc = 0;
+jj = 1;
 
+for k = 2:N
 % Model state vector
 % x(:,k) = Ad * x(:,k-1) + Bd * u;
 x(:,k) = aauship(x(:,k-1), u, 'nonlinear');
@@ -95,6 +97,16 @@ z(:,k) = H(:,:,k)*x_noisy(:,k) + randn(7,1).*v;
 z_hat(:,k) = z(:,k) - H(:,:,k)*x_hat_minus(:,k);
 S(:,:,k) = H(:,:,k)*P_minus(:,:,k)*H(:,:,k)' + R;
 K(:,:,k) = P_minus(:,:,k)*H(:,:,k)'*inv(S(:,:,k));
+if mod(k,10)
+    K(1:2,:,k) = zeros(2,7);
+    K(:,1:2,k) = zeros(10,2);
+    K(6:7,:,k) = zeros(2,7);
+    K(:,4:5,k) = zeros(10,2);
+else
+    gpsc(jj) = k;
+    jj=jj+1;
+end
+    
 x_hat_plus(:,k) = x_hat_minus(:,k) + K(:,:,k)* z_hat(:,k);
 % P_plus(:,:,k) = (eye(10) - K(:,:,k)*H(:,:,k))*P_minus(:,:,k);
 P_plus(:,:,k) = (eye(10) - K(:,:,k)*H(:,:,k)) *P_minus(:,:,k)* (eye(10) - K(:,:,k)*H(:,:,k))' + K(:,:,k)*R*K(:,:,k)';
@@ -122,11 +134,14 @@ P_minus(:,:,k+1) = PHI*P_plus(:,:,k)*PHI + Q;
 % %       sin(psi)  cos(psi)];
 % % NED_noisy(:,k+1) = Rz*x_hat_plus(6:7,k)*0.1 + NED_noisy(:,k);
 % heading(k) = (x(10,k)'*0.1 + heading(k-1));
+
+% pos_error(k) = sqrt((x(1,k)-x_hat_plus(1,k)).^2+(x(2,k)-x_hat_plus(2,k)).^2);
+pos_error(k) = norm([(x(1,k)-x_hat_plus(1,k)),(x(2,k)-x_hat_plus(2,k))]);
 end
 
 
 figure(1)
-plot( x(1,:),x(2,:),'.-', x_hat_plus(1,:),x_hat_plus(2,:),'.-')
+plot( x(1,:),x(2,:),'.-', x_hat_plus(1,:),x_hat_plus(2,:),'.-', x_hat_plus(1,gpsc), x_hat_plus(2,gpsc), 'o', x(1,gpsc), x(2,gpsc), 'o')
 % plot(NED(1,:),NED(2,:),NED_noisy(1,:),NED_noisy(2,:))
 xlabel('easting [m]'); ylabel('northing [m]')
 legend('x', 'x_{hat}')
@@ -152,5 +167,9 @@ legend('ax_{noisy}', 'ax_{hat}')
 subplot(2,1,2)
 plot(1:N,z(7,:), 1:N,z_hat(7,:))
 legend('ay_{noisy}', 'ay_{hat}')
+
+figure(7)
+plot(1:N,pos_error', '.-', gpsc, pos_error(gpsc)','o')
+legend('norm error')
 
 
