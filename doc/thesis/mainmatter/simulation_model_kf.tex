@@ -135,7 +135,7 @@ x_n & y_n & \psi & u & v & a_x & a_y
 \end{bmatrix}^\top
 \end{align}
 
-Measurement matrix
+Measurement matrix defining the relationship between the state of the dynamic system and the measurements.
 \begin{align}
 H_k =
 \begin{bmatrix}
@@ -150,17 +150,17 @@ H_k =
 \end{align}
 
 
-Covariance matrix of observational (measurement) uncertainty
+The covariance matrix of observational (measurement) uncertainty $R_k$ is assumed to be uncorrelated with the other states, such that the matrix only becomes the variances, with no covariance elements as:
 \begin{align}
 R_k = \diag{\mathbf{v}} =
 \diag{
-?, ?, ?, ?, ?, ?, ?}
+\sigma_{x_n}^2, \sigma_{y_n}^2, ?, ?, \sigma_p^2, \sigma_q^2, \sigma_r^2}
 \end{align}
 
-Covariance matrix of process noise in the system state dynamics
+The covariance matrix of process noise in the system state dynamics is $Q_k$ is also assumed to be the variances only:
 \begin{align}
 Q_k = \diag{\mathbf{w}} = \diag{
-\sigma_{x_n}^2, \sigma_{y_n}^2 , ?, ?, ?, ?, ?, \sigma_p^2, \sigma_q^2, \sigma_r^2}
+?, ?, ?, ?, ?, ?, ?, ?, ?, ? }
 \end{align}
 
 \todo{What about $\mathbf w$ and $\mathbf v$?}

@@ -75,7 +75,7 @@ for k = 2:N
 
 % Model state vector
 % x(:,k) = Ad * x(:,k-1) + Bd * u;
-x(:,k) = aauship(x(:,k-1), u);
+x(:,k) = aauship(x(:,k-1), u, 'linear');
 noise(:,k) = randn(10,1).*w;
 x_noisy(:,k) = x(:,k) + noise(:,k);
 
@@ -103,7 +103,7 @@ P_plus(:,:,k) = (eye(10) - K(:,:,k)*H(:,:,k)) *P_minus(:,:,k)* (eye(10) - K(:,:,
 % x_hat_minus(:,k) = PHI*x_hat_plus(:,k-1) + G*u;
 % P_minus(:,:,k) = PHI*P_minus(:,:,k-1)*PHI + Q;
 % x_hat_minus(:,k+1) = PHI*x_hat_plus(:,k) + G*u;
-x_hat_minus(:,k+1) = aauship(x_hat_plus(:,k),u);
+x_hat_minus(:,k+1) = aauship(x_hat_plus(:,k),u, 'linear');
 P_minus(:,:,k+1) = PHI*P_plus(:,:,k)*PHI + Q;
 
 %x(:,k+1) = x(:,k) + 0.1*x_hat(:,k);

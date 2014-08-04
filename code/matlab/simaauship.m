@@ -72,7 +72,7 @@ for k = 1:N
     tau(k,:)=[6 0 0 0 thrustdiff(k)];
     
     % Simulation
-    x(k+1,:) = aauship(x(k,:)', tau(k,:)');
+    x(k+1,:) = aauship(x(k,:)', tau(k,:)', 'nonlinear');
     psi=x(k,5);
     Rz = [cos(psi) -sin(psi);
           sin(psi)  cos(psi)];
@@ -88,7 +88,8 @@ for k = 1:N
 %          headingdesired(k) = headingdesired(k) + rev;
         NED(k+1,:) = Rz*x(k,6:7)'*0.1 + NED(k,:)';
 %         NED(k+1,1:2) = NED(k+1,1:2) + (diag([1.0035,1.0035])*randn(2,1)/10)';
-        heading(k) = (x(k,10)'*0.1 + heading(k-1));
+%         heading(k) = (x(k,10)'*0.1 + heading(k-1));
+        heading(k) = x(k,5);
     end
     
     % PID
@@ -110,19 +111,27 @@ tt = 0.01:0.1:es/10;
 % subplot(3,1,1)
 
 for k = 1:79:es
-    ship(NED(k,2),NED(k,1),-x(k+1,5)+pi/2,'y')
+%     ship(NED(k,2),NED(k,1),-x(k+1,5)+pi/2,'y')
+    ship(x(k+1,2),x(k+1,1),-x(k+1,5)+pi/2,'y')
+
 end
 % for k = 1:100:N
 %     ship(NED(k,2),NED(k,1),pi/2-headingdesired(k),'y')
 % end
 hold on
 plot(track(:,2),track(:,1),'b-o', NED(1:es,2),NED(1:es,1),'-r')
+plot(x(1:es,2),x(1:es,1),'-k')
 plot(track(n,2),track(n,1),'ro')
 xlabel('Easting [m]');
 ylabel('Northing [m]');
 grid on
 axis equal
 hold off
+
+%%DEBUG
+figure(2)
+plot(tt, heading(1:es), tt, x(1:es,5))
+%%DEBUGEND
 
 % csvwrite('positions.csv',[NED(1:es,1:2) -x(1:es,5)+pi/2])
 

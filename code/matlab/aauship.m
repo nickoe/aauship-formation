@@ -11,6 +11,8 @@ function [ xn ] = aauship( x, tau, type )
 %   
 %   State vector: x = [x y phi theta psi u v p q r]'  % default
 %   State vector: xn = [x_n y_n phi theta psi u v p q r]'  % nonlinear
+%   State vector: xn = [x_n y_n phi theta psi u v p q r U chi a_x a_y a_z
+%   m_x m_y m_z g_x g_y g_z]'
 %   Force vector: tau = [X Y K M N]'
 
 % Check of input and state dimensions
@@ -23,9 +25,11 @@ xdot = ss.Ad*x + ss.Bd*tau;
 xn = xdot;
 
 if strcmp(type, 'nonlinear');
-    psi=x(5);
+    xn(5) = xn(10)*0.1 + x(5);
+    psi=xn(5);
     Rz = [cos(psi) -sin(psi);
           sin(psi)  cos(psi)];
     xn(1:2) = Rz*xn(6:7)*0.1 + x(1:2);
+    
 end
 end
