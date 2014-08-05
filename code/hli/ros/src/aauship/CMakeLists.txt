@@ -122,6 +122,7 @@ include_directories(
 add_library(aauship
   src/MahonyAHRS.cpp
   src/MadgwickAHRS.cpp
+  src/KalmanFilter.cpp
 )
 
 ## Declare a cpp executable
@@ -146,6 +147,8 @@ add_executable(ahrs-madgwick-node src/ahrs-madgwick-node.cpp)
 target_link_libraries(ahrs-madgwick-node aauship ${catkin_LIBRARIES})
 add_executable(matlab-ahrs-helper-node src/matlab-ahrs-helper-node.cpp)
 target_link_libraries(matlab-ahrs-helper-node  ${catkin_LIBRARIES})
+add_executable(kf-node src/kf-node.cpp)
+target_link_libraries(kf-node  ${catkin_LIBRARIES})
 
 #add_executable(MahonyAHRS src/MahonyAHRS.cpp)
 #target_link_libraries(MahonyAHRS ${catkin_LIBRARIES})
