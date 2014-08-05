@@ -222,6 +222,23 @@ float MadgwickAHRS::invSqrt(float x){
    return tmp * (1.69000231f - 0.714158168f * x * tmp * tmp);
 }
 
+void MadgwickAHRS::calculateEulerAngles(void)
+{
+    eulerAngleX = atan2(2 * (q0*q1 + q2*q3), 1 - 2 *(q1*q1 + q2*q2));
+    eulerAngleY =  asin(2 * (q0*q2 - q1*q3));
+    eulerAngleZ = atan2(2 * (q0*q3 + q1*q2), 1 - 2 *(q2*q2 + q3*q3));  
+}
+
+float MadgwickAHRS::getEulerAngles(int axes)
+{
+    switch(axes)
+    {
+        case 0: return eulerAngleX;
+        case 1: return eulerAngleY;
+        case 2: return eulerAngleZ;
+    }
+    return 0;
+}
 
 float MadgwickAHRS::getQuaternions(int axes)
 {

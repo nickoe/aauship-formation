@@ -97,7 +97,7 @@ class Estimator(object):
         pr = self.pitchroll(self.imu['xaccl'],self.imu['yaccl'],self.imu['zaccl'])
         head = self.yaw(self.imu['xmagn'],self.imu['ymagn'],self.imu['zmagn'],pr['pitch'],pr['roll'])
 
-        self.pub_attitude.publish(pr['pitch'],pr['roll'],head)
+        #self.pub_attitude.publish(pr['pitch'],pr['roll'],head) # We use the cpp ahrs methods insted
 
         self.stat = 0 # Used for callback debugging
 
@@ -125,7 +125,7 @@ class Estimator(object):
         rospy.init_node('estimator')
         rospy.Subscriber('samples', Faps, self.callback)
         self.pub_imu = rospy.Publisher('imu', ADIS16405, queue_size=10)
-        self.pub_attitude = rospy.Publisher('attitude',Attitude, queue_size=10)
+        #self.pub_attitude = rospy.Publisher('attitude',Attitude, queue_size=10) # We use the cpp ahrs methods insted
         rospy.spin() # Keeps the node running untill stopped
         print("\nClosing log files")
         self.imulog.close()

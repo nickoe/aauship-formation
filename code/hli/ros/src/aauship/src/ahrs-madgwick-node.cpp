@@ -1,5 +1,6 @@
 #include "ros/ros.h"
 #include "aauship/ADIS16405.h"
+#include "geometry_msgs/Quaternion.h"
 #include <tf/transform_broadcaster.h>
 #include <visualization_msgs/Marker.h>
 #include <aauship/MahonyAHRS.h>
@@ -10,46 +11,72 @@
 // in rviz.
 
 // Construct filter
-MadgwickAHRS p(1,12);
+MadgwickAHRS u(1,22); // Magic numbers here
 
-void adisCallback(const aauship::ADIS16405::ConstPtr& msg)
+
+class SubscribeAndPublish
 {
-  /* AHRS update */
-  p.MadgwickAHRSupdate((msg->xgyro-0.2888)*3.1415/180, (msg->ygyro-0.1282)*3.1415/180, (msg->zgyro-0.3322)*3.1415/180,
-		    (-msg->xaccl), (-msg->yaccl), (-msg->zaccl),
-//		     msg->xmagn*0.0005-0.28, msg->ymagn*0.0005-0.15, msg->zmagn*0.0005-(-0.18));
-		     msg->xmagn, msg->ymagn, msg->zmagn);
 
-  printf("gyro [% f, % f, % f]\r\n", (msg->xgyro-0.2888)*3.1415/180, (msg->ygyro-0.1282)*3.1415/180, (msg->zgyro-0.3322)*3.1415/180);
-  printf("accl [% f, % f, % f]\r\n", (msg->xaccl), (msg->yaccl), (msg->zaccl));
-  printf("magn [% f, % f, % f]\r\n", msg->xmagn, msg->ymagn, msg->zmagn);
-  
-  /* Madgwick filter results */
-  tf::Quaternion q(p.getQuaternions(1),p.getQuaternions(2),p.getQuaternions(3),p.getQuaternions(0));
+public:
+  SubscribeAndPublish()
+  {
+    adissub = n.subscribe("imu", 1, &SubscribeAndPublish::adisCallback, this);
+    ahrssub = n.subscribe("ahrs", 2, &SubscribeAndPublish::ahrsCallback, this);
+    attitudepub = n.advertise<geometry_msgs::Quaternion>("attitude", 2);
+  }
 
-  /* Publish rviz transform information */
-  static tf::TransformBroadcaster tfbc;
-  tf::Transform transform;
-  transform.setOrigin( tf::Vector3(0,0,0) );
-  transform.setRotation(q);
-  tfbc.sendTransform( tf::StampedTransform(transform, ros::Time::now(), "map", "boat_link"));
+  void adisCallback(const aauship::ADIS16405::ConstPtr& msg)
+  {
+    /* AHRS update */
+    u.MadgwickAHRSupdate((msg->xgyro-0.2888)*3.1415/180, (msg->ygyro-0.1282)*3.1415/180, (msg->zgyro-0.3322)*3.1415/180,
+		      (-msg->xaccl), (-msg->yaccl), (-msg->zaccl),
+  //		     msg->xmagn*0.0005-0.28, msg->ymagn*0.0005-0.15, msg->zmagn*0.0005-(-0.18));
+		       msg->xmagn, msg->ymagn, msg->zmagn);
 
-  // @TODO Publish attitude information to the Kalman filter
-}
+    /* Debug output */
+    //u.calculateEulerAngles();
+    //ROS_INFO("Euler angles: [%.3f, %.3f, %.3f]", u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
 
-// Used to configure the filter
-void ahrsCallback(const aauship::ADIS16405::ConstPtr& msg)
-{
-//  setTuning(float kpA, float kiA, float kpM, float kiM);
-}
+    /* Madgwick filter results */
+    tf::Quaternion q(u.getQuaternions(1),u.getQuaternions(2),u.getQuaternions(3),u.getQuaternions(0));
 
+    /* Publish rviz transform information */
+    static tf::TransformBroadcaster tfbc;
+    tf::Transform transform;
+    transform.setOrigin( tf::Vector3(0,0,0) );
+    transform.setRotation(q);
+    tfbc.sendTransform( tf::StampedTransform(transform, ros::Time::now(), "map", "boat_link"));
+
+    // Publish attitude information (for use with i.e. the Kalman filter)
+    geometry_msgs::Quaternion msgq;
+    msgq.w = u.getQuaternions(1);
+    msgq.x = u.getQuaternions(2);
+    msgq.y = u.getQuaternions(3);
+    msgq.z = u.getQuaternions(0);
+    attitudepub.publish(msgq);
+  }
+
+  // Used to configure the filter
+  void ahrsCallback(const aauship::ADIS16405::ConstPtr& msg)
+  {
+  //  setTuning(float kpA, float kiA, float kpM, float kiM);
+  }
+
+private:
+  ros::NodeHandle n;
+  ros::Subscriber adissub;
+  ros::Subscriber ahrssub;
+  ros::Publisher attitudepub;
+}; //End of class SubscribeAndPublish
+
+// Main
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "ahrs_madgwick_node");
-  ros::NodeHandle adis;
-  ros::Subscriber adissub = adis.subscribe("imu", 1, adisCallback);
-  ros::NodeHandle ahrs;
-  ros::Subscriber ahrssub = ahrs.subscribe("ahrs", 2, ahrsCallback);
+
+  //Create an object of class SubscribeAndPublish that will take care of everything
+  SubscribeAndPublish SAPObject;
+
   ros::spin();
 
   return 0;
