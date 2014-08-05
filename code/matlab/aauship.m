@@ -30,6 +30,5 @@ if strcmp(type, 'nonlinear');
     Rz = [cos(psi) -sin(psi);
           sin(psi)  cos(psi)];
     xn(1:2) = Rz*xn(6:7)*0.1 + x(1:2);
-    
 end
 end

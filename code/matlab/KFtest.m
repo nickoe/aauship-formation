@@ -64,7 +64,7 @@ v = [3 3 13.5969e-006 0.1 0.1 0.0524 0.0524]';
 
 % jeppe = [1 1 1 1 1 1 1]';
 % R = diag(jeppe*500);
-R = diag(v.*[10 10 1 100 100 1 1]'); % Skal gaines på de rigtige elementer
+R = diag(v); %.*[10 10 1 100 100 1 1]'); % Skal gaines på de rigtige elementer
 Q = diag(w);
 
 NED = zeros(2,N);
@@ -87,8 +87,8 @@ H(:,:,k) = [1 0 0 0 0 0 0 0 0 0;
             0 0 0 0 1 0 0 0 0 0;
             0 0 0 0 0 1 0 0 0 0;
             0 0 0 0 0 0 1 0 0 0;
-            0 0 0 0 0 (x_noisy(6,k)-x_noisy(6,k-1)) 0 0 0 0;
-            0 0 0 0 0 0 (x_noisy(7,k)-x_noisy(7,k-1)) 0 0 0];
+            0 0 0 0 0 (x_hat_minus(6,k)-x_hat_minus(6,k-1)) 0 0 0 0;
+            0 0 0 0 0 0 (x_hat_minus(7,k)-x_hat_minus(7,k-1)) 0 0 0];
 
 % Add noise, making measurements
 z(:,k) = H(:,:,k)*x_noisy(:,k) + randn(7,1).*v;
