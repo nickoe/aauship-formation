@@ -8,12 +8,12 @@ set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
 % load inertia.mat
 linewidth = 1;
 %% Data files
-logpath = '~/aauship-formation/code/hli/ros/src/aauship/scripts/';
-testname = 'logs';
+% logpath = '~/aauship-formation/code/hli/ros/src/aauship/scripts/';
+% testname = 'logs';
 % logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 % testname = 'magnetometertest-lab2';
-% logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
-% testname = 'magnetometertest-lab6/test02';
+logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
+testname = 'magnetometertest-lab6/test02';
 % testname = 'statictest-lab';
 
 %% Data files
