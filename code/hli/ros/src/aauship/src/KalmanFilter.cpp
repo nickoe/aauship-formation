@@ -67,6 +67,7 @@ double v = gsl_vector_get(xk_1,6);
 double roll = gsl_vector_get(xk_1,7);
 double pitch = gsl_vector_get(xk_1,8);
 double yaw = gsl_vector_get(xk_1,9);
+double dt = gsl_vector_get(params, 0);
 gsl_vector_set(xk, 0, x);
 gsl_vector_set(xk, 1, y);
 gsl_vector_set(xk, 2, phi);
@@ -83,53 +84,125 @@ void df(gsl_vector * params, gsl_vector * xk_1, gsl_matrix * Fxk)
 {
 double x = gsl_vector_get(xk_1,0);
 double y = gsl_vector_get(xk_1,1);
-double z = gsl_vector_get(xk_1,2);
-double sigma = gsl_vector_get(xk_1,3);
-double rho = gsl_vector_get(xk_1,4);
-double beta = gsl_vector_get(xk_1,5);
+double phi = gsl_vector_get(xk_1,2);
+double theta = gsl_vector_get(xk_1,3);
+double psi = gsl_vector_get(xk_1,4);
+double u = gsl_vector_get(xk_1,5);
+double v = gsl_vector_get(xk_1,6);
+double roll = gsl_vector_get(xk_1,7);
+double pitch = gsl_vector_get(xk_1,8);
+double yaw = gsl_vector_get(xk_1,9);
 double dt = gsl_vector_get(params, 0);
-// Derivatives for x(t+1) = ..
-gsl_matrix_set(Fxk, 0, 0, 1.0 - sigma * dt);
-gsl_matrix_set(Fxk, 0, 1, sigma * dt);
+// Derivatives for x(t+1)
+gsl_matrix_set(Fxk, 0, 0, 0.0);
+gsl_matrix_set(Fxk, 0, 1, 0.0);
 gsl_matrix_set(Fxk, 0, 2, 0.0);
-gsl_matrix_set(Fxk, 0, 3, dt * (y - x));
+gsl_matrix_set(Fxk, 0, 3, 0.0);
 gsl_matrix_set(Fxk, 0, 4, 0.0);
-gsl_matrix_set(Fxk, 0, 5, 0.0);
+gsl_matrix_set(Fxk, 0, 5, 1.0);
+gsl_matrix_set(Fxk, 0, 6, 1.0);
+gsl_matrix_set(Fxk, 0, 7, 1.0);
+gsl_matrix_set(Fxk, 0, 8, 1.0);
+gsl_matrix_set(Fxk, 0, 9, 1.0);
 // Derivatives for y(t+1)
-gsl_matrix_set(Fxk, 1, 0, dt * (rho - z));
-gsl_matrix_set(Fxk, 1, 1, 1.0 - dt);
-gsl_matrix_set(Fxk, 1, 2, - dt * x);
+gsl_matrix_set(Fxk, 1, 0, 0.0);
+gsl_matrix_set(Fxk, 1, 1, 0.0);
+gsl_matrix_set(Fxk, 1, 2, 0.0);
 gsl_matrix_set(Fxk, 1, 3, 0.0);
-gsl_matrix_set(Fxk, 1, 4, dt * x);
-gsl_matrix_set(Fxk, 1, 5, 0.0);
-// Derivatives for z(t+1)
-gsl_matrix_set(Fxk, 2, 0, dt * y);
-gsl_matrix_set(Fxk, 2, 1, dt * x);
-gsl_matrix_set(Fxk, 2, 2, 1.0 - beta * dt);
+gsl_matrix_set(Fxk, 1, 4, 0.0);
+gsl_matrix_set(Fxk, 1, 5, 1.0);
+gsl_matrix_set(Fxk, 1, 6, 1.0);
+gsl_matrix_set(Fxk, 1, 7, 1.0);
+gsl_matrix_set(Fxk, 1, 8, 1.0);
+gsl_matrix_set(Fxk, 1, 9, 1.0);
+// Derivatives for phi(t+1)
+gsl_matrix_set(Fxk, 2, 0, 0.0);
+gsl_matrix_set(Fxk, 2, 1, 0.0);
+gsl_matrix_set(Fxk, 2, 2, 0.0);
 gsl_matrix_set(Fxk, 2, 3, 0.0);
 gsl_matrix_set(Fxk, 2, 4, 0.0);
-gsl_matrix_set(Fxk, 2, 5, -dt * z);
-// Derivatives for sigma(t+1)
+gsl_matrix_set(Fxk, 2, 5, 1.0);
+gsl_matrix_set(Fxk, 2, 6, 1.0);
+gsl_matrix_set(Fxk, 2, 7, 1.0);
+gsl_matrix_set(Fxk, 2, 8, 1.0);
+gsl_matrix_set(Fxk, 2, 9, 1.0);
+// Derivatives for theta(t+1)
 gsl_matrix_set(Fxk, 3, 0, 0.0);
 gsl_matrix_set(Fxk, 3, 1, 0.0);
 gsl_matrix_set(Fxk, 3, 2, 0.0);
-gsl_matrix_set(Fxk, 3, 3, 1.0);
+gsl_matrix_set(Fxk, 3, 3, 0.0);
 gsl_matrix_set(Fxk, 3, 4, 0.0);
-gsl_matrix_set(Fxk, 3, 5, 0.0);
-// Derivatives for rho(t+1)
+gsl_matrix_set(Fxk, 3, 5, 1.0);
+gsl_matrix_set(Fxk, 3, 6, 1.0);
+gsl_matrix_set(Fxk, 3, 7, 1.0);
+gsl_matrix_set(Fxk, 3, 8, 1.0);
+gsl_matrix_set(Fxk, 3, 9, 1.0);
+// Derivatives for psi(t+1)
 gsl_matrix_set(Fxk, 4, 0, 0.0);
 gsl_matrix_set(Fxk, 4, 1, 0.0);
 gsl_matrix_set(Fxk, 4, 2, 0.0);
 gsl_matrix_set(Fxk, 4, 3, 0.0);
-gsl_matrix_set(Fxk, 4, 4, 1.0);
-gsl_matrix_set(Fxk, 4, 5, 0.0);
-// Derivatives for beta(t+1)
+gsl_matrix_set(Fxk, 4, 4, 0.0);
+gsl_matrix_set(Fxk, 4, 5, 1.0);
+gsl_matrix_set(Fxk, 4, 6, 1.0);
+gsl_matrix_set(Fxk, 4, 7, 1.0);
+gsl_matrix_set(Fxk, 4, 8, 1.0);
+gsl_matrix_set(Fxk, 4, 9, 1.0);
+// Derivatives for u(t+1)
 gsl_matrix_set(Fxk, 5, 0, 0.0);
 gsl_matrix_set(Fxk, 5, 1, 0.0);
 gsl_matrix_set(Fxk, 5, 2, 0.0);
 gsl_matrix_set(Fxk, 5, 3, 0.0);
 gsl_matrix_set(Fxk, 5, 4, 0.0);
 gsl_matrix_set(Fxk, 5, 5, 1.0);
+gsl_matrix_set(Fxk, 5, 6, 1.0);
+gsl_matrix_set(Fxk, 5, 7, 1.0);
+gsl_matrix_set(Fxk, 5, 8, 1.0);
+gsl_matrix_set(Fxk, 5, 9, 1.0);
+// Derivatives for v(t+1)
+gsl_matrix_set(Fxk, 6, 0, 0.0);
+gsl_matrix_set(Fxk, 6, 1, 0.0);
+gsl_matrix_set(Fxk, 6, 2, 0.0);
+gsl_matrix_set(Fxk, 6, 3, 0.0);
+gsl_matrix_set(Fxk, 6, 4, 0.0);
+gsl_matrix_set(Fxk, 6, 5, 1.0);
+gsl_matrix_set(Fxk, 6, 6, 1.0);
+gsl_matrix_set(Fxk, 6, 7, 1.0);
+gsl_matrix_set(Fxk, 6, 8, 1.0);
+gsl_matrix_set(Fxk, 6, 9, 1.0);
+// Derivatives for roll(t+1)
+gsl_matrix_set(Fxk, 7, 0, 0.0);
+gsl_matrix_set(Fxk, 7, 1, 0.0);
+gsl_matrix_set(Fxk, 7, 2, 0.0);
+gsl_matrix_set(Fxk, 7, 3, 0.0);
+gsl_matrix_set(Fxk, 7, 4, 0.0);
+gsl_matrix_set(Fxk, 7, 5, 1.0);
+gsl_matrix_set(Fxk, 7, 6, 1.0);
+gsl_matrix_set(Fxk, 7, 7, 1.0);
+gsl_matrix_set(Fxk, 7, 8, 1.0);
+gsl_matrix_set(Fxk, 7, 9, 1.0);
+// Derivatives for pitch(t+1)
+gsl_matrix_set(Fxk, 8, 0, 0.0);
+gsl_matrix_set(Fxk, 8, 1, 0.0);
+gsl_matrix_set(Fxk, 8, 2, 0.0);
+gsl_matrix_set(Fxk, 8, 3, 0.0);
+gsl_matrix_set(Fxk, 8, 4, 0.0);
+gsl_matrix_set(Fxk, 8, 5, 1.0);
+gsl_matrix_set(Fxk, 8, 6, 1.0);
+gsl_matrix_set(Fxk, 8, 7, 1.0);
+gsl_matrix_set(Fxk, 8, 8, 1.0);
+gsl_matrix_set(Fxk, 8, 9, 1.0);
+// Derivatives for yaw(t+1)
+gsl_matrix_set(Fxk, 9, 0, 0.0);
+gsl_matrix_set(Fxk, 9, 1, 0.0);
+gsl_matrix_set(Fxk, 9, 2, 0.0);
+gsl_matrix_set(Fxk, 9, 3, 0.0);
+gsl_matrix_set(Fxk, 9, 4, 0.0);
+gsl_matrix_set(Fxk, 9, 5, 1.0);
+gsl_matrix_set(Fxk, 9, 6, 1.0);
+gsl_matrix_set(Fxk, 9, 7, 1.0);
+gsl_matrix_set(Fxk, 9, 8, 1.0);
+gsl_matrix_set(Fxk, 9, 9, 1.0);
 }
 // Observation function
 void h(gsl_vector * params, gsl_vector * xk , gsl_vector * yk)

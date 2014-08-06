@@ -90,11 +90,19 @@ H(:,:,k) = [1 0 0 0 0 0 0 0 0 0;
             0 0 0 0 0 (x_hat_minus(6,k)-x_hat_minus(6,k-1)) 0 0 0 0;
             0 0 0 0 0 0 (x_hat_minus(7,k)-x_hat_minus(7,k-1)) 0 0 0];
 
+h(:,:,k) = [1 0 0 0 0 0 0 0 0 0;
+            0 1 0 0 0 0 0 0 0 0;
+            0 0 0 0 1 0 0 0 0 0;
+            0 0 0 0 0 1 0 0 0 0;
+            0 0 0 0 0 0 1 0 0 0;
+            0 0 0 0 0 (x_noisy(6,k)-x_noisy(6,k-1)) 0 0 0 0;
+            0 0 0 0 0 0 (x_noisy(7,k)-x_noisy(7,k-1)) 0 0 0];        
+        
 % Add noise, making measurements
-z(:,k) = H(:,:,k)*x_noisy(:,k) + randn(7,1).*v;
+z(:,k) = h(:,:,k)*x_noisy(:,k) + randn(7,1).*v;
         
 % Update
-z_hat(:,k) = z(:,k) - H(:,:,k)*x_hat_minus(:,k);
+z_hat(:,k) = z(:,k) - h(:,:,k)*x_hat_minus(:,k);
 S(:,:,k) = H(:,:,k)*P_minus(:,:,k)*H(:,:,k)' + R;
 K(:,:,k) = P_minus(:,:,k)*H(:,:,k)'*inv(S(:,:,k));
 if mod(k,10)
