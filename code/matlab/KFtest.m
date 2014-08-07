@@ -55,7 +55,7 @@ x = zeros(states,N);
 x_hat_minus = zeros(states,N);
 
 % Process noise
-w = [0.001 0.001 0.0001 0.01 0.001 0.1 0.1 0.0001 0.01 0.001]';
+w = [0.001 0.001 0.0001 0.01 0.001 0.1 0.1 0.0001 0.001 0.001]';
 % w = zeros(10,1);
 
 % Measurement noise
@@ -64,7 +64,7 @@ v = [3 3 13.5969e-006 0.1 0.1 0.0524 0.0524]';
 
 % jeppe = [1 1 1 1 1 1 1]';
 % R = diag(jeppe*500);
-R = diag(v); %.*[10 10 1 100 100 1 1]'); % Skal gaines på de rigtige elementer
+R = diag(v)*diag([10 10 1 100 100 1 1]'); % Skal gaines på de rigtige elementer
 Q = diag(w);
 
 NED = zeros(2,N);
@@ -99,10 +99,12 @@ h(:,:,k) = [1 0 0 0 0 0 0 0 0 0;
             0 0 0 0 0 0 (x_noisy(7,k)-x_noisy(7,k-1)) 0 0 0];        
         
 % Add noise, making measurements
-z(:,k) = h(:,:,k)*x_noisy(:,k) + randn(7,1).*v;
-        
+z_noise(:,k) = h(:,:,k)*x_noisy(:,k) + randn(7,1).*v;
+z(:,k) = h(:,:,k)*x_noisy(:,k);
+z_hat(:,k) = h(:,:,k)*x_hat_minus(:,k);
+
 % Update
-z_hat(:,k) = z(:,k) - h(:,:,k)*x_hat_minus(:,k);
+z_bar(:,k) = z_noise(:,k) - h(:,:,k)*x_hat_minus(:,k);
 S(:,:,k) = H(:,:,k)*P_minus(:,:,k)*H(:,:,k)' + R;
 K(:,:,k) = P_minus(:,:,k)*H(:,:,k)'*inv(S(:,:,k));
 if mod(k,10)
@@ -115,7 +117,7 @@ else
     jj=jj+1;
 end
     
-x_hat_plus(:,k) = x_hat_minus(:,k) + K(:,:,k)* z_hat(:,k);
+x_hat_plus(:,k) = x_hat_minus(:,k) + K(:,:,k)* z_bar(:,k);
 % P_plus(:,:,k) = (eye(10) - K(:,:,k)*H(:,:,k))*P_minus(:,:,k);
 P_plus(:,:,k) = (eye(10) - K(:,:,k)*H(:,:,k)) *P_minus(:,:,k)* (eye(10) - K(:,:,k)*H(:,:,k))' + K(:,:,k)*R*K(:,:,k)';
 
@@ -170,11 +172,15 @@ legend('u_{noisy}', 'u_{noisy}', 'u_{hat}', 'v_{hat}','u', 'v')
 
 figure(6)
 subplot(2,1,1)
-plot(1:N,z(6,:), 1:N,z_hat(6,:))
-legend('ax_{noisy}', 'ax_{hat}')
+% plot(1:N,z(6,:), 1:N,z_hat(6,:))
+% plot(1:N,z_temp(6,:) , 1:N,z_hat(6,:))
+plot(1:N,z(6,:) , 1:N,z_hat(6,:))
+legend('ax_{process}', 'ax_{hat}')
 subplot(2,1,2)
-plot(1:N,z(7,:), 1:N,z_hat(7,:))
-legend('ay_{noisy}', 'ay_{hat}')
+% plot(1:N,z(7,:), 1:N,z_hat(7,:))
+% plot(1:N,z_temp(7,:) , 1:N,z_hat(7,:))
+plot(1:N,z(7,:) , 1:N,z_hat(7,:))
+legend('ay_{process}', 'ay_{hat}')
 
 figure(7)
 plot(1:N,pos_error', '.-', gpsc, pos_error(gpsc)','o')
