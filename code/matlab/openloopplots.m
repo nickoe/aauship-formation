@@ -1,6 +1,6 @@
 %% Simulation of AAUSHIP in open loop
 
-% clear all
+clear all
 r_g = -[0.03 0 0.03]'; % location of CG with respect to CO
 % r_g = [-0.46 0 -3.54]'; % TP-MB-shipmod.pdf container ship
 % r_g = [0 0 0]'; % location of CG with respect to CO
@@ -112,7 +112,7 @@ plot(t,x(:,6), t,x(:,7), t,x(:,8));
 legend('surge vel', 'sway vel', 'roll vel')
 title('wop')
 
-save('ssaauship.mat','Ad','Bd','Cd','MRB','D','r_g')
+save('ssaauship.mat','Ad','Bd','Cd','MRB','D','r_g', 'ts')
 
 %%
 figure(2)

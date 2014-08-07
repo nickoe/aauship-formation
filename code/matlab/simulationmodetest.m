@@ -1,4 +1,4 @@
-% This tests the simulaiton model and plots stuff
+%% This tests the simulaiton model and plots stuff
 clear all;
 
 
@@ -9,44 +9,55 @@ tau = [6 0 0 0 -0.1]';
 ts = 0.1;
 
 % Number of samples
-N = 500;
+N = 1000;
 
 x = zeros(10,N);
+z = zeros(10,N);
 eta = zeros(5,N);
 nu = zeros(5,N);
 nudot = zeros(5,N);
 
-
-
 % Initial state
-x(:,1) = [0 0 0 0 0.7854 0 0 0 0 0]';
+x(:,1) = [0 0 0 0 0 0 0 0 0 0]';
 
+
+flag=1;
+%% Simulation
 for k = 1:N-1
-    if k > 200
-        tau = [ 1 0 0 0 0.1 ]';
+    % Zig-zag
+    if z(3,k) > deg2rad(30+90) && flag==0
+        tau(5) = -tau(5);
+        flag=1;
+    elseif z(3,k) < deg2rad(-30+90) && flag==1
+        tau(5) = -tau(5);
+        flag=0;
     end
-    [x(:,k+1), eta(:,k+1), nu(:,k+1), nudot(:,k+1)] = aaushipsimmodel( x(:,k), tau, ts );
-
+    
+    % Simulation model
+    [x(:,k+1), eta(:,k+1), nu(:,k+1), nudot(:,k+1)] = aaushipsimmodel( x(:,k), tau);
+    
+    % Measurement vector
     z(1:2,k+1) = eta(1:2,k+1);
     z(3,k+1) = eta(5,k+1);
     z(4:5,k+1) = nu(1:2,k+1);
     z(6:7,k+1) = nudot(1:2,k+1);
 end
 
+%% Plotting
 figure(1)
 subplot(2,2,1)
-plot(eta(2,:),eta(1,:),'-')
+plot(z(2,:),z(1,:),'-')
 axis equal
 xlabel('Easting (m)')
 ylabel('Norting (m)')
 
 subplot(2,2,2);
-plot(ts:ts:N*ts,eta(5,:))
+plot(ts:ts:N*ts,z(3,:))
 xlabel('Time (s)')
 ylabel('Heading (rad)')
 
 subplot(2,2,3);
-plot(ts:ts:N*ts,nu(1,:), ts:ts:N*ts,nu(2,:))
+plot(ts:ts:N*ts,z(4,:), ts:ts:N*ts,z(5,:))
 xlabel('Time (s)')
 ylabel('Speed (m/s)')
 
