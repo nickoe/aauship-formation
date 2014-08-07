@@ -1,4 +1,4 @@
-function [ xn, eta, nu ] = aaushipsimmodel( x, tau, ts )
+function [ xn, eta, nu, nudot ] = aaushipsimmodel( x, tau, ts )
 %AAUSHIP Control Model of AAUSHIHP
 %   This is a simple model of AAUSHIP, supposed to be a simulation model
 %   
@@ -32,4 +32,6 @@ xn(1:5) = eta(1:5);
 
 eta(3:5) = xn(8:10)*ts+x(3:5);
 nu = xn(6:10);
+
+nudot=diff([x(6:10) xn(6:10)]');
 end
