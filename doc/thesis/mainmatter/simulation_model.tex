@@ -82,7 +82,7 @@ normal distribution of this should suffice. \todo{Is this good enough
 or even correct? We have nonlinearities.}
 
 \section{\acs{SOG} to body frame velocities}
-The \acl{SOG} block on the figure~\vref{fig:intermediate-calc} is used to calculate the body frame velocities in surge $u$ and sway $v$, which in turn is filtered by the Kalman filter described in section~\vref{sec:kfdesign}. The block on the diagram uses the \ac{SOG} from the \ac{GPS} which is the course angle relative to true north, we denote this the course angle $\chi$. Which is the sum of the heading and sidelip.
+The \acl{SOG} block on the figure~\vref{fig:intermediate-calc} is used to calculate the body frame velocities in surge $u$ and sway $v$, which in turn is filtered by the Kalman filter described in section~\vref{sec:kfdesign}. The block on the diagram uses the \ac{SOG} from the \ac{GPS}, denoted as the magnitude $U$ and the course angle relative to true north, denoteed the course angle $\chi$. Which is the sum of the heading $\psi$ and sidelip $\beta$ angles:
 \nomenclature{$\chi$}{Course angle}
 \nomenclature{$\beta$}{Sideslip angle}
 \nomenclature{$U$}{Course speed}
@@ -100,28 +100,38 @@ R_{z} (\psi) =
 \end{bmatrix}
 \label{eq:Rz}
 \end{align}
-First the course speed magnitude $U$ can be calculated in \ac{NED} by the following computation, where we assuem the course speed is a vector
+First the course speed magnitude $U$ can be calculated in \ac{NED} by the following computation, where we describe the course speed as a vector $[U\quad 0]^\top$, such that the 
 \begin{align}
-U_n = R_{z} (\psi)
+U_n = R_{z} (\chi)
 \begin{bmatrix}
 U \\ 0 
 \end{bmatrix}
-\end{align}
-which is the same as
-\begin{align}
-U_n =
+=
 \begin{bmatrix}
 \cos(\chi) \\
 \sin(\chi)
 \end{bmatrix}
 U
 \end{align}
-Now this can be rotated into the \ac{BODY} frame, using the same rotation matrix \vref{eq:Rz}, but with the sidelip angle instead of the course angle. Such that:
+Now this can be rotated into \ac{BODY}, using the same rotation matrix \vref{eq:Rz}, but with the sidelip angle instead of the course angle. Such that:
 \begin{align}
 U_b = \begin{bmatrix}
 u \\ v
 \end{bmatrix}
 = R_z (\beta) U_n
+\end{align}
+Assuming the course speed vector in relation to the \ac{BODY} (as opposed to \ac{NED} initially suggested) it is enough to use the sideslip for rotation directly.
+\begin{align}
+U_b = R_{z} (\beta)
+\begin{bmatrix}
+U \\ 0 
+\end{bmatrix}
+=
+\begin{bmatrix}
+\cos(\beta) \\
+\sin(\beta)
+\end{bmatrix}
+U
 \end{align}
 
 \todo{Add figure about this}
