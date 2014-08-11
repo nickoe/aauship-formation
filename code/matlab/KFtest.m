@@ -45,12 +45,12 @@ load('ssaauship.mat');
 % PHI = Ad;
 % G = Bd;
 
-N = 2000;
+N = 500;
 
 states = 17;
 x_hat_plus = zeros(states,N);
 P_minus = zeros(states,states,N);
-u = [7 0 0 0 -0.1]';
+u = [7 0 0 0 -0.08]';
 x = zeros(states,N);
 x_hat_minus = zeros(states,N);
 z = zeros(7,N);
@@ -65,7 +65,7 @@ v = [3 3 13.5969e-006 0.1 0.1 0.0524 0.0524]';
 
 % jeppe = [1 1 1 1 1 1 1]';
 % R = diag(jeppe*500);
-R = diag(v)%*diag([10 10 1 100 100 1 1]'); % Skal gaines på de rigtige elementer
+R = diag(v)*diag(1.5*[10 10 1 100 100 1 1]'); % Skal gaines på de rigtige elementer
 Q = diag(w);
 
 NED = zeros(2,N);
@@ -99,7 +99,7 @@ h(6:7,13:14) = diag([1 1]);
 H(:,:,k) = h;
 
 if(k==2)
-    x_hat_minus(1:2,2) = [4,4]'
+    x_hat_minus(1:2,2) = [0,0]';
 end
 % Add noise, making measurements
 z_noise(:,k) = h*x_noisy(:,k) + randn(7,1).*v;
@@ -111,7 +111,7 @@ z_hat(:,k) = h*x_hat_minus(:,k);
 z_bar(:,k) = z_noise(:,k) - h*x_hat_minus(:,k);
 S(:,:,k) = H(:,:,k)*P_minus(:,:,k)*H(:,:,k)' + R;
 K(:,:,k) = P_minus(:,:,k)*H(:,:,k)'*inv(S(:,:,k));
-if mod(k,1)
+if mod(k,10)
     K(1:2,:,k) = zeros(2,7);
     K(:,1:2,k) = zeros(17,2);
     K(8:9,:,k) = zeros(2,7);
@@ -126,7 +126,7 @@ x_hat_plus(:,k) = x_hat_minus(:,k) + K(:,:,k)* z_bar(:,k);
 P_plus(:,:,k) = (eye(17) - K(:,:,k)*H(:,:,k)) *P_minus(:,:,k)* (eye(17) - K(:,:,k)*H(:,:,k))' + K(:,:,k)*R*K(:,:,k)';
 
 
-PHI(1:2,8:9) = [ts*cos(x(7,k)) -ts*sin(x(7,k)); ts*sin(x(7,k)) ts*cos(x(7,k))];
+PHI(1:2,8:9) = [ts*cos(x(7,k)) -ts*sin(x(7,k)); ts*sin(x(7,k)) ts*cos(x(7,k))]; % The nonlinear contribution to the system
 
 % Prediction
 % x_hat_minus(:,k) = PHI*x_hat_plus(:,k-1) + G*u;

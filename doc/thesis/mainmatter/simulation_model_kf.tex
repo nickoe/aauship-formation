@@ -20,7 +20,7 @@
 
 A \ac{KF} is a type of observer that can be applied to estimate the state vector. This is done to filter the measurements from the vessel and smooth these. If the measurements are too noisy, such that the vessel changes direction suddenly, but should be surging forward, a filter can predict the modelled direction and compare this to the measurement.
 
-The \ac{KF} comprises the deterministic part \todo{Determinisitc part? nick} of the model which estimates the state vector. This is corrected by means of measurements to estimate the final state vector.
+The \ac{KF} comprises the deterministic part \todo{Deterministic part? nick} of the model which estimates the state vector. This is corrected by means of measurements to estimate the final state vector.
 
 The \ac{KF} is drawn as a block diagram as seen on figure~\vref{fig:blockkf} illustrating both the process and the \ac{KF} together. The upper part represent the process, which can both be a simulated model or the real vessel with measurements, here it is a linear state space model. The lower part is the \ac{KF} which takes in the measurements and estimates the new state vector based on these measurements. The \ac{KF} can be of different types: \ac{LKF}, \ac{EKF} or \ac{UKF}. The figure illustrates the \ac{LKF}. Choosing between these types of filters depends on the type of model used and the application. 
 
@@ -81,7 +81,7 @@ H_k &= \left.\frac{\partial h}{\partial x}\right|_{\hat x_{k}^-}
 \end{align}
 
 \subsection{\acl{KF} in the case of AAUSHIP}
-The input is given by the forces applied to the vessel. On AAUSHIP with the two twin properllers and two side thrusters as illustrated in seciton~\vref{sec:thrust_allocation}, this will result in forces in the surge and sway direction as well as a torque around yaw, the roll and pitch torques are neglected, such that the input vector $u_k$ becomes.
+The input is given by the forces applied to the vessel. On AAUSHIP with the two twin properllers and two side thrusters as illustrated in section~\vref{sec:thrust_allocation}, this will result in forces in the surge and sway direction as well as a torque around yaw, the roll and pitch torques are neglected, such that the input vector $u_k$ becomes.
 \begin{align}
 u_k = \tau_k =
 \begin{bmatrix}
@@ -90,10 +90,10 @@ X & Y & 0 & 0 & N
 \end{align}
 These are the forces that can be applied by the thrusters mounted at the vessel. It should be noted that the pitch and roll are not set as input, since no thrusters can control these, and should be treated as model variations.
 
-The discrete input matrix $G$ is a $10 \times 5$ matrix from the discretised $B$ matrix from equation~\vref{eq:ss}. \todo{Should we use $\Gamma$ for $G$ as in done in other sources (e.g. fossen), such that the input matrix is not confused with the restorin force matrix from fossen?}
-The $G$ matrix takes the forces in $X$, $Y$ and $N$ as input, and neglects inputs in $\phi$ and $\theta$. The forces in $\phi$ and $\theta$ are outputs from the system that makes the vessel change in pitch and roll.
+The discrete input matrix $\Gamma$ is a $17 \times 5$ matrix from the discretised $B$ matrix from equation~\vref{eq:ss}. \todo{Should we use $\Gamma$ for $G$ as in done in other sources (e.g. fossen), such that the input matrix is not confused with the restorin force matrix from fossen?}
+The $\Gamma$ matrix takes the forces in $X$, $Y$ and $N$ as input, and neglects inputs in $\phi$ and $\theta$. The forces in $\phi$ and $\theta$ are outputs from the system that makes the vessel change in pitch and roll.
 
-The discrete system $\boldsymbol \Phi$ is a $10 \times 10$ from the discretised $A$ matrix from equation~\vref{eq:ss}.
+The discrete system $\boldsymbol \Phi$ is a $17 \times 17$ from the discretised $A$ matrix from equation~\vref{eq:ss}, but expanded to contain the full state vector.
 
 The dimensions of the different matrices used are checked as a type of sanity check and verify that the matrices are in correct size.
 
