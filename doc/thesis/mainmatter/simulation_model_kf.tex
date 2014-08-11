@@ -100,32 +100,37 @@ The dimensions of the different matrices used are checked as a type of sanity ch
 The covariance propagation matrix, the uncertainty of the estimated state, is given by:
 \begin{align}
 P_k^- &= F_k\ P_{k-1}^-F^\top + Q_k\\
-\text{dim}(P_k^-) &= [10 \times 10]\cdot [10 \times 10]\cdot [10 \times 10]^\top + [10 \times 10]
+\text{dim}(P_k^-) &= [17 \times 17]\cdot [17 \times 17]\cdot [17 \times 17]^\top + [17 \times 17]
 \end{align}
+The $Q$ is the variances of each of the states from the full state vector.
+
 The posteriori error covariance matrix, the update, is given by:
 \begin{align}
 P_k^+ &= (I - K_k\ H_k)P_k^-\\
-\text{dim}(P_k^+) &= ([10 \times 10] - [10 \times 7]\cdot [7 \times 10])\cdot [10 \times 10]
+\text{dim}(P_k^+) &= ([17 \times 17] - [17 \times 7]\cdot [7 \times 17])\cdot [17 \times 17]
 \end{align}
 which is a measure of the estimated accuracy of the state estimate. Adding a middle calculation as the residual covariance:
 \begin{align}
 S_k &= H\ P\ H^\top + R\\
-\text{dim}(S_k) &= [7 \times 10]\cdot [10 \times 10]\cdot [7 \times 10]^\top + [10 \times 10]
+\text{dim}(S_k) &= [7 \times 17]\cdot [17 \times 17]\cdot [7 \times 17]^\top + [7 \times 7]
 \end{align}
+The $R$ is variances from the sensors, which makes it sensor noise terms.
+
 The updated Kalman Gain:
 \begin{align}
 K_k &= P\ H^\top\ S^{-1}\\
-\text{dim}(K_k) &= [10 \times 10]\cdot [7 \times 10]^\top\cdot [7 \times 7]^{-1}
+\text{dim}(K_k) &= [17 \times 17]\cdot [7 \times 17]^\top\cdot [7 \times 7]^{-1}
 \end{align}
-witch is optimal in a \ac{MMSE} sense.
+witch is optimal in a \ac{MMSE} sense. %\todo{Hvorfor virkede denne ac ikke? Har fjernet den tidtil videre}
 
 State vector
-\begin{align}
-\hat{\mathbf x}=
-\begin{bmatrix}
-x_n & y_n & \phi & \theta &\psi & u & v & p & q & r
-\end{bmatrix}^\top
-\end{align}
+\todo{lav noget smart med appendix med store matricer - Se kode her}
+%\begin{align}
+%\hat{\mathbf x}=
+%\begin{bmatrix}
+%N & E & x_n & y_n & \phi & \theta & \psi & u & v & p & q & r & \dot u & \dot v & \dot p & \dot q & \dot r
+%\end{bmatrix}^\top
+%\end{align}
 
 Measurement vector
 \begin{align}
@@ -136,31 +141,32 @@ x_n & y_n & \psi & u & v & a_x & a_y
 \end{align}
 
 Measurement matrix defining the relationship between the state of the dynamic system and the measurements.
-\begin{align}
-H_k =
-\begin{bmatrix}
-1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & \frac{\partial}{\partial u} & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & \frac{\partial}{\partial v} & 0 & 0 & 0
-\end{bmatrix}
-\end{align}
+\todo{lav noget smart med appendix med store matricer - Se kode her}
+%\begin{align}
+%H_k =
+%\begin{bmatrix}
+%1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+%0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+%0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+%0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+%0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+%0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+%0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 
+%\end{bmatrix}
+%\end{align}
 
 
 The covariance matrix of observational (measurement) uncertainty $R_k$ is assumed to be uncorrelated with the other states, such that the matrix only becomes the variances, with no covariance elements as:
 \begin{align}
 R_k = \diag{\mathbf{v}} =
 \diag{
-\sigma_{x_n}^2, \sigma_{y_n}^2, ?, ?, \sigma_p^2, \sigma_q^2, \sigma_r^2}
+\sigma_{N}^2, \sigma_{E}^2, ? u, ? v, \sigma_p^2, \sigma_q^2, \sigma_r^2}
 \end{align}
 
 The covariance matrix of process noise in the system state dynamics is $Q_k$ is also assumed to be the variances only:
 \begin{align}
 Q_k = \diag{\mathbf{w}} = \diag{
-?, ?, ?, ?, ?, ?, ?, ?, ?, ? }
+?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? }
 \end{align}
 
 \todo{What about $\mathbf w$ and $\mathbf v$?}
