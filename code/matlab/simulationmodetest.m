@@ -11,14 +11,14 @@ ts = 0.1;
 % Number of samples
 N = 1000;
 
-x = zeros(10,N);
+x = zeros(17,N);% Full state simulation vector
 z = zeros(10,N);
 eta = zeros(5,N);
 nu = zeros(5,N);
 nudot = zeros(5,N);
 
 % Initial state
-x(:,1) = [0 0 0 0 0 0 0 0 0 0]';
+x(:,1) = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]';
 
 
 flag=1;
@@ -46,7 +46,8 @@ end
 %% Plotting
 figure(1)
 subplot(2,2,1)
-plot(z(2,:),z(1,:),'-')
+% plot(z(2,:),z(1,:),'-')
+plot(x(2,:),x(1,:),'-')
 axis equal
 xlabel('Easting (m)')
 ylabel('Norting (m)')

@@ -42,20 +42,21 @@ clf;
 
 load('ssaauship.mat');
 
-PHI = Ad;
-G = Bd;
+% PHI = Ad;
+% G = Bd;
 
-N = 200;
+N = 2000;
 
-states = 10;
+states = 17;
 x_hat_plus = zeros(states,N);
 P_minus = zeros(states,states,N);
 u = [7 0 0 0 -0.1]';
 x = zeros(states,N);
 x_hat_minus = zeros(states,N);
+z = zeros(7,N);
 
 % Process noise
-w = [0.001 0.001 0.0001 0.01 0.001 0.1 0.1 0.0001 0.001 0.001]';
+w = [0.001 0.001 0.001 0.001 0.0001 0.01 0.1 0.1 0.1 0.0001 0.001 0.001 0.01 0.01 0.01 0.01 0.01]';
 % w = zeros(10,1);
 
 % Measurement noise
@@ -64,7 +65,7 @@ v = [3 3 13.5969e-006 0.1 0.1 0.0524 0.0524]';
 
 % jeppe = [1 1 1 1 1 1 1]';
 % R = diag(jeppe*500);
-R = diag(v)*diag([10 10 1 100 100 1 1]'); % Skal gaines på de rigtige elementer
+R = diag(v)%*diag([10 10 1 100 100 1 1]'); % Skal gaines på de rigtige elementer
 Q = diag(w);
 
 NED = zeros(2,N);
@@ -73,45 +74,48 @@ heading(1) = x(1,5);
 
 gpsc = 0;
 jj = 1;
+%%
+PHI = zeros(17,17);
+PHI(1:2,1:2) = [1 0; 0 1];
+% PHI(1:2,8:9) = [ts*cos(psi) -ts*sin(psi); ts*sin(psi) ts*cos(psi)]; % nonlinear part of PHI
+PHI(3:12,3:12) = Ad;
+PHI(13:17,13:17) = diag([1 1 1 1 1]);
+PHI(13:17,8:12) = Ad(6:10,6:10);
+%%
 
 for k = 2:N
 % Model state vector
-% x(:,k) = Ad * x(:,k-1) + Bd * u;
-x(:,k) = aauship(x(:,k-1), u, 'nonlinear');
-noise(:,k) = randn(10,1).*w;
+x(:,k) = aaushipsimmodel(x(:,k-1), u);
+noise(:,k) = randn(17,1).*w;
 x_noisy(:,k) = x(:,k) + noise(:,k);
 
-%H(:,:,k) = h(k)-h(k-1);
-H(:,:,k) = [1 0 0 0 0 0 0 0 0 0;
-            0 1 0 0 0 0 0 0 0 0;
-            0 0 0 0 1 0 0 0 0 0;
-            0 0 0 0 0 1 0 0 0 0;
-            0 0 0 0 0 0 1 0 0 0;
-            0 0 0 0 0 (x_hat_minus(6,k)-x_hat_minus(6,k-1)) 0 0 0 0;
-            0 0 0 0 0 0 (x_hat_minus(7,k)-x_hat_minus(7,k-1)) 0 0 0];
 
-h(:,:,k) = [1 0 0 0 0 0 0 0 0 0;
-            0 1 0 0 0 0 0 0 0 0;
-            0 0 0 0 1 0 0 0 0 0;
-            0 0 0 0 0 1 0 0 0 0;
-            0 0 0 0 0 0 1 0 0 0;
-            0 0 0 0 0 (x_noisy(6,k)-x_noisy(6,k-1)) 0 0 0 0;
-            0 0 0 0 0 0 (x_noisy(7,k)-x_noisy(7,k-1)) 0 0 0];        
+% Measurement matrix
+h = zeros(7,17);
+h(1:2,1:2) = diag([1 1]);
+h(3:5,7:9) = diag([1 1 1]);
+h(6:7,13:14) = diag([1 1]);
         
+H(:,:,k) = h;
+
+if(k==2)
+    x_hat_minus(1:2,2) = [4,4]'
+end
 % Add noise, making measurements
-z_noise(:,k) = h(:,:,k)*x_noisy(:,k) + randn(7,1).*v;
-z(:,k) = h(:,:,k)*x_noisy(:,k);
-z_hat(:,k) = h(:,:,k)*x_hat_minus(:,k);
+z_noise(:,k) = h*x_noisy(:,k) + randn(7,1).*v;
+z(:,k) = h*x_noisy(:,k);
+z_hat(:,k) = h*x_hat_minus(:,k);
+
 
 % Update
-z_bar(:,k) = z_noise(:,k) - h(:,:,k)*x_hat_minus(:,k);
+z_bar(:,k) = z_noise(:,k) - h*x_hat_minus(:,k);
 S(:,:,k) = H(:,:,k)*P_minus(:,:,k)*H(:,:,k)' + R;
 K(:,:,k) = P_minus(:,:,k)*H(:,:,k)'*inv(S(:,:,k));
-if mod(k,10)
+if mod(k,1)
     K(1:2,:,k) = zeros(2,7);
-    K(:,1:2,k) = zeros(10,2);
-    K(6:7,:,k) = zeros(2,7);
-    K(:,4:5,k) = zeros(10,2);
+    K(:,1:2,k) = zeros(17,2);
+    K(8:9,:,k) = zeros(2,7);
+    K(:,4:5,k) = zeros(17,2);
 else
     gpsc(jj) = k;
     jj=jj+1;
@@ -119,13 +123,16 @@ end
     
 x_hat_plus(:,k) = x_hat_minus(:,k) + K(:,:,k)* z_bar(:,k);
 % P_plus(:,:,k) = (eye(10) - K(:,:,k)*H(:,:,k))*P_minus(:,:,k);
-P_plus(:,:,k) = (eye(10) - K(:,:,k)*H(:,:,k)) *P_minus(:,:,k)* (eye(10) - K(:,:,k)*H(:,:,k))' + K(:,:,k)*R*K(:,:,k)';
+P_plus(:,:,k) = (eye(17) - K(:,:,k)*H(:,:,k)) *P_minus(:,:,k)* (eye(17) - K(:,:,k)*H(:,:,k))' + K(:,:,k)*R*K(:,:,k)';
+
+
+PHI(1:2,8:9) = [ts*cos(x(7,k)) -ts*sin(x(7,k)); ts*sin(x(7,k)) ts*cos(x(7,k))];
 
 % Prediction
 % x_hat_minus(:,k) = PHI*x_hat_plus(:,k-1) + G*u;
 % P_minus(:,:,k) = PHI*P_minus(:,:,k-1)*PHI + Q;
 % x_hat_minus(:,k+1) = PHI*x_hat_plus(:,k) + G*u;
-x_hat_minus(:,k+1) = aauship(x_hat_plus(:,k),u, 'nonlinear');
+x_hat_minus(:,k+1) = aaushipsimmodel(x_hat_plus(:,k),u);
 P_minus(:,:,k+1) = PHI*P_plus(:,:,k)*PHI + Q;
 
 %x(:,k+1) = x(:,k) + 0.1*x_hat(:,k);
@@ -163,11 +170,11 @@ axis equal;
 % end
 
 figure(2)
-plot(1:N,x_noisy(5,:), 1:N,x_hat_plus(5,:), 1:N,x(5,:) )
+plot(1:N,x_noisy(7,:), 1:N,x_hat_plus(7,:), 1:N,x(7,:) )
 legend('Psi_{noisy}', 'Psi_{hat}', 'Psi');
 
 figure(5)
-plot(1:N,x_noisy(6,:), 1:N,x_noisy(7,:), 1:N,x_hat_plus(6,:), 1:N,x_hat_plus(7,:), 1:N,x(6,:), 1:N,x(7,:))
+plot(1:N,x_noisy(8,:), 1:N,x_noisy(9,:), 1:N,x_hat_plus(8,:), 1:N,x_hat_plus(9,:), 1:N,x(8,:), 1:N,x(9,:))
 legend('u_{noisy}', 'u_{noisy}', 'u_{hat}', 'v_{hat}','u', 'v')
 
 figure(6)
