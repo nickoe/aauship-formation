@@ -81,6 +81,7 @@ H_k &= \left.\frac{\partial h}{\partial x}\right|_{\hat x_{k}^-}
 \end{align}
 
 \subsection{\acl{KF} in the case of AAUSHIP}
+\label{sec:kfonaauship}
 The input is given by the forces applied to the vessel. On AAUSHIP with the two twin properllers and two side thrusters as illustrated in section~\vref{sec:thrust_allocation}, this will result in forces in the surge and sway direction as well as a torque around yaw, the roll and pitch torques are neglected, such that the input vector $u_k$ becomes.
 \begin{align}
 u_k = \tau_k =
@@ -124,13 +125,12 @@ K_k &= P\ H^\top\ S^{-1}\\
 witch is optimal in a \ac{MMSE} sense. %\todo{Hvorfor virkede denne ac ikke? Har fjernet den tidtil videre}
 
 State vector
-\todo{lav noget smart med appendix med store matricer - Se kode her}
-%\begin{align}
-%\hat{\mathbf x}=
-%\begin{bmatrix}
-%N & E & x_n & y_n & \phi & \theta & \psi & u & v & p & q & r & \dot u & \dot v & \dot p & \dot q & \dot r
-%\end{bmatrix}^\top
-%\end{align}
+\begin{align}
+\hat{\mathbf x}=
+\begin{bmatrix}
+N & E & x_n & y_n & \phi & \theta & \psi & u & v & p & q & r & \dot u & \dot v & \dot p & \dot q & \dot r
+\end{bmatrix}^\top
+\end{align}
 
 Measurement vector
 \begin{align}
@@ -140,20 +140,19 @@ x_n & y_n & \psi & u & v & a_x & a_y
 \end{bmatrix}^\top
 \end{align}
 
-Measurement matrix defining the relationship between the state of the dynamic system and the measurements.
-\todo{lav noget smart med appendix med store matricer - Se kode her}
-%\begin{align}
-%H_k =
-%\begin{bmatrix}
-%1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-%0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-%0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-%0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-%0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-%0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
-%0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 
-%\end{bmatrix}
-%\end{align}
+Measurement matrix defining the relationship between the state of the dynamic system and the measurements
+\begin{align}
+H_k =
+\begin{bmatrix}
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 
+\end{bmatrix}
+\end{align}
 
 
 The covariance matrix of observational (measurement) uncertainty $R_k$ is assumed to be uncorrelated with the other states, such that the matrix only becomes the variances, with no covariance elements as:
