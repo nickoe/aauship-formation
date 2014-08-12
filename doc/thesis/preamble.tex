@@ -27,6 +27,7 @@
 \usepackage{suffix} % Krævet af acronym
 \usepackage{listings} % Til at inkludere kildekode direkte
 \usepackage{lipsum} % Lorem ipsum dolar sit amet
+\usepackage{lscape} % Bruges til at lave landscape på specifikke sider. /begin{landscape} .... \end{landscape}
 \usepackage{caption} % Vi kan bruge \captionof
 \usepackage{subfig} % Vi kan nu bruge \subfloat
 \usepackage{calc} % Vi kan regne med tællere
@@ -62,6 +63,9 @@
 
 % Writing equation references with parenthesis
 \labelformat{equation}{(#1)} 
+
+% Sets max coloum in bmatrix
+\setcounter{MaxMatrixCols}{20}
 
 \pagestyle{companion}
 
