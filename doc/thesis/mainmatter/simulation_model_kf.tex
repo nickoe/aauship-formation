@@ -94,7 +94,7 @@ These are the forces that can be applied by the thrusters mounted at the vessel.
 The discrete input matrix $\Gamma$ is a $17 \times 5$ matrix from the discretised $B$ matrix from equation~\vref{eq:ss}. \todo{Should we use $\Gamma$ for $G$ as in done in other sources (e.g. fossen), such that the input matrix is not confused with the restorin force matrix from fossen?}
 The $\Gamma$ matrix takes the forces in $X$, $Y$ and $N$ as input, and neglects inputs in $\phi$ and $\theta$. The forces in $\phi$ and $\theta$ are outputs from the system that makes the vessel change in pitch and roll.
 
-The discrete system $\boldsymbol \Phi$ is a $17 \times 17$ from the discretised $A$ matrix from equation~\vref{eq:ss}, but expanded to contain the full state vector.
+The discrete system $\boldsymbol \Phi$ is a $17 \times 17$ from the discretised $A$ matrix from equation~\vref{eq:ss}, but expanded to contain the full state vector calculations.
 
 The dimensions of the different matrices used are checked as a type of sanity check and verify that the matrices are in correct size.
 
@@ -122,13 +122,13 @@ The updated Kalman Gain:
 K_k &= P\ H^\top\ S^{-1}\\
 \text{dim}(K_k) &= [17 \times 17]\cdot [7 \times 17]^\top\cdot [7 \times 7]^{-1}
 \end{align}
-witch is optimal in a \ac{MMSE} sense. %\todo{Hvorfor virkede denne ac ikke? Har fjernet den tidtil videre}
+witch is optimal in a \ac{MMSE} sense. %\todo{Hvorfor virkede denne ac ikke? Har fjernet den tidtil videre} - Hah, det var slet ikke den som var fejlen.
 
 State vector
 \begin{align}
 \hat{\mathbf x}=
 \begin{bmatrix}
-N & E & x_n & y_n & \phi & \theta & \psi & u & v & p & q & r & \dot u & \dot v & \dot p & \dot q & \dot r
+N & E & x_b & y_b & \phi & \theta & \psi & u & v & p & q & r & \dot u & \dot v & \dot p & \dot q & \dot r
 \end{bmatrix}^\top
 \end{align}
 
@@ -136,7 +136,7 @@ Measurement vector
 \begin{align}
 \mathbf z=
 \begin{bmatrix}
-x_n & y_n & \psi & u & v & a_x & a_y
+N & E & \psi & u & v & a_x & a_y
 \end{bmatrix}^\top
 \end{align}
 
@@ -154,19 +154,19 @@ H_k =
 \end{bmatrix}
 \end{align}
 
-
 The covariance matrix of observational (measurement) uncertainty $R_k$ is assumed to be uncorrelated with the other states, such that the matrix only becomes the variances, with no covariance elements as:
 \begin{align}
-R_k = \diag{\mathbf{v}} =
-\diag{
-\sigma_{N}^2, \sigma_{E}^2, ? u, ? v, \sigma_p^2, \sigma_q^2, \sigma_r^2}
+&R_k = \diag{\mathbf{v}} =\\\nonumber
+&\diag{\sigma_{N}^2, \sigma_{E}^2, \sigma_{u}^2, \sigma_{v}^2, \sigma_p^2, \sigma_q^2, \sigma_r^2}
 \end{align}
+These variances can be found by letting the AAUSHIP be in steady state. The sensor outputs are read while in steady state to check the variances from these. This will be the variances of the individual sensor measurements thus the variances of the particular measurements. The test finding these variances can be found in appendix \todo{lav appendix og ref til det her}.
 
-The covariance matrix of process noise in the system state dynamics is $Q_k$ is also assumed to be the variances only:
+The covariance matrix of process noise in the system state dynamics is $Q_k$ and is assumed to be the variances of each individual state:
 \begin{align}
-Q_k = \diag{\mathbf{w}} = \diag{
-?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? }
+&Q_k = \diag{\mathbf{w}} = \\\nonumber
+&\diag{\sigma_{N}^2, \sigma_{E}^2, \sigma_{x_{b}}^2, \sigma_{y_{b}}^2, \sigma_{\phi}^2, \sigma_{\theta}^2, \sigma_{\psi}^2, \sigma_{u}^2, \sigma_{v}^2, \sigma_{p}^2, \sigma_{q}^2, \sigma_{r}^2, \sigma_{\dot u}^2, \sigma_{\dot v}^2, \sigma_{\dot p}^2, \sigma_{\dot q}^2, \sigma_{\dot r}^2}
 \end{align}
+These variances can be found by making tests of the AAUSHIP. These should be carried out such that only one type of variance is tested at a time. By doing this, and testing around a known mean of the given state, makes it possible to test the variance of that particular state. The test finding these variances can be found in appendix \todo{lav appendix og ref til det her}.
+\todo{What about $\mathbf w$ and $\mathbf v$? How to determine them correctly}
 
-\todo{What about $\mathbf w$ and $\mathbf v$?}
-
+The $\mathbf F$ from the calculations are the $[17 \times 17]$ system matrix, referred to as $\Phi$ in discrete case. This system matrix changes over time due the changes in the heading. The change of heading is not a linear transition which makes the system non-linear and therefore needs to be linearised about the given states of the system. Therefore is this matrix used as the system matrix in the \ac{EKF}, which is implemented at the AAUSHIP. 
