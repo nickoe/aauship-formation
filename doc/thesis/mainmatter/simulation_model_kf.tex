@@ -169,4 +169,15 @@ The covariance matrix of process noise in the system state dynamics is $Q_k$ and
 The variances can be found by making tests of the AAUSHIP. These should be carried out such that only one type of variance is tested at a time. By doing this, and testing around a known mean of the given state, makes it possible to test the variance of that particular state. The test finding these variances can be found in appendix \todo{lav appendix og ref til det her}.
 \todo{What about $\mathbf w$ and $\mathbf v$? How to determine them correctly}
 
-%The $\mathbf F$ \ref{eq:EKFF} from the previous calculations are the $[17 \times 17]$ system matrix, referred to as $\Phi$ in discrete case. This system matrix changes over time due the changes in the heading. The change of heading is not a linear transition which makes the system non-linear and therefore needs to be linearised about the given states of the system. Therefore this matrix is used as the system matrix in the \ac{EKF}, which is implemented in the AAUSHIP. $\Phi$ is designed to be
+The $\mathbf F$ \ref{eq:EKFF} from the previous calculations are the $[17 \times 17]$ system matrix, referred to as $\Phi$ in discrete case. This system matrix changes over time due the changes in the heading. The change of heading is not a linear transition which makes the system non-linear and therefore needs to be linearised about the given states of the system. Therefore this matrix is used as the system matrix in the \ac{EKF}, which is implemented in the AAUSHIP. $\Phi$ is designed to be
+
+ 
+\begin{align}
+\Phi = 
+  \left[\begin{array}{c|ccc|c}
+    I_{2\times 2} & 0_{2\times 5} & R_z (\psi) & 0_{2\times 3} & 0_{2\times 5}\\ \hline
+    0_{10\times2}  & \multicolumn{3}{c}{\multirow{1}{*}{{$A_d$}}} \vline&  0_{10\times 5} \\ \hline
+    0_{5\times 7} & & A_{d[6:10]} & & I_{5\times 5}
+  \end{array}\right]
+\end{align}
+\todo{fix lower left coror alignment vline}
