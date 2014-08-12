@@ -76,13 +76,13 @@ P_k^+ &= (I - K_k H_k) P_k^-
 \end{itemize}
 where the state transition and observation matrices are defined by their respective jacobians:
 \begin{align}
-F_{k-1} &= \left.\frac{\partial f}{\partial x}\right|_{\hat x_{k-1}^-,u_{k-1}}\\
+F_{k-1} &= \left.\frac{\partial f}{\partial x}\right|_{\hat x_{k-1}^-,u_{k-1}} \label{eq:EKFF}\\
 H_k &= \left.\frac{\partial h}{\partial x}\right|_{\hat x_{k}^-}
 \end{align}
 
 \subsection{\acl{KF} in the case of AAUSHIP}
 \label{sec:kfonaauship}
-The input is given by the forces applied to the vessel. On AAUSHIP with the two twin properllers and two side thrusters as illustrated in section~\vref{sec:thrust_allocation}, this will result in forces in the surge and sway direction as well as a torque around yaw, the roll and pitch torques are neglected, such that the input vector $u_k$ becomes.
+The input is given by the forces applied to the vessel. On AAUSHIP with the two twin propellers and two side thrusters as illustrated in section~\vref{sec:thrust_allocation}, this will result in forces in the surge and sway direction as well as a torque around yaw, the roll and pitch torques are neglected, such that the input vector $u_k$ becomes.
 \begin{align}
 u_k = \tau_k =
 \begin{bmatrix}
@@ -91,7 +91,7 @@ X & Y & 0 & 0 & N
 \end{align}
 These are the forces that can be applied by the thrusters mounted at the vessel. It should be noted that the pitch and roll are not set as input, since no thrusters can control these, and should be treated as model variations.
 
-The discrete input matrix $\Gamma$ is a $17 \times 5$ matrix from the discretised $B$ matrix from equation~\vref{eq:ss}. \todo{Should we use $\Gamma$ for $G$ as in done in other sources (e.g. fossen), such that the input matrix is not confused with the restorin force matrix from fossen?}
+The discrete input matrix $\Gamma$ is a $17 \times 5$ matrix from the discretised $B$ matrix from equation~\vref{eq:ss}. \todo{Should we use $\Gamma$ for $G$ as in done in other sources (e.g. fossen), such that the input matrix is not confused with the restoring force matrix from fossen?}
 The $\Gamma$ matrix takes the forces in $X$, $Y$ and $N$ as input, and neglects inputs in $\phi$ and $\theta$. The forces in $\phi$ and $\theta$ are outputs from the system that makes the vessel change in pitch and roll.
 
 The discrete system $\boldsymbol \Phi$ is a $17 \times 17$ from the discretised $A$ matrix from equation~\vref{eq:ss}, but expanded to contain the full state vector calculations.
@@ -156,17 +156,17 @@ H_k =
 
 The covariance matrix of observational (measurement) uncertainty $R_k$ is assumed to be uncorrelated with the other states, such that the matrix only becomes the variances, with no covariance elements as:
 \begin{align}
-&R_k = \diag{\mathbf{v}} =\\\nonumber
-&\diag{\sigma_{N}^2, \sigma_{E}^2, \sigma_{u}^2, \sigma_{v}^2, \sigma_p^2, \sigma_q^2, \sigma_r^2}
+&R_k = \diag{\mathbf{v}} =\\ \nonumber
+&\diag{\sigma_{N}^2, \sigma_{E}^2, \sigma_{\psi}^2, \sigma_{u}^2, \sigma_{v}^2, \sigma_{a_x}^2, \sigma_{a_y}^2}
 \end{align}
 These variances can be found by letting the AAUSHIP be in steady state. The sensor outputs are read while in steady state to check the variances from these. This will be the variances of the individual sensor measurements thus the variances of the particular measurements. The test finding these variances can be found in appendix \todo{lav appendix og ref til det her}.
 
 The covariance matrix of process noise in the system state dynamics is $Q_k$ and is assumed to be the variances of each individual state:
 \begin{align}
-&Q_k = \diag{\mathbf{w}} = \\\nonumber
+&Q_k = \diag{\mathbf{w}} = \\ \nonumber
 &\diag{\sigma_{N}^2, \sigma_{E}^2, \sigma_{x_{b}}^2, \sigma_{y_{b}}^2, \sigma_{\phi}^2, \sigma_{\theta}^2, \sigma_{\psi}^2, \sigma_{u}^2, \sigma_{v}^2, \sigma_{p}^2, \sigma_{q}^2, \sigma_{r}^2, \sigma_{\dot u}^2, \sigma_{\dot v}^2, \sigma_{\dot p}^2, \sigma_{\dot q}^2, \sigma_{\dot r}^2}
-\end{align}
-These variances can be found by making tests of the AAUSHIP. These should be carried out such that only one type of variance is tested at a time. By doing this, and testing around a known mean of the given state, makes it possible to test the variance of that particular state. The test finding these variances can be found in appendix \todo{lav appendix og ref til det her}.
+\end{align} \todo{bedre notation for process og maalevarians?}
+The variances can be found by making tests of the AAUSHIP. These should be carried out such that only one type of variance is tested at a time. By doing this, and testing around a known mean of the given state, makes it possible to test the variance of that particular state. The test finding these variances can be found in appendix \todo{lav appendix og ref til det her}.
 \todo{What about $\mathbf w$ and $\mathbf v$? How to determine them correctly}
 
-The $\mathbf F$ from the calculations are the $[17 \times 17]$ system matrix, referred to as $\Phi$ in discrete case. This system matrix changes over time due the changes in the heading. The change of heading is not a linear transition which makes the system non-linear and therefore needs to be linearised about the given states of the system. Therefore is this matrix used as the system matrix in the \ac{EKF}, which is implemented at the AAUSHIP. 
+%The $\mathbf F$ \ref{eq:EKFF} from the previous calculations are the $[17 \times 17]$ system matrix, referred to as $\Phi$ in discrete case. This system matrix changes over time due the changes in the heading. The change of heading is not a linear transition which makes the system non-linear and therefore needs to be linearised about the given states of the system. Therefore this matrix is used as the system matrix in the \ac{EKF}, which is implemented in the AAUSHIP. $\Phi$ is designed to be
