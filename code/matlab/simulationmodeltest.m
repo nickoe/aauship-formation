@@ -14,6 +14,8 @@ N = 1000;
 x = zeros(17,N);% Full state simulation vector
 z = zeros(10,N);
 eta = zeros(5,N);
+c = zeros(2,N-1);
+
 nu = zeros(5,N);
 nudot = zeros(5,N);
 
@@ -36,6 +38,8 @@ for k = 1:N-1
     % Simulation model
     [x(:,k+1), eta(:,k+1), nu(:,k+1), nudot(:,k+1)] = aaushipsimmodel( x(:,k), tau);
     
+    Rz         = [cos(x(7)) -sin(x(7)); sin(x(7)) cos(x(7))];
+    c(:,k) = Rz*x(3:4,k);
     % Measurement vector
     z(1:2,k+1) = eta(1:2,k+1);
     z(3,k+1) = eta(5,k+1);
