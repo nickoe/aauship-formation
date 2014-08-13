@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 import roslib; roslib.load_manifest('aauship')
 
@@ -28,7 +28,7 @@ class Control(object):
         ##print(self.ctllog.name)
         sub = rospy.Subscriber('control_input', Faps, self.callback)
         pub = rospy.Publisher('lli_input', Faps)
-        rospy.init_node('control')
+        rospy.init_node('control_node')
         r = rospy.Rate(0.5) # Hz
         #rospy.spin() # Keeps the node running untill stopped
         while not rospy.is_shutdown():

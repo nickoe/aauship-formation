@@ -58,7 +58,7 @@ class Control(object):
         subpid = rospy.Subscriber('pid_input', PID, self.ref_cb, queue_size=1)
         pub = rospy.Publisher('lli_input', LLIinput, queue_size=1)
 
-        rospy.init_node('control')
+        rospy.init_node('control_test_node')
         r = rospy.Rate(0.5) # Hz
         #rospy.spin() # Keeps the node running untill stopped
         while not rospy.is_shutdown():
