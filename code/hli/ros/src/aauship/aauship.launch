@@ -1,4 +1,4 @@
 <launch>
   <node cwd="node" name="lli_node" pkg="aauship" type="lli-node.py" output="screen"/>
-  <node cwd="node" name="estimator_node" pkg="aauship" type="estimator-node.py" output="screen"/>
+  <node cwd="node" name="sensor_decode_node" pkg="aauship" type="sensor-decode-node.py" output="screen"/>
 </launch>
