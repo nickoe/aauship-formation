@@ -170,8 +170,6 @@ The variances can be found by making tests of the AAUSHIP. These should be carri
 \todo{What about $\mathbf w$ and $\mathbf v$? How to determine them correctly}
 
 The $\mathbf F$, equation\ref{eq:EKFF} from the previous calculations, are the $[17 \times 17]$ system matrix, referred to as $\Phi$ in discrete case. This system matrix changes over time due the changes in the heading. The change of heading is not a linear transition which makes the system non-linear and therefore needs to be linearised about the given states of the system. Therefore this matrix is used as the system matrix in the \ac{EKF}, which is implemented in the AAUSHIP. $\Phi$ is designed to be
-
- 
 \begin{align}
 \Phi = 
   \left[\begin{array}{c|ccc|c}
@@ -181,3 +179,4 @@ The $\mathbf F$, equation\ref{eq:EKFF} from the previous calculations, are the $
   \end{array}\right]
 \end{align}
 \todo{fix lower left corner alignment vline}
+
