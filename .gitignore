@@ -54,3 +54,6 @@ code/**/doc
 
 # MATLAB
 slprj/
+
+# ROS
+code/hli/ros/src/CMakeLists.txt

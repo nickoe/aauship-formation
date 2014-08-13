@@ -14,6 +14,11 @@ find_package(catkin REQUIRED COMPONENTS
   tf
 )
 
+## Require GSL for use with the Kalman Filter
+find_package( PkgConfig REQUIRED)
+pkg_check_modules( gsl REQUIRED gsl )
+
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -64,7 +69,7 @@ add_message_files(
   Attitude.msg
   GPS.msg
   controlTest.msg
-	BatteryMonitor.msg
+  BatteryMonitor.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -142,13 +147,13 @@ target_link_libraries(joy-teleop-node  ${catkin_LIBRARIES})
 add_executable(joy-teleop-step-node src/joy-teleop-step-node.cpp)
 target_link_libraries(joy-teleop-step-node  ${catkin_LIBRARIES})
 add_executable(ahrs-mahony-node src/ahrs-mahony-node.cpp)
-target_link_libraries(ahrs-mahony-node aauship ${catkin_LIBRARIES})
+target_link_libraries(ahrs-mahony-node ${gsl_LIBRARIES} aauship ${catkin_LIBRARIES})
 add_executable(ahrs-madgwick-node src/ahrs-madgwick-node.cpp)
-target_link_libraries(ahrs-madgwick-node aauship ${catkin_LIBRARIES})
+target_link_libraries(ahrs-madgwick-node ${gsl_LIBRARIES} aauship ${catkin_LIBRARIES})
 add_executable(matlab-ahrs-helper-node src/matlab-ahrs-helper-node.cpp)
 target_link_libraries(matlab-ahrs-helper-node  ${catkin_LIBRARIES})
 add_executable(kf-node src/kf-node.cpp)
-target_link_libraries(kf-node  ${catkin_LIBRARIES})
+target_link_libraries(kf-node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
 
 #add_executable(MahonyAHRS src/MahonyAHRS.cpp)
 #target_link_libraries(MahonyAHRS ${catkin_LIBRARIES})
