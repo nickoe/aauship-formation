@@ -49,13 +49,13 @@ using namespace ekf;
 //#define X0 0.1
 //#define Y0 1.2
 //#define Z0 0.4
-#define N0    0
-#define E0    0
+#define N0    0.0
+#define E0    0.0
 #define X0    0
 #define Y0    0
 #define PHI   0
 #define THETA 0
-#define PSI   0
+#define PSI   0.0
 #define U     0
 #define V     0
 #define P     0
@@ -66,6 +66,7 @@ using namespace ekf;
 #define DOTP  0
 #define DOTQ  0
 #define DOTR  0
+#define DT    0.05
 #define NOISE_AMPLITUDE 2.0
 #define VERBOSE true
 /*************************************************************************************/
@@ -74,8 +75,8 @@ using namespace ekf;
 // Evolution function
 void f(gsl_vector * params, gsl_vector * xk_1, gsl_vector * xk)
 {
-double N = gsl_vector_get(xk_1,0);
-double E = gsl_vector_get(xk_1,1);
+double n = gsl_vector_get(xk_1,0);
+double e = gsl_vector_get(xk_1,1);
 double x = gsl_vector_get(xk_1,2);
 double y = gsl_vector_get(xk_1,3);
 double phi = gsl_vector_get(xk_1,4);
@@ -603,7 +604,7 @@ double total = safter - sbefore;
 outfile.close();
 outfile_rms.close();
 std::cout << " Run on " << epoch << " epochs ;" << std::scientific << total / double(epoch) << " s./step " << std::endl;
-printf("I found the following parameters : %e %e ; The true parameters being : %e %e \n", s.xk->data[0], s.xk->data[1], s.xk->data[6], N, E, PSI);
+printf("I found the following parameters : %e %e %e ; The true parameters being : %e %e %e \n", s.xk->data[0], s.xk->data[1], s.xk->data[6], N0, E0, PSI);
 std::cout << " Outputs are saved in example-009*.data " << std::endl;
 std::cout << " You can plot them using e.g. gnuplot : " << std::endl;
 //std::cout << " gnuplot Data/plot-example-009.gplot ; gv Output/example-009-rms.ps ; gv Output/example-009-Lorentz.ps " << std::endl;
