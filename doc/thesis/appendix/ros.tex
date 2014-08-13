@@ -95,9 +95,9 @@ real sensor nodes that use real sensor data is used.
 		This is responsible for communicaiting with the \ac{LLI}. It
 		publishes sensor data from the \ac{LLI} and recieves various input
 		commands and forwards them to the \ac{LLI}.
-	\item[\texttt{/estimator\_node}]\hfill \\
+	\item[\texttt{/sensor\_decode\_node}]\hfill \\
 		This decodes the samples from the \ac{LLI} and publishes this to
-		the relevant topics.
+		the relevant topics. 
 	\item[\texttt{/joy}]\hfill \\
 		This is a node from \ac{ROS} that is a generic interface to
 		various joystick inputs. Here it is used to get data from a PS3
@@ -105,7 +105,15 @@ real sensor nodes that use real sensor data is used.
 	\item[\texttt{/joy\_teleop\_node}]\hfill \\
 		This is node parses some data from the PlayStation 3 controller, and formats
 		those as messages that is to be sent to the \ac{LLI}.
+	\item[\texttt{/kf\_node}]\hfill \\
+		This node is the running the \ac{KF} iteration with the attitude estimate and
+		the decoded \ac{IMU} samples.
+	\item[\texttt{/gnc\_node}]\hfill \\
+		This node runs the \ac{GNC} angorithm
+	\item[\texttt{/rqt\_mission\_planner\_node}]\hfill \\
+		This node is an rqt plugin used to specify the mission.
 \end{description}
+
 \begin{figure}[htbp]
 	\centering
 	\includesvg{ros_aauship_teleop}
@@ -114,7 +122,14 @@ real sensor nodes that use real sensor data is used.
 	\label{fig:ros-aauship-teleop}
 \end{figure}
 
-\missingfigure{Closed loop ROS system on one ship}
+\begin{figure}[htbp]
+	\centering
+	{\footnotesize
+	\includesvg{ros_aauship_closed_loop_single}}
+	\caption{Closed loop ROS system on one ship.}
+	\label{fig:ros-aauship-closed-loop-single}
+\end{figure}
+
 \missingfigure{ROS system used for multiple ships, when doing autonomous
 formation control}
 
