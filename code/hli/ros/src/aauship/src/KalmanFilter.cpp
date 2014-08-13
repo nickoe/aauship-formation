@@ -39,7 +39,7 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
-#include "ukf.h"
+//#include "ukf.h"
 #include <sys/time.h>
 using namespace ekf;
 //#define SIGMA 10.0
@@ -49,23 +49,23 @@ using namespace ekf;
 //#define X0 0.1
 //#define Y0 1.2
 //#define Z0 0.4
-#define N0   
-#define E0   
-#define X0   
-#define Y0   
-#define PHI  
-#define THETA
-#define PSI  
-#define U    
-#define V    
-#define P    
-#define Q    
-#define R    
-#define DOTU 
-#define DOTV 
-#define DOTP 
-#define DOTQ 
-#define DOTR 
+#define N0    0
+#define E0    0
+#define X0    0
+#define Y0    0
+#define PHI   0
+#define THETA 0
+#define PSI   0
+#define U     0
+#define V     0
+#define P     0
+#define Q     0
+#define R     0
+#define DOTU  0
+#define DOTV  0
+#define DOTP  0
+#define DOTQ  0
+#define DOTR  0
 #define NOISE_AMPLITUDE 2.0
 #define VERBOSE true
 /*************************************************************************************/
@@ -131,7 +131,7 @@ double dotroll = gsl_vector_get(xk_1,14);
 double dotpitch = gsl_vector_get(xk_1,15);
 double dotyaw = gsl_vector_get(xk_1,16);
 double dt = gsl_vector_get(params, 0);
-// Derivatives for x(t+1)
+// Derivatives for N(t+1)
 gsl_matrix_set(Fxk, 0, 0, 1.0);
 gsl_matrix_set(Fxk, 0, 1, 0.0);
 gsl_matrix_set(Fxk, 0, 2, 0.0);
@@ -149,7 +149,7 @@ gsl_matrix_set(Fxk, 0, 13, 0.0);
 gsl_matrix_set(Fxk, 0, 14, 0.0);
 gsl_matrix_set(Fxk, 0, 15, 0.0);
 gsl_matrix_set(Fxk, 0, 16, 0.0);
-// Derivatives for y(t+1)
+// Derivatives for E(t+1)
 gsl_matrix_set(Fxk, 1, 0, 0.0);
 gsl_matrix_set(Fxk, 1, 1, 1.0);
 gsl_matrix_set(Fxk, 1, 2, 0.0);
@@ -167,7 +167,7 @@ gsl_matrix_set(Fxk, 1, 13, 0.0);
 gsl_matrix_set(Fxk, 1, 14, 0.0);
 gsl_matrix_set(Fxk, 1, 15, 0.0);
 gsl_matrix_set(Fxk, 1, 16, 0.0);
-// Derivatives for phi(t+1)
+// Derivatives for x(t+1)
 gsl_matrix_set(Fxk, 2, 0, 0.0);
 gsl_matrix_set(Fxk, 2, 1, 0.0);
 gsl_matrix_set(Fxk, 2, 2, 1.0);
@@ -185,7 +185,7 @@ gsl_matrix_set(Fxk, 2, 13, 0.0);
 gsl_matrix_set(Fxk, 2, 14, 0.0);
 gsl_matrix_set(Fxk, 2, 15, 0.0);
 gsl_matrix_set(Fxk, 2, 16, 0.0);
-// Derivatives for theta(t+1)
+// Derivatives for y(t+1)
 gsl_matrix_set(Fxk, 3, 0, 0.0);
 gsl_matrix_set(Fxk, 3, 1, 0.0);
 gsl_matrix_set(Fxk, 3, 2, 0.0);
@@ -203,7 +203,7 @@ gsl_matrix_set(Fxk, 3, 13, 0.0);
 gsl_matrix_set(Fxk, 3, 14, 0.0);
 gsl_matrix_set(Fxk, 3, 15, 0.0);
 gsl_matrix_set(Fxk, 3, 16, 0.0);
-// Derivatives for psi(t+1)
+// Derivatives for phi(t+1)
 gsl_matrix_set(Fxk, 4, 0, 0.0);
 gsl_matrix_set(Fxk, 4, 1, 0.0);
 gsl_matrix_set(Fxk, 4, 2, -0.000047368775740);
@@ -221,7 +221,7 @@ gsl_matrix_set(Fxk, 4, 13, 0.0);
 gsl_matrix_set(Fxk, 4, 14, 0.0);
 gsl_matrix_set(Fxk, 4, 15, 0.0);
 gsl_matrix_set(Fxk, 4, 16, 0.0);
-// Derivatives for u(t+1)
+// Derivatives for theta(t+1)
 gsl_matrix_set(Fxk, 5, 0, 0.0);
 gsl_matrix_set(Fxk, 5, 1, 0.0);
 gsl_matrix_set(Fxk, 5, 2, -0.004009144592212);
@@ -239,7 +239,7 @@ gsl_matrix_set(Fxk, 5, 13, 0.0);
 gsl_matrix_set(Fxk, 5, 14, 0.0);
 gsl_matrix_set(Fxk, 5, 15, 0.0);
 gsl_matrix_set(Fxk, 5, 16, 0.0);
-// Derivatives for v(t+1)
+// Derivatives for psi(t+1)
 gsl_matrix_set(Fxk, 6, 0, 0.0);
 gsl_matrix_set(Fxk, 6, 1, 0.0);
 gsl_matrix_set(Fxk, 6, 2, 0.0);
@@ -257,9 +257,9 @@ gsl_matrix_set(Fxk, 6, 13, 0.0);
 gsl_matrix_set(Fxk, 6, 14, 0.0);
 gsl_matrix_set(Fxk, 6, 15, 0.0);
 gsl_matrix_set(Fxk, 6, 16, 0.0);
-// Derivatives for roll(t+1)
-gsl_matrix_set(Fxk, 7, 0, ts*cos(psi));
-gsl_matrix_set(Fxk, 7, 1, ts*sin(psi));
+// Derivatives for u(t+1)
+gsl_matrix_set(Fxk, 7, 0, dt*cos(psi));
+gsl_matrix_set(Fxk, 7, 1, dt*sin(psi));
 gsl_matrix_set(Fxk, 7, 2,  0.049723406204869);
 gsl_matrix_set(Fxk, 7, 3,  0.000000533491234);
 gsl_matrix_set(Fxk, 7, 4, -0.000019426501116);
@@ -275,9 +275,9 @@ gsl_matrix_set(Fxk, 7, 13,  0.000017884125782);
 gsl_matrix_set(Fxk, 7, 14, -0.000670202021289);
 gsl_matrix_set(Fxk, 7, 15, -0.003201606995903);
 gsl_matrix_set(Fxk, 7, 16, -0.000029556488868);
-// Derivatives for pitch(t+1)
-gsl_matrix_set(Fxk, 8, 0, ts*(-sin(psi)));
-gsl_matrix_set(Fxk, 8, 1, ts*cos(psi));
+// Derivatives for v(t+1)
+gsl_matrix_set(Fxk, 8, 0, dt*(-sin(psi)));
+gsl_matrix_set(Fxk, 8, 1, dt*cos(psi));
 gsl_matrix_set(Fxk, 8, 2,  0.000012127867596);
 gsl_matrix_set(Fxk, 8, 3,  0.045837548347937);
 gsl_matrix_set(Fxk, 8, 4,  0.039922222094321);
@@ -293,7 +293,7 @@ gsl_matrix_set(Fxk, 8, 13,  0.840360099012158);
 gsl_matrix_set(Fxk, 8, 14,  1.477258087981388);
 gsl_matrix_set(Fxk, 8, 15,  0.013643189863155);
 gsl_matrix_set(Fxk, 8, 16, -0.024926387639480);
-// Derivatives for yaw(t+1)
+// Derivatives for p(t+1)
 gsl_matrix_set(Fxk, 9, 0,                  0);
 gsl_matrix_set(Fxk, 9, 1,                  0);
 gsl_matrix_set(Fxk, 9, 2, -0.000001585666563);
@@ -311,7 +311,7 @@ gsl_matrix_set(Fxk, 9, 13,  0.006788922250085);
 gsl_matrix_set(Fxk, 9, 14,  0.752899321745734);
 gsl_matrix_set(Fxk, 9, 15, -0.002445889774367);
 gsl_matrix_set(Fxk, 9, 16, -0.009625312696845);
-
+// Derivatives for q(t+1)
 gsl_matrix_set(Fxk, 10, 0,                  0);
 gsl_matrix_set(Fxk, 10, 1,                  0);
 gsl_matrix_set(Fxk, 10, 2, -0.000288466147122);
@@ -329,7 +329,7 @@ gsl_matrix_set(Fxk, 10, 13,  0.002334197445616);
 gsl_matrix_set(Fxk, 10, 14, -0.086588459653789);
 gsl_matrix_set(Fxk, 10, 15,  0.595468162879000);
 gsl_matrix_set(Fxk, 10, 16, -0.003796674187051);
-
+// Derivatives for r(t+1)
 gsl_matrix_set(Fxk, 11, 0,                  0);
 gsl_matrix_set(Fxk, 11, 1,                  0);
 gsl_matrix_set(Fxk, 11, 2, -0.000000147096000);
@@ -347,7 +347,7 @@ gsl_matrix_set(Fxk, 11, 13, -0.000202061143866);
 gsl_matrix_set(Fxk, 11, 14, -0.017394200825761);
 gsl_matrix_set(Fxk, 11, 15, -0.000172595493010);
 gsl_matrix_set(Fxk, 11, 16,  0.987291639691711);
-
+// Derivatives for dotu(t+1)
 gsl_matrix_set(Fxk, 12, 0, 0.0);
 gsl_matrix_set(Fxk, 12, 1, 0.0);
 gsl_matrix_set(Fxk, 12, 2, 0.0);
@@ -365,7 +365,7 @@ gsl_matrix_set(Fxk, 12, 13, 0.0);
 gsl_matrix_set(Fxk, 12, 14, 0.0);
 gsl_matrix_set(Fxk, 12, 15, 0.0);
 gsl_matrix_set(Fxk, 12, 16, 0.0);
-
+// Derivatives for dotv(t+1)
 gsl_matrix_set(Fxk, 13, 0, 0.0);
 gsl_matrix_set(Fxk, 13, 1, 0.0);
 gsl_matrix_set(Fxk, 13, 2, 0.0);
@@ -383,7 +383,7 @@ gsl_matrix_set(Fxk, 13, 13, 1.0);
 gsl_matrix_set(Fxk, 13, 14, 0.0);
 gsl_matrix_set(Fxk, 13, 15, 0.0);
 gsl_matrix_set(Fxk, 13, 16, 0.0);
-
+// Derivatives for dotp(t+1)
 gsl_matrix_set(Fxk, 14, 0, 0.0);
 gsl_matrix_set(Fxk, 14, 1, 0.0);
 gsl_matrix_set(Fxk, 14, 2, 0.0);
@@ -401,7 +401,7 @@ gsl_matrix_set(Fxk, 14, 13, 0.0);
 gsl_matrix_set(Fxk, 14, 14, 1.0);
 gsl_matrix_set(Fxk, 14, 15, 0.0);
 gsl_matrix_set(Fxk, 14, 16, 0.0);;
-
+// Derivatives for dotq(t+1)
 gsl_matrix_set(Fxk, 15, 0, 0.0);
 gsl_matrix_set(Fxk, 15, 1, 0.0);
 gsl_matrix_set(Fxk, 15, 2, 0.0);
@@ -419,7 +419,7 @@ gsl_matrix_set(Fxk, 15, 13, 0.0);
 gsl_matrix_set(Fxk, 15, 14, 0.0);
 gsl_matrix_set(Fxk, 15, 15, 1.0);
 gsl_matrix_set(Fxk, 15, 16, 0.0);
-
+// Derivatives for dotr(t+1)
 gsl_matrix_set(Fxk, 16, 0, 0.0);
 gsl_matrix_set(Fxk, 16, 1, 0.0);
 gsl_matrix_set(Fxk, 16, 2, 0.0);
@@ -520,11 +520,11 @@ int nb_steps_below_error=1000;
 //int is_counting=0;
 gettimeofday(&before, NULL);
 outfile << epoch << " ";
-for(int i = 0 ; i < 6 ; ++i)
+for(int i = 0 ; i < 17 ; ++i)
 outfile << xi->data[i] << " " ;
-for(int i = 0 ; i < 3 ; ++i)
+for(int i = 0 ; i < 7 ; ++i)
 outfile << yi->data[i] << " " ;
-for(int i = 0 ; i < 6 ; ++i)
+for(int i = 0 ; i < 17 ; ++i)
 outfile << s.xk->data[i] << " " ;
 outfile << std::endl;
 while( epoch < 8000)
