@@ -157,7 +157,7 @@ H_k =
 The covariance matrix of observational (measurement) uncertainty $R_k$ is assumed to be uncorrelated with the other states, such that the matrix only becomes the variances, with no covariance elements as:
 \begin{align}
 &R_k = \diag{\mathbf{v}} =\\ \nonumber
-&\diag{\sigma_{N}^2, \sigma_{E}^2, \sigma_{\psi}^2, \sigma_{u}^2, \sigma_{v}^2, \sigma_{a_x}^2, \sigma_{a_y}^2}
+&\diag{^\text{GPS}\sigma_{N}^2,\ ^\text{GPS}\sigma_{E}^2,\ ^\text{GPS}\sigma_{\psi}^2,\ ^\text{GPS}\sigma_{u}^2,\ ^\text{GPS}\sigma_{v}^2,\ ^\text{gyro}\sigma_{a_x}^2,\ ^\text{gyro}\sigma_{a_y}^2}
 \end{align}
 These variances can be found by letting the AAUSHIP be in steady state. The sensor outputs are read while in steady state to check the variances from these. This will be the variances of the individual sensor measurements thus the variances of the particular measurements. The test finding these variances can be found in appendix \todo{lav appendix og ref til det her}.
 
@@ -169,7 +169,7 @@ The covariance matrix of process noise in the system state dynamics is $Q_k$ and
 The variances can be found by making tests of the AAUSHIP. These should be carried out such that only one type of variance is tested at a time. By doing this, and testing around a known mean of the given state, makes it possible to test the variance of that particular state. The test finding these variances can be found in appendix \todo{lav appendix og ref til det her}.
 \todo{What about $\mathbf w$ and $\mathbf v$? How to determine them correctly}
 
-The $\mathbf F$ \ref{eq:EKFF} from the previous calculations are the $[17 \times 17]$ system matrix, referred to as $\Phi$ in discrete case. This system matrix changes over time due the changes in the heading. The change of heading is not a linear transition which makes the system non-linear and therefore needs to be linearised about the given states of the system. Therefore this matrix is used as the system matrix in the \ac{EKF}, which is implemented in the AAUSHIP. $\Phi$ is designed to be
+The $\mathbf F$, equation\ref{eq:EKFF} from the previous calculations, are the $[17 \times 17]$ system matrix, referred to as $\Phi$ in discrete case. This system matrix changes over time due the changes in the heading. The change of heading is not a linear transition which makes the system non-linear and therefore needs to be linearised about the given states of the system. Therefore this matrix is used as the system matrix in the \ac{EKF}, which is implemented in the AAUSHIP. $\Phi$ is designed to be
 
  
 \begin{align}
@@ -180,4 +180,4 @@ The $\mathbf F$ \ref{eq:EKFF} from the previous calculations are the $[17 \times
     0_{5\times 7} & & A_{d[6:10]} & & I_{5\times 5}
   \end{array}\right]
 \end{align}
-\todo{fix lower left coror alignment vline}
+\todo{fix lower left corner alignment vline}
