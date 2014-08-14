@@ -1,4 +1,5 @@
 function [ xs, eta, nu, nudot] = aaushipsimmodel( x, tau )
+%#codegen
 %AAUSHIP Control Model of AAUSHIHP
 %   This is a simple model of AAUSHIP, supposed to be a simulation model
 %   
@@ -35,6 +36,11 @@ if (length(tau) ~= 5),error('tau-vector must have dimension 5!');end
 % Linear simulation step
 ss = load('ssaauship.mat');
 xn = ss.Ad*x(3:12) + ss.Bd*tau;
+
+eta   = zeros(5,1);
+nu    = zeros(5,1);
+nudot = zeros(5,1);
+xs    = zeros(17,1);
 
 % Calculate positions with euler integration
 xn(5)      = xn(10)*ss.ts + x(7);
