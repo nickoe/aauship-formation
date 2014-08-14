@@ -122,7 +122,7 @@ class Estimator(object):
 
         print(self.imulog.name)
 
-        rospy.init_node('estimator')
+        rospy.init_node('sensor_decode_node')
         rospy.Subscriber('samples', Faps, self.callback)
         self.pub_imu = rospy.Publisher('imu', ADIS16405, queue_size=10)
         #self.pub_attitude = rospy.Publisher('attitude',Attitude, queue_size=10) # We use the cpp ahrs methods insted
