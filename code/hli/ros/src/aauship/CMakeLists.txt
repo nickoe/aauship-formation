@@ -156,16 +156,16 @@ add_dependencies(ahrs-mahony-node ${catkin_EXPORTED_TARGETS})
 target_link_libraries(ahrs-mahony-node ${gsl_LIBRARIES} aauship ${catkin_LIBRARIES})
 
 add_executable(ahrs-madgwick-node src/ahrs-madgwick-node.cpp)
-target_link_libraries(ahrs-madgwick-node ${gsl_LIBRARIES} aauship ${catkin_LIBRARIES})
 add_dependencies(ahrs-madgwick-node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(ahrs-madgwick-node ${gsl_LIBRARIES} aauship ${catkin_LIBRARIES})
 
 add_executable(matlab-ahrs-helper-node src/matlab-ahrs-helper-node.cpp)
-target_link_libraries(matlab-ahrs-helper-node  ${catkin_LIBRARIES})
 add_dependencies(matlab-ahrs-helper-node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(matlab-ahrs-helper-node  ${catkin_LIBRARIES})
 
 add_executable(kf-node src/kf-node.cpp)
-target_link_libraries(kf-node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(kf-node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(kf-node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
 
 
 #############
