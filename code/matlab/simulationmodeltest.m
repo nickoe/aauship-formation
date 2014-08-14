@@ -22,6 +22,10 @@ nudot = zeros(5,N);
 % Initial state
 x(:,1) = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]';
 
+% ROS node setup
+node = rosmatlab.node('matlab_sim_node', 'http://localhost:11311');
+pub = node.addPublisher('simstate', 'std_msgs/Float64MultiArray');
+msg = rosmatlab.message('std_msgs/Float64MultiArray', node);
 
 flag=1;
 %% Simulation
@@ -45,6 +49,11 @@ for k = 1:N-1
     z(3,k+1) = eta(5,k+1);
     z(4:5,k+1) = nu(1:2,k+1);
     z(6:7,k+1) = nudot(1:2,k+1);
+    
+    % ROS state publish
+    pause(1)
+    msg.setData(x(:,k+1));
+    pub.publish(msg);
 end
 
 %% Plotting
