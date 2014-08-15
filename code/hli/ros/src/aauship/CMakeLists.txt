@@ -142,30 +142,29 @@ add_library(aauship
 #   ${catkin_LIBRARIES}
 # )
 
-
 add_executable(joy-teleop-node src/joy-teleop-node.cpp)
 add_dependencies(joy-teleop-node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(joy-teleop-node  ${catkin_LIBRARIES})
+target_link_libraries(joy-teleop-node ${catkin_LIBRARIES})
 
 add_executable(joy-teleop-step-node src/joy-teleop-step-node.cpp)
 add_dependencies(joy-teleop-step-node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(joy-teleop-step-node  ${catkin_LIBRARIES})
+target_link_libraries(joy-teleop-step-node ${catkin_LIBRARIES})
 
 add_executable(ahrs-mahony-node src/ahrs-mahony-node.cpp)
 add_dependencies(ahrs-mahony-node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(ahrs-mahony-node ${gsl_LIBRARIES} aauship ${catkin_LIBRARIES})
+target_link_libraries(ahrs-mahony-node aauship ${gsl_LIBRARIES}  ${catkin_LIBRARIES})
 
 add_executable(ahrs-madgwick-node src/ahrs-madgwick-node.cpp)
 add_dependencies(ahrs-madgwick-node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(ahrs-madgwick-node ${gsl_LIBRARIES} aauship ${catkin_LIBRARIES})
+target_link_libraries(ahrs-madgwick-node aauship ${gsl_LIBRARIES}  ${catkin_LIBRARIES})
 
 add_executable(matlab-ahrs-helper-node src/matlab-ahrs-helper-node.cpp)
 add_dependencies(matlab-ahrs-helper-node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(matlab-ahrs-helper-node  ${catkin_LIBRARIES})
+target_link_libraries(matlab-ahrs-helper-node aauship ${gsl_LIBRARIES} ${catkin_LIBRARIES})
 
 add_executable(kf-node src/kf-node.cpp)
 add_dependencies(kf-node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(kf-node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
+target_link_libraries(kf-node aauship ${gsl_LIBRARIES} ${catkin_LIBRARIES})
 
 
 #############
