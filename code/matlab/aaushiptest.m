@@ -4,13 +4,14 @@ N = 40;
 clf
 
 
-%x = [ u v r x y psi ]'
-x = zeros(6,N);
-xdot = zeros(6,N);
+x = zeros(10,N);
+xdot = zeros(10,N);
 
-for i = 1:N
-    [xdot(1:6,i)] = aauship(x(1:6,i), [5;10]); % SHIP
-    x(:,i+1)=xdot(:,i)+x(:,i); % Euler integration, now assuming dt = 1, dt*xdot when not true
+NED = zeros(2,N);
+
+for k = 1:N
+    [xdot(:,k)] = aauship(x(:,k), [4 0 0 0 0]', 'foo'); % SHIP
+    x(:,k+1)=xdot(:,k)*0.05+x(:,k); % Euler integration, now assuming dt = 1, dt*xdot when not true
 end
 
 subplot(2,1,1)

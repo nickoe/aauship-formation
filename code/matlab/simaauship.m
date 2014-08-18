@@ -6,14 +6,17 @@ clear all; clf;
 %% Pre allocation of variables
 N = 4000;
 es = N;
-x = zeros(N,10);
-x(1,:) = [0 0 0 0 pi/4 2 0 0 0 0]';
-xdot = zeros(N,10);
+x = zeros(N,17);
+x(1,:) = [0 0 0 0 0 0 pi 2 0 0 0 0 0 0 0 0 0]';
+z = zeros(N,7);
+x_hat = zeros(N,17);
+P_plus = zeros(17,17);
+xdot = zeros(N,17);
 NED = zeros(N,2);
 taus = [1 0 0 0 0.005]';
 tau = repmat(taus',N,1);
 % tau(:,1) = (1:N)/600;
-taus = [10 0 0 0 0]';
+taus = [2 0 0 0 0]';
 tau(ceil(N/2)+1:N,:)  = repmat(taus',N/2,1);
 
 %% Thrust allocation 
@@ -33,17 +36,17 @@ tau(ceil(N/2)+1:N,:)  = repmat(taus',N/2,1);
 % ta = T*K*(uf+[0 0 24.8350/2 24.8350/2]');
 
 %% Waypoints
-start = [100, 1000];
-stop = [-1000,1000];
+% start = [100, 1000];
+% stop = [-1000,1000];
 track = load('track.mat');
 track = [x(1:2,1)';track.allwps];
 n = 1;
 error = zeros(1,N);
 integral = zeros(1,N);
 derivative = zeros(1,N);
-Kp = 0.8;
-Ki = 0.1;
-Kd = 32;
+Kp = 5;
+Ki = 0.051;
+Kd = 50;
 thrustdiff = zeros(1,N);
 heading = zeros(N,1);
 headingdesired = zeros(N,1);
@@ -54,12 +57,12 @@ clf
 hold on
 rev = 0;
 limit = 3.07;
-heading(1) = x(1,5);
+heading(1) = x(1,7);
 for k = 1:N
 %     x(k+1,:) = aauship(x(k,:)', ta); % Used fo thrust allocaiton testing
 
     % GNC
-    [headingdesired(k), wp_reached, cte(k)] = wp_gen(track(n,:),track(n+1,:),NED(k,:)); % WP Gen
+    [headingdesired(k), wp_reached, cte(k)] = wp_gen(track(n,:),track(n+1,:),NED(k,1:2)); % WP Gen
     if (wp_reached == 1)
         n = n+1;
         if n >= length(track)
@@ -68,28 +71,30 @@ for k = 1:N
         end
     end
 
-    % Computed control input
-    tau(k,:)=[6 0 0 0 thrustdiff(k)];
+%     % Computed control input
+    tau(k,:)=[8 0 0 0 thrustdiff(k)];
     
     % Simulation
-    x(k+1,:) = aauship(x(k,:)', tau(k,:)', 'nonlinear');
-    psi=x(k,5);
+    x(k+1,:) = aaushipsimmodel(x(k,:)', tau(k,:)');
+    
+%     x(k+1,1:2) = x(k+1,1:2) + 0.01*randn(2,1)';
+%     x(k+1,7) = x(k+1,7) + 13.5969e-006*randn(1,1)';
+
+    % Generere z m støj
+    z(k,1:2) = x(k,1:2) + 1.1*randn(2,1)';
+    z(k,3) = x(k,7) + 13.5969e-006*randn(1,1)';
+    z(k,4:5) = x(k,8:9) + 0.1*randn(2,1)';
+    z(k,6:7) = x(k,13:14) + 0.0524*randn(2,1)';
+    
+    [x_hat(k+1,:), P_plus] = KalmanF(x_hat(k,:)', tau(k,:)', z(k,:)', P_plus);
+
+    psi=x(k+1,7);
     Rz = [cos(psi) -sin(psi);
           sin(psi)  cos(psi)];
     
     if k ~=  1
-%      if (headingdesired(k-1) >= limit) && (headingdesired(k) <= -limit)
-%  %       disp('up')
-%          rev = rev + 2*pi;
-%      elseif (headingdesired(k-1) <= -limit) && (headingdesired(k) >= limit)
-%  %       disp('down')
-%          rev = rev - 2*pi;
-%      end
-%          headingdesired(k) = headingdesired(k) + rev;
-        NED(k+1,:) = Rz*x(k,6:7)'*0.1 + NED(k,:)';
-%         NED(k+1,1:2) = NED(k+1,1:2) + (diag([1.0035,1.0035])*randn(2,1)/10)';
-%         heading(k) = (x(k,10)'*0.1 + heading(k-1));
-        heading(k) = x(k,5);
+        NED(k+1,:) = Rz*x(k+1,8:9)'*0.05 + NED(k,:)';
+        heading(k) = x(k+1,7);
     end
     
     % PID
@@ -112,15 +117,18 @@ tt = 0.01:0.1:es/10;
 
 for k = 1:79:es
 %     ship(NED(k,2),NED(k,1),-x(k+1,5)+pi/2,'y')
-    ship(x(k+1,2),x(k+1,1),-x(k+1,5)+pi/2,'y')
+%     ship(x(k+1,2),x(k+1,1),-x(k+1,7)+pi/2,'y')
+    ship(NED(k,2),NED(k,1),pi/2-headingdesired(k),'y')
+
 
 end
 % for k = 1:100:N
 %     ship(NED(k,2),NED(k,1),pi/2-headingdesired(k),'y')
 % end
 hold on
-plot(track(:,2),track(:,1),'b-o', NED(1:es,2),NED(1:es,1),'-r')
-plot(x(1:es,2),x(1:es,1),'-k')
+plot(track(:,2),track(:,1),'b-o', x(1:es,2),x(1:es,1),'-r')
+plot(x_hat(1:es,2),x_hat(1:es,1),'-k')
+plot(NED(1:es,2),NED(1:es,1),'g-.')
 plot(track(n,2),track(n,1),'ro')
 xlabel('Easting [m]');
 ylabel('Northing [m]');
@@ -130,7 +138,9 @@ hold off
 
 %%DEBUG
 figure(2)
-plot(tt, heading(1:es), tt, x(1:es,5))
+plot(tt, heading(1:es), tt, x(1:es,7), tt, headingdesired(1:es))
+legend('Heading', 'x(:,7)')
+xlabel('time')
 %%DEBUGEND
 
 % csvwrite('positions.csv',[NED(1:es,1:2) -x(1:es,5)+pi/2])
@@ -155,7 +165,7 @@ plot(tt, heading(1:es), tt, x(1:es,5))
 % ylabel('Sway speed [m/s]')
 % subplot(3,1,3)
 % plot(t,x(1:es,10))
-% ylabel('Yaw speed [rad/s]')
+% ylabel('Yaw speed [rad/s]')7
 % xlabel('Time [s]')
 % 
 % figure(4);clf;

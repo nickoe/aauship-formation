@@ -25,10 +25,10 @@ xdot = ss.Ad*x + ss.Bd*tau;
 xn = xdot;
 
 if strcmp(type, 'nonlinear');
-    xn(5) = xn(10)*0.1 + x(5);
+    xn(5) = xn(10)*ss.ts + x(5);
     psi=xn(5);
     Rz = [cos(psi) -sin(psi);
           sin(psi)  cos(psi)];
-    xn(1:2) = Rz*xn(6:7)*0.1 + x(1:2);
+    xn(1:2) = Rz*xn(6:7)*ss.ts + x(1:2);
 end
 end

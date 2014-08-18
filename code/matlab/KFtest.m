@@ -156,7 +156,6 @@ P_minus(:,:,k+1) = PHI*P_plus(:,:,k)*PHI + Q;
 pos_error(k) = norm([(x(1,k)-x_hat_plus(1,k)),(x(2,k)-x_hat_plus(2,k))]);
 end
 
-
 figure(1)
 plot( x(1,:),x(2,:),'.-', x_hat_plus(1,:),x_hat_plus(2,:),'.-', x_hat_plus(1,gpsc), x_hat_plus(2,gpsc), 'o', x(1,gpsc), x(2,gpsc), 'o')
 % plot(NED(1,:),NED(2,:),NED_noisy(1,:),NED_noisy(2,:))

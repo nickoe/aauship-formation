@@ -14,18 +14,17 @@ N = 1000;
 x = zeros(17,N);% Full state simulation vector
 z = zeros(10,N);
 eta = zeros(5,N);
-c = zeros(2,N-1);
 
 nu = zeros(5,N);
 nudot = zeros(5,N);
 
 % Initial state
-x(:,1) = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]';
+x(:,1) = [0 0 0 0 0 0 -pi/4 0 0 0 0 0 0 0 0 0 0]';
 
 % ROS node setup
-node = rosmatlab.node('matlab_sim_node', 'http://localhost:11311');
-pub = node.addPublisher('simstate', 'std_msgs/Float64MultiArray');
-msg = rosmatlab.message('std_msgs/Float64MultiArray', node);
+% node = rosmatlab.node('matlab_sim_node', 'http://localhost:11311');
+% pub = node.addPublisher('simstate', 'std_msgs/Float64MultiArray');
+% msg = rosmatlab.message('std_msgs/Float64MultiArray', node);
 
 flag=1;
 %% Simulation
@@ -41,9 +40,7 @@ for k = 1:N-1
     
     % Simulation model
     [x(:,k+1), eta(:,k+1), nu(:,k+1), nudot(:,k+1)] = aaushipsimmodel( x(:,k), tau);
-    
-    Rz         = [cos(x(7)) -sin(x(7)); sin(x(7)) cos(x(7))];
-    c(:,k) = Rz*x(3:4,k);
+
     % Measurement vector
     z(1:2,k+1) = eta(1:2,k+1);
     z(3,k+1) = eta(5,k+1);
@@ -51,9 +48,9 @@ for k = 1:N-1
     z(6:7,k+1) = nudot(1:2,k+1);
     
     % ROS state publish
-    pause(1)
-    msg.setData(x(:,k+1));
-    pub.publish(msg);
+%     pause(1)
+%     msg.setData(x(:,k+1));
+%     pub.publish(msg);
 end
 
 %% Plotting
