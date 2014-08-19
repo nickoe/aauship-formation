@@ -4,7 +4,7 @@
 clear all; clf;
 
 %% Pre allocation of variables
-N = 4000;
+N = 400;
 es = N;
 x = zeros(N,17);
 x(1,:) = [0 0 0 0 0 0 pi 2 0 0 0 0 0 0 0 0 0]';
@@ -12,12 +12,17 @@ z = zeros(N,7);
 x_hat = zeros(N,17);
 P_plus = zeros(17,17);
 xdot = zeros(N,17);
-NED = zeros(N,2);
 taus = [1 0 0 0 0.005]';
 tau = repmat(taus',N,1);
 % tau(:,1) = (1:N)/600;
 taus = [2 0 0 0 0]';
 tau(ceil(N/2)+1:N,:)  = repmat(taus',N/2,1);
+% Measurement noise
+v = [3 3 13.5969e-006 0.1 0.1 0.0524 0.0524]';
+R_i = diag(v)*diag(1.5*[10 10 1 100 100 1 1]'); % Skal gaines på de rigtige elementer
+R = R_i;
+gpsc = 0;
+jj = 1;
 
 %% Thrust allocation 
 % lx1 = 0.41; lx2 = 0.18; lx3 = 0.48; lx4 = 0.48; ly3 = 0.05; ly4 = 0.05;
@@ -62,7 +67,7 @@ for k = 1:N
 %     x(k+1,:) = aauship(x(k,:)', ta); % Used fo thrust allocaiton testing
 
     % GNC
-    [headingdesired(k), wp_reached, cte(k)] = wp_gen(track(n,:),track(n+1,:),NED(k,1:2)); % WP Gen
+    [headingdesired(k), wp_reached, cte(k)] = wp_gen(track(n,:),track(n+1,:),x(k,1:2)); % WP Gen
     if (wp_reached == 1)
         n = n+1;
         if n >= length(track)
@@ -81,19 +86,27 @@ for k = 1:N
 %     x(k+1,7) = x(k+1,7) + 13.5969e-006*randn(1,1)';
 
     % Generere z m støj
-    z(k,1:2) = x(k,1:2) + 1.1*randn(2,1)';
-    z(k,3) = x(k,7) + 13.5969e-006*randn(1,1)';
-    z(k,4:5) = x(k,8:9) + 0.1*randn(2,1)';
-    z(k,6:7) = x(k,13:14) + 0.0524*randn(2,1)';
+    z(k,1:2) = x(k,1:2) + [v(1) v(2)].*randn(2,1)';
+    z(k,3) = x(k,7) + v(3).*randn(1,1)';
+    z(k,4:5) = x(k,8:9) + [v(4) v(5)].*randn(2,1)';
+    z(k,6:7) = x(k,13:14) + [v(6) v(7)].*randn(2,1)';
     
-    [x_hat(k+1,:), P_plus] = KalmanF(x_hat(k,:)', tau(k,:)', z(k,:)', P_plus);
+    if mod(k,10) ~= 0
+        R(1,1) = 10*10^10;
+        R(2,2) = 10*10^10;
+    else
+        R = R_i;
+        gpsc(jj) = k;
+        jj = jj+1;
+    end
+    
+    [x_hat(k+1,:), P_plus] = KalmanF(x_hat(k,:)', tau(k,:)', z(k,:)', P_plus, R);
 
     psi=x(k+1,7);
     Rz = [cos(psi) -sin(psi);
           sin(psi)  cos(psi)];
     
     if k ~=  1
-        NED(k+1,:) = Rz*x(k+1,8:9)'*0.05 + NED(k,:)';
         heading(k) = x(k+1,7);
     end
     
@@ -116,19 +129,14 @@ tt = 0.01:0.1:es/10;
 % subplot(3,1,1)
 
 for k = 1:79:es
-%     ship(NED(k,2),NED(k,1),-x(k+1,5)+pi/2,'y')
-%     ship(x(k+1,2),x(k+1,1),-x(k+1,7)+pi/2,'y')
-    ship(NED(k,2),NED(k,1),pi/2-headingdesired(k),'y')
-
-
+    ship(x(k+1,2),x(k+1,1),-x(k+1,7)+pi/2,'y')
 end
 % for k = 1:100:N
 %     ship(NED(k,2),NED(k,1),pi/2-headingdesired(k),'y')
 % end
 hold on
-plot(track(:,2),track(:,1),'b-o', x(1:es,2),x(1:es,1),'-r')
+plot(track(:,2),track(:,1),'b-o', x(1:es,2),x(1:es,1),'-r', x_hat(gpsc,2),x_hat(gpsc,1), '*')
 plot(x_hat(1:es,2),x_hat(1:es,1),'-k')
-plot(NED(1:es,2),NED(1:es,1),'g-.')
 plot(track(n,2),track(n,1),'ro')
 xlabel('Easting [m]');
 ylabel('Northing [m]');
@@ -138,12 +146,14 @@ hold off
 
 %%DEBUG
 figure(2)
-plot(tt, heading(1:es), tt, x(1:es,7), tt, headingdesired(1:es))
-legend('Heading', 'x(:,7)')
+plot(tt, x(1:es,7), tt, headingdesired(1:es), tt, x_hat(1:es,7))
+legend('x(:,7)', 'Desired heading', 'x_{hat}(:,7)')
+legpos = [.2, .2, .2, .2];
+set(legend, 'Position', legpos)
 xlabel('time')
 %%DEBUGEND
 
-% csvwrite('positions.csv',[NED(1:es,1:2) -x(1:es,5)+pi/2])
+% csvwrite('positions.csv',[x(1:es,1:2) -x(1:es,5)+pi/2])
 
 % figure(2)
 % subplot(2,1,1)
@@ -156,17 +166,17 @@ xlabel('time')
 
 
 %%
-% figure(3);clf;
-% subplot(3,1,1)
-% plot(t,x(1:es,6))
-% ylabel('Surge speed [m/s]')
-% subplot(3,1,2)
-% plot(t,x(1:es,7))
-% ylabel('Sway speed [m/s]')
-% subplot(3,1,3)
-% plot(t,x(1:es,10))
-% ylabel('Yaw speed [rad/s]')7
-% xlabel('Time [s]')
+figure(3);clf;
+subplot(2,1,1)
+plot(t,x(1:es,8),t,x_hat(1:es,8))%,t,z(1:es,4))
+ylabel('Surge vel [m/s]')
+xlabel('Time [s]')
+legend('Real', 'Estimate')
+subplot(2,1,2)
+plot(t,x(1:es,9),t,x_hat(1:es,9))%,t,z(1:es,5))
+ylabel('Sway vel [m/s]')
+xlabel('Time [s]')
+legend('Real', 'Estimate')
 % 
 % figure(4);clf;
 % subplot(3,1,1)

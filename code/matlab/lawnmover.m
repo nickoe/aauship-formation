@@ -5,7 +5,7 @@
 %%
 clear all
 % Box options
-boxheigth = 22;
+boxheigth = 32;
 boxwidth = 22;
 
 ll = [0,0];
