@@ -18,27 +18,32 @@
 \input{../manual/acronyms}
 
 \mainmatter
-\descpart{System design}{%
-All the magic about the system}
+\descpart{Problem Analysis}{%
+This part contains an analysis about the project background and its goal, leading to a problem statement and a requirement speficication.}
 \include{mainmatter/introduction} % Talk specifically about the data from havnen?
+
+\descpart{System Design}{%
+This is the main part of the report documenting all the engineering that is essential for the project.}
 \include{mainmatter/formcontrol}
 \include{mainmatter/designs}
 \include{mainmatter/modelling}
-
 \include{mainmatter/thrust_allocation}
 \include{mainmatter/path_generation}
 \include{mainmatter/ahrs}
-
-\descpart{Simulation}{%
-All the magic about the numerical part}
 \include{mainmatter/simulation_model}
 \input{mainmatter/model_verification}
 \input{mainmatter/simulation_model_kf}
+\include{mainmatter/ros}
+
+\descpart{Conclusion}{%
+The end of the project is the conclusion and perspectivation.}
+% Acceptance test
+% Conclusion
+% Perspectives
 
 \cleardoublepage\descpart{Appendix}{%
 The appendix includes chapters which are important for the project, but not necessarily interesting to the reader of the report.}
 \appendix
-\include{appendix/ros}
 \include{appendix/identification_of_hydrodynamic_derivatives}
 \include{appendix/bollard_pull}
 \include{appendix/verification-of-attitude-with-a-camera}
