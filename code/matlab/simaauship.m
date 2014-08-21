@@ -4,12 +4,12 @@
 clear all; clf;
 
 %% Pre allocation of variables
-N = 400;
+N = 600;
 es = N;
 x = zeros(N,17);
-x(1,:) = [0 0 0 0 0 0 pi 2 0 0 0 0 0 0 0 0 0]';
+x(1,:) = [0 20 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]';
 z = zeros(N,7);
-x_hat = zeros(N,17);
+x_hat = x;
 P_plus = zeros(17,17);
 xdot = zeros(N,17);
 taus = [1 0 0 0 0.005]';
@@ -19,7 +19,7 @@ taus = [2 0 0 0 0]';
 tau(ceil(N/2)+1:N,:)  = repmat(taus',N/2,1);
 % Measurement noise
 v = [3 3 13.5969e-006 0.1 0.1 0.0524 0.0524]';
-R_i = diag(v)*diag(1.5*[10 10 1 100 100 1 1]'); % Skal gaines på de rigtige elementer
+R_i = diag(v);%*diag(1.5*[10 10 1 100 100 1 1]'); % Skal gaines på de rigtige elementer
 R = R_i;
 gpsc = 0;
 jj = 1;
@@ -44,7 +44,7 @@ jj = 1;
 % start = [100, 1000];
 % stop = [-1000,1000];
 track = load('track.mat');
-track = [x(1:2,1)';track.allwps];
+track = [x(1,1:2);track.allwps];
 n = 1;
 error = zeros(1,N);
 integral = zeros(1,N);
@@ -76,22 +76,26 @@ for k = 1:N
         end
     end
 
-%     % Computed control input
+    % Computed control input
     tau(k,:)=[8 0 0 0 thrustdiff(k)];
-    
+        
     % Simulation
     x(k+1,:) = aaushipsimmodel(x(k,:)', tau(k,:)');
     
-%     x(k+1,1:2) = x(k+1,1:2) + 0.01*randn(2,1)';
-%     x(k+1,7) = x(k+1,7) + 13.5969e-006*randn(1,1)';
-
+	% For test of acceleration - Right now seems weird
+    if x(k,8) >= 2.75
+        x(k+1,8) = 0;
+    else
+        x(k+2,8) = 2;
+    end
+    
     % Generere z m støj
     z(k,1:2) = x(k,1:2) + [v(1) v(2)].*randn(2,1)';
     z(k,3) = x(k,7) + v(3).*randn(1,1)';
     z(k,4:5) = x(k,8:9) + [v(4) v(5)].*randn(2,1)';
     z(k,6:7) = x(k,13:14) + [v(6) v(7)].*randn(2,1)';
     
-    if mod(k,10) ~= 0
+    if mod(k,20) ~= 0
         R(1,1) = 10*10^10;
         R(2,2) = 10*10^10;
     else
@@ -166,7 +170,7 @@ xlabel('time')
 
 
 %%
-figure(3);clf;
+figure(3)
 subplot(2,1,1)
 plot(t,x(1:es,8),t,x_hat(1:es,8))%,t,z(1:es,4))
 ylabel('Surge vel [m/s]')
@@ -189,4 +193,38 @@ legend('Real', 'Estimate')
 % plot(t,x(1:es,5))
 % ylabel('Yaw angle [rad]')
 % xlabel('Time [s]')
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Plots til bestemmelse af Q
+figure(4)
+subplot(2,2,1)
+plot(x_hat(gpsc,2),x_hat(gpsc,1),'r', z(gpsc,2),z(gpsc,1),'b')
+axis equal
+legend('x_{hat}(1:2)','z(1:2)')
+xlabel('Easting (m)')
+ylabel('Norting (m)')
+
+subplot(2,2,2)
+plot(tt,x_hat(1:es,7),'r',tt,z(1:es,3))
+legend('x_{hat}(7)','z(3)')
+xlabel('Time (s)')
+ylabel('Heading (rad)')
+
+subplot(2,2,3)
+plot(tt,x_hat(1:es,8),'r',tt,x_hat(1:es,9),'r',tt,z(1:es,4),'b',tt,z(1:es,5),'b')
+legend('x_{hat}(8)','x_{hat}(9)','z(4)','z(5)')
+xlabel('Time (s)')
+ylabel('Speed (m/s)')
+
+subplot(2,2,4)
+plot(tt,x_hat(1:es,13),'r',tt,x_hat(1:es,14),'r',tt,z(1:es,6),'b',tt,z(1:es,7),'b')
+legend('x_{hat}(13)','x_{hat}(14)','z(6)','z(7)')
+xlabel('Time (s)')
+ylabel('Acceleration (m/s^2)')
+
+figure(5)
+plot(tt,x_hat(1:es,13),'r',tt,z(1:es,6),'b')
+legend('x_{hat}(13)','z(6)')
+xlabel('Time (s)')
+ylabel('Acceleration (m/s^2)')
 

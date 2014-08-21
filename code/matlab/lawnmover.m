@@ -5,8 +5,8 @@
 %%
 clear all
 % Box options
-boxheigth = 32;
-boxwidth = 22;
+boxheigth = 142;
+boxwidth = 202;
 
 ll = [0,0];
 lr = [boxwidth,0];
@@ -15,7 +15,7 @@ ul = [0,boxheigth];
 
 
 % Turning restrictions
-tr = 1; % turning radius
+tr = 10; % turning radius
 s = 2*tr;
 n = 1;
 figure(1)
@@ -37,7 +37,7 @@ g = 1;
 k = 1;
 for l = 2:cl
 %     norm([x(l)-x(l+1),y(l)-y(l+k)])
-    if ( norm([x(l-k)-x(l),y(l-k)-y(l)]) > 0.3)
+    if ( norm([x(l-k)-x(l),y(l-k)-y(l)]) > 1.5)
         xx(g) = x(l);
         yy(g) = y(l);
         g = g  +1;

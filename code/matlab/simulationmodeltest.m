@@ -12,7 +12,7 @@ ts = 0.1;
 N = 1000;
 
 x = zeros(17,N);% Full state simulation vector
-z = zeros(10,N);
+z = zeros(7,N);
 eta = zeros(5,N);
 
 nu = zeros(5,N);

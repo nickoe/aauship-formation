@@ -7,7 +7,8 @@ P_minus = zeros(states,states);
 x_hat_minus = zeros(states);
 
 % Process noise
-w = [0.1 0.1 0.001 0.001 0.0001 0.01 0.1 0.1 0.1 0.0001 0.001 0.001 0.01 0.01 0.01 0.01 0.01]';
+w = [0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 1.00000 0.00000 0.00000 0.00000 0.00000 0.00000001 0 0 0 0]';
+% states = [N E x y phi theta psi u v p q r dotu dotv dotphi dottheta dotpsi]
 
 % Measurement noise
 % v = [3 3 13.5969e-006 0.1 0.1 0.0524 0.0524]';
