@@ -157,7 +157,7 @@ H_k =
 The covariance matrix of observational (measurement) uncertainty $R_k$ is assumed to be uncorrelated with the other states, such that the matrix only becomes the variances, with no covariance elements as:
 \begin{align}
 &R_k = \diag{\mathbf{v}} =\\ \nonumber
-&\diag{^\text{GPS}\sigma_{N}^2,\ ^\text{GPS}\sigma_{E}^2,\ ^\text{GPS}\sigma_{\psi}^2,\ ^\text{GPS}\sigma_{u}^2,\ ^\text{GPS}\sigma_{v}^2,\ ^\text{gyro}\sigma_{a_x}^2,\ ^\text{gyro}\sigma_{a_y}^2}
+&\diag{^\text{GPS}\sigma_{N}^2,\ ^\text{GPS}\sigma_{E}^2,\ ^\text{GPS}\sigma_{\psi}^2,\ ^\text{GPS}\sigma_{u}^2,\ ^\text{GPS}\sigma_{v}^2,\ ^\text{IMU}\sigma_{a_x}^2,\ ^\text{IMU}\sigma_{a_y}^2}
 \end{align}
 These variances can be found by letting the AAUSHIP be in steady state. The sensor outputs are read while in steady state to check the variances from these. This will be the variances of the individual sensor measurements thus the variances of the particular measurements. The test finding these variances can be found in appendix \todo{lav appendix og ref til det her}.
 

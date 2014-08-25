@@ -1,4 +1,4 @@
-function [ xs, eta, nu, nudot] = aaushipsimmodel( x, tau )
+function [ xs, eta, nu, nudot] = aaushipsimmodel( x, tau, pn, wp )
 %#codegen
 %AAUSHIP Control Model of AAUSHIHP
 %   This is a simple model of AAUSHIP, supposed to be a simulation model
@@ -63,5 +63,9 @@ xs(3:4) = xn(1:2);  % x, y
 xs(5:7) = eta(3:5); % phi, theta, psi
 xs(8:12) = nu;      % u, v, p, q, r
 xs(13:17) = nudot;  % u_dot, v_dot, p_dot, q_dot, r_dot
-
+if strcmp(pn,'wip')
+    xs = xs + wp.*randn(17,1);
+%     disp('foo')
+else
+%     disp('kat')
 end

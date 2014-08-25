@@ -4,7 +4,7 @@
 clear all; clf;
 
 %% Pre allocation of variables
-N = 600;
+N = 6000;
 es = N;
 x = zeros(N,17);
 x(1,:) = [0 20 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]';
@@ -12,15 +12,20 @@ z = zeros(N,7);
 x_hat = x;
 P_plus = zeros(17,17);
 xdot = zeros(N,17);
-taus = [1 0 0 0 0.005]';
+tau = zeros(N,5);
+taus = [8 0 0 0 0]';
 tau = repmat(taus',N,1);
-% tau(:,1) = (1:N)/600;
-taus = [2 0 0 0 0]';
-tau(ceil(N/2)+1:N,:)  = repmat(taus',N/2,1);
+% taus = [0 0 0 0 0]';
+% tau(ceil(N/2)+1:N,:)  = repmat(taus',N/2,1);
 % Measurement noise
-v = [3 3 13.5969e-006 0.1 0.1 0.0524 0.0524]';
-R_i = diag(v);%*diag(1.5*[10 10 1 100 100 1 1]'); % Skal gaines på de rigtige elementer
+v = [3 3 13.5969e-006 0.2 0.2 0.00033 0.00033]'; % Disse må ikke ændres - Kun med mere rigtige tal på U og V
+R_i = diag(v);
 R = R_i;
+% process noise kalman
+w = [0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.01 0.01 0.01 0.01 0.01 0.033 0.033 0.033 0.033 0.033]';
+Q = diag(w);
+% process noise
+wp = [0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.0000 0.0000 0.0000000 0.0000000 0.0000000 0.000 0 0 0 0]';
 gpsc = 0;
 jj = 1;
 
@@ -80,38 +85,43 @@ for k = 1:N
     tau(k,:)=[8 0 0 0 thrustdiff(k)];
         
     % Simulation
-    x(k+1,:) = aaushipsimmodel(x(k,:)', tau(k,:)');
+    x(k+1,:) = aaushipsimmodel(x(k,:)', tau(k,:)','wip',wp);
     
-	% For test of acceleration - Right now seems weird
-    if x(k,8) >= 2.75
-        x(k+1,8) = 0;
-    else
-        x(k+2,8) = 2;
-    end
+% % 	For test of acceleration - Right now seems weird
+% %     if x(k,8) >= 2.75
+% %         tau(k+1,1) = 0;
+% %     end
     
     % Generere z m støj
+%     if k < 300
     z(k,1:2) = x(k,1:2) + [v(1) v(2)].*randn(2,1)';
     z(k,3) = x(k,7) + v(3).*randn(1,1)';
     z(k,4:5) = x(k,8:9) + [v(4) v(5)].*randn(2,1)';
     z(k,6:7) = x(k,13:14) + [v(6) v(7)].*randn(2,1)';
+%     else
+%     z(k,1:2) = [v(1) v(2)].*randn(2,1)';
+%     z(k,3) = v(3).*randn(1,1)';
+%     z(k,4:5) = [v(4) v(5)].*randn(2,1)';
+%     z(k,6:7) = [v(6) v(7)].*randn(2,1)';
+%     end
     
     if mod(k,20) ~= 0
         R(1,1) = 10*10^10;
-        R(2,2) = 10*10^10;
+        R(2,2) = 10*10^10; 
     else
         R = R_i;
         gpsc(jj) = k;
         jj = jj+1;
     end
     
-    [x_hat(k+1,:), P_plus] = KalmanF(x_hat(k,:)', tau(k,:)', z(k,:)', P_plus, R);
+    [x_hat(k+1,:), P_plus] = KalmanF(x_hat(k,:)', tau(k,:)', z(k,:)', P_plus, R, Q);
 
     psi=x(k+1,7);
     Rz = [cos(psi) -sin(psi);
           sin(psi)  cos(psi)];
     
     if k ~=  1
-        heading(k) = x(k+1,7);
+        heading(k) = x_hat(k+1,7);
     end
     
     % PID
@@ -128,8 +138,8 @@ t = 0:0.1:es/10-0.01;
 tt = 0.01:0.1:es/10;
 
 
-% figure(1)
-% clf
+figure(1)
+clf
 % subplot(3,1,1)
 
 for k = 1:79:es
@@ -141,6 +151,7 @@ end
 hold on
 plot(track(:,2),track(:,1),'b-o', x(1:es,2),x(1:es,1),'-r', x_hat(gpsc,2),x_hat(gpsc,1), '*')
 plot(x_hat(1:es,2),x_hat(1:es,1),'-k')
+plot(z(gpsc,2),z(gpsc,1),'g.-')
 plot(track(n,2),track(n,1),'ro')
 xlabel('Easting [m]');
 ylabel('Northing [m]');
@@ -150,7 +161,7 @@ hold off
 
 %%DEBUG
 figure(2)
-plot(tt, x(1:es,7), tt, headingdesired(1:es), tt, x_hat(1:es,7))
+plot(tt, x(1:es,7), tt, headingdesired(1:es),'-.', tt, x_hat(1:es,7))
 legend('x(:,7)', 'Desired heading', 'x_{hat}(:,7)')
 legpos = [.2, .2, .2, .2];
 set(legend, 'Position', legpos)
@@ -172,15 +183,31 @@ xlabel('time')
 %%
 figure(3)
 subplot(2,1,1)
-plot(t,x(1:es,8),t,x_hat(1:es,8))%,t,z(1:es,4))
+plot(t,x_hat(1:es,8),'r',t,z(1:es,4),'b',t,x(1:es,8),'-.g')
 ylabel('Surge vel [m/s]')
 xlabel('Time [s]')
-legend('Real', 'Estimate')
+legend('Estimate','Meas','Ideal')
 subplot(2,1,2)
-plot(t,x(1:es,9),t,x_hat(1:es,9))%,t,z(1:es,5))
+plot(t,x_hat(1:es,9),'r',t,z(1:es,5),'b',t,x(1:es,9),'-.g')
 ylabel('Sway vel [m/s]')
 xlabel('Time [s]')
-legend('Real', 'Estimate')
+legend('Estimate','Meas','Ideal')
+% subplot(2,3,3)
+% plot(t,x_hat(1:es,10),'r',t,x(1:es,10),'-.g')
+% ylabel('Roll vel [rad/s]')
+% xlabel('Time [s]')
+% legend('Estimate','Ideal')
+% subplot(2,3,4)
+% plot(t,x_hat(1:es,11),'r',t,x(1:es,11),'-.g')
+% ylabel('Pitch vel [rad/s]')
+% xlabel('Time [s]')
+% legend('Estimate','Ideal')
+% subplot(2,3,5)
+% plot(t,x_hat(1:es,12),'r',t,x(1:es,12),'-.g')
+% ylabel('Yaw vel [rad/s]')
+% xlabel('Time [s]')
+% legend('Estimate','Ideal')
+
 % 
 % figure(4);clf;
 % subplot(3,1,1)
@@ -211,20 +238,45 @@ xlabel('Time (s)')
 ylabel('Heading (rad)')
 
 subplot(2,2,3)
-plot(tt,x_hat(1:es,8),'r',tt,x_hat(1:es,9),'r',tt,z(1:es,4),'b',tt,z(1:es,5),'b')
-legend('x_{hat}(8)','x_{hat}(9)','z(4)','z(5)')
+plot(tt,x_hat(1:es,8),'r',tt,z(1:es,4),'b',tt,x(1:es,8),'-.g')
+legend('x_{hat}(8)','z(4)','Ideal')
 xlabel('Time (s)')
-ylabel('Speed (m/s)')
+ylabel('u Speed (m/s)')
 
 subplot(2,2,4)
-plot(tt,x_hat(1:es,13),'r',tt,x_hat(1:es,14),'r',tt,z(1:es,6),'b',tt,z(1:es,7),'b')
-legend('x_{hat}(13)','x_{hat}(14)','z(6)','z(7)')
+plot(tt,x_hat(1:es,9),'r',tt,z(1:es,5),'b',tt,x(1:es,9),'-.g')
+legend('x_{hat}(9)','z(5)','Ideal')
 xlabel('Time (s)')
-ylabel('Acceleration (m/s^2)')
+ylabel('v Speed (m/s)')
 
+% subplot(2,2,4)
+% plot(tt,x_hat(1:es,13),'r',tt,x_hat(1:es,14),'r',tt,z(1:es,6),'b',tt,z(1:es,7),'b')
+% legend('x_{hat}(13)','x_{hat}(14)','z(6)','z(7)')
+% xlabel('Time (s)')
+% ylabel('Acceleration (m/s^2)')% 
+
+% Plots af acceleration
 figure(5)
-plot(tt,x_hat(1:es,13),'r',tt,z(1:es,6),'b')
-legend('x_{hat}(13)','z(6)')
+subplot(2,1,1)
+plot(tt,x_hat(1:es,13),'r',tt,z(1:es,6),'b',tt,x(1:es,13),'-.g')
+legend('x_{hat}(13)','z(6)','Ideal')
+xlabel('Time (s)')
+ylabel('Acceleration (m/s^2)')
+subplot(2,1,2)
+plot(tt,x_hat(1:es,14),'r',tt,z(1:es,7),'b',tt,x(1:es,14),'-.g')
+legend('x_{hat}(14)','z(7)','Ideal')
 xlabel('Time (s)')
 ylabel('Acceleration (m/s^2)')
 
+% Plot af Nord og Øst hver for sig
+figure(6)
+subplot(2,1,1)
+plot(tt,x_hat(1:es,1),'r',tt,z(1:es,1),'b',tt,x(1:es,1),'-.g')
+legend('N est','N meas','N ideal')
+xlabel('time')
+ylabel('N')
+subplot(2,1,2)
+plot(tt,x_hat(1:es,2),'r',tt,z(1:es,2),'b',tt,x(1:es,2),'-.g')
+legend('E est','E meas','E ideal')
+xlabel('time')
+ylabel('E')

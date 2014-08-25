@@ -1,4 +1,4 @@
-function [ x_hat_plus P_plus ] = KalmanF( x, u, z, P_plus, R  )
+function [ x_hat_plus P_plus ] = KalmanF( x, u, z, P_plus, R , Q )
 load('ssaauship.mat');
 
 states = 17;
@@ -7,14 +7,14 @@ P_minus = zeros(states,states);
 x_hat_minus = zeros(states);
 
 % Process noise
-w = [0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 1.00000 0.00000 0.00000 0.00000 0.00000 0.00000001 0 0 0 0]';
+% w = [0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.00000001 0.00000001 0.00000001 0.10 0.00000010 0.00000010 0.00000010 0.00000010]';
 % states = [N E x y phi theta psi u v p q r dotu dotv dotphi dottheta dotpsi]
 
 % Measurement noise
 % v = [3 3 13.5969e-006 0.1 0.1 0.0524 0.0524]';
 
 % R = diag(v)*diag(1.5*[10 10 1 100 100 1 1]'); % Skal gaines på de rigtige elementer
-Q = diag(w);
+% Q = diag(w);
 
 % gpsc = 0;
 % jj = 1;
@@ -41,7 +41,7 @@ H(:,:) = h;
 PHI(1:2,8:9) = [ts*cos(x(7)) -ts*sin(x(7)); ts*sin(x(7)) ts*cos(x(7))]; % The nonlinear contribution to the system
 
 % Prediction
-x_hat_minus = aaushipsimmodel(x,u);
+x_hat_minus = aaushipsimmodel(x,u,'nop');
 P_minus = PHI*P_plus*PHI + Q;
 
 % Update
