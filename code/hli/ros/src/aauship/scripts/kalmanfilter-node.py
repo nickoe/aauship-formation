@@ -16,7 +16,8 @@ import scipy.linalg as linalg
 
 class KF(object):
     def __init__(self):
-        self.ssmat = sio.loadmat('/home/nickoe/aauship-formation/code/matlab/ssaauship.mat')
+        # Load discretised model constants
+        self.ssmat = sio.loadmat('../../../../../matlab/ssaauship.mat')
         # Measurement noise
         self.v = numpy.array([3.0, 3.0, 13.5969e-006, 0.2, 0.2, 0.00033, 0.00033])
         self.R = numpy.diag(self.v)
@@ -75,16 +76,14 @@ class KF(object):
         x_hat_minus = self.aaushipsimmodel(x,u);
         P_minus = PHI*P_plus*PHI + Q;
         
-        print(x_hat_minus.T)
-        print(h)
-        print(z.T)
         # Update
         z_bar = z - h.dot(x_hat_minus);
         S = H.dot(P_minus).dot(H.T) + R;
         K = P_minus.dot(H.T).dot(linalg.inv(S));
         x_hat_plus = x_hat_minus + K.dot(z_bar);
         P_plus = (numpy.eye(17) - K.dot(H)).dot(P_minus).dot( (numpy.eye(17) - K.dot(H)).T ) + K.dot(R).dot(K.T);
-        
+       
+        # Return estimated state vector
         return x_hat_plus
         
 
