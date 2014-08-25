@@ -36,7 +36,7 @@ z_k &= H_k x_k + v_k
 \item Prediction
 \begin{align}
 \hat x_k^- &= \Phi_{k-1}\ \hat x_{k-1}^+ + G u_{k-1} \\
-P_k^- &= \Phi_{k-1}P_{k-1}^- \Phi_{k-1}^\top + Q_{k-1}
+P_k^- &= \Phi_{k-1}P_{k-1}^+ \Phi_{k-1}^\top + Q_{k-1}
 \end{align}
 \item Update
 \begin{align}
@@ -63,7 +63,7 @@ The above mentioned \ac{LKF} can only be applied on linear systems and transitio
 \item Prediction
 \begin{align}
 \hat x_k^- &= f(\hat x_{k-1}^-,u_{k-1})\\
-P_k^- &= F_{k-1}P_{k-1}^-F_{k-1}^\top+Q_{k-1}
+P_k^- &= F_{k-1}P_{k-1}^+F_{k-1}^\top+Q_{k-1}
 \end{align}
 \item Update
 \begin{align}
