@@ -11,6 +11,7 @@ from math import sin, cos
 import numpy
 import pylab
 import scipy.io as sio
+import scipy.linalg as linalg
 
 
 class KF(object):
@@ -44,18 +45,37 @@ class KF(object):
         xs[7:12] = nu
         xs[12:17] = nudot
 
+        return xs
+
 
     def KalmanF(self, x, u, z, P_plus, R):
-        '''
-        # Prediction
-        x_hat_minus = aaushipsimmodel(x,u);
-        P_minus = PHI*P_plus*PHI + Q;
+        # System matrix
+        PHI = numpy.zeros([17,17])
+        PHI[0:2,0:2] = numpy.matrix([[1,0],[0,1]])
+        PHI[2:12,2:12] = self.ssmat['Ad']
+        PHI[12:17,12:17] = numpy.diag([1,1,1,1,1])
+        PHI[12:17,7:12] = self.ssmat['Ad'][5:10,5:10]
 
+        # Measurement matrix
+        h = numpy.zeros([7,17])
+        h[0:2,0:2] = numpy.diag([1,1])
+        h[2:5,6:9] = numpy.diag([1,1,1])
+        h[5:7,12:14] = numpy.diag([1,1])
+        H = h;
+
+        Q = numpy.diag(numpy.ones([17]))
+        # Prediction
+        x_hat_minus = self.aaushipsimmodel(x,u);
+        P_minus = PHI*P_plus*PHI + Q;
+        
+        print(x_hat_minus.T)
+        print(h)
+        print(z.T)
         # Update
-        z_bar = z - h*x_hat_minus;
-        S = H*P_minus*H' + R;
-        K = P_minus*H'*inv(S);
-        '''
+        z_bar = z - h.dot(x_hat_minus);
+        S = H.dot(P_minus).dot(H.T) + R;
+        K = P_minus.dot(H.T).dot(linalg.inv(S));
+         
 
         '''
         % if mod(k,10)
@@ -69,16 +89,24 @@ class KF(object):
         % end
         '''
 
-        '''
-        x_hat_plus = x_hat_minus + K * z_bar;
-        P_plus = (eye(17) - K*H) * P_minus * (eye(17) - K * H)' + K*R*K';
-        '''
+        
+        x_hat_plus = x_hat_minus + K.dot(z_bar);
+        P_plus = (numpy.eye(17) - K.dot(H)).dot(P_minus).dot( (numpy.eye(17) - K.dot(H)).T ) + K.dot(R).dot(K.T);
+        
+        return x_hat_plus
         
 
     def run(self):
-        x = numpy.array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16])
-        u = numpy.array([8,0,0,0,0])
-        self.aaushipsimmodel(x,u)
+        x = numpy.array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]) # state vector
+        u = numpy.array([8,0,0,0,0]) # input vector
+        z = numpy.array([1,1,1,1,1,1,1]) # measurement vector
+        #xs = self.aaushipsimmodel(x,u)
+        #print(xs)
+
+        P_plus = numpy.zeros([17,17])
+        R = numpy.diag([3.0, 3.0, 13.5969, 0.1, 0.1, 0.0524, 0.0524])
+        xest = self.KalmanF(x, u, z, P_plus, R)
+        print(xest)
 
         # intial parameters
         n_iter = 50
