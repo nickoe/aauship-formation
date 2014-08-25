@@ -17,6 +17,13 @@ import scipy.linalg as linalg
 class KF(object):
     def __init__(self):
         self.ssmat = sio.loadmat('/home/nickoe/aauship-formation/code/matlab/ssaauship.mat')
+        # Measurement noise
+        self.v = numpy.array([3.0, 3.0, 13.5969e-006, 0.2, 0.2, 0.00033, 0.00033])
+        self.R = numpy.diag(self.v)
+
+        # Process noise
+        self.w = numpy.array([0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.01, 0.01, 0.01, 0.01, 0.01, 0.033, 0.033, 0.033, 0.033, 0.033])
+        self.Q = numpy.diag(self.w)
         self.no_of_states = 17
 
     def aaushipsimmodel(self, x, u):
@@ -75,21 +82,6 @@ class KF(object):
         z_bar = z - h.dot(x_hat_minus);
         S = H.dot(P_minus).dot(H.T) + R;
         K = P_minus.dot(H.T).dot(linalg.inv(S));
-         
-
-        '''
-        % if mod(k,10)
-        %     K(1:2,:,k) = zeros(2,7);
-        %     K(:,1:2,k) = zeros(17,2);
-        %     K(8:9,:,k) = zeros(2,7);
-        %     K(:,4:5,k) = zeros(17,2);
-        % else
-        %     gpsc(jj) = k;
-        %     jj=jj+1;
-        % end
-        '''
-
-        
         x_hat_plus = x_hat_minus + K.dot(z_bar);
         P_plus = (numpy.eye(17) - K.dot(H)).dot(P_minus).dot( (numpy.eye(17) - K.dot(H)).T ) + K.dot(R).dot(K.T);
         
@@ -105,39 +97,9 @@ class KF(object):
 
         P_plus = numpy.zeros([17,17])
         R = numpy.diag([3.0, 3.0, 13.5969, 0.1, 0.1, 0.0524, 0.0524])
-        xest = self.KalmanF(x, u, z, P_plus, R)
+        xest = self.KalmanF(x, u, z, P_plus, self.R)
         print(xest)
 
-        # intial parameters
-        n_iter = 50
-        sz = (n_iter,) # size of array
-        x = -0.37727 # truth value (typo in example at top of p. 13 calls this z)
-        z = numpy.random.normal(x,0.1,size=sz) # observations (normal about x, sigma=0.1)
-
-        Q = 1e-5 # process variance
-
-        # allocate space for arrays
-        xhat=numpy.zeros(sz)      # a posteri estimate of x
-        P=numpy.zeros(sz)         # a posteri error estimate
-        xhatminus=numpy.zeros(sz) # a priori estimate of x
-        Pminus=numpy.zeros(sz)    # a priori error estimate
-        K=numpy.zeros(sz)         # gain or blending factor
-
-        R = 0.1**2 # estimate of measurement variance, change to see effect
-
-        # intial guesses
-        xhat[0] = 0.0
-        P[0] = 1.0
-
-        for k in range(1,n_iter):
-            # time update
-            xhatminus[k] = xhat[k-1]
-            Pminus[k] = P[k-1]+Q
-
-            # measurement update
-            K[k] = Pminus[k]/( Pminus[k]+R )
-            xhat[k] = xhatminus[k]+K[k]*(z[k]-xhatminus[k])
-            P[k] = (1-K[k])*Pminus[k]
 
         '''
         pylab.figure()
