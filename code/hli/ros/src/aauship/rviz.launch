@@ -19,9 +19,10 @@
     pkg="robot_state_publisher"
     type="state_publisher" />
   <node
-    name="rqt_gui"
-    pkg="rqt_gui"
-    type="rqt_gui"
+    name="rviz"
+    pkg="rviz"
+    type="rviz"
+		args="-d $(find aauship)/aauship.rviz"
     required="true"
     />
 </launch>
