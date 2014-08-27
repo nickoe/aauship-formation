@@ -13,6 +13,8 @@ import scipy.io as sio
 # temporary way to simulate aauship
 import kalmanfilterfoo as kfoo
 import numpy as np
+from math import pi, sqrt, atan2, acos, sin
+import scipy.linalg as linalg
 
 import time
 import os 
@@ -53,8 +55,65 @@ class Simulator(object):
         self.u = np.array([8,0,0,0,0])
         pass
 
+    # Angle in rad to the interval (-pi pi]
     def rad2pipi(self, rad):
-        return rad
+        r = (rad+np.sign(rad)*pi) % (2*pi) # remainder
+        s = np.sign(np.sign(rad) + 2*(np.sign(abs( ((rad+pi) % (2*pi)) /(2*pi)))-1));
+        pipi = r - s*pi;
+        return pipi
+
+    # This calculates reference points for the path follower
+    def wp_gen(self, wps, wpe, now):
+        
+        #P_c = [now, 0]; # [x y angle]
+        P_c = now; # [x y]
+        wp_r = 1; # Waypoint Radius
+        wp_reached = 0; # Waypoint not reached
+        v_i_len = 2; # length of intermediate vector
+        
+        ## Initial calculations
+        # track = [wps;wpe];
+
+        ## Track-frame projected point
+        v_i = ( (wpe-wps)/linalg.norm(wpe-wps) )*v_i_len; # Intermediate vector
+        #P_i = [P_c[0]+v_i[0], P_c[1]+v_i[1]]; # Intermediate projected parallel point
+        P_i = P_c+v_i
+
+        ## Calculate projected point onto the track
+        A = P_i - wps;
+        B = wpe - wps;
+        r_p = ((A.dot(B))/((linalg.norm(B)**2)))*B; # Projection of vector on vector
+        P_p = r_p + wps;
+
+        ## The vessels predicted position
+        v_d = P_p - P_c[0:2];
+        v_ref = v_d/linalg.norm(v_d); # normaliserer
+        v_ref = v_ref * v_i_len;
+        P_ref = v_ref + now;
+        # plot(P_ref(2),P_ref(1),'*')
+
+        ## Calculate if waypoint is reached
+        dist = sqrt((P_c[0]-wpe[0])**2+(P_c[1]-wpe[1])**2);
+        if dist < wp_r:
+            wp_reached = 1
+
+        ## Calculate heading
+        # heading = 2*pi-asin(( P_ref(1)-P_c[0] ) / sqrt( (P_ref(1)-P_c[0])  ^2 + (P_ref(2)-P_c[1])^2 ));
+        # heading = mod(atan2(v_ref(2),v_ref(1))+pi,2*pi)-pi;
+        heading = self.rad2pipi(atan2(v_ref[1],v_ref[0]));
+
+
+        ## CrossTrackError % MOD = HYP*SIN(A) => crosstrack = (pos-wps) * sin(vinkel mellem (pos-wps) og (pos-wps))
+        print(type(now))
+        print(type(wpe))
+        print(type(wps))
+        a = linalg.norm(now-wps);
+        b = linalg.norm(wpe-wps);
+        vinkel = (acos((now-wps).dot((wpe-wps).T)/(a*b)));
+        # vinkeligrader = vinkel*180/pi;
+        cte = a*sin(vinkel);
+
+        return {'heading':heading, 'wp_reached':wp_reached, 'cte':cte}
 
     def run(self):
         BUFSIZE = 1024
@@ -76,6 +135,9 @@ class Simulator(object):
         Kp = 5.0
         Ki = 0.051
         Kd = 50.0
+        
+        print(self.wp_gen(np.array([0,0]),np.array([10,10]),np.array([10,1])))
+
 
         headingdesired = 2
         k = 0
