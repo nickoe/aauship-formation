@@ -27,7 +27,7 @@ class Simulator(object):
         self.pubpath = rospy.Publisher('path', Path, queue_size=3)
         self.trackpath = rospy.Publisher('track', Path, queue_size=3)
         rospy.init_node('simulation_node')
-        self.r = rospy.Rate(10) # Hz
+        self.r = rospy.Rate(30) # Hz
 
 
         self.u = np.zeros(5) # input vector
@@ -104,16 +104,14 @@ class Simulator(object):
 
 
         ## CrossTrackError % MOD = HYP*SIN(A) => crosstrack = (pos-wps) * sin(vinkel mellem (pos-wps) og (pos-wps))
-        print(type(now))
-        print(type(wpe))
-        print(type(wps))
         a = linalg.norm(now-wps);
         b = linalg.norm(wpe-wps);
         vinkel = (acos((now-wps).dot((wpe-wps).T)/(a*b)));
         # vinkeligrader = vinkel*180/pi;
         cte = a*sin(vinkel);
 
-        return {'heading':heading, 'wp_reached':wp_reached, 'cte':cte}
+        #return {'heading':heading, 'wp_reached':wp_reached, 'cte':cte}
+        return (heading, wp_reached, cte)
 
     def run(self):
         BUFSIZE = 1024
@@ -132,15 +130,16 @@ class Simulator(object):
         derivative.append(0)
         thrustdiff =[]
         thrustdiff.append(0)
-        Kp = 5.0
-        Ki = 0.051
-        Kd = 50.0
+        Kp = 5.0;
+        Ki = 0.0;
+        Kd = 50.0;
         
         print(self.wp_gen(np.array([0,0]),np.array([10,10]),np.array([10,1])))
 
 
         headingdesired = 2
         k = 0
+        n = 0 # used for wp gen logic
         h = Header()
         p = Point(0,0,0)
         q = Quaternion(0,0,0,1)
@@ -150,6 +149,15 @@ class Simulator(object):
             p = Point(self.x[0],self.x[1],0.0)
             q = Quaternion(0,0,0,1)
             self.trackmsg.poses[0] = PoseStamped(h, Pose(p, q))
+
+            # GNC
+            (headingdesired, wp_reached, cte) = self.wp_gen(self.path['allwps'][n],self.path['allwps'][n+1],self.x[0:2]); # WP Gen
+            if (wp_reached == 1):
+                n = n+1;
+                if n >= len(self.path['allwps']):
+                    es = k;
+                    print('Trying to break')
+                    break
 
 
             self.u = np.array([4,0,0,0,thrustdiff[k]])
@@ -161,7 +169,7 @@ class Simulator(object):
             br = tf.TransformBroadcaster()
 
             br.sendTransform((self.x[0],self.x[1], 0),
-                             tf.transformations.quaternion_from_euler(self.x[4], self.x[5], self.x[6]),
+                             tf.transformations.quaternion_from_euler(self.x[4], self.x[5], headingdesired),
                              rospy.Time.now(),
                              "boat_link",
                              "map")
@@ -182,6 +190,10 @@ class Simulator(object):
             if k!=1:
                 derivative.append(error[k] - error[k-1])
 
+            print("error " + str(error[k]))
+            print("integral " + str(integral[k]))
+            print("derivative " + str(derivative[k]))
+            print("thrustdiff " + str(thrustdiff[k]))
             thrustdiff.append(Kp*error[k] + Ki*integral[k] + Kd*derivative[k])
 
             k = k+1
