@@ -18,11 +18,12 @@ class KF(object):
     def __init__(self):
         # Load discretised model constants
         self.ssmat = sio.loadmat('../../../../../matlab/ssaauship.mat')
-        # Measurement noise
+        
+        # Measurement noise vector and covarince matrix
         self.v = numpy.array([3.0, 3.0, 13.5969e-006, 0.2, 0.2, 0.00033, 0.00033])
         self.R = numpy.diag(self.v)
 
-        # Process noise
+        # Process noise vector and covariance matrix
         self.w = numpy.array([0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.01, 0.01, 0.01, 0.01, 0.01, 0.033, 0.033, 0.033, 0.033, 0.033])
         self.Q = numpy.diag(self.w)
         self.no_of_states = 17
