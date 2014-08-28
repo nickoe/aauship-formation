@@ -58,9 +58,9 @@ class Simulator(object):
     # Angle in rad to the interval (-pi pi]
     def rad2pipi(self, rad):
         r = fmod((rad+np.sign(rad)*pi) , 2*pi) # remainder
-        print(r)
+        #print(r)
         s = np.sign(np.sign(rad) + 2*(np.sign(abs( fmod((rad+pi), (2*pi)) /(2*pi)))-1));
-        print(s)
+        #print(s)
         pipi = r - s*pi;
         return pipi
 
@@ -141,7 +141,7 @@ class Simulator(object):
         thrustdiff =[]
         thrustdiff.append(0)
         Kp = 5.0;
-        Ki = 0.0;
+        Ki = 0.051;
         Kd = 50.0;
         
 	    # Testing output of rad2pipi funciton
@@ -169,7 +169,7 @@ class Simulator(object):
 
 
         k = 0
-        n = 0 # used for wp gen logic
+        n = 1 # used for wp gen logic
 
         # Initialize an poses array for the trackmsg
         h = Header()
@@ -181,12 +181,12 @@ class Simulator(object):
         # Main loop
         while not rospy.is_shutdown():
             # Headpoint of trail track
-            p = Point(self.x[0],-self.x[1],0.0)
+            p = Point(self.x[0],self.x[1],0.0)
             q = Quaternion(0,0,0,1)
             self.trackmsg.poses[0] = PoseStamped(h, Pose(p, q))
 
             # GNC
-            (headingdesired, wp_reached, cte) = self.wp_gen(self.path['allwps'][n],self.path['allwps'][n+1],np.array([self.x[0],self.x[1]])); # WP Gen
+            (headingdesired, wp_reached, cte) = self.wp_gen(self.path['allwps'][n-1],self.path['allwps'][n],np.array([self.x[0],self.x[1]])); # WP Gen
             if (wp_reached == 1):
                 n = n+1;
                 if n >= len(self.path['allwps']):
@@ -194,7 +194,7 @@ class Simulator(object):
                     print('Trying to break')
                     break
 
-            self.u = np.array([8,0,0,0,-thrustdiff[k]])
+            self.u = np.array([8,0,0,0,thrustdiff[k]])
 
             # Simulation
             self.x = f.aaushipsimmodel(self.x,self.u)
@@ -210,7 +210,7 @@ class Simulator(object):
                              "map")
 
             # Endpoint of trail track
-            p = Point(self.x[0],-self.x[1],0.0)
+            p = Point(self.x[0],self.x[1],0.0)
             q = Quaternion(0,0,0,1)
             self.trackmsg.poses[1] = PoseStamped(h, Pose(p, q))
             self.trackpath.publish(self.trackmsg)
@@ -231,6 +231,7 @@ class Simulator(object):
 
             k = k+1
             print(time.time())
+
             self.r.sleep()
         print("\nClosing log file")
         ##self.ctllog.close()
