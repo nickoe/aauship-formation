@@ -13,7 +13,7 @@ import scipy.io as sio
 # temporary way to simulate aauship
 import kalmanfilterfoo as kfoo
 import numpy as np
-from math import pi, sqrt, atan2, acos, sin
+from math import pi, sqrt, atan2, acos, sin, fmod
 import scipy.linalg as linalg
 
 import time
@@ -43,7 +43,7 @@ class Simulator(object):
         h = Header()
         q = Quaternion(0,0,0,1)
         for i in self.path['allwps']:
-            p = Point(i[1],i[0],0)
+            p = Point(i[0],i[1],0)
             self.pathmsg.poses.append(PoseStamped(h, Pose(p, q)))
 
         
@@ -57,10 +57,19 @@ class Simulator(object):
 
     # Angle in rad to the interval (-pi pi]
     def rad2pipi(self, rad):
-        r = (rad+np.sign(rad)*pi) % (2*pi) # remainder
-        s = np.sign(np.sign(rad) + 2*(np.sign(abs( ((rad+pi) % (2*pi)) /(2*pi)))-1));
+        r = fmod((rad+np.sign(rad)*pi) , 2*pi) # remainder
+        print(r)
+        s = np.sign(np.sign(rad) + 2*(np.sign(abs( fmod((rad+pi), (2*pi)) /(2*pi)))-1));
+        print(s)
         pipi = r - s*pi;
         return pipi
+
+        '''
+        -2.6416 = rem( (-2*pi+0.5) + sign(-2*pi+0.5)*pi , 2*pi)
+        r = rem(angle+sign(angle)*pi,2*pi);
+        s = sign(sign(angle) + 2*(sign(abs(rem(angle+pi,2*pi)/(2*pi)))-1));
+        y = r - s*pi;
+        '''
 
     # This calculates reference points for the path follower
     def wp_gen(self, wps, wpe, now):
@@ -76,6 +85,7 @@ class Simulator(object):
 
         ## Track-frame projected point
         v_i = ( (wpe-wps)/linalg.norm(wpe-wps) )*v_i_len; # Intermediate vector
+
         #P_i = [P_c[0]+v_i[0], P_c[1]+v_i[1]]; # Intermediate projected parallel point
         P_i = P_c+v_i
 
@@ -100,8 +110,7 @@ class Simulator(object):
         ## Calculate heading
         # heading = 2*pi-asin(( P_ref(1)-P_c[0] ) / sqrt( (P_ref(1)-P_c[0])  ^2 + (P_ref(2)-P_c[1])^2 ));
         # heading = mod(atan2(v_ref(2),v_ref(1))+pi,2*pi)-pi;
-        heading = self.rad2pipi(atan2(v_ref[1],v_ref[0]));
-
+        heading = self.rad2pipi(atan2(v_ref[1],v_ref[0]))
 
         ## CrossTrackError % MOD = HYP*SIN(A) => crosstrack = (pos-wps) * sin(vinkel mellem (pos-wps) og (pos-wps))
         a = linalg.norm(now-wps);
@@ -118,11 +127,12 @@ class Simulator(object):
         #self.ctllog = open(os.getcwd() + "/../meas/ctl.log",'w')
         ##self.ctllog = open("logs/ctl.log",'w',BUFSIZE)
         ##print(self.ctllog.name)
-        self.u = np.array([4,0,0,0,0.1])
+
         f = kfoo.KF()
-        time.sleep(1)
+        time.sleep(3)
         self.pubpath.publish(self.pathmsg)
 
+        # Initilaze parapeters for the PID contorller
         error = []
         integral = []
         integral.append(0)
@@ -134,24 +144,49 @@ class Simulator(object):
         Ki = 0.0;
         Kd = 50.0;
         
-        print(self.wp_gen(np.array([0,0]),np.array([10,10]),np.array([10,1])))
+	    # Testing output of rad2pipi funciton
+        '''
+        a = np.array([-12.5664,-12.0664,-11.5664,-11.0664,-10.5664,-10.0664, -9.5664, -9.0664, -8.5664, -8.0664, -7.5664, -7.0664, -6.5664, -6.0664, -5.5664, -5.0664, -4.5664, -4.0664, -3.5664, -3.0664, -2.5664, -2.0664, -1.5664, -1.0664, -0.5664, -0.0664,  0.4336,  0.9336,  1.4336,  1.9336,  2.4336,  2.9336,  3.4336,  3.9336,  4.4336,  4.9336,  5.4336,  5.9336,  6.4336,  6.9336,  7.4336,  7.9336,  8.4336,  8.9336,  9.4336,  9.9336, 10.4336, 10.9336, 11.4336, 11.9336, 12.4336])
+        for x in a:
+            print(self.rad2pipi(x))
+        '''
+        #(self.rad2pipi(-2*pi+0.5))
+        
+	
+	    # Testing output of the wp_gen funciton
+	    # [heading is wrong, compares to the matlab funciton]
+        #print(self.wp_gen(np.array([0,-3]),np.array([10,10]),np.array([-10,1])))
 
 
-        headingdesired = 2
+        '''
+        # Testing output of the simulation model
+        # [Seems to work just fine when compared to the matlab function]
+        x = np.array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16])
+        u = np.array([8,0,0,0,0])
+        print(f.aaushipsimmodel(x,u))
+        '''
+        #rospy.signal_shutdown("testing")
+
+
         k = 0
         n = 0 # used for wp gen logic
+
+        # Initialize an poses array for the trackmsg
         h = Header()
         p = Point(0,0,0)
         q = Quaternion(0,0,0,1)
         self.trackmsg.poses.append(PoseStamped(h, Pose(p, q)))
         self.trackmsg.poses.append(PoseStamped(h, Pose(p, q)))
+
+        # Main loop
         while not rospy.is_shutdown():
-            p = Point(self.x[0],self.x[1],0.0)
+            # Headpoint of trail track
+            p = Point(self.x[0],-self.x[1],0.0)
             q = Quaternion(0,0,0,1)
             self.trackmsg.poses[0] = PoseStamped(h, Pose(p, q))
 
             # GNC
-            (headingdesired, wp_reached, cte) = self.wp_gen(self.path['allwps'][n],self.path['allwps'][n+1],self.x[0:2]); # WP Gen
+            (headingdesired, wp_reached, cte) = self.wp_gen(self.path['allwps'][n],self.path['allwps'][n+1],np.array([self.x[0],self.x[1]])); # WP Gen
             if (wp_reached == 1):
                 n = n+1;
                 if n >= len(self.path['allwps']):
@@ -159,25 +194,23 @@ class Simulator(object):
                     print('Trying to break')
                     break
 
+            self.u = np.array([8,0,0,0,-thrustdiff[k]])
 
-            self.u = np.array([4,0,0,0,thrustdiff[k]])
-
+            # Simulation
             self.x = f.aaushipsimmodel(self.x,self.u)
             self.pubmsg.data = self.x
             
-            self.pathmsg.header.frame_id = "map"
+            # Send tf for the robot model visualisation
             br = tf.TransformBroadcaster()
-
             br.sendTransform((self.x[0],self.x[1], 0),
-                             tf.transformations.quaternion_from_euler(self.x[4], self.x[5], headingdesired),
+                             #tf.transformations.quaternion_from_euler(self.x[4], self.x[5], headingdesired),
+                             tf.transformations.quaternion_from_euler(self.x[4], self.x[5], self.x[6]),
                              rospy.Time.now(),
                              "boat_link",
                              "map")
 
-            
-
-
-            p = Point(self.x[0],self.x[1],0.0)
+            # Endpoint of trail track
+            p = Point(self.x[0],-self.x[1],0.0)
             q = Quaternion(0,0,0,1)
             self.trackmsg.poses[1] = PoseStamped(h, Pose(p, q))
             self.trackpath.publish(self.trackmsg)
@@ -189,12 +222,12 @@ class Simulator(object):
             integral.append(integral[k] + error[k])
             if k!=1:
                 derivative.append(error[k] - error[k-1])
-
+            thrustdiff.append(Kp*error[k] + Ki*integral[k] + Kd*derivative[k])
+            
             print("error " + str(error[k]))
             print("integral " + str(integral[k]))
             print("derivative " + str(derivative[k]))
             print("thrustdiff " + str(thrustdiff[k]))
-            thrustdiff.append(Kp*error[k] + Ki*integral[k] + Kd*derivative[k])
 
             k = k+1
             print(time.time())
