@@ -97,7 +97,7 @@ class KF(object):
         P_plus = (numpy.eye(17) - K.dot(H)).dot(P_minus).dot( (numpy.eye(17) - K.dot(H)).T ) + K.dot(R).dot(K.T);
        
         # Return estimated state vector
-        return x_hat_plus
+        return (x_hat_plus,P_plus)
         
 
     def run(self):
@@ -107,10 +107,10 @@ class KF(object):
         #xs = self.aaushipsimmodel(x,u)
         #print(xs)
 
-        P_plus = numpy.zeros([17,17])
+        self.P_plus = numpy.zeros([17,17])
         R = numpy.diag([3.0, 3.0, 13.5969, 0.1, 0.1, 0.0524, 0.0524])
-        xest = self.KalmanF(x, u, z, P_plus, R)
-        print(xest)
+        (xest,self.P_plus) = self.KalmanF(x, u, z, self.P_plus, R)
+        print(self.P_plus)
 
 
         '''
