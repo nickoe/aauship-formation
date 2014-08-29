@@ -31,13 +31,12 @@ class Simulator(object):
         rospy.init_node('simulation_node')
         self.r = rospy.Rate(30) # Hz
 
-        self.v = np.array([3,3,13.5969e-006,0.2,0.2,0.00033,0.00033])#Measurement,noise
+        self.v = np.array([3,3,13.5969e-005,0.2,0.2,0.00033,0.00033])#Measurement,noise
         self.z = np.zeros(7)
 
         self.P_plus = np.zeros([17,17])
         self.R = np.diag(self.v)
         self.R_i = np.diag(self.v)
-
 
         self.u = np.zeros(5) # input vector
         self.x = np.zeros(17) # state vector
@@ -231,7 +230,7 @@ class Simulator(object):
 
             # Simulation
             self.x = f.aaushipsimmodel(self.x,self.u)
-            self.pubmsg.data = self.x
+            #self.pubmsg.data = self.x
             
             # Generate noise vector
             self.z[0:2] = self.x[0:2] + np.array([self.v[0],self.v[1]])*np.random.randn(1,2)
@@ -254,6 +253,11 @@ class Simulator(object):
                 jj = jj+1;
             
             (x_hat,self.P_plus) = f.KalmanF(x_hat, self.u, self.z, self.P_plus, self.R)
+            
+            for a in x_hat:
+                self.pubmsg.data.append(a)
+                print(a)
+            self.pub.publish(self.pubmsg)
 
             # Send tf for the robot model visualisation
             br = tf.TransformBroadcaster()
