@@ -97,7 +97,7 @@ class Simulator(object):
         v_i_len = 2; # length of intermediate vector
         
         ## Initial calculations
-        # track = [wps;wpe];
+        #track = [wps;wpe];
 
         ## Track-frame projected point
         v_i = ( (wpe-wps)/linalg.norm(wpe-wps) )*v_i_len; # Intermediate vector
@@ -196,6 +196,10 @@ class Simulator(object):
         self.trackmsg.poses.append(PoseStamped(h, Pose(p, q)))
         self.trackmsg.poses.append(PoseStamped(h, Pose(p, q)))
 
+
+        print(self.path['track'])
+        self.path['track'] = np.append([[self.x[0],self.x[1]]], self.path['track'], axis=0)
+        print(self.path['track'])
         # Main loop
         while not rospy.is_shutdown():
             # Headpoint of trail track
