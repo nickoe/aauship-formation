@@ -11,7 +11,7 @@
 // in rviz.
 
 // Construct filter
-MahonyAHRS u(18, 0.1, 22); // Magic numbers here
+MahonyAHRS u(18, 8, 22); // Magic numbers here
 
 
 class SubscribeAndPublish
