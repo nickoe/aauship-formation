@@ -313,4 +313,3 @@ void MahonyAHRS::setSampleFreq(float fs)
 {
     sampleFreq = fs;
 }
-

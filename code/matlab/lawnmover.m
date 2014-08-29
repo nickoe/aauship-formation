@@ -5,17 +5,18 @@
 %%
 clear all
 % Box options
-boxheigth = 142;
-boxwidth = 202;
+boxheigth = 45;
+boxwidth = 44;
 
-ll = [0,0];
+% ll = [0,0];
 lr = [boxwidth,0];
 ur = [boxwidth,boxheigth];
-ul = [0,boxheigth];
+% ul = [0,boxheigth];
 
+load('/afs/ies.auc.dk/group/14gr1034/Private/matlab/gpx2local/klingenberg.mat')
 
 % Turning restrictions
-tr = 10; % turning radius
+tr = 4; % turning radius
 s = 2*tr;
 n = 1;
 figure(1)
@@ -78,10 +79,19 @@ elseif mod(n,2)==0 %lige
     n = n+1
 end
 end
-
 save('track.mat','allwps')
+
+figure(1)
 plot(allwps(:,1),allwps(:,2),'.-')
 axis equal
 
+allwps(:,2) = allwps(:,2)+(-57);
+allwps(:,1) = allwps(:,1)+(-46.5);
 
+allwps(1,2) = -49;
+allwps(1,1) = -34;
 
+figure(2)
+plot(inner.E,inner.N,'b', outer.E,outer.N,'g', allwps(:,2),allwps(:,1),'.-r')
+track = [allwps(:,2) allwps(:,1)];
+save('2mmargintrack.mat','track')
