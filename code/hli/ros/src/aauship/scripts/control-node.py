@@ -10,6 +10,7 @@ from nav_msgs.msg import Path
 import scipy.io as sio
 import scipy.linalg as linalg
 import numpy as np
+from math import pi, sqrt, atan2, acos, sin, fmod
 import time
 import os 
 
@@ -43,14 +44,31 @@ class Control(object):
         self.pathmsg.header.frame_id = "ned"
         h = Header()
         q = Quaternion(0,0,0,1)
+
+        # Load the lawnmower generated path
+        self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
+
         # Fill in the path on the rviz path
         for i in self.path['track']:
             p = Point(i[0],i[1],0)
             self.pathmsg.poses.append(PoseStamped(h, Pose(p, q)))
         self.pubpath.publish(self.pathmsg)
 
-        # Load the lawnmower generated path
-        self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
+    # Angle in rad to the interval (-pi pi]
+    def rad2pipi(self, rad):
+        r = fmod((rad+np.sign(rad)*pi) , 2*pi) # remainder
+        #print(r)
+        s = np.sign(np.sign(rad) + 2*(np.sign(abs( fmod((rad+pi), (2*pi)) /(2*pi)))-1));
+        #print(s)
+        pipi = r - s*pi;
+        return pipi
+
+        '''
+        -2.6416 = rem( (-2*pi+0.5) + sign(-2*pi+0.5)*pi , 2*pi)
+        r = rem(angle+sign(angle)*pi,2*pi);
+        s = sign(sign(angle) + 2*(sign(abs(rem(angle+pi,2*pi)/(2*pi)))-1));
+        y = r - s*pi;
+        '''
 
     def callback(self, data):
         # send data to lli_input topic
@@ -64,31 +82,41 @@ class Control(object):
             # Include initial point to path once
             print('Hej')
             print(self.k)
+            print(len(data.data))
             print(data.data[0])
             print(data.data[1])
             print(self.path['track'][self.n-1])
             print(self.path['track'][self.n])
             self.path['track'] = np.append([[data.data[0],data.data[1]]], self.path['track'], axis=0)
+            #rospy.signal_shutdown("testing")
 
         # GNC
         (headingdesired, wp_reached, cte) = self.wp_gen(self.path['track'][self.n-1],self.path['track'][self.n],np.array([data.data[0],data.data[1]])); # WP Gen
+        nopid = 0
         if (wp_reached == 1):
             self.n = self.n+1;
             if self.n >= len(self.path['track']):
                 #es = k;
-                print('Trying to break')
-                #break
+                print('Finished path')
+                self.n = 1
 
         # PID
-        self.error.append(self.rad2pipi(headingdesired  - x_hat[6]))
-        self.integral.append(integral[self.k] + error[self.k])
+        self.error.append(self.rad2pipi(headingdesired  - data.data[6]))
+        self.integral.append(self.integral[self.k] + self.error[self.k])
         if self.k!=1:
-            self.derivative.append(self.error[self.k] - self.error[k-1])
-        self.thrustdiff.append(Kp*self.error[self.k] + Ki*self.integral[self.k] + Kd*self.derivative[self.k])
+            self.derivative.append(self.error[self.k] - self.error[self.k-1])
+        self.thrustdiff.append(self.Kp*self.error[self.k] + self.Ki*self.integral[self.k] + self.Kd*self.derivative[self.k])
         print("error " + str(self.error[self.k]))
         print("integral " + str(self.integral[self.k]))
         print("derivative " + str(self.derivative[self.k]))
         print("thrustdiff " + str(self.thrustdiff[self.k]))
+
+
+        self.pubmsg = Float64MultiArray()
+
+        self.pubmsg.data.append(self.thrustdiff[self.k])
+        print(self.pubmsg)
+        self.pub.publish(self.pubmsg)
         self.k = self.k+1
 
 
@@ -99,7 +127,7 @@ class Control(object):
         P_c = now; # [x y]
         wp_r = 1; # Waypoint Radius
         wp_reached = 0; # Waypoint not reached
-        v_i_len = 2; # length of intermediate vector
+        v_i_len = 1.5; # length of intermediate vector
         
         ## Initial calculations
         #track = [wps;wpe];

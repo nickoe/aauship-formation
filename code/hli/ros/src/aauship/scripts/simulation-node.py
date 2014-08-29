@@ -30,7 +30,7 @@ class Simulator(object):
         rospy.init_node('simulation_node')
         self.r = rospy.Rate(30) # Hz
 
-        self.v = np.array([3,3,13.5969e-005,0.2,0.2,0.00033,0.00033])#Measurement,noise
+        self.v = np.array([0.3,0.3,13.5969e-006,0.2,0.2,0.00033,0.00033])#Measurement,noise
         self.z = np.zeros(7)
 
         self.P_plus = np.zeros([17,17])
@@ -67,22 +67,6 @@ class Simulator(object):
         print(data.data[0])
         self.thrustdiff = data.data[0]      
         
-
-    # Angle in rad to the interval (-pi pi]
-    def rad2pipi(self, rad):
-        r = fmod((rad+np.sign(rad)*pi) , 2*pi) # remainder
-        #print(r)
-        s = np.sign(np.sign(rad) + 2*(np.sign(abs( fmod((rad+pi), (2*pi)) /(2*pi)))-1));
-        #print(s)
-        pipi = r - s*pi;
-        return pipi
-
-        '''
-        -2.6416 = rem( (-2*pi+0.5) + sign(-2*pi+0.5)*pi , 2*pi)
-        r = rem(angle+sign(angle)*pi,2*pi);
-        s = sign(sign(angle) + 2*(sign(abs(rem(angle+pi,2*pi)/(2*pi)))-1));
-        y = r - s*pi;
-        '''
 
     def run(self):
         BUFSIZE = 1024
@@ -151,6 +135,8 @@ class Simulator(object):
             self.x = f.aaushipsimmodel(self.x,self.u)
             #self.pubmsg.data = self.x
             
+            # Call AHRS node either Mahoney or Madgwick
+
             # Generate noise vector
             self.z[0:2] = self.x[0:2] + np.array([self.v[0],self.v[1]])*np.random.randn(1,2)
             self.z[2]   = self.x[6] + self.v[2]*np.random.randn(1,1)
@@ -173,6 +159,7 @@ class Simulator(object):
             
             (x_hat,self.P_plus) = f.KalmanF(x_hat, self.u, self.z, self.P_plus, self.R)
             
+            self.pubmsg = Float64MultiArray()
             for a in x_hat:
                 self.pubmsg.data.append(a)
                 #print(a)
