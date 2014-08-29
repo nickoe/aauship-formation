@@ -22,6 +22,7 @@ class Control(object):
         self.r = rospy.Rate(0.5) # Hz
         self.n = 1 # used for wp gen logic
         self.k = 0
+
         # Initilaze parapeters for the PID contorller
         self.error = []
         self.integral = []
@@ -33,21 +34,23 @@ class Control(object):
         self.Kp = 5.0;
         self.Ki = 0.051;
         self.Kd = 50.0;
+
+        # Create path object in rviz
         self.pubpath = rospy.Publisher('path', Path, queue_size=3)
         # Create the struct to be printed
         self.pathmsg = Path()
-        # Assign name
+        # Assign fram
         self.pathmsg.header.frame_id = "ned"
-        # Load the lawnmower generated path
-        self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
         h = Header()
         q = Quaternion(0,0,0,1)
+        # Fill in the path on the rviz path
         for i in self.path['track']:
             p = Point(i[0],i[1],0)
             self.pathmsg.poses.append(PoseStamped(h, Pose(p, q)))
         self.pubpath.publish(self.pathmsg)
 
-
+        # Load the lawnmower generated path
+        self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
 
     def callback(self, data):
         # send data to lli_input topic
