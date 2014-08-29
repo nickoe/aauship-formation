@@ -31,11 +31,13 @@ class Simulator(object):
         rospy.init_node('simulation_node')
         self.r = rospy.Rate(30) # Hz
 
-        self.v = np.array([3,3,13.5969e-006,0.2,0.2,0.00033,0.00033])#Measurement noise
+        self.v = np.array([3,3,13.5969e-006,0.2,0.2,0.00033,0.00033])#Measurement,noise
         self.z = np.zeros(7)
 
         self.P_plus = np.zeros([17,17])
-        self.R = np.diag([3.0, 3.0, 13.5969, 0.1, 0.1, 0.0524, 0.0524])
+        self.R = np.diag(self.v)
+        self.R_i = np.diag(self.v)
+
 
         self.u = np.zeros(5) # input vector
         self.x = np.zeros(17) # state vector
@@ -201,12 +203,18 @@ class Simulator(object):
         self.trackmsg.poses.append(PoseStamped(h, Pose(p, q)))
         self.trackmsg.poses.append(PoseStamped(h, Pose(p, q)))
 
+        # GPS frequencey counter
+        #gpsc = []
+        #gpsc.append(0)
+        jj = 0
 
+        x_hat = self.x
         self.path['track'] = np.append([[self.x[0],self.x[1]]], self.path['track'], axis=0)
         # Main loop
         while not rospy.is_shutdown():
             # Headpoint of trail track
-            p = Point(self.x[0],self.x[1],0.0)
+            #p = Point(self.x[0],self.x[1],0.0)
+            p = Point(x_hat[0],x_hat[1],0.0)
             q = Quaternion(0,0,0,1)
             self.trackmsg.poses[0] = PoseStamped(h, Pose(p, q))
 
@@ -231,15 +239,21 @@ class Simulator(object):
             self.z[3:5] = self.x[7:9] + np.array([self.v[3],self.v[4]])*np.random.randn(1,2)
             self.z[5:7] = self.x[12:14] + np.array([self.v[5],self.v[6]])*np.random.randn(1,2)
 
-            #if mod(k,20) != 0:
-            #    R(1,1) = 10*10^10;
-            #    R(2,2) = 10*10^10; 
-            #else:
-            #    R = R_i;
-            #    gpsc(jj) = k;
-            #    jj = jj+1;
+            if k%20 != 0:
+                print("stor R")
+                self.R[0,0] = 10*10**10;
+                self.R[1,1] = 10*10**10; 
+                print(self.R)
+
+            else:
+                print("orig R")
+                self.R[0,0] = self.R_i[0,0]
+                self.R[1,1] = self.R_i[1,1]
+                print(self.R)
+                #gpsc[jj] = k;
+                jj = jj+1;
             
-            (x_hat,self.P_plus) = f.KalmanF(self.x, self.u, self.z, self.P_plus, self.R)
+            (x_hat,self.P_plus) = f.KalmanF(x_hat, self.u, self.z, self.P_plus, self.R)
 
             # Send tf for the robot model visualisation
             br = tf.TransformBroadcaster()
@@ -251,7 +265,8 @@ class Simulator(object):
                              "ned")
 
             # Endpoint of trail track
-            p = Point(self.x[0],self.x[1],0.0)
+            #p = Point(self.x[0],self.x[1],0.0)
+            p = Point(x_hat[0],x_hat[1],0.0)
             q = Quaternion(0,0,0,1)
             self.trackmsg.poses[1] = PoseStamped(h, Pose(p, q))
             self.trackpath.publish(self.trackmsg)
@@ -259,7 +274,7 @@ class Simulator(object):
 
 
             # PID
-            error.append(self.rad2pipi(headingdesired  - self.x[6]))
+            error.append(self.rad2pipi(headingdesired  - x_hat[6]))
             integral.append(integral[k] + error[k])
             if k!=1:
                 derivative.append(error[k] - error[k-1])
