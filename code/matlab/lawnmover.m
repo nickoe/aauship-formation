@@ -93,5 +93,5 @@ allwps(1,1) = -34;
 
 figure(2)
 plot(inner.E,inner.N,'b', outer.E,outer.N,'g', allwps(:,2),allwps(:,1),'.-r')
-track = [allwps(:,2) allwps(:,1)];
+track = [allwps(:,1) allwps(:,2)];
 save('2mmargintrack.mat','track')
