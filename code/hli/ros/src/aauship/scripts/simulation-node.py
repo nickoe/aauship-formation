@@ -26,6 +26,8 @@ class Simulator(object):
         self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=3)
         self.pubpath = rospy.Publisher('path', Path, queue_size=3)
         self.trackpath = rospy.Publisher('track', Path, queue_size=3)
+        self.refpath = rospy.Publisher('refpath', Path, queue_size=3)
+        self.keepoutpath = rospy.Publisher('keepout', Path, queue_size=3)
         rospy.init_node('simulation_node')
         self.r = rospy.Rate(30) # Hz
 
@@ -35,17 +37,31 @@ class Simulator(object):
         self.pubmsg = Float64MultiArray()
         self.pathmsg = Path()
         self.pathmsg.header.frame_id = "map"
-        self.path = sio.loadmat('../../../../../matlab/track.mat')
+        self.refmsg = Path()
+        self.refmsg.header.frame_id = "map"
+        self.keepoutmsg = Path()
+        self.keepoutmsg.header.frame_id = "map"
+        self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
+        self.klingen = sio.loadmat('klingenberg.mat')
 
         self.trackmsg = Path()
         self.trackmsg.header.frame_id = "map"
 
         h = Header()
         q = Quaternion(0,0,0,1)
-        for i in self.path['allwps']:
+        for i in self.path['track']:
             p = Point(i[0],i[1],0)
             self.pathmsg.poses.append(PoseStamped(h, Pose(p, q)))
+	
+        # klingen['inner'][0]  is northing
+        # klingen['inner'][1]  is easting
+        for i in self.klingen['outer']:
+            p = Point(i[0],i[1],0)
+            self.refmsg.poses.append(PoseStamped(h, Pose(p, q)))
 
+        for i in self.klingen['inner']:
+            p = Point(i[0],i[1],0)
+            self.keepoutmsg.poses.append(PoseStamped(h, Pose(p, q)))
         
     def callback(self, data):
         # Set the input according to the control signal.
@@ -131,6 +147,8 @@ class Simulator(object):
         f = kfoo.KF()
         time.sleep(3)
         self.pubpath.publish(self.pathmsg)
+        self.refpath.publish(self.refmsg)
+        self.keepoutpath.publish(self.keepoutmsg)
 
         # Initilaze parapeters for the PID contorller
         error = []
@@ -186,10 +204,10 @@ class Simulator(object):
             self.trackmsg.poses[0] = PoseStamped(h, Pose(p, q))
 
             # GNC
-            (headingdesired, wp_reached, cte) = self.wp_gen(self.path['allwps'][n-1],self.path['allwps'][n],np.array([self.x[0],self.x[1]])); # WP Gen
+            (headingdesired, wp_reached, cte) = self.wp_gen(self.path['track'][n-1],self.path['track'][n],np.array([self.x[0],self.x[1]])); # WP Gen
             if (wp_reached == 1):
                 n = n+1;
-                if n >= len(self.path['allwps']):
+                if n >= len(self.path['track']):
                     es = k;
                     print('Trying to break')
                     break
