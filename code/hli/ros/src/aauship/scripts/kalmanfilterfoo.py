@@ -20,8 +20,8 @@ class KF(object):
         self.ssmat = sio.loadmat('../../../../../matlab/ssaauship.mat')
         
         # Measurement noise vector and covarince matrix
-        self.v = numpy.array([3.0, 3.0, 13.5969e-006, 0.2, 0.2, 0.00033, 0.00033])
-        self.R = numpy.diag(self.v)
+        #self.v = numpy.array([3.0, 3.0, 13.5969e-006, 0.2, 0.2, 0.00033, 0.00033])
+        #self.R = numpy.diag(self.v)
 
         # Process noise vector and covariance matrix
         self.w = numpy.array([0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.01, 0.01, 0.01, 0.01, 0.01, 0.033, 0.033, 0.033, 0.033, 0.033])
@@ -57,6 +57,7 @@ class KF(object):
         return xs
 
 
+    # Seems like the KalmanF does not return the same as the matlab implementation at the moment!!!
     def KalmanF(self, x, u, z, P_plus, R):
         # System matrix
         PHI = numpy.zeros([17,17])
@@ -72,20 +73,31 @@ class KF(object):
         h[5:7,12:14] = numpy.diag([1,1])
         H = h;
 
-        Q = numpy.diag(numpy.ones([17]))
+        # The nonlinear contribution to the system
+        PHI[0:2,7:9] = numpy.matrix([ [float(self.ssmat['ts'])*cos(x[6]),-float(self.ssmat['ts'])*sin(x[6])], 
+                       [float(self.ssmat['ts'])*sin(x[6]), float(self.ssmat['ts'])*cos(x[6])] ])
+        # PHI(1:2,8:9) = [ts*cos(x(7)) -ts*sin(x(7)); ts*sin(x(7)) ts*cos(x(7))]; 
+        # print(PHI[0:2,7:9]) # seems to be ok now
+
+        #Q = numpy.diag(numpy.ones([17]))
+        Q = numpy.diag([0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.01,0.01,0.01,0.01,0.01,0.033,0.033,0.033,0.033,0.033])
         # Prediction
         x_hat_minus = self.aaushipsimmodel(x,u);
         P_minus = PHI*P_plus*PHI + Q;
         
         # Update
         z_bar = z - h.dot(x_hat_minus);
-        S = H.dot(P_minus).dot(H.T) + R;
+        #print(R)
+        S = H.dot(P_minus.dot(H.T)) + R; # test the individual vars and operators in this line
+        #print(S) # Something is wrong with S
+        # S = H*P_minus*H' + R
+
         K = P_minus.dot(H.T).dot(linalg.inv(S));
         x_hat_plus = x_hat_minus + K.dot(z_bar);
         P_plus = (numpy.eye(17) - K.dot(H)).dot(P_minus).dot( (numpy.eye(17) - K.dot(H)).T ) + K.dot(R).dot(K.T);
        
         # Return estimated state vector
-        return x_hat_plus
+        return (x_hat_plus,P_plus)
         
 
     def run(self):
@@ -95,10 +107,10 @@ class KF(object):
         #xs = self.aaushipsimmodel(x,u)
         #print(xs)
 
-        P_plus = numpy.zeros([17,17])
+        self.P_plus = numpy.zeros([17,17])
         R = numpy.diag([3.0, 3.0, 13.5969, 0.1, 0.1, 0.0524, 0.0524])
-        xest = self.KalmanF(x, u, z, P_plus, self.R)
-        print(xest)
+        (xest,self.P_plus) = self.KalmanF(x, u, z, self.P_plus, R)
+        print(self.P_plus)
 
 
         '''
