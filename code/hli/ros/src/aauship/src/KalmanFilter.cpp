@@ -615,7 +615,3 @@ void KalmanFilter::dh(gsl_vector * params, gsl_vector * xk , gsl_matrix * Hyk)
     gsl_matrix_set(Hyk, 6, 13, 1.0);
 }
 
-
-// Constructor
-KalmanFilter::KalmanFilter(void) {
-}
