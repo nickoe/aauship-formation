@@ -31,6 +31,11 @@ class Simulator(object):
         rospy.init_node('simulation_node')
         self.r = rospy.Rate(30) # Hz
 
+        self.v = np.array([3,3,13.5969e-006,0.2,0.2,0.00033,0.00033])#Measurement noise
+        self.z = np.zeros(7)
+
+        self.P_plus = np.zeros([17,17])
+        self.R = np.diag([3.0, 3.0, 13.5969, 0.1, 0.1, 0.0524, 0.0524])
 
         self.u = np.zeros(5) # input vector
         self.x = np.zeros(17) # state vector
@@ -197,9 +202,7 @@ class Simulator(object):
         self.trackmsg.poses.append(PoseStamped(h, Pose(p, q)))
 
 
-        print(self.path['track'])
         self.path['track'] = np.append([[self.x[0],self.x[1]]], self.path['track'], axis=0)
-        print(self.path['track'])
         # Main loop
         while not rospy.is_shutdown():
             # Headpoint of trail track
@@ -222,6 +225,22 @@ class Simulator(object):
             self.x = f.aaushipsimmodel(self.x,self.u)
             self.pubmsg.data = self.x
             
+            # Generate noise vector
+            self.z[0:2] = self.x[0:2] + np.array([self.v[0],self.v[1]])*np.random.randn(1,2)
+            self.z[2]   = self.x[6] + self.v[2]*np.random.randn(1,1)
+            self.z[3:5] = self.x[7:9] + np.array([self.v[3],self.v[4]])*np.random.randn(1,2)
+            self.z[5:7] = self.x[12:14] + np.array([self.v[5],self.v[6]])*np.random.randn(1,2)
+
+            #if mod(k,20) != 0:
+            #    R(1,1) = 10*10^10;
+            #    R(2,2) = 10*10^10; 
+            #else:
+            #    R = R_i;
+            #    gpsc(jj) = k;
+            #    jj = jj+1;
+            
+            (x_hat,self.P_plus) = f.KalmanF(self.x, self.u, self.z, self.P_plus, self.R)
+
             # Send tf for the robot model visualisation
             br = tf.TransformBroadcaster()
             br.sendTransform((self.x[0],self.x[1], 0),
@@ -250,7 +269,7 @@ class Simulator(object):
             print("integral " + str(integral[k]))
             print("derivative " + str(derivative[k]))
             print("thrustdiff " + str(thrustdiff[k]))
-
+            #rospy.signal_shutdown("testing")
             k = k+1
             print(time.time())
 
