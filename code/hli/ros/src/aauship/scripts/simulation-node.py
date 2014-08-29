@@ -36,16 +36,16 @@ class Simulator(object):
         self.x = np.zeros(17) # state vector
         self.pubmsg = Float64MultiArray()
         self.pathmsg = Path()
-        self.pathmsg.header.frame_id = "map"
+        self.pathmsg.header.frame_id = "ned"
         self.refmsg = Path()
-        self.refmsg.header.frame_id = "map"
+        self.refmsg.header.frame_id = "ned"
         self.keepoutmsg = Path()
-        self.keepoutmsg.header.frame_id = "map"
+        self.keepoutmsg.header.frame_id = "ned"
         self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
         self.klingen = sio.loadmat('klingenberg.mat')
 
         self.trackmsg = Path()
-        self.trackmsg.header.frame_id = "map"
+        self.trackmsg.header.frame_id = "ned"
 
         h = Header()
         q = Quaternion(0,0,0,1)
@@ -229,7 +229,7 @@ class Simulator(object):
                              tf.transformations.quaternion_from_euler(self.x[4], self.x[5], self.x[6]),
                              rospy.Time.now(),
                              "boat_link",
-                             "map")
+                             "ned")
 
             # Endpoint of trail track
             p = Point(self.x[0],self.x[1],0.0)
