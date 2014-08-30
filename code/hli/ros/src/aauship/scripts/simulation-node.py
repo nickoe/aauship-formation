@@ -69,42 +69,19 @@ class Simulator(object):
         
 
     def run(self):
-        BUFSIZE = 1024
+        # SAve a csv log with the control inputs
+        #BUFSIZE = 1024
         #self.ctllog = open(os.getcwd() + "/../meas/ctl.log",'w')
         ##self.ctllog = open("logs/ctl.log",'w',BUFSIZE)
         ##print(self.ctllog.name)
 
+        # Construct the Kalman-filter
         f = kfoo.KF()
+
+        # Wait a bit for the node to settle, such that Rviz does not miss the publishing
         time.sleep(3)
         self.refpath.publish(self.refmsg)
         self.keepoutpath.publish(self.keepoutmsg)
-
-        # Testing output of rad2pipi funciton
-        '''
-        a = np.array([-12.5664,-12.0664,-11.5664,-11.0664,-10.5664,-10.0664, -9.5664, -9.0664, -8.5664, -8.0664, -7.5664, -7.0664, -6.5664, -6.0664, -5.5664, -5.0664, -4.5664, -4.0664, -3.5664, -3.0664, -2.5664, -2.0664, -1.5664, -1.0664, -0.5664, -0.0664,  0.4336,  0.9336,  1.4336,  1.9336,  2.4336,  2.9336,  3.4336,  3.9336,  4.4336,  4.9336,  5.4336,  5.9336,  6.4336,  6.9336,  7.4336,  7.9336,  8.4336,  8.9336,  9.4336,  9.9336, 10.4336, 10.9336, 11.4336, 11.9336, 12.4336])
-        for x in a:
-            print(self.rad2pipi(x))
-        '''
-        #(self.rad2pipi(-2*pi+0.5))
-        
-	
-	    # Testing output of the wp_gen funciton
-	    # [heading is wrong, compares to the matlab funciton]
-        #print(self.wp_gen(np.array([0,-3]),np.array([10,10]),np.array([-10,1])))
-
-
-        '''
-        # Testing output of the simulation model
-        # [Seems to work just fine when compared to the matlab function]
-        x = np.array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16])
-        u = np.array([8,0,0,0,0])
-        print(f.aaushipsimmodel(x,u))
-        '''
-        #rospy.signal_shutdown("testing")
-
-
-        k = 0
-        
 
         # Initialize an poses array for the trackmsg
         h = Header()
@@ -117,6 +94,9 @@ class Simulator(object):
         #gpsc = []
         #gpsc.append(0)
         jj = 0
+
+        # Counter for figuring out when to add the GPS sample
+        k = 0
 
         x_hat = self.x
         self.path['track'] = np.append([[self.x[0],self.x[1]]], self.path['track'], axis=0)
@@ -144,16 +124,11 @@ class Simulator(object):
             self.z[5:7] = self.x[12:14] + np.array([self.v[5],self.v[6]])*np.random.randn(1,2)
 
             if k%20 != 0:
-                #print("stor R")
                 self.R[0,0] = 10*10**10;
-                self.R[1,1] = 10*10**10; 
-                #print(self.R)
-
+                self.R[1,1] = 10*10**10;
             else:
-                #print("orig R")
                 self.R[0,0] = self.R_i[0,0]
                 self.R[1,1] = self.R_i[1,1]
-                #print(self.R)
                 #gpsc[jj] = k;
                 jj = jj+1;
             
@@ -183,6 +158,7 @@ class Simulator(object):
             #print(self.pathmsg)
 
             #rospy.signal_shutdown("testing")
+
             k = k+1
             print(time.time())
 
