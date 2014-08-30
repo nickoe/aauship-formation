@@ -36,55 +36,6 @@ The different types of coordination and control algorithms within centralized an
 	When applying the graph theory method one assign every agent as a node and assign connections between the nodes. In graph theory this is denoted vertices and edges. The study with graph theory is mainly concentrated of the formation itself and related to changes within the structure. This can be related to the structure within a tree-structure which is used when assigning the formations in graph theory manor. This can be applied as communication analysis for the agents and consensus analysis can be of benefit. The edges between the nodes symbolizes the possible connections thus communication between them. The nodes that are connected are denoted as neighbours and are capable of communicating.
 \end{description}
 
-\section{Motivation and the AAUSHIP project}
-These above mentioned theories makes the basis for the formation control within the scope of this project. This thesis will utilise formation control and extensions to manoeuvre agents through a specified area for surveying purposes.
-
-The port of Aalborg would like Aalborg University to help them to expand their options of improving the conditions of the Limfjord. One of their tasks is to map the seabed of the Limfjord to get bathymetry data. This will help them guide larger cargo ships to port while using the autonomous ships as guidance.
-
-Another aspect from the port of Aalborg is a task to escort larger ships with cargo into the port of Aalborg. This is done by a pilot whom needs to sail out to incoming larger cargo ships and escort them safely into port. The pilot does this in a pilot boat which is controlled manually by the pilot. The port of Aalborg would like this process to become autonomous such that an autonomous boat can sail to the cargo ship and to some extend take over the control and guide the cargo ship into port. The system to do this implies that the port of Aalborg needs an autonomous ship which can perform this task.
-
-The mapping itself can be done by one ship or by more. For the moment one of the ships from the port of Aalborg, which is manned, and covers the mapping of the closer part of the Limfjord ($\approx$ 65 km). This is only done every third year, but mapping around Hals Barre (a sandbar \todo{slet efterfølgende kommentar igen engang}and not a beach bar) at the end of the Limfjord is a more critical place and is mapped every third month.
-
-If the port of Aalborg had an autonomous ship fleet at their disposal, which could sail out and do the mapping autonoumously, they would get updated bathymetry maps with a higher update frequency than they have currently.  \cite{portofaalborg}.
-
-\subsection{The mission}
-Within the scope of this project the robots will be unmanned ships,
-\ac{ASV}. The ship's main purpose will be to map the seabed by using
-sonars to obtain bathymetry data. When one ship need to do this alone, and due to the range of
-the sonar, the time spend could be improved by using multiple ships. The sonar scanning would
-be done as seen on figure~\vref{fig:concept-art}.
-
-\begin{figure}[htbp]
-	\centering
-	\subfloat[One ship\label{fig:concept-art1}]{\includegraphics[width=0.48\textwidth]{fig/conseptart-single}}
-	\ % One forced space to seperate figures
-	\subfloat[Thee ships\label{fig:concept-art3}]{\includegraphics[width=0.48\textwidth]{fig/conseptart-formation}}
-	\caption{Comparison of two ways to cover an area with a lawn mower
-	pattern.}
-	\label{fig:concept-art}
-\end{figure}
-
-When only one ship (figure~\vref{fig:concept-art1}) need to map a complete seabed this process could
-take up much time dependent on the area that need to be covered. The
-time spend could be improved to make this mapping more efficient. One
-way of optimizing the time used is to add more ships (figure~\vref{fig:concept-art3}) to help map the
-seabed. To make the process of this as optimal as possible it could be
-of benefit to implement formation control in the specific assignment.
-
-I cooperation with the port of Aalborg, a use case is presented, where we can perform tests of the platform, and use those to compare the performance of our system to their system.
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=\textwidth]{fig/use-case-data}
-	\caption{Area of the harbour at Aalborg Portland provided as sample
-	data from Aalborg Havn. Background map data CC BY-SA OpenStreetMap.}
-	\label{fig:diffforms}
-\end{figure}
-
-%This could be done in several ways, but is mostly thought of in a
-%rigid formation, such that the formation maps the same area of the
-%seabed the whole time. The idea can be seen on
-%figure~\vref{fig:concept-art}.
-
 \subsection{Approaches on formation control}
 When performing this kind of surveying with multiple ships, it is important to take note of the kind of sensor it uses and the coverage that it provides. Initially the port of Aalborg used single beam echo sounders, but have in recent years turned over to multibeam sonars for their survey boat, which has improved their resolution and time for a survey. But they still wishes to improve the update rate, by i.e. using fairly low cost autonomous ships.
 
