@@ -17,12 +17,13 @@ import os
 ## This is the control node
 class Control(object):
     def __init__(self):
-        self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=1)
-        self.pub = rospy.Publisher('lli_input', Float64MultiArray, queue_size=3)
+        self.k = 0        
+        self.n = 1 # used for wp gen logic
+
         rospy.init_node('control_node')
         self.r = rospy.Rate(0.5) # Hz
-        self.n = 1 # used for wp gen logic
-        self.k = 0
+        self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=1)
+        self.pub = rospy.Publisher('lli_input', Float64MultiArray, queue_size=3)
 
         # Initilaze parapeters for the PID contorller
         self.error = []
@@ -119,6 +120,7 @@ class Control(object):
         print(self.pubmsg)
         self.pub.publish(self.pubmsg)
         self.k = self.k+1
+        rospy.signal_shutdown("testing")
 
 
     # This calculates reference points for the path follower
