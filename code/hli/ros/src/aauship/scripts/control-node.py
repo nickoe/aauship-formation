@@ -82,13 +82,6 @@ class Control(object):
         # First time we get a state estimate
         if self.k == 0:
             # Include initial point to path once
-            print('Hej')
-            print(self.k)
-            print(len(data.data))
-            print(data.data[0])
-            print(data.data[1])
-            print(self.path['track'][self.n-1])
-            print(self.path['track'][self.n])
             self.path['track'] = np.append([[data.data[0],data.data[1]]], self.path['track'], axis=0)
             #rospy.signal_shutdown("testing")
 
@@ -117,7 +110,6 @@ class Control(object):
         self.pubmsg = Float64MultiArray()
 
         self.pubmsg.data.append(self.thrustdiff[self.k])
-        print(self.pubmsg)
         self.pub.publish(self.pubmsg)
         self.k = self.k+1
 
