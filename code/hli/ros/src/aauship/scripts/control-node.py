@@ -120,7 +120,6 @@ class Control(object):
         print(self.pubmsg)
         self.pub.publish(self.pubmsg)
         self.k = self.k+1
-        rospy.signal_shutdown("testing")
 
 
     # This calculates reference points for the path follower
