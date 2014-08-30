@@ -52,6 +52,7 @@ class Control(object):
         for i in self.path['track']:
             p = Point(i[0],i[1],0)
             self.pathmsg.poses.append(PoseStamped(h, Pose(p, q)))
+        time.sleep(1)
         self.pubpath.publish(self.pathmsg)
 
     # Angle in rad to the interval (-pi pi]
