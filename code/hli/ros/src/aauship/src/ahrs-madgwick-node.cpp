@@ -22,7 +22,7 @@ public:
   {
     adissub = n.subscribe("imu", 1, &SubscribeAndPublish::adisCallback, this);
     ahrssub = n.subscribe("ahrs", 2, &SubscribeAndPublish::ahrsCallback, this);
-    attitudepub = n.advertise<geometry_msgs::Quaternion>("attitude", 2);
+    attitudepub = n.advertise<geometry_msgs::Quaternion>("attitude", 2, true);
   }
 
   void adisCallback(const aauship::ADIS16405::ConstPtr& msg)
@@ -45,7 +45,7 @@ public:
     tf::Transform transform;
     transform.setOrigin( tf::Vector3(0,0,0) );
     transform.setRotation(q);
-    tfbc.sendTransform( tf::StampedTransform(transform, ros::Time::now(), "map", "boat_link"));
+    //tfbc.sendTransform( tf::StampedTransform(transform, ros::Time::now(), "map", "boat_link"));
 
     // Publish attitude information (for use with i.e. the Kalman filter)
     geometry_msgs::Quaternion msgq;

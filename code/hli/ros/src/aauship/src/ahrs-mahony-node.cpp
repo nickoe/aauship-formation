@@ -37,15 +37,15 @@ public:
     tf::Quaternion q(u.getQuaternions(1),u.getQuaternions(2),u.getQuaternions(3),u.getQuaternions(0));
 
     /* Debug output */
-    //u.calculateEulerAngles();
-    //ROS_INFO("Euler angles: [%.3f, %.3f, %.3f]", u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
+    u.calculateEulerAngles();
+    ROS_INFO("Euler angles: [%.3f, %.3f, %.3f]", u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
 
     /* Publish rviz transform information */
     static tf::TransformBroadcaster tfbc;
     tf::Transform transform;
     transform.setOrigin( tf::Vector3(0,0,0) );
     transform.setRotation(q);
-    tfbc.sendTransform( tf::StampedTransform(transform, ros::Time::now(), "map", "boat_link"));
+    //tfbc.sendTransform( tf::StampedTransform(transform, ros::Time::now(), "map", "boat_link"));
 
     // Publish attitude information (for use with i.e. the Kalman filter)
     geometry_msgs::Quaternion msgq;
