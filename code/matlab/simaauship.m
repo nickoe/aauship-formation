@@ -2,12 +2,19 @@
 % TODO nonlinear stuff for simulation model
 
 clear all; clf;
+addpath('x-io')
+AHRS = MahonyAHRS('SamplePeriod', 1/10, 'Kp', 8.8 , 'Ki', 0.5);
+% set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
+% set(gcf,'paperunits','centimeters')
+% set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
+% set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
 
 %% Pre allocation of variables
-N = 6000;
+N = 5000;
 es = N;
+ts = 0.05;
 x = zeros(N,17);
-x(1,:) = [0 20 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]';
+x(1,:) = [0 8 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]';
 z = zeros(N,7);
 x_hat = x;
 P_plus = zeros(17,17);
@@ -54,8 +61,8 @@ n = 1;
 error = zeros(1,N);
 integral = zeros(1,N);
 derivative = zeros(1,N);
-Kp = 5;
-Ki = 0.051;
+Kp = 10;
+Ki = 0.1;
 Kd = 50;
 thrustdiff = zeros(1,N);
 heading = zeros(N,1);
@@ -63,7 +70,7 @@ headingdesired = zeros(N,1);
 
 %% Simulation
 figure(1)
-clf
+clf;
 hold on
 rev = 0;
 limit = 3.07;
@@ -91,7 +98,29 @@ for k = 1:N
 % %     if x(k,8) >= 2.75
 % %         tau(k+1,1) = 0;
 % %     end
-    
+           %%% Calculate the IMY measurements from the aaushipsimmodel
+            accelbody = [x(k,13) x(k,14) 0]';
+            accelimu(:,k) = accelbody + transpose(Rzyx(x(k,5),x(k,6),x(k,7)))*[0;0;9.82];
+
+            declination = 2.1667*pi/180; % angle from north
+            inclination = 70.883*pi/180; % angle from north-east plane
+            magnbody = [x(k,13) x(k,14) 0]';
+            magnimu(:,k) = magnbody + transpose(Rzyx(x(k,5),x(k,6),x(k,7)))*[0;inclination;declination];
+
+            xgyro(k) = x(k,15); % dot_p
+            ygyro(k) = x(k,16); % dot_q
+            zgyro(k) = x(k,17); % dot_r
+            xaccl(k) = accelimu(1,k);
+            yaccl(k) = accelimu(2,k);
+            zaccl(k) = accelimu(3,k);
+            xmagn(k) = magnimu(1,k);
+            ymagn(k) = magnimu(2,k);
+            zmagn(k) = magnimu(3,k);
+                       
+            AHRS.Update([xgyro(k) ygyro(k) zgyro(k)] * (pi/180), [xaccl(k) yaccl(k) zaccl(k)], [xmagn(k) ymagn(k) zmagn(k)]);	% gyroscope units must be radians
+            quaternion(k, :) = AHRS.Quaternion;
+                       
+            
     % Generere z m støj
 %     if k < 300
     z(k,1:2) = x(k,1:2) + [v(1) v(2)].*randn(2,1)';
@@ -121,7 +150,7 @@ for k = 1:N
           sin(psi)  cos(psi)];
     
     if k ~=  1
-        heading(k) = x_hat(k+1,7);
+        heading(k) = x(k+1,7);
     end
     
     % PID
@@ -134,12 +163,14 @@ for k = 1:N
 end
 
 %% Plot the results
-t = 0:0.1:es/10-0.01;
-tt = 0.01:0.1:es/10;
+t = 0:ts:es*ts-ts;
+tt = ts:ts:es*ts;
 
-
-figure(1)
-clf
+sailsim = figure(1)
+% set(gcf,'Visible','on'); % Hides the matlab plot because it is ugly
+% set(gcf,'paperunits','centimeters')
+% set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
+% set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
 % subplot(3,1,1)
 
 for k = 1:79:es
@@ -149,15 +180,24 @@ end
 %     ship(NED(k,2),NED(k,1),pi/2-headingdesired(k),'y')
 % end
 hold on
-plot(track(:,2),track(:,1),'b-o', x(1:es,2),x(1:es,1),'-r', x_hat(gpsc,2),x_hat(gpsc,1), '*')
-plot(x_hat(1:es,2),x_hat(1:es,1),'-k')
-plot(z(gpsc,2),z(gpsc,1),'g.-')
-plot(track(n,2),track(n,1),'ro')
+h1 = plot(track(:,2),track(:,1),'b-o', x(1:es,2),x(1:es,1),'-r', x_hat(gpsc,2),x_hat(gpsc,1), '*');
+h2 = plot(x_hat(1:es,2),x_hat(1:es,1),'-k');
+h3 = plot(z(gpsc,2),z(gpsc,1),'g.-');
+% plot(track(n,2),track(n,1),'ro')
+legend([h1;h2;h3],'Trajectory','State','Marker for recieved GPS','Estimate','GPS meas','Location','eastoutside')
 xlabel('Easting [m]');
 ylabel('Northing [m]');
 grid on
 axis equal
 hold off
+
+% Figure for error plotting
+errorplot = figure(100)
+nick = sqrt((x_hat(1:es,2)-x(1:es,2)).^2 + (x_hat(1:es,1)-x(1:es,1)).^2);
+plot(1:es,nick)
+legend('Euclidian position error')
+xlabel('Samples')
+ylabel('Position error [m]')
 
 %%DEBUG
 figure(2)
@@ -280,3 +320,16 @@ plot(tt,x_hat(1:es,2),'r',tt,z(1:es,2),'b',tt,x(1:es,2),'-.g')
 legend('E est','E meas','E ideal')
 xlabel('time')
 ylabel('E')
+
+% Plot af KF angles and AHRS angles
+figure(7)
+euler = quatern2euler(quaternConj(quaternion)) * (180/pi);	% use conjugate for sensor frame relative to Earth and convert to degrees.
+plot(t,euler(1:es,1),'g',t,euler(1:es,2),'b',t,euler(1:es,3),'r')
+
+
+
+
+
+
+
+
