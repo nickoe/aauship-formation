@@ -22,11 +22,13 @@ import os
 ## This is the simulaiton node, basically kind of the same as simaauship.m
 class Simulator(object):
     def __init__(self):
-        self.sub = rospy.Subscriber('lli_input', Float64MultiArray, self.callback)
+        self.sub = rospy.Subscriber('lli_input', Float64MultiArray, self.llicb)
         self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=1)
+        self.subahrs = rospy.Subscriber('attitude', Quaternion, self.ahrscb)
+        self.pubimu = rospy.Publisher('imu', ADIS16405, queue_size=1)
         self.trackpath = rospy.Publisher('track', Path, queue_size=3)
-        self.refpath = rospy.Publisher('refpath', Path, queue_size=3)
-        self.keepoutpath = rospy.Publisher('keepout', Path, queue_size=3)
+        self.refpath = rospy.Publisher('refpath', Path, queue_size=3, latch=True)
+        self.keepoutpath = rospy.Publisher('keepout', Path, queue_size=3, latch=True)
         rospy.init_node('simulation_node')
         self.r = rospy.Rate(30) # Hz
 
@@ -62,11 +64,18 @@ class Simulator(object):
         for i in self.klingen['inner']:
             p = Point(i[0],i[1],0)
             self.keepoutmsg.poses.append(PoseStamped(h, Pose(p, q)))
-        
-    def callback(self, data):
+
+    # /lli_input callback
+    def llicb(self, data):
         print(data.data[0])
         self.thrustdiff = data.data[0]      
-        
+    
+    # /attidude callback
+    def ahrscb(self, data):
+        print(data.data[0])
+
+
+
 
     def run(self):
         # SAve a csv log with the control inputs
@@ -78,10 +87,9 @@ class Simulator(object):
         # Construct the Kalman-filter
         f = kfoo.KF()
 
-        # Wait a bit for the node to settle, such that Rviz does not miss the publishing
-        time.sleep(3)
-        self.refpath.publish(self.refmsg)
+        # Publish out static map data
         self.keepoutpath.publish(self.keepoutmsg)
+        self.refpath.publish(self.refmsg)
 
         # Initialize an poses array for the trackmsg
         h = Header()
@@ -114,8 +122,13 @@ class Simulator(object):
             # Simulation
             self.x = f.aaushipsimmodel(self.x,self.u)
             #self.pubmsg.data = self.x
-            
-            # Call AHRS node either Mahoney or Madgwick
+
+            # Call AHRS node either Mahony or Madgwick
+            # Publish the calculated measurements for /imu
+
+            # This part is basically waiting for the arhs node to publish to the /attitude topic
+            # Idle loop untill the /ahrs_* publishses to /attitude
+
 
             # Generate noise vector
             self.z[0:2] = self.x[0:2] + np.array([self.v[0],self.v[1]])*np.random.randn(1,2)
@@ -155,11 +168,13 @@ class Simulator(object):
             q = Quaternion(0,0,0,1)
             self.trackmsg.poses[1] = PoseStamped(h, Pose(p, q))
             self.trackpath.publish(self.trackmsg)
-            #print(self.pathmsg)
+
+
 
             #rospy.signal_shutdown("testing")
 
             k = k+1
+            print(k)
             print(time.time())
 
             self.r.sleep()

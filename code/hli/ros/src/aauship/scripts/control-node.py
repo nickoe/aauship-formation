@@ -38,7 +38,7 @@ class Control(object):
         self.Kd = 50.0;
 
         # Create path object in rviz
-        self.pubpath = rospy.Publisher('path', Path, queue_size=3)
+        self.pubpath = rospy.Publisher('path', Path, queue_size=3, latch=True)
         # Create the struct to be printed
         self.pathmsg = Path()
         # Assign fram
@@ -53,7 +53,6 @@ class Control(object):
         for i in self.path['track']:
             p = Point(i[0],i[1],0)
             self.pathmsg.poses.append(PoseStamped(h, Pose(p, q)))
-        time.sleep(1)
         self.pubpath.publish(self.pathmsg)
 
     # Angle in rad to the interval (-pi pi]
