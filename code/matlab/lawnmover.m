@@ -5,8 +5,8 @@
 %%
 clear all
 % Box options
-boxheigth = 45;
-boxwidth = 44;
+boxheigth = 45*2;
+boxwidth = 44*2;
 
 % ll = [0,0];
 lr = [boxwidth,0];
