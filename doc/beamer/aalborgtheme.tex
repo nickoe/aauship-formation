@@ -31,6 +31,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[T1]{fontenc}
+\usepackage{subfig} % Vi kan nu bruge \subfloat
 \usepackage{soul} % use this (many fancier options)
 \DeclareUnicodeCharacter{00A0}{~} % Fixes the "! Package inputenc Error: Unicode char \u8:  not set up for use with LaTeX."
 % ... or whatever. Note that the encoding and the font should match. If T1
@@ -113,23 +114,45 @@
 \end{frame}
 
 %%%%%%%%%%%%%%%%
-\begin{frame}{Development}{AAUSHIP.01 Hull}
-\begin{figure}
-	\begin{center}
-		%\includegraphics[width=8.2cm]{img/rendermontage}
-		\label{fig:render}
-	\end{center}
-\end{figure}
+\section{Simulation and Verificaiton}
+\begin{frame}{Simulation and Verificaiton}{Kalman Filter}
+<plots>
+\end{frame}
+
+\begin{frame}{Simulation and Verificaiton}{Attitude and Heading Reference System}
+<plots>
+\end{frame}
+
+\begin{frame}{Simulation and Verificaiton}{Comparision between KF and AHRS}
+<plots>
+\end{frame}
+
+
+\begin{frame}{Simulation and Verificaiton}{ROS Demo}
+<video>
+\end{frame}
+
+\begin{frame}{Simulation and Verificaiton}{Loose Ends}
+\begin{itemize}
+	\item Interface between the \texttt{/lli\_input} topic is not compatible with the LLI
+	\item Optionally extend the KF with the IMU data not use the AHRS
+	\item Thrustallocation needs testing
+	\item Lab test with the hardware in the loop to test that interfaces work
+	\item Sea-trail needed to verify that it all works
+\end{itemize}
 \end{frame}
 
 %%%%%%%%%%%%%%%%
 \begin{frame}{Development}{AAUSHIP.01 Hull}
 \begin{figure}
-	\begin{center}
-		%\includegraphics[width=8.2cm]{img/VerticalJumpingTele}
-		\label{fig:jumping}
-	\end{center}
+	\centering
+	\subfloat[One ship\label{fig:concept-art1}]{\includegraphics[width=0.48\textwidth]{../thesis/fig/conseptart-single}}
+	\ % One forced space to seperate figures
+	\subfloat[Thee ships\label{fig:concept-art3}]{\includegraphics[width=0.48\textwidth]{../thesis/fig/conseptart-formation}}
+	\caption{Comparison of two ways to cover an area with a single beam ships}
+	\label{fig:concept-art}
 \end{figure}
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%
