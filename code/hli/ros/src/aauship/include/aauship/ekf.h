@@ -130,12 +130,12 @@ namespace ekf
 
     // Compute the Jacobian of the evolution
     // Eq. 2.34
-    df(s.params, s.xk,s.Fxk);
+    df(s.params, s.xk,s.Fxk); // PHI system matrix
 
     // Compute the predicted state mean and covariance
     // Eq. 2.36
     // s.xk will now hold the predicted state !
-    f(s.params, s.xk, s.xkm);
+    f(s.params, s.xk, s.xkm); // simmodel prediction
 
     // Eq. 2.37
     // s.Pxk will now hold Pxk^-
