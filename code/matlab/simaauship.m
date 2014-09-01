@@ -2,8 +2,8 @@
 % TODO nonlinear stuff for simulation model
 
 clear all; clf;
-addpath('x-io')
-AHRS = MahonyAHRS('SamplePeriod', 1/10, 'Kp', 8.8 , 'Ki', 0.5);
+addpath(genpath('x-io'))
+AHRS = MahonyAHRS('SamplePeriod', 1/10, 'Kp', 18 , 'Ki', 8);
 % set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
 % set(gcf,'paperunits','centimeters')
 % set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
@@ -83,7 +83,7 @@ for k = 1:N
     if (wp_reached == 1)
         n = n+1;
         if n >= length(track)
-            es = k;
+            es = k-1;
             break
         end
     end
@@ -201,15 +201,18 @@ ylabel('Position error [m]')
 
 %%DEBUG
 figure(2)
-plot(tt, x(1:es,7), tt, headingdesired(1:es),'-.', tt, x_hat(1:es,7))
-legend('x(:,7)', 'Desired heading', 'x_{hat}(:,7)')
+euler = quatern2euler(quaternConj(quaternion)) * (180/pi);	% use conjugate for sensor frame relative to Earth and convert to degrees.
+eulerinrad = euler(1:es,3) * (pi/180) + pi/2;
+plot(tt, x(1:es,7), tt, headingdesired(1:es),'-.', tt, x_hat(1:es,7),tt,eulerinrad,'k')
+legend('x(:,7)', 'Desired heading', 'x_{hat}(:,7)','Heading from Mahony')
 legpos = [.2, .2, .2, .2];
 set(legend, 'Position', legpos)
 xlabel('time')
+ylabel('rad')
+
+
 %%DEBUGEND
-
 % csvwrite('positions.csv',[x(1:es,1:2) -x(1:es,5)+pi/2])
-
 % figure(2)
 % subplot(2,1,1)
 % plot(tt,heading(1:es),tt,headingdesired(1:es))
@@ -321,11 +324,10 @@ legend('E est','E meas','E ideal')
 xlabel('time')
 ylabel('E')
 
-% Plot af KF angles and AHRS angles
+% Plot of KF angles and AHRS angles
 figure(7)
 euler = quatern2euler(quaternConj(quaternion)) * (180/pi);	% use conjugate for sensor frame relative to Earth and convert to degrees.
 plot(t,euler(1:es,1),'g',t,euler(1:es,2),'b',t,euler(1:es,3),'r')
-
 
 
 
