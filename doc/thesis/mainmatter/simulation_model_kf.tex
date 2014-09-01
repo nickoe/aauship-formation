@@ -225,6 +225,9 @@ If the different sensor measurements are not sampled with the same rate will the
 \subsection{Overall filter test and conclusion}
 Ja det er nok meget godt.
 
+\section{Addition to the \acl{KF}}
+\todo{Dette er en beskrivelse af hvad der skal goeres - Er ikke sket endnu. Dette skal goeres hurtigst muligt. Dette fungerer mest som en note.}
+The heading reference can be estimated both from the \ac{GPS} measurements and the from the \ac{IMU} measurements. The simulation model is for now only using the measurement from one \ac{GPS}, due to the implementation of only one at the moment. The noise have been measured from the single \ac{GPS} thus setting the accuracy only from this. When the \ac{RTK} \ac{GPS} has been implemented can the noise variance from this be measured to fuse the two \ac{GPS}s. The measurements from the \ac{IMU} can too be used to estimate the attitude and the heading. All of these sensor measurements should be fused together in the \ac{KF}, such that the two \ac{GPS}s can give an estimate of the heading and include the \ac{IMU}. The \ac{GPS}s will also be used to estimate the \ac{SOG} together. When the \ac{RTK} \ac{GPS} is expected to have a lower variance both in position and \ac{SOG} measurements thus making the fusion of this preferable and resulting in a better estimate of both position and \ac{SOG}.
 
 
 
