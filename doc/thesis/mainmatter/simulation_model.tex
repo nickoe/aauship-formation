@@ -162,15 +162,43 @@ U \\ 0
 \sin(\beta)
 \end{bmatrix}
 U
-\end{align}
+\end{align}o
 
 \todo{Add figure about this}
 
-\section{Calculation of magnetic field form attitude}
+\section{Magnetic and acceleration vectors from state attitude}
 The simulation model state vector do not contain magnetic field
 strength directly, therefore it has to be calculated from the
-attitude, that is the pitch, roll and yaw vales.
+attitude, that is the pitch, roll and yaw values.
 
-It is assumed that the true north is the same as the magnetic north
-for this case. The calculation is the basic rotations.
+First the magnetic field direction has to be known for the area where the system operates. There exists models of the magnetic field on the earh, accesible from \citep{geomag}. Using the ``WMM 2010'' model, the declination and inclination has been determined to be $2.167 \arcdeg$ (east), and $70.883 \arcdeg$ (down) respectively. Additionally the field strength is about $50432$ nT.
+
+This defines the magnetic field in the earth frams as:
+\begin{align}
+m_n = \begin{bmatrix}0 & \text{inclination} & \text{declination}\end{bmatrix}^\top
+\end{align}
+
+The magnetic field in the body frame $m_b$ is:
+\begin{align}
+m_b = R_b^n(\Theta_{nb}) m_n 
+\end{align}
+Where the rotation matrix $R_b^n(\Theta_{nb})$ \vref{eq:Rfromntob}.
+\begin{align}
+R_b^n (\Theta_{nb}) &=
+\begin{bmatrix}
+c\psi c\theta & -s\psi c\theta + c\psi s\theta s\phi & s\psi s\phi + c\psi c\phi s\theta \\
+s\psi c\theta & c\psi c\phi + s\phi s\theta s\psi & -c\psi s\phi + s\theta s\psi c\phi \\
+-s\theta & c\theta s\phi & c\theta s\phi
+\end{bmatrix}
+\label{eq:Rfrombton} \\
+R_n^b (\Theta_{nb}) &= R_b^n (\Theta_{nb})^{-1}
+\label{eq:Rfromntob}
+\end{align}
+where $s \cdot = \sin(\cdot)$ and $c \cdot = \cos(\cdot)$. $\Theta_{nb}$ is the Euler angles of the {b} in {n}.
+
+The acceleration is made in a similar way as the magnetic body vector is made, except it adds the bodyframe accelerations caused by the ship itself.
+\begin{align}
+a_b = [a_x, a_y, 0]^T + R_n^b (\Theta_{nb}) [0,0,g]^\top
+\end{align}
+where $g$ is the gravity, defined as 9.82 m/s$^2$
 
