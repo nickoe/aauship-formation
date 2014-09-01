@@ -215,12 +215,20 @@ Implementation with ROS
 
 %%%%%%%%%%%%%%%%
 \section{Modelling}
-\begin{frame}{Modelling}{Linear Model}
-
+\begin{frame}{Modelling}{Model}
+  \begin{itemize}
+    \item Using the linear ship model by Thor I. Fossen
+    \item Extended with nonlinear calculations, like the trajectory calculation
+    \item Saturation of inputs
+    \item Thrust allocation included in the control node
+  \end{itemize}
 \end{frame}
 
-\begin{frame}{Modelling}{Simulation Model}
-
+\begin{frame}{Modelling}{Estimation}
+  \begin{figure}
+    {\tiny \includesvg[width=\textwidth]{intermediate-sensor-calculations-block}}
+	  \caption{\scriptsize Block diagram of the combined AHRS and KF estimator}
+  \end{figure}
 \end{frame}
 
 %%%%%%%%%%%%%%%%
@@ -297,20 +305,6 @@ Position tuning, $Q_{1:2,1:2}$ = 0.00001
   \item Lab test with the hardware in the loop to test that interfaces work
   \item Sea-trail needed to verify that it all works
 \end{itemize}
-\end{frame}
-
-
-%%%%%%%%%%%%%%%%
-\begin{frame}{Testing the control algorithms}{Results}
-  \begin{itemize}
-  \item Plot of the ship states during the voyage
-  \end{itemize}
-  \begin{figure}
-    \begin{center}
-      \includegraphics[width=8.2cm]{img/states}
-      \label{fig:controltest3}
-    \end{center}
-  \end{figure}
 \end{frame}
 
 %%%%%%%%%%%%%%%%
