@@ -93,10 +93,50 @@
 \section{Introduction}
 \begin{frame}{Introduction}{Motivation}
   \begin{itemize}
-  	\item<1-> Little to no research are currently devoted to maritime autonomous crafts.
+    \item<1-> Little to no research are currently devoted to maritime autonomous crafts.
     \item<2-> During the 2012 Fukushima accident in Japan, no measurements of the spread of radioactivity was available in the coastal zones, thus relying only on estimates. 
     \item<3-> The coastal area around Greenland has no up-to-date baymethric maps available, and with the growing interest in Greenland (both industrially and commercially) this poses a threat to the ships going in and out of the fjords.
   \end{itemize}
+\end{frame}
+
+\begin{frame}{Introduction}{The Mission}
+<Mission description here>
+\end{frame}
+
+\begin{frame}{Introduction}{Concept Art}
+\begin{figure}
+  \centering
+  \subfloat[One ship\label{fig:concept-art1}]{\includegraphics[width=0.48\textwidth]{../thesis/fig/conseptart-single}}
+  \ % One forced space to seperate figures
+  \subfloat[Thee ships\label{fig:concept-art3}]{\includegraphics[width=0.48\textwidth]{../thesis/fig/conseptart-formation}}
+  \caption{Comparison of two ways to cover an area with a single beam ships}
+  \label{fig:concept-art}
+\end{figure}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%
+\section{System Design}
+\begin{frame}{System Design}{}
+Modelling
+
+\end{frame}
+
+\begin{frame}{System Design}{Modelling}
+<Describe what should be modelled, why 5DOF, parmeter estimation...>
+\end{frame}
+
+\begin{frame}{System Design}{Estimaiton}
+
+\end{frame}
+
+\begin{frame}{System Design}{Simulation}
+
+\end{frame}
+
+\begin{frame}{System Design}{Implementation with ROS}
+<ROS node graphs here>
 \end{frame}
 
 %%%%%%%%%%%%%%%%
@@ -104,12 +144,12 @@
 \subsection{AAUSHIP.01}
 \begin{frame}{Development}{AAUSHIP.01}
 \begin{itemize}
-	\item<1-> The ship is designed as a non-planing deplacement craft (eg. like freight ships).
-	\item<2-> Developed using rapid prototyping techniques.
-	\item<3-> Developed in Rhinoceros\texttrademark using a lofting techniques.
-	\item<4-> Printed on a 3D printer.
-	\item<5-> Examined and the process iterated.
-	\item<6-> Vaccumformed by DD-plast in Randers and assembled in the machine shop at Aalborg University.
+  \item<1-> The ship is designed as a non-planing deplacement craft (eg. like freight ships).
+  \item<2-> Developed using rapid prototyping techniques.
+  \item<3-> Developed in Rhinoceros\texttrademark using a lofting techniques.
+  \item<4-> Printed on a 3D printer.
+  \item<5-> Examined and the process iterated.
+  \item<6-> Vaccumformed by DD-plast in Randers and assembled in the machine shop at Aalborg University.
 \end{itemize}
 \end{frame}
 
@@ -127,61 +167,75 @@
 <plots>
 \end{frame}
 
-
 \begin{frame}{Simulation and Verificaiton}{ROS Demo}
 <video>
 \end{frame}
 
 \begin{frame}{Simulation and Verificaiton}{Loose Ends}
 \begin{itemize}
-	\item Interface between the \texttt{/lli\_input} topic is not compatible with the LLI
-	\item Optionally extend the KF with the IMU data not use the AHRS
-	\item Thrustallocation needs testing
-	\item Lab test with the hardware in the loop to test that interfaces work
-	\item Sea-trail needed to verify that it all works
+  \item Interface between the \texttt{/lli\_input} topic is not compatible with the LLI
+  \item Optionally extend the KF with the IMU data not use the AHRS
+  \item Thrustallocation needs testing
+  \item Lab test with the hardware in the loop to test that interfaces work
+  \item Sea-trail needed to verify that it all works
 \end{itemize}
 \end{frame}
 
-%%%%%%%%%%%%%%%%
-\begin{frame}{Development}{AAUSHIP.01 Hull}
-\begin{figure}
-	\centering
-	\subfloat[One ship\label{fig:concept-art1}]{\includegraphics[width=0.48\textwidth]{../thesis/fig/conseptart-single}}
-	\ % One forced space to seperate figures
-	\subfloat[Thee ships\label{fig:concept-art3}]{\includegraphics[width=0.48\textwidth]{../thesis/fig/conseptart-formation}}
-	\caption{Comparison of two ways to cover an area with a single beam ships}
-	\label{fig:concept-art}
-\end{figure}
-
-\end{frame}
 
 %%%%%%%%%%%%%%%%
 \subsection{Development}
 \begin{frame}{Development}{Hardware}
 \begin{itemize}
-	\item Fitted with 2 x 1200W engines (totally producing around 3 HP at full thrust).
-	\item Fitted with 6 x 3200mAh batteries (results in a mission time of around 5 hours).
-	\item 2 counter rotating 60mm propellers.
-	\item Inertial Measurement Unit.
-	\item Global Positioning System.
-	\item A (currently) 20mW 19.2 kbps radio link @ 470 MHz
-	\item Arduino Mega with a custom made shield board mounted.
-    \item Retrofitted with a hydrofoil to reduce the wake and pitch of the ship.
+  \item Fitted with 2 x 1200W engines (totally producing around 3 HP at full thrust).
+  \item Fitted with 6 x 3200mAh batteries (results in a mission time of around 5 hours).
+  \item 2 counter rotating 60mm propellers.
+  \item Inertial Measurement Unit.
+  \item Global Positioning System.
+  \item A (currently) 20mW 19.2 kbps radio link @ 470 MHz
+  \item Arduino Mega with a custom made shield board mounted.
+  \item Retrofitted with a hydrofoil to reduce the wake and pitch of the ship.
 \end{itemize}
 \end{frame}
 
-
-%###########################
 \begin{frame}{Testing the control algorithms}{Results}
-	\begin{itemize}
-	\item Plot of the ship states during the voyage
-	\end{itemize}
-	\begin{figure}
-		\begin{center}
-			\includegraphics[width=8.2cm]{img/states}
-			\label{fig:controltest3}
-		\end{center}
-	\end{figure}
+  \begin{itemize}
+  \item Plot of the ship states during the voyage
+  \end{itemize}
+  \begin{figure}
+    \begin{center}
+      \includegraphics[width=8.2cm]{img/states}
+      \label{fig:controltest3}
+    \end{center}
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%
+\section{Schedule}
+\begin{frame}{Schedule}{1st Half Goals}
+Development of a single working testing platform
+  \begin{itemize}
+  \item Research of formation control paradigms
+  \item Decide feasibility for using ROS as the software platform
+  \item Subsystem test of the ship system, manual control
+  \item Modelling of the ship
+  \item Design and implementation of an state estimator
+  \item Creation of a simulation environment (Matlab and ROS)
+  \item \textit{Testing of autonomous control for a single ship}
+  \item \textit{Further research for the formation control task}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Schedule}{2nd Half Goals}
+Design and implementation of formation control on the platforms
+  \begin{itemize}
+  \item Assembly of two other boats, same as the we have
+  \item Analyse different formation control strategies in more detail
+  \item Determination of practical group coordination (initialisation task)
+  \item Implementation of leader-follower formation control (tracking task)
+  \item Formation control is according to a given path of interest
+  \item Extend simulation model with environmental disturbances
+  \item Agent-agent avoidance, and maybe other objects too
+  \end{itemize}
 \end{frame}
 
 {
