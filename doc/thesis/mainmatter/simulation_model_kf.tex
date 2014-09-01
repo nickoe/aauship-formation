@@ -190,7 +190,27 @@ The matrix R represents covariance matrix of observational (measurement) uncerta
 
 \subsection{Determine Q}
 The matrix Q represents the covariance matrix of process noise in the system state dynamics. This matrix includes parameters as disturbances in the process itself. When looking at the AAUSHIP this could for instance be the incoming waves acting as disturbances both in the roll, pitch and the heading. These types of disturbances can be hard to measure and put a precise number to. Instead this matrix is used as a tuning parameter for the \ac{KF} where this sets a weighting of how much the process, and therefore the model, are to be trusted. If the sensors has a high accuracy, it would be of benefit to trust these more than the process, thus putting the parameter of this specific measurement in the Q matrix high. But the Q matrix is used to combine the measurements and the model prediction together. This means that based on the variances from the Q matrix, based on the values from the R matrix, is tuned to get the best performance from the combination of the model and the measurements.\\
-As the model of the AAUSHIP is made makes it possible to tune the parameters of Q in a systematic way. The model decouples the acceleration from the velocity, and the velocity from the position. Therefore it is of benefit to tune the acceleration noise variance firstly, such that this makes a proper fit to a step function. A simple test can be simulated where the AAUSHIP accelerates to a certain velocity and keeps this velocity. This needs to fit within some predetermined margin that makes the AAUSHIP follow a satisfying curve in each of the acceleration, velocity and position. The simulation curve is both based on measurements and model predictions \todo{Vi skal have sat nogle tal på det her, maaske forme en krav spec? - Dog er det jo mest the relative position til trajectory som har en vigtigere krav}. A wanted acceleration curve, for instance in surge, will look like \todo{Få lige sat billede ind}. Afterwards is the velocity of the AAUSHIP tuned. This is done in the same manor, where the velocity of a step function needs to look like \todo{Også billede her}. At last is the position tuned, which is the one with largest relative noise from the measurements. This forces the value in Q to be smaller thus making the AAUSHIP trust the model prediction more than then measurements. A position plot with two different values in Q can be seen here. \todo{lav plot med to forskellige Q værdier i N og E}. The one with the lowest value in Q gives the best position fit of these, which also follows the intuition of how the \ac{KF} should work. The resulting Q matrix is tuned to be
+As the model of the AAUSHIP is made makes it possible to tune the parameters of Q in a systematic way. The model decouples the acceleration from the velocity, and the velocity from the position. Therefore it is of benefit to tune the acceleration noise variance firstly, such that this makes a proper fit to a step function. A test can be simulated where the AAUSHIP accelerates to a certain velocity and keeps this velocity. This needs to fit such that it makes the AAUSHIP follow a satisfying curve in each of the acceleration, velocity and position. The simulation curve is both based on measurements and model predictions \todo{Vi skal have sat nogle tal på det her, maaske forme en krav spec? - Dog er det jo mest the relative position til trajectory som har en vigtigere krav}. A wanted acceleration curve, for instance in surge and sway, will look like
+\begin{figure}
+  \includegraphics[width=0.9\textwidth]{../../code/matlab/accel0,00001}
+  \caption{Measurement and estimate of acceleration in surge and sway.}
+  \label{fig:uvacceltest}
+\end{figure}
+Afterwards is the velocity of the AAUSHIP tuned. This is done in the same manor, where the velocity of a step function needs to look like
+\begin{figure}
+  \includegraphics[width=0.9\textwidth]{../../code/matlab/uv0,00001}
+  \caption{Measurement and estimate of velocity in surge and sway.}
+  \label{fig:uvtest}
+\end{figure}
+At last is the position tuned, which is the one with largest relative noise from the measurements. This forces the value in Q to be smaller thus making the AAUSHIP trust the model prediction more than then measurements. A position plot with two different values in Q can be seen here
+\begin{figure}
+\centering
+  \includegraphics[width=0.8\textwidth]{../../code/matlab/q0,001}
+  \includegraphics[width=0.8\textwidth]{../../code/matlab/q0,00001}
+  \caption{Simulated and filtered measurements of AAUSHIP tracking a trajectory. 1.st figure is with low sensor variance of the NED measurement, and 2.nd figure is with high sensor variance of the NED measurement.}
+  \label{fig:postest0,00001}
+\end{figure}
+The one with the lowest value in Q gives the best position fit of these, which also follows the intuition of how the \ac{KF} should work. The resulting Q matrix is tuned to be
 \begin{align}
 &Q_k = \diag{\mathbf{w}} = \\ \nonumber
 &\diag{\sigma_{N}^2, \sigma_{E}^2, \sigma_{x_{b}}^2, \sigma_{y_{b}}^2, \sigma_{\phi}^2, \sigma_{\theta}^2, \sigma_{\psi}^2, \sigma_{u}^2, \sigma_{v}^2, \sigma_{p}^2, \sigma_{q}^2, \sigma_{r}^2, \sigma_{\dot u}^2, \sigma_{\dot v}^2, \sigma_{\dot p}^2, \sigma_{\dot q}^2, \sigma_{\dot r}^2}
