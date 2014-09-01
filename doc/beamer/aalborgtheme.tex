@@ -44,7 +44,7 @@
 }
 
 \title[AAUSHIP\\ Formation Control]% optional, use only with long paper titles
-{Halfway Statusseminar for the\\ AAUSHIP Formation Control Project}
+{\includegraphics[width=5cm]{../thesis/frontmatter/aauship}\\ Halfway Statusseminar for the\\ AAUSHIP Formation Control Project}
 
 %\subtitle[v.\ 0.1.1] %optional
 %{v.\ 0.1.1}
@@ -79,6 +79,7 @@
 \date{\today}
 
 \begin{document}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
 % the titlepage
 \begin{frame}[plain] % the plain option removes the sidebar and header from the title page
   \titlepage
@@ -93,14 +94,34 @@
 \section{Introduction}
 \begin{frame}{Introduction}{Motivation}
   \begin{itemize}
-    \item<1-> Little to no research are currently devoted to maritime autonomous crafts.
-    \item<2-> During the 2012 Fukushima accident in Japan, no measurements of the spread of radioactivity was available in the coastal zones, thus relying only on estimates. 
-    \item<3-> The coastal area around Greenland has no up-to-date baymethric maps available, and with the growing interest in Greenland (both industrially and commercially) this poses a threat to the ships going in and out of the fjords.
+    \item Port of Aalborg wants to be an intelligent harbour
+    \item Always updated bathymetry data for an ``automatic pilot''
+    \item Currently mapped with a manned boat
+    \begin{itemize}
+      \item Previosly using a single beam echoshounder
+      \item Now using a multibeam sonar
+    \end{itemize}
+    \item Bathymetry data is currently updated every three month to every three years approximately
+    \item Could use autonomous vehichles to verify validity of old data
+    \item A fleet of ``cheap'' autonomous vehichles could update the map in areas which do not require high resolution.
   \end{itemize}
 \end{frame}
 
+\begin{frame}{Introduction}{Motivation}
+  \begin{figure}
+	  \includegraphics[width=\textwidth]{../thesis/fig/use-case-data}
+	  \caption{\scriptsize Area of the harbour at Aalborg Portland provided as sample
+	  data from Aalborg Havn. Background map data CC BY-SA OpenStreetMap.}
+	  \label{fig:diffforms}
+  \end{figure}
+\end{frame}
+
 \begin{frame}{Introduction}{The Mission}
-<Mission description here>
+\begin{itemize}
+\item Use Autonomous Surface Vessel's (ASV's) for mapping with a single beam sonar
+\item Control the ASV's with some kind of formation control
+\item Formation control is choosen because it is an advantage to only have one group
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Introduction}{Concept Art}
@@ -228,9 +249,6 @@ Implementation with ROS
 
 
 %%%%%%%%%%%%%%%%
-\subsection{Development}
-
-
 \begin{frame}{Testing the control algorithms}{Results}
   \begin{itemize}
   \item Plot of the ship states during the voyage
