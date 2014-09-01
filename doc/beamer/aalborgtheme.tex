@@ -43,7 +43,7 @@
   \href{#1}{{\usebeamercolor[bg]{Aalborg}#2}}
 }
 
-\title[AAUSHIP Formation Control]% optional, use only with long paper titles
+\title[AAUSHIP\\ Formation Control]% optional, use only with long paper titles
 {Halfway Statusseminar for the\\ AAUSHIP Formation Control Project}
 
 %\subtitle[v.\ 0.1.1] %optional
@@ -112,37 +112,26 @@
   \caption{Comparison of two ways to cover an area with a single beam ships}
   \label{fig:concept-art}
 \end{figure}
+\end{frame}
 
+\begin{frame}{Introduction}{1st Half Goals}
+Development of a single working testing platform
+  \begin{itemize}
+  \item Research of formation control paradigms
+  \item Decide feasibility for using ROS as the software platform
+  \item Subsystem test of the ship system, manual control
+  \item Modelling of the ship
+  \item Design and implementation of an state estimator
+  \item Creation of a simulation environment (Matlab and ROS)
+  \item \textit{Testing of autonomous control for a single ship}
+  \item \textit{Further research for the formation control task}
+  \end{itemize}
 \end{frame}
 
 
 %%%%%%%%%%%%%%%%
 \section{System Design}
-\begin{frame}{System Design}{}
-Modelling
-
-\end{frame}
-
-\begin{frame}{System Design}{Modelling}
-<Describe what should be modelled, why 5DOF, parmeter estimation...>
-\end{frame}
-
-\begin{frame}{System Design}{Estimaiton}
-
-\end{frame}
-
-\begin{frame}{System Design}{Simulation}
-
-\end{frame}
-
-\begin{frame}{System Design}{Implementation with ROS}
-<ROS node graphs here>
-\end{frame}
-
-%%%%%%%%%%%%%%%%
-\section{Development}
-\subsection{AAUSHIP.01}
-\begin{frame}{Development}{AAUSHIP.01}
+\begin{frame}{System Design}{AAUSHIP.01}
 \begin{itemize}
   \item<1-> The ship is designed as a non-planing deplacement craft (eg. like freight ships).
   \item<2-> Developed using rapid prototyping techniques.
@@ -151,6 +140,62 @@ Modelling
   \item<5-> Examined and the process iterated.
   \item<6-> Vaccumformed by DD-plast in Randers and assembled in the machine shop at Aalborg University.
 \end{itemize}
+<Image of the boat here>
+\end{frame}
+
+\begin{frame}{System Design}{Hardware}
+\begin{itemize}
+  \item Fitted with 2 x 1200W engines (totally producing around 3 HP at full thrust).
+  \item Fitted with 6 x 3200mAh batteries (results in a mission time of around 5 hours).
+  \item 2 counter rotating 60mm propellers.
+  \item Inertial Measurement Unit.
+  \item Global Positioning System.
+  \item A (currently) 20mW 19.2 kbps radio link @ 470 MHz
+  \item Arduino Mega with a custom made shield board mounted.
+  \item Retrofitted with a hydrofoil to reduce the wake and pitch of the ship.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{System Design}{Overview}
+Modelling
+\begin{itemize}
+% <Describe what should be modelled, why 5DOF, parmeter estimation...>
+\item What should be modelled?
+\item How many states
+\item Parameter estimation
+\end{itemize}
+
+Estimaiton
+\begin{itemize}
+% <KF and AHRS filters>
+\item KF
+\item AHRS
+\end{itemize}
+
+Simulation
+\begin{itemize}
+% <Simulation to model verification>
+\item Simulation model in Matlab and ROS for office testing
+\end{itemize}
+
+Implementation with ROS
+\begin{itemize}
+\item ROS is modular, theese are called nodes
+\end{itemize}
+\end{frame}
+
+\begin{frame}{System Design}{ROS}
+<ROS node graphs here>
+\end{frame}
+
+%%%%%%%%%%%%%%%%
+\section{Modelling}
+\begin{frame}{Modelling}{Linear Model}
+
+\end{frame}
+
+\begin{frame}{Modelling}{Simulation Model}
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%
@@ -184,18 +229,7 @@ Modelling
 
 %%%%%%%%%%%%%%%%
 \subsection{Development}
-\begin{frame}{Development}{Hardware}
-\begin{itemize}
-  \item Fitted with 2 x 1200W engines (totally producing around 3 HP at full thrust).
-  \item Fitted with 6 x 3200mAh batteries (results in a mission time of around 5 hours).
-  \item 2 counter rotating 60mm propellers.
-  \item Inertial Measurement Unit.
-  \item Global Positioning System.
-  \item A (currently) 20mW 19.2 kbps radio link @ 470 MHz
-  \item Arduino Mega with a custom made shield board mounted.
-  \item Retrofitted with a hydrofoil to reduce the wake and pitch of the ship.
-\end{itemize}
-\end{frame}
+
 
 \begin{frame}{Testing the control algorithms}{Results}
   \begin{itemize}
@@ -211,20 +245,6 @@ Modelling
 
 %%%%%%%%%%%%%%%%
 \section{Schedule}
-\begin{frame}{Schedule}{1st Half Goals}
-Development of a single working testing platform
-  \begin{itemize}
-  \item Research of formation control paradigms
-  \item Decide feasibility for using ROS as the software platform
-  \item Subsystem test of the ship system, manual control
-  \item Modelling of the ship
-  \item Design and implementation of an state estimator
-  \item Creation of a simulation environment (Matlab and ROS)
-  \item \textit{Testing of autonomous control for a single ship}
-  \item \textit{Further research for the formation control task}
-  \end{itemize}
-\end{frame}
-
 \begin{frame}{Schedule}{2nd Half Goals}
 Design and implementation of formation control on the platforms
   \begin{itemize}
