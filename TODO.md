@@ -105,7 +105,19 @@ Datoer i () er til, og ikke med. Der er ikke lagt vægt på så meget til næste
 - (Nu - Uge 23) Undersøg formationsfølgeropgave
 	Vidensopbygning til næste del af projektet.
 
-# Næste semester
-- () Få alt hardware op at køre, her tænkes mest på en båd mere
-- () Lav og implementer gruppekoordineringsopgave, formationsfølgeropgave og eventuel undvigelsesopgave
-- () Få begge både til at sejle i gruppe og hold formation i en given path.
+# Næste semester [uger 37 til of med 49 (12 uger)]
+
+- (37) Succesfull seatrail in Klingenberg
+  - Fix /lli_input interface in simulation and real process
+  - Get GPS data properly into the NED frame, use the rotation origin from the map data, from Klingenberg.
+  - Test thrust allocation on boat
+  - Implement thrust allocation in ROS in the control node and simulation node
+  - Test with boat hardware, HIL testing
+- Finish off the esitmation and modelling stuff
+- (?) Assembly of two other boats, same as the one we have
+- Analyse different formation control strategies in more detail (documentaiton, with conclusion)
+- Determination of practical group coordination (initialisation task)
+- Implementation of leader-follower formation control (tracking task)
+- Formation control is according to a given path of interest (implementation in ROS, at least with simulation model)
+- Extend simulation model with environmental disturbances
+- Optional future work, could be described. Agent-agent avoidance, and maybe other objects too
