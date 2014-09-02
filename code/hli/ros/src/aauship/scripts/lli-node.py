@@ -25,15 +25,16 @@ class LLI(object):
         tmp = []
         tmp = struct.pack('>h', data.Data )
 
-        if data.DevID == 10: # Actuators
-            self.ctllog.write(str(ord(data.MsgID)) + ',' + str(data.Data) + ',' + str(time.time()) + "\r\n")
+        #if data.DevID == 10: # Actuators
+            #self.ctllog.write(str(ord(data.MsgID)) + ',' + str(data.Data) + ',' + str(time.time()) + "\r\n")
 
         self.packet.lli_send(self.packet.package(tmp,data.DevID,data.MsgID))
+        print("packet sent")
 
     def run(self):
         self.qu = Queue.Queue()
-#        self.packet = fapsPacket.Handler('/dev/lli', 57600, 0.02, self.qu)
-        self.packet = fapsPacket.Handler('/dev/lli', 115200, 0.02, self.qu)
+        self.packet = fapsPacket.Handler('/dev/lli', 57600, 0.02, self.qu)
+#        self.packet = fapsPacket.Handler('/dev/lli', 115200, 0.02, self.qu)
         # GPS2 and Echo sounder should be opened here, or maybe implemented in the fapsPacket.Handler thread
 #        gps2rcv = serial.Serial("/dev/gps2",115200,timeout=0.04)
 #        echorcv = serial.Serial("/dev/echosounder",4800,timeout=0.04)

@@ -22,7 +22,7 @@ class Control(object):
 
         rospy.init_node('control_node')
         self.r = rospy.Rate(0.5) # Hz
-        self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=1)
+        self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=3)
         self.pub = rospy.Publisher('lli_input', Float64MultiArray, queue_size=3)
 
         # Initilaze parapeters for the PID contorller
@@ -33,8 +33,8 @@ class Control(object):
         self.derivative.append(0)
         self.thrustdiff =[]
         self.thrustdiff.append(0)
-        self.Kp = 5.0;
-        self.Ki = 0.051;
+        self.Kp = 4.0;
+        self.Ki = 0.0#51;
         self.Kd = 50.0;
 
         # Create path object in rviz
@@ -118,9 +118,9 @@ class Control(object):
         
         #P_c = [now, 0]; # [x y angle]
         P_c = now; # [x y]
-        wp_r = 1; # Waypoint Radius
+        wp_r = 1.5; # Waypoint Radius
         wp_reached = 0; # Waypoint not reached
-        v_i_len = 1.5; # length of intermediate vector
+        v_i_len = 1.2; # length of intermediate vector
         
         ## Initial calculations
         #track = [wps;wpe];

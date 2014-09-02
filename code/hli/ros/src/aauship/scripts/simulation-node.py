@@ -32,9 +32,9 @@ k = 0
 class Simulator(object):
     def __init__(self):
         self.sub = rospy.Subscriber('lli_input', Float64MultiArray, self.llicb)
-        self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=1)
+        self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=3)
         self.subahrs = rospy.Subscriber('attitude', Quaternion, self.ahrscb)
-        self.pubimu = rospy.Publisher('imu', ADIS16405, queue_size=1, latch=True)
+        self.pubimu = rospy.Publisher('imu', ADIS16405, queue_size=3, latch=True)
         self.trackpath = rospy.Publisher('track', Path, queue_size=3)
         self.refpath = rospy.Publisher('refpath', Path, queue_size=3, latch=True)
         self.keepoutpath = rospy.Publisher('keepout', Path, queue_size=3, latch=True)
@@ -44,7 +44,7 @@ class Simulator(object):
         # Construct the Kalman-filter
         self.f = kfoo.KF()
 
-        self.v = np.array([0.3,0.3,13.5969e-006,0.2,0.2,0.00033,0.00033])#Measurement,noise
+        self.v = np.array([3,3,13.5969e-006,0.2,0.2,0.00033,0.00033])#Measurement,noise
         self.z = np.zeros(7)
 
         self.P_plus = np.zeros([17,17])
@@ -186,14 +186,15 @@ class Simulator(object):
             self.x = self.f.aaushipsimmodel(self.x,self.u)
             #self.pubmsg.data = self.x
             
-            # Calculate the IMY measurements from the aaushipsimmodel
+            # Calculate the IMU measurements from the aaushipsimmodel
+            # TODO wops wops, det skal vaere invers ikke transponeret
+
             accelbody = np.array([self.x[12], self.x[13], 0])
             accelimu = accelbody + self.RNED2BODY(self.x[4],self.x[5],self.x[6]).T.dot(np.array([0,0,9.82]))
 
             declination = 2.1667*pi/180 # angle from north
             inclination = 70.883*pi/180 # angle from north-east plane
-            magnbody = np.array([self.x[12], self.x[13], 0])
-            magnimu = magnbody + self.RNED2BODY(self.x[4],self.x[5],self.x[6]).T.dot(np.array([0,inclination,declination]))
+            magnimu = self.RNED2BODY(self.x[4],self.x[5],self.x[6]).T.dot(np.array([0,inclination,declination]))
 
             self.imumsg.xgyro = self.x[14] # dot_p
             self.imumsg.ygyro = self.x[15] # dot_q
@@ -213,7 +214,7 @@ class Simulator(object):
             # Idle loop untill the /ahrs_* publishses to /attitude
             before = time.time()
             print("waiting for topic")
-            rospy.wait_for_message('attitude', Quaternion, timeout=0.1)
+            rospy.wait_for_message('attitude', Quaternion, timeout=1)
             print("recieved topic " + str(time.time()-before))
 
             #rospy.signal_shutdown("testing")

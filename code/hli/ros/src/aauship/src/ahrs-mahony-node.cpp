@@ -21,8 +21,8 @@ public:
   SubscribeAndPublish()
   {
     adissub = n.subscribe("imu", 1, &SubscribeAndPublish::adisCallback, this);
-    ahrssub = n.subscribe("ahrs", 2, &SubscribeAndPublish::ahrsCallback, this); // not implemented
-    attitudepub = n.advertise<geometry_msgs::Quaternion>("attitude", 2);
+    ahrssub = n.subscribe("ahrs", 2, &SubscribeAndPublish::ahrsCallback, this); // not implemented, supposed to be live update of filter parameters
+    attitudepub = n.advertise<geometry_msgs::Quaternion>("attitude", 2, true);
   }
 
   void adisCallback(const aauship::ADIS16405::ConstPtr& msg)
@@ -37,8 +37,8 @@ public:
     tf::Quaternion q(u.getQuaternions(1),u.getQuaternions(2),u.getQuaternions(3),u.getQuaternions(0));
 
     /* Debug output */
-    u.calculateEulerAngles();
-    ROS_INFO("Euler angles: [%.3f, %.3f, %.3f]", u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
+    //u.calculateEulerAngles();
+    //ROS_INFO("Euler angles: [%.3f, %.3f, %.3f]", u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
 
     /* Publish rviz transform information */
     static tf::TransformBroadcaster tfbc;

@@ -21,7 +21,7 @@ public:
   SubscribeAndPublish()
   {
     adissub = n.subscribe("imu", 1, &SubscribeAndPublish::adisCallback, this);
-    ahrssub = n.subscribe("ahrs", 2, &SubscribeAndPublish::ahrsCallback, this);
+    ahrssub = n.subscribe("ahrs", 2, &SubscribeAndPublish::ahrsCallback, this);  // not inplemented, supposed to be live update of filter parameters
     attitudepub = n.advertise<geometry_msgs::Quaternion>("attitude", 2, true);
   }
 
