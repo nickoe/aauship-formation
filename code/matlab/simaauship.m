@@ -194,6 +194,7 @@ hold off
 % Figure for error plotting
 errorplot = figure(100)
 nick = sqrt((x_hat(1:es,2)-x(1:es,2)).^2 + (x_hat(1:es,1)-x(1:es,1)).^2);
+meanerror = mean(nick)
 plot(1:es,nick)
 legend('Euclidian position error')
 xlabel('Samples')
