@@ -155,26 +155,29 @@ Development of a single working testing platform
 \section{System Design}
 \begin{frame}{System Design}{AAUSHIP.01}
 \begin{itemize}
-  \item<1-> The ship is designed as a non-planing deplacement craft (eg. like freight ships).
-  \item<2-> Developed using rapid prototyping techniques.
-  \item<3-> Developed in Rhinoceros using lofting techniques.
-  \item<4-> Printed on a 3D printer.
-  \item<5-> Examined and the process iterated.
-  \item<6-> Vacuumformed by DD-plast in Randers and assembled in the machine shop at Aalborg University.
+  \item The ship is designed as a non-planing deplacement craft (eg. like freight ships)
+  \item Developed using rapid prototyping techniques
+  \item Developed in Rhinoceros using lofting techniques
+  \item Printed on a 3D printer
+  \item Examined and the process iterated
+  \item Vacuumformed by DD-plast in Randers and assembled at Aalborg University
 \end{itemize}
-<Image of the boat here>
+\begin{center}
+\includegraphics[width=0.5\textwidth]{img/blender-render}
+\end{center}
 \end{frame}
 
 \begin{frame}{System Design}{Hardware}
 \begin{itemize}
-  \item Fitted with 2 x 1200W engines (totally producing around 3 HP at full thrust).
+  \item Fitted with 2 brushless motors
   \item Fitted with 6 x 3200mAh batteries (results in a mission time of around 5 hours).
-  \item 2 counter rotating 60mm propellers.
-  \item Inertial Measurement Unit.
-  \item Global Positioning System.
-  \item A (currently) 20mW 19.2 kbps radio link @ 470 MHz
-  \item Arduino Mega with a custom made shield board mounted.
-  \item Retrofitted with a hydrofoil to reduce the wake and pitch of the ship.
+  \item 2 counter rotating 40mm propellers
+  \item Inertial Measurement Unit
+  \item Global Positioning System
+  \item An ISM 20mW 19.2 kbps radio link 
+  \item Microcontroller connects the ship electronics to the main computer (LLI)
+  \item Netbook computer with ROS (HLI)
+  \item Retrofitted with a hydrofoil to reduce the wake and pitch of the ship
 \end{itemize}
 \end{frame}
 
@@ -312,7 +315,7 @@ Position tuning, $Q_{1:2,1:2}$ = 0.00001
 \begin{frame}{Schedule}{2nd Half Goals}
 Design and implementation of formation control on the platforms
   \begin{itemize}
-  \item Assembly of two other boats, same as the we have
+  \item Assembly of two other boats, same as the one we have
   \item Analyse different formation control strategies in more detail
   \item Determination of practical group coordination (initialisation task)
   \item Implementation of leader-follower formation control (tracking task)
