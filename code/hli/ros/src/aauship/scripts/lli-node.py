@@ -13,7 +13,6 @@ import struct
 import time
 
 import Queue
-import fapsParse  # fork of packetparser
 import fapsPacket # fork of packetHandler
 
 class LLI(object):

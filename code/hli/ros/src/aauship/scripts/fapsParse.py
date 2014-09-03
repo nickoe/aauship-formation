@@ -252,7 +252,7 @@ class packetParser():
                 #print "GPS!"
                 #time.sleep(1)
                 if(ord(packet['MsgID']) == 6): # This is what the LII sends for the moment
-                    #print str("".join(packet['Data']))
+                    print str("".join(packet['Data']))
                     content = "".join(packet['Data']).split(',')
                     if content[0] == "$GPRMC" and content[2] == 'A':
                     
@@ -276,13 +276,14 @@ class packetParser():
                         print "Gps invalid!"
                     '''
                     if content[1] == 'A' :
-                    
+                        print("Wee, we have a valid $GPRMC fix")
                         self.gpslog.write(",".join(content) + ", " + str(time.time()) + "\r\n")
                         self.fulllog.write(",".join(content) + ", " + str(time.time()) + "\r\n")
                         #print content
                         speed = float(content[6]) * 0.514444444 #* 0 + 100
                         #print str(speed) + " m/s"
                         [latdec, londec] = (gpsfunctions.nmea2decimal(float(content[2]),content[3],float(content[4]),content[5]))
+                        print(latdec,londec)
                         latdec = latdec*pi/180
                         londec = londec*pi/180
                         if self.centerlat == 0 and self.centerlon == 0:
@@ -290,9 +291,8 @@ class packetParser():
                             self.centerlat = float(latdec)
                             self.centerlon = float(londec)
                         
-                        
                         pos = self.rot * (gpsfunctions.wgs842ecef(float(latdec),float(londec))-gpsfunctions.wgs842ecef(float(self.centerlat),float(self.centerlon)))
-                        #print pos
+                        print pos
                         
                         
                         self.state[0] = [float(pos[0,0]),        1]

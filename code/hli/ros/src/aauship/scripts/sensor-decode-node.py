@@ -67,6 +67,7 @@ class Estimator(object):
             print("self.stat = " + str(self.stat))
 
         #print "Running parser"
+	### if IMU device ###
         tmp = {'DevID':str(data.DevID), 'MsgID':str(data.MsgID),'Data': (data.Data)}
         self.parser.parse(tmp)
         self.imu['supply'] = numpy.asscalar(self.samples[0,0])*0.002418
@@ -97,6 +98,10 @@ class Estimator(object):
         pr = self.pitchroll(self.imu['xaccl'],self.imu['yaccl'],self.imu['zaccl'])
         head = self.yaw(self.imu['xmagn'],self.imu['ymagn'],self.imu['zmagn'],pr['pitch'],pr['roll'])
 
+	### if GPS device ###
+	# publish GPS topic here
+
+
         #self.pub_attitude.publish(pr['pitch'],pr['roll'],head) # We use the cpp ahrs methods insted
 
         self.stat = 0 # Used for callback debugging
@@ -107,15 +112,20 @@ class Estimator(object):
         BUFSIZE = 1024
         self.imulog   = open("logs/imu.log",'w',BUFSIZE)   # was acclog
         self.mixedlog = open("logs/mixed.log",'w',BUFSIZE) # was recieved
-        self.gpslog   = open("logs/gps1.log",'w',BUFSIZE)  # was gpslog
+        self.gps1log   = open("logs/gps1.log",'w',BUFSIZE)  # was gpslog
         self.plog     = open("logs/p.log",'w',BUFSIZE)     # was plog
         #self.echolog = open("logs/echo.log",'w',BUFSIZE)  # Currently logged in lli-node.py
         #self.gps2log = open("logs/gps2.log",'wb',BUFSIZE) # Currently logged in lli-node.py
 
+        # TODO use the rotlat and rotlat from sio.loadmat('klingenberg.mat')
+        # to determine the rotatoin point for GPS positions to the NED frame.
+        # GPS1 = LLI GPS
+        # GPS2 = u-blox GPS	
+
         self.samples = numpy.zeros((12,2))
         self.parser = fapsParse.packetParser(
                 self.imulog,
-                self.gpslog,
+                self.gps1log,
                 self.samples,
                 self.mixedlog,
                 self.plog)
@@ -130,7 +140,7 @@ class Estimator(object):
         print("\nClosing log files")
         self.imulog.close()
         self.mixedlog.close()
-        self.gpslog.close()
+        self.gps1log.close()
         self.plog.close()
         print("Exiting")
         exit()
