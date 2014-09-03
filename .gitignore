@@ -21,6 +21,8 @@
 *.ilg
 *.nlo
 *.nls
+*.snm
+*.nav
 
 # Hardware files
 *.bak
