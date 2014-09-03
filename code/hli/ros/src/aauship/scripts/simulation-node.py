@@ -31,8 +31,8 @@ k = 0
 ## This is the simulaiton node, basically kind of the same as simaauship.m
 class Simulator(object):
     def __init__(self):
-        self.sub = rospy.Subscriber('lli_input', Float64MultiArray, self.llicbsim)
-        self.subsim = rospy.Subscriber('lli_inputsim', LLIinput, self.llicb)
+        self.subsim = rospy.Subscriber('lli_inputsim', Float64MultiArray, self.llicbsim)
+        self.sub = rospy.Subscriber('lli_input', LLIinput, self.llicb)
         self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=3)
         self.subahrs = rospy.Subscriber('attitude', Quaternion, self.ahrscb)
         self.pubimu = rospy.Publisher('imu', ADIS16405, queue_size=3, latch=True)
@@ -53,7 +53,7 @@ class Simulator(object):
         self.R_i = np.diag(self.v)
 
         self.thrustdiff = 0
-        self.u = np.zeros(5) # input vector
+        self.tau = np.zeros(5) # input vector
         self.x = np.zeros(17) # state vector
         self.x_hat = self.x
         self.imumsg = ADIS16405()
@@ -98,14 +98,31 @@ class Simulator(object):
     # /lli_inputsim callback
     def llicbsim(self, data):
         #print(data.data[0])
-        self.thrustdiff = data.data[0]      
+        ##self.thrustdiff = data.data[0]      
 	pass
     
     # /lli_input callback
     def llicb(self, data):
-        print(data.Data)
+        if data.MsgID == 5:
+            self.rightthruster = data.Data
+
+        if data.MsgID == 3:
+            self.leftthruster = data.Data
+        
+        print(self.leftthruster, self.rightthruster)
 	    #self.thrustdiff = data.Data
-        pass
+
+        # Thust allocation matrix from calcTforthrustalloc.m
+        self.T = np.matrix([[     0,         0,    1.0000,    1.0000],
+                            [1.0000,    1.0000,         0,         0],
+                            [0.0500,    0.0500,    0.0498,   -0.0498],
+                            [     0,         0,    0.0000,    0.0000],
+                            [0.4100,   -0.1800,   -0.0047,    0.0047]])
+        # Thust coefficient matrix
+        self.K = np.eye(4)
+        self.u = np.array([0,0,self.leftthruster,self.rightthruster])
+        self.tau = np.squeeze( np.asarray( self.T.dot(self.K.dot(self.u)) ) )
+        print(self.tau)
 	
 
 
@@ -131,7 +148,7 @@ class Simulator(object):
             #gpsc[jj] = k;
             jj = jj+1;
         
-        (self.x_hat,self.P_plus) = self.f.KalmanF(self.x_hat, self.u, self.z, self.P_plus, self.R)
+        (self.x_hat,self.P_plus) = self.f.KalmanF(self.x_hat, self.tau, self.z, self.P_plus, self.R)
         
         self.pubmsg = Float64MultiArray()
         for a in self.x_hat:
@@ -190,10 +207,10 @@ class Simulator(object):
             self.trackmsg.poses[0] = PoseStamped(h, Pose(p, q))
 
             # Her skal u subscripe til lli input
-            self.u = np.array([8,0,0,0,self.thrustdiff])
+            ##self.tau = np.array([8,0,0,0,self.thrustdiff])
 
             # Simulation
-            self.x = self.f.aaushipsimmodel(self.x,self.u)
+            self.x = self.f.aaushipsimmodel(self.x,self.tau)
             #self.pubmsg.data = self.x
             
             # Calculate the IMU measurements from the aaushipsimmodel
@@ -223,9 +240,9 @@ class Simulator(object):
             # This part is basically waiting for the arhs node to publish to the /attitude topic
             # Idle loop untill the /ahrs_* publishses to /attitude
             before = time.time()
-            print("waiting for topic")
+            #print("waiting for topic")
             rospy.wait_for_message('attitude', Quaternion, timeout=1)
-            print("recieved topic " + str(time.time()-before))
+            #print("recieved topic " + str(time.time()-before))
 
             #rospy.signal_shutdown("testing")
 

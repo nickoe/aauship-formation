@@ -23,9 +23,9 @@ class Control(object):
         rospy.init_node('control_node')
         self.r = rospy.Rate(0.5) # Hz
         self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=3)
-        self.pub = rospy.Publisher('lli_input', Float64MultiArray, queue_size=1)
+        self.pub = rospy.Publisher('lli_input', LLIinput, queue_size=1)
 
-        self.pubsim = rospy.Publisher('lli_inputsim', LLIinput, queue_size=1)
+        self.pubsim = rospy.Publisher('lli_inputsim', Float64MultiArray, queue_size=1)
 
         # Initilaze parapeters for the PID contorller
         self.error = []
@@ -108,20 +108,19 @@ class Control(object):
         print("thrustdiff " + str(self.thrustdiff[self.k]))
 
 
-        self.pubmsg = Float64MultiArray()
-
-        self.pubmsg.data.append(self.thrustdiff[self.k])
-        self.pub.publish(self.pubmsg)
+        self.pubmsgsim = Float64MultiArray()
+        self.pubmsgsim.data.append(self.thrustdiff[self.k])
+        self.pubsim.publish(self.pubmsgsim)
 
         # right thruster, devid 10, msgid 5
         # left thruster, devid 10, msgid 3
         # Temporary implementaiton, replacing the pubmsg with Float64MultiArray
-        self.pubmsgsim = LLIinput()
-        self.pubmsgsim.MsgID = 10
-        self.pubmsgsim.DevID = 5
-        self.pubmsgsim.Data  = self.thrustdiff[self.k]
-        print(self.pubmsgsim)
-        self.pubsim.publish(self.pubmsgsim)
+        self.pubmsg = LLIinput()
+        self.pubmsg.MsgID = 10
+        self.pubmsg.DevID = 5
+        self.pubmsg.Data  = self.thrustdiff[self.k]
+        print(self.pubmsg)
+        self.pub.publish(self.pubmsg)
         # Temporary implementation
 
         self.k = self.k+1
