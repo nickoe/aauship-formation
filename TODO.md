@@ -107,6 +107,9 @@ Datoer i () er til, og ikke med. Der er ikke lagt vægt på så meget til næste
 
 # Næste semester [uger 37 til of med 49 (12 uger)]
 
+JAL og Damkjær skal skrive RTK på indkøbslisten
+Skal have skaffet computerer til de nye både
+
 - (37) Succesfull seatrail in Klingenberg
   - Fix /lli_input interface in simulation and real process
   - Get GPS data properly into the NED frame, use the rotation origin from the map data, from Klingenberg.
@@ -115,9 +118,47 @@ Datoer i () er til, og ikke med. Der er ikke lagt vægt på så meget til næste
   - Test with boat hardware, HIL testing
 - Finish off the esitmation and modelling stuff
 - (?) Assembly of two other boats, same as the one we have
-- Analyse different formation control strategies in more detail (documentaiton, with conclusion)
+- Analyse different formation control strategies in more detail (documentaiton, with conclusion)  [slutningen af september]
+
+husk at leder follower også kan være formation efter manualt styret båd, den med en mand på. Måske snak om hvordan dette f.eks. kan bruges i åløb. 
+
+Find på så mange kriterer så muligt og snak med Søren fra havnen
+Hetrogen eller homogen gruppe af robotter? altid være hetrogen på en eller anden facon
+
+september beskriv nogle strategier, og udeluk nogle, fordi de ikke passer. Afgør strategier der ligner noget vi kan bruge og test dem. [skrivebordsanalyse] kommunikations krav er vigtig. Afgør hvor strikt formationen skal være. Sæt nogle kriterier op. Kommunikationsbehov, fleksibilitet hvis een dør, hvor strikt den skal holde formationen, objektundvigelse hvad skal gøres for det, [kriterievægting]  {energiforbrug, divergens, slitage, skalering af agenter (mht tid og sådant), ..., forbedringsforslag}
+ved 30 sep skal vi stå klar med nogle kriterer og simulering der understøtter de ønskede implemteringer
+oktober til analyse i smilerings miljøer, de og de tilfølde er gode osv, skal implemter en strategi per uge i oktober [dvs 3]
+første uge af november til klargøring til mission, sammenligning af de tre tests data for at se om de stemmer overens med vor simulering
+november til  test og resultatet dertil, noget addendum til de tests 
+
 - Determination of practical group coordination (initialisation task)
 - Implementation of leader-follower formation control (tracking task)
 - Formation control is according to a given path of interest (implementation in ROS, at least with simulation model)
 - Extend simulation model with environmental disturbances
 - Optional future work, could be described. Agent-agent avoidance, and maybe other objects too
+
+Kommentar fra Karl
+Noget med at lave digitale kort, som vi ikke har sagt. Hvis man vil lave en model af tilsanding, er dette projekt brugbart for at verifisere tilsandingsmodel. Dette er en næsteskridts motivation. 
+Multibeam - single beam; tænk på single beam formations kontrol versus multibeam. (tænk også på dette med formations topologien)
+Lige meget hvordan båden rent faktisk organiserer sig, hvis det er en virtula structure. Hvordan skal andre opfatte formationen, hvordan vil de undvige. 
+Han synes vi arbejder med en bottomup. Kan være farligt, måske vi skla lave ønsketænking med at starte fra toppen og håbe på at det neden under funker. (SLAM) Kunne bruge top down i stedet lidt, så vi kan få styr på nogle interfaces.
+Ryd op på bibliografi, find reference fra nogle af de mere kendte. [kan Karl sende navne og jorunaler]?
+Sørg for at få referencer fra mere kendte jornaler og sådant.
+Motivationsafsnittet. Grunder er ikke åbenlys, altså til hvorfor det skal være formatainskontrol.
+Skalering af formationen. (matemagisk resonering)
+Figur Figure 3.1 er ikke så precis, eller forklaret godt.
+Evnentuelt diskussion af path og trajectorie controllere.
+trapez cell decomposition, suggestion for making simple shapes to make lawnmover pattern
+Ide: Brug en statisk optagelse af støjen af GPS til at tilføje støj, i stedet for at brug gaussisk
+
+
+Kommentar fra JAL
+Hvad med formationskontrol med multibeam, formation skal ændres afhængig af dybde, afhængig af hvor meget overlap der er.
+"Two controls and Trajectory-Tracking control" kalligrafisk S, osv.
+Et fragtskib der sejler gennem fjorden, det har sin egen sonar båd med.
+Vi kan måske bruge single beam til at lave grov skanning under opmåling med multibeam.
+Sørg for konsekvent citeringsmetode. evntuelt kombinere   "bla bla bla Jensen said that [42]"
+(3.7) ret col til ^\top
+(4.13) argument for at den linære approximation er valid
+kaptiler 4, 5, 6 slutter brat
+Find ud af om der gør noget at båden ikke sejler precist, RTK log er nok fin. [BESKRIV DETTE ET STED]
