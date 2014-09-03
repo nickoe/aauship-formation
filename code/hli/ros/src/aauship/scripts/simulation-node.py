@@ -31,7 +31,8 @@ k = 0
 ## This is the simulaiton node, basically kind of the same as simaauship.m
 class Simulator(object):
     def __init__(self):
-        self.sub = rospy.Subscriber('lli_input', Float64MultiArray, self.llicb)
+        self.sub = rospy.Subscriber('lli_input', Float64MultiArray, self.llicbsim)
+        self.subsim = rospy.Subscriber('lli_inputsim', LLIinput, self.llicb)
         self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=3)
         self.subahrs = rospy.Subscriber('attitude', Quaternion, self.ahrscb)
         self.pubimu = rospy.Publisher('imu', ADIS16405, queue_size=3, latch=True)
@@ -94,11 +95,20 @@ class Simulator(object):
                         [    -sth,                 cth*sphi,                 cth*cphi] ])
         return R
 
-    # /lli_input callback
-    def llicb(self, data):
+    # /lli_inputsim callback
+    def llicbsim(self, data):
         #print(data.data[0])
         self.thrustdiff = data.data[0]      
+	pass
     
+    # /lli_input callback
+    def llicb(self, data):
+        print(data.Data)
+	    #self.thrustdiff = data.Data
+        pass
+	
+
+
     # /attidude callback
     def ahrscb(self, data):
         #print(data.data[0])
