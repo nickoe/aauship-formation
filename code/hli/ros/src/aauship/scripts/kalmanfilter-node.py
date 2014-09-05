@@ -9,7 +9,6 @@ from aauship.msg import *
 from math import sin, cos
 
 import numpy
-import pylab
 import scipy.io as sio
 import scipy.linalg as linalg
 
@@ -113,23 +112,6 @@ class KF(object):
         print(self.P_plus)
 
 
-        '''
-        pylab.figure()
-        pylab.plot(z,'k+',label='noisy measurements')
-        pylab.plot(xhat,'b-',label='a posteri estimate')
-        pylab.axhline(x,color='g',label='truth value')
-        pylab.legend()
-        pylab.xlabel('Iteration')
-        pylab.ylabel('Voltage')
-
-        pylab.figure()
-        valid_iter = range(1,n_iter) # Pminus not valid at step 0
-        pylab.plot(valid_iter,Pminus[valid_iter],label='a priori error estimate')
-        pylab.xlabel('Iteration')
-        pylab.ylabel('$(Voltage)^2$')
-        pylab.setp(pylab.gca(),'ylim',[0,.01])
-        pylab.show()
-        '''
 
 if __name__ == '__main__':
     w = KF()
