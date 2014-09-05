@@ -36,10 +36,12 @@ T = [T;F1r,F2r,F3r,F4r]
 %       -1 -1 0 0;...
 %       0 0 sin(az)*lz3 sin(az*lz4);...
 %       lx1 -lx2 -sin(a)*lx3 sin(a)*lx4];
+
 K = eye(4,4);
+
 % K(3,3) = 0.2657/2;
 % K(4,4) = 0.2657/2;
-u = [10 10 0 0]'; % Thruster force vector [N]
+u = [0 0 10 10]'; % Thruster force vector [N]
 tau = T*K*u;
 fprintf('X (surge)\t%f\n', tau(1))
 fprintf('Y (sway)\t%f\n', tau(2))
@@ -47,5 +49,20 @@ fprintf('K (roll)\t%f\n', tau(3))
 fprintf('M (pitch)\t%f\n', tau(4))
 fprintf('N (yaw)\t\t%f\n', tau(5))
 
-% u_check = inv(K)*pinv(T)*tau
+tau= [8;0;0;0;0.1];
+u_check = inv(K)*pinv(T)*tau
+
+
+
+%%
+T = [F3,F4];
+T = T(1:2,:);
+T = [T;F3r,F4r];
+
+K = eye(2,2);
+K(1,1) = 0.26565;
+K(2,2) = 0.26565;
+
+u_check = inv(K)*pinv(T)*tau
+
 
