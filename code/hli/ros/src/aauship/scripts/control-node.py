@@ -48,6 +48,13 @@ class Control(object):
         h = Header()
         q = Quaternion(0,0,0,1)
 
+        # Thust allocation matrix from calcTforthrustalloc.m
+        self.T = np.matrix([[     0,         0,    1.0000,    1.0000],
+                            [1.0000,    1.0000,         0,         0],
+                            [0.0500,    0.0500,    0.0498,   -0.0498],
+                            [     0,         0,    0.0000,    0.0000],
+                            [0.4100,   -0.1800,   -0.0047,    0.0047]])
+
         # Load the lawnmower generated path
         self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
 
@@ -107,6 +114,21 @@ class Control(object):
         print("derivative " + str(self.derivative[self.k]))
         print("thrustdiff " + str(self.thrustdiff[self.k]))
 
+        # Thust coefficient matrix
+        self.K = np.eye(4)
+        self.tau = np.array([1,1,1,1])
+
+        print('before foo')
+        foo = self.T.dot(self.T.T)
+        print(foo)
+        print(self.T.T.dot(foo))
+        print('before T_dagger')
+        #self.T_dagger = linalg.inv(self.T.T.dot(foo))
+        print('before u')
+        #self.u = linalg.inv(self.K).dot( self.T_dagger )
+
+        #print(self.u)
+
 
         self.pubmsgsim = Float64MultiArray()
         self.pubmsgsim.data.append(self.thrustdiff[self.k])
@@ -119,7 +141,10 @@ class Control(object):
         self.pubmsg.MsgID = 10
         self.pubmsg.DevID = 5
         self.pubmsg.Data  = self.thrustdiff[self.k]
-        print(self.pubmsg)
+        #print(self.pubmsg)
+
+
+
         self.pub.publish(self.pubmsg)
         # Temporary implementation
 

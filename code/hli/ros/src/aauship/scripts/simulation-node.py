@@ -67,6 +67,9 @@ class Simulator(object):
         self.trackmsg = Path()
         self.trackmsg.header.frame_id = "ned"
 
+        self.leftthruster = 0.0
+        self.rightthruster = 0.0
+
         h = Header()
         q = Quaternion(0,0,0,1)
 
@@ -97,12 +100,13 @@ class Simulator(object):
 
     # /lli_inputsim callback
     def llicbsim(self, data):
-        #print(data.data[0])
+        print(data.data[0])
         ##self.thrustdiff = data.data[0]      
-	pass
+        #pass
     
     # /lli_input callback
     def llicb(self, data):
+        print('ff')
         if data.MsgID == 5:
             self.rightthruster = data.Data
 
@@ -120,7 +124,7 @@ class Simulator(object):
                             [0.4100,   -0.1800,   -0.0047,    0.0047]])
         # Thust coefficient matrix
         self.K = np.eye(4)
-        self.u = np.array([0,0,self.leftthruster,self.rightthruster])
+        self.u = np.array([0,0,self.rightthruster,self.leftthruster])
         self.tau = np.squeeze( np.asarray( self.T.dot(self.K.dot(self.u)) ) )
         print(self.tau)
 	

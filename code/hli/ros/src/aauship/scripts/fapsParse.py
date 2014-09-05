@@ -14,7 +14,7 @@ from aauship.msg import *
 #
 # This parses the packets to identify messages and decodes them for the logs
 class packetParser():
-    def __init__(self,accelfile,gpsfile,measstate,fulllog,plog):
+    def __init__(self,accelfile,gpsfile,gpsstate,measstate,fulllog,plog):
     #def __init__(self,accelfile,gpsfile,fulllog,plog):
         self.GPS = {0: 'Latitude',
                     1: 'Longtitude',
@@ -39,6 +39,7 @@ class packetParser():
         self.excount = 0
         #self.accelburst = 0
         self.gpspacket = 0
+        self.gps = gpsstate
         self.measureddata = measstate
         self.n_rec = 0
         
@@ -58,6 +59,9 @@ class packetParser():
         self.gyroconst = 0.05*pi/180
 
         self.pub_bm = rospy.Publisher('bm', BatteryMonitor, queue_size=1)
+        self.pub_gps = rospy.Publisher('gps1', GPS, queue_size=1)
+
+        self.gpsmsg = GPS()
         
         self.bank1 = [0.0, 0.0, 0.0, 0.0]
         self.bank2 = [0.0, 0.0, 0.0, 0.0]
@@ -252,54 +256,99 @@ class packetParser():
                 #print "GPS!"
                 #time.sleep(1)
                 if(ord(packet['MsgID']) == 6): # This is what the LII sends for the moment
-                    print str("".join(packet['Data']))
+                    #['$GPGGA', '133635.000', '5700.8791', 'N', '00959.1707', 'E', '1', '7', '1.23', '42.0', 'M', '42.5', 'M', '', '*6E\r\n']
+                    #['$GPRMC', '133635.000', 'A', '5700.8791', 'N', '00959.1707', 'E', '0.20', '263.57', '040914', '', '', 'A*61\r\n']
+
+                    # We expect to get both GPGGA and GPRMC at every GPS sample. This is in two messages.
+                    # The GPRMC message is the plast one, so we publish our hybrid GPS message in that if.
+
+                    #print str("".join(packet['Data']))
                     content = "".join(packet['Data']).split(',')
+                    #print(content)
+
+                    if content[0] == "$GPGGA":
+                        # The GPGGA packet contain the following information:
+                        # [0] Message type ($GPGGA)
+                        # [1] Time
+                        # [2] Latitude
+                        # [3] N or S (N)
+                        # [4] Longitude
+                        # [5] E or W (E)
+                        # [6] Fix quality (expect 1 = GPS fix single)
+                        # [7] Number of satellites being tracked
+                        # [8] HDOP
+                        # [9] Altitude, above mean sea level
+                        # [10] Unit for altitude M = meters
+                        # [11] Height of geoid (mean sea level) above WGS84 ellipsoid
+                        # [12] Unit of heigt M = meters
+                        # [13] DGPS stuff, ignore
+                        # [14] DGPS stuff, ignore
+                        # [15] Checksum
+
+                        self.gpsmsg.fix = int(content[6])
+                        self.gpsmsg.sats = int(content[7])
+                        self.gpsmsg.HDOP = float(content[8])
+                        self.gpsmsg.altitude = float(content[9])
+                        self.gpsmsg.height = float(content[11])
+
+
                     if content[0] == "$GPRMC" and content[2] == 'A':
-                    
                         #print ",".join("".join(packet['Data']).split(',')[1:8])
-                        content = content[1:8]
-                    # The GPRMC packet contain the following information:
-                    # [0] Timestamp
-                    # [1] A for valid, V for invalid (only valid packets gets send)
-                    # [2] Latitude
-                    # [3] N or S (N)
-                    # [4] Longitude
-                    # [5] E or W (E)
-                    # [6] Speed over ground
-                    #print content[6]
-                    '''
-                    if content[1] == 'A' :
-                        self.gpsinvalid += 1
-                    
-                    if 42 <= self.gpsinvalid <= 67:
-                        content[1] = 'V'
-                        print "Gps invalid!"
-                    '''
-                    if content[1] == 'A' :
-                        print("Wee, we have a valid $GPRMC fix")
-                        self.gpslog.write(",".join(content) + ", " + str(time.time()) + "\r\n")
-                        self.fulllog.write(",".join(content) + ", " + str(time.time()) + "\r\n")
-                        #print content
-                        speed = float(content[6]) * 0.514444444 #* 0 + 100
-                        #print str(speed) + " m/s"
-                        [latdec, londec] = (gpsfunctions.nmea2decimal(float(content[2]),content[3],float(content[4]),content[5]))
-                        print(latdec,londec)
-                        latdec = latdec*pi/180
-                        londec = londec*pi/180
-                        if self.centerlat == 0 and self.centerlon == 0:
-                            self.rot=gpsfunctions.get_rot_matrix(float(latdec),float(londec))
-                            self.centerlat = float(latdec)
-                            self.centerlon = float(londec)
-                        
-                        pos = self.rot * (gpsfunctions.wgs842ecef(float(latdec),float(londec))-gpsfunctions.wgs842ecef(float(self.centerlat),float(self.centerlon)))
-                        print pos
-                        
-                        
-                        self.state[0] = [float(pos[0,0]),        1]
-                        #self.state[0] = [10,1]
-                        self.state[1] = [speed, 1]
-                        self.state[3] = [float(pos[1,0]),     1]
-                        #self.state[3] = [5,1]
+
+                        # The GPRMC packet contain the following information:
+                        # [0] Message type ($GPRMC)
+                        # [1] Timestamp
+                        # [2] A for valid, V for invalid (only valid packets gets send)
+                        # [3] Latitude
+                        # [4] N or S (N)
+                        # [5] Longitude
+                        # [6] E or W (E)
+                        # [7] Speed over ground
+                        # [8] Track angle
+                        # [9] Date
+                        # [10] Magnetic variation value [not existant on this cheap GPS]
+                        # [11] Magnetic variation direction [not existant on this cheap GPS]
+
+                        if content[2] == 'A' :
+                            print("Wee, we have a valid $GPRMC fix")
+                            self.gpslog.write(",".join(content) + ", " + str(time.time()) + "\r\n")
+                            self.fulllog.write(",".join(content) + ", " + str(time.time()) + "\r\n")
+                            #print content
+                            speed = float(content[7]) * 0.514444444 #* 0 + 100
+                            #print str(speed) + " m/s"
+                            
+                            # Caculate decimal degrees
+                            [latdec, londec] = (gpsfunctions.nmea2decimal(float(content[3]),content[4],float(content[5]),content[6]))
+                            print(latdec,londec)
+                            latdec = latdec*pi/180
+                            londec = londec*pi/180
+
+                            # Old code for rotating the position into the local NED frame
+                            if self.centerlat == 0 and self.centerlon == 0:
+                                self.rot=gpsfunctions.get_rot_matrix(float(latdec),float(londec))
+                                self.centerlat = float(latdec)
+                                self.centerlon = float(londec)
+                            pos = self.rot * (gpsfunctions.wgs842ecef(float(latdec),float(londec))-gpsfunctions.wgs842ecef(float(self.centerlat),float(self.centerlon)))
+                            #print pos
+                            
+                            # Legacy stuff
+                            self.state[0] = [float(pos[0,0]), 1]
+                            #self.state[0] = [10,1]
+                            self.state[1] = [speed, 1]
+                            self.state[3] = [float(pos[1,0]), 1]
+                            #self.state[3] = [5,1]
+
+                            # With [0:6] we ignore ".000" in the NMEA string.
+                            # It is always zero for GPS1 anyways.
+                            self.gpsmsg.time = int(content[1][0:6]) 
+                            self.gpsmsg.latitude = latdec
+                            self.gpsmsg.longitude = londec
+                            self.gpsmsg.track_angle = float(content[8])
+                            self.gpsmsg.date = int(content[9])
+                            self.gpsmsg.SOG = speed
+
+                            self.pub_gps.publish(self.gpsmsg)
+                            
                         
                 elif(ord(packet['MsgID']) == 31):
                     self.n_rec += 1

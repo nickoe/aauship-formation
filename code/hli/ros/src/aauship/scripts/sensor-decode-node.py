@@ -116,6 +116,8 @@ class Estimator(object):
         self.plog     = open("logs/p.log",'w',BUFSIZE)     # was plog
         #self.echolog = open("logs/echo.log",'w',BUFSIZE)  # Currently logged in lli-node.py
         #self.gps2log = open("logs/gps2.log",'wb',BUFSIZE) # Currently logged in lli-node.py
+	
+	self.gps1sample = GPS()
 
         # TODO use the rotlat and rotlat from sio.loadmat('klingenberg.mat')
         # to determine the rotatoin point for GPS positions to the NED frame.
@@ -126,6 +128,7 @@ class Estimator(object):
         self.parser = fapsParse.packetParser(
                 self.imulog,
                 self.gps1log,
+		self.gps1sample,
                 self.samples,
                 self.mixedlog,
                 self.plog)
