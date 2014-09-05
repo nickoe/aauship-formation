@@ -45,7 +45,7 @@ class Simulator(object):
         # Construct the Kalman-filter
         self.f = kfoo.KF()
 
-        self.v = np.array([3,3,13.5969e-006,0.2,0.2,0.00033,0.00033])#Measurement,noise
+        self.v = np.array([0.1,0.1,13.5969e-006,0.2,0.2,0.00033,0.00033])#Measurement,noise
         self.z = np.zeros(7)
 
         self.P_plus = np.zeros([17,17])
@@ -55,6 +55,7 @@ class Simulator(object):
         self.thrustdiff = 0
         self.tau = np.zeros(5) # input vector
         self.x = np.zeros(17) # state vector
+        #self.x[0] = -34
         self.x_hat = self.x
         self.imumsg = ADIS16405()
         self.pubmsg = Float64MultiArray()
@@ -100,13 +101,15 @@ class Simulator(object):
 
     # /lli_inputsim callback
     def llicbsim(self, data):
-        print(data.data[0])
-        ##self.thrustdiff = data.data[0]      
-        #pass
+        #print(data.data[0])
+        self.thrustdiff = data.data[0]   
+        self.tau = [8,0,0,0, self.thrustdiff]
+        print(self.tau)
+        pass
     
     # /lli_input callback
     def llicb(self, data):
-        print('ff')
+        print('/lli_input callback')
         if data.MsgID == 5:
             self.rightthruster = data.Data
 
@@ -114,19 +117,28 @@ class Simulator(object):
             self.leftthruster = data.Data
         
         print(self.leftthruster, self.rightthruster)
-	    #self.thrustdiff = data.Data
 
         # Thust allocation matrix from calcTforthrustalloc.m
-        self.T = np.matrix([[     0,         0,    1.0000,    1.0000],
-                            [1.0000,    1.0000,         0,         0],
-                            [0.0500,    0.0500,    0.0498,   -0.0498],
-                            [     0,         0,    0.0000,    0.0000],
-                            [0.4100,   -0.1800,   -0.0047,    0.0047]])
+        self.T = np.matrix([[      0,         0,    0.9946,    0.9946],
+                            [ 1.0000,    1.0000,         0,         0],
+                            [-0.0500,   -0.0500,    0.0052,   -0.0052],
+                            [      0,         0,    0.0995,    0.0995],
+                            [ 0.4100,   -0.1800,   -0.0497,    0.0497]])
+
+        self.T = self.T[:,2:4] # Reducing our thrust allocation to only ues the main propellers
+
         # Thust coefficient matrix
-        self.K = np.eye(4)
-        self.u = np.array([0,0,self.rightthruster,self.leftthruster])
-        self.tau = np.squeeze( np.asarray( self.T.dot(self.K.dot(self.u)) ) )
-        print(self.tau)
+        #self.K = np.eye(4)
+        self.K = np.eye(2) # Reducing our thrust allocation to only ues the main propellers
+        self.K[0,0] = 0.26565
+        self.K[1,1] = 0.26565
+
+	    # Calculation of forces from the input vector
+        self.u = np.array([0,0,self.rightthruster,self.leftthruster]) 
+        self.u = np.array([self.rightthruster,self.leftthruster]) # Reducing our thrust allocation to only ues the main propellers
+        #self.tau = np.squeeze( np.asarray( self.T.dot(self.K.dot(self.u)) ) )
+        #print(self.tau)
+
 	
 
 
@@ -161,13 +173,14 @@ class Simulator(object):
         self.pub.publish(self.pubmsg)
 
         # Send tf for the robot model visualisation
+        '''
         br = tf.TransformBroadcaster()
         br.sendTransform((self.x[0],self.x[1], 0),
-                         #tf.transformations.quaternion_from_euler(self.x[4], self.x[5], headingdesired),
                          tf.transformations.quaternion_from_euler(self.x[4], self.x[5], self.x[6]),
                          rospy.Time.now(),
                          "boat_link",
                          "ned")
+        '''
 
         # Endpoint of trail track
         #p = Point(self.x[0],self.x[1],0.0)

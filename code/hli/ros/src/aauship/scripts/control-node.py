@@ -13,6 +13,7 @@ import numpy as np
 from math import pi, sqrt, atan2, acos, sin, fmod
 import time
 import os 
+import tf
 
 ## This is the control node
 class Control(object):
@@ -23,7 +24,7 @@ class Control(object):
         rospy.init_node('control_node')
         self.r = rospy.Rate(0.5) # Hz
         self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=3)
-        self.pub = rospy.Publisher('lli_input', LLIinput, queue_size=1)
+        self.pub = rospy.Publisher('lli_input', LLIinput, queue_size=2)
 
         self.pubsim = rospy.Publisher('lli_inputsim', Float64MultiArray, queue_size=1)
 
@@ -35,9 +36,15 @@ class Control(object):
         self.derivative.append(0)
         self.thrustdiff =[]
         self.thrustdiff.append(0)
+        
+        #Olk tuning, when using thrustdiff in yaw force
         self.Kp = 4.0;
         self.Ki = 0.0#51;
         self.Kd = 50.0;
+
+        #self.Kp = 0.021
+        #self.Ki = 0.0
+        #self.Kd = 0.1
 
         # Create path object in rviz
         self.pubpath = rospy.Publisher('path', Path, queue_size=3, latch=True)
@@ -49,11 +56,17 @@ class Control(object):
         q = Quaternion(0,0,0,1)
 
         # Thust allocation matrix from calcTforthrustalloc.m
-        self.T = np.matrix([[     0,         0,    1.0000,    1.0000],
-                            [1.0000,    1.0000,         0,         0],
-                            [0.0500,    0.0500,    0.0498,   -0.0498],
-                            [     0,         0,    0.0000,    0.0000],
-                            [0.4100,   -0.1800,   -0.0047,    0.0047]])
+        self.T = np.matrix([[      0,         0,    0.9946,    0.9946],
+                            [ 1.0000,    1.0000,         0,         0],
+                            [-0.0500,   -0.0500,    0.0052,   -0.0052],
+                            [      0,         0,    0.0995,    0.0995],
+                            [ 0.4100,   -0.1800,   -0.0497,    0.0497]])
+        self.T = self.T[:,2:4] # Reducing our thrust allocation to only ues the main propellers
+        # Thust coefficient matrix
+        #self.K = np.eye(4)
+        self.K = np.eye(2) # Reducing our thrust allocation to only ues the main propellers
+        self.K[0,0] = 0.26565
+        self.K[1,1] = 0.26565
 
         # Load the lawnmower generated path
         self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
@@ -103,6 +116,13 @@ class Control(object):
                 print('Finished path')
                 self.n = 1
 
+        br = tf.TransformBroadcaster()
+        br.sendTransform((data.data[0],data.data[1], 0),
+                         tf.transformations.quaternion_from_euler(0,0,headingdesired),
+                         rospy.Time.now(),
+                         "boat_link",
+                         "ned")
+
         # PID
         self.error.append(self.rad2pipi(headingdesired  - data.data[6]))
         self.integral.append(self.integral[self.k] + self.error[self.k])
@@ -114,39 +134,37 @@ class Control(object):
         print("derivative " + str(self.derivative[self.k]))
         print("thrustdiff " + str(self.thrustdiff[self.k]))
 
-        # Thust coefficient matrix
-        self.K = np.eye(4)
-        self.tau = np.array([1,1,1,1])
-
-        print('before foo')
-        foo = self.T.dot(self.T.T)
-        print(foo)
-        print(self.T.T.dot(foo))
-        print('before T_dagger')
-        #self.T_dagger = linalg.inv(self.T.T.dot(foo))
-        print('before u')
-        #self.u = linalg.inv(self.K).dot( self.T_dagger )
-
-        #print(self.u)
-
-
+        # Temporay hax for control input for sim
         self.pubmsgsim = Float64MultiArray()
         self.pubmsgsim.data.append(self.thrustdiff[self.k])
         self.pubsim.publish(self.pubmsgsim)
 
+        # Desired control forces
+        self.tau = np.array([8,0,0,0,self.thrustdiff[self.k]])
+        print(self.tau)
+        # Calculation of input vector from desired control forces    
+        pinvT = np.asmatrix( linalg.pinv(self.T) )
+        self.u = linalg.inv(self.K).dot( linalg.pinv(self.T).dot(self.tau) )
+
+        print(self.u)
+
+
+
         # right thruster, devid 10, msgid 5
         # left thruster, devid 10, msgid 3
-        # Temporary implementaiton, replacing the pubmsg with Float64MultiArray
         self.pubmsg = LLIinput()
-        self.pubmsg.MsgID = 10
-        self.pubmsg.DevID = 5
-        self.pubmsg.Data  = self.thrustdiff[self.k]
-        #print(self.pubmsg)
-
-
-
+        self.pubmsg.DevID = 10
+        self.pubmsg.MsgID = 5
+        #self.pubmsg.Data  = self.u[3]
+        self.pubmsg.Data  = self.u[1] # Reducing our thrust allocation to only ues the main propellers
         self.pub.publish(self.pubmsg)
-        # Temporary implementation
+
+        self.pubmsg.DevID = 10
+        self.pubmsg.MsgID = 3
+        #self.pubmsg.Data  = self.u[2]
+        self.pubmsg.Data  = self.u[0] # Reducing our thrust allocation to only ues the main propellers
+        self.pub.publish(self.pubmsg)
+
 
         self.k = self.k+1
 
