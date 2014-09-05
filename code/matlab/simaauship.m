@@ -25,11 +25,11 @@ tau = repmat(taus',N,1);
 % taus = [0 0 0 0 0]';
 % tau(ceil(N/2)+1:N,:)  = repmat(taus',N/2,1);
 % Measurement noise
-v = [3 3 13.5969e-003 0.2 0.2 0.00033 0.00033]'; % Disse må ikke ændres - Kun med mere rigtige tal på U og V
+v = [3 3 13.5969e-006 0.2 0.2 0.00033 0.00033]'; % Disse må ikke ændres - Kun med mere rigtige tal på U og V
 R_i = diag(v);
 R = R_i;
 % process noise kalman
-w = [0.00001 0.00001 0.001 0.001 0.001 0.001 0.001 0.01 0.01 0.01 0.01 0.01 0.033 0.033 0.033 0.033 0.033]';
+w = [0.00001 0.00001 0.001 0.001 0.001 0.001 0.001 0.01 0.01 0.01 0.01 0.01 0.0033 0.0033 0.0033 0.0033 0.0033]';
 Q = diag(w);
 % process noise
 wp = [0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.0000 0.0000 0.0000000 0.0000000 0.0000000 0.000 0 0 0 0]';

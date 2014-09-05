@@ -4,23 +4,33 @@ clear all;
 % Arm
 r(1:3,1) = [0.41;0.00;-0.05];
 r(1:3,2) = [-0.18;0.00;-0.05];
-r(1:3,3) = [-0.48;0.05;-5.05];
-r(1:3,4) = [-0.48;-0.05;-5.05];
+r(1:3,3) = [-0.48;0.05;-0.05];
+r(1:3,4) = [-0.48;-0.05;-0.05];
 
-alpha = atan(r(3,:)./r(1,:))
+alpha = atan(r(3,:)./r(1,:));
+alpha
 
-F1 = [0;1;0]
-F2 = [0;1;0]
-F3 = [cos(alpha(3));0;sin(alpha(3))]
-F4 = [cos(alpha(4));0;sin(alpha(4))]
+F1 = [0;1;0];
+F2 = [0;1;0];
+F3 = [cos(alpha(3));0;sin(alpha(3))];
+F4 = [cos(alpha(4));0;sin(alpha(4))];
 
-F1 = cross(r(:,1),F1)
-F2 = cross(r(:,2),F2)
-F3 = cross(r(:,3),F3)
-F4 = cross(r(:,4),F4)
+F1r = cross(r(:,1),F1);
+F2r = cross(r(:,2),F2);
+F3r = cross(r(:,3),F3);
+F4r = cross(r(:,4),F4);
 
-T = [F1,F2,F3,F4] % Torque
-T = [0,0,1,1;1,1,0,0;T]
+% F1t = F1(3)*r(2,3)
+% F2t = 1;
+% F3t = 1;
+% F4t = 1;
+
+% T = [F1,F2,F3,F4] % Torque
+% T = [0,0,cos(alpha(3)),cos(alpha(4));1,1,0,0;T]
+
+T = [F1,F2,F3,F4];
+T = T(1:2,:);
+T = [T;F1r,F2r,F3r,F4r]
 % 
 % T = [ 0 0 1 1;...
 %       1 1 -sin(a) sin(a);...
@@ -30,6 +40,8 @@ T = [0,0,1,1;1,1,0,0;T]
 K = eye(4,4);
 % K(3,3) = 0.2657/2;
 % K(4,4) = 0.2657/2;
-u = [10 10 0 0]'; % Thruster force vector [N]
+u = [10 10 0 0]' % Thruster force vector [N]
 tau = T*K*u
 % ta = T*K*(u+[0 0 24.8350/2 24.8350/2]')
+u_check = inv(K)*pinv(T)*tau
+
