@@ -2,18 +2,17 @@
 clear all;
 
 % Arm
-r(1:3,1) = [0.41;0.00;-0.05];
-r(1:3,2) = [-0.18;0.00;-0.05];
-r(1:3,3) = [-0.48;0.05;-0.05];
-r(1:3,4) = [-0.48;-0.05;-0.05];
+r(1:3,1) = [0.41;0.00;0.05];
+r(1:3,2) = [-0.18;0.00;0.05];
+r(1:3,3) = [-0.48;0.05;0.05];
+r(1:3,4) = [-0.48;-0.05;0.05];
 
 alpha = atan(r(3,:)./r(1,:));
-alpha
 
 F1 = [0;1;0];
 F2 = [0;1;0];
-F3 = [cos(alpha(3));0;sin(alpha(3))];
-F4 = [cos(alpha(4));0;sin(alpha(4))];
+F3 = [cos(alpha(3));0;-sin(alpha(3))];
+F4 = [cos(alpha(4));0;-sin(alpha(4))];
 
 F1r = cross(r(:,1),F1);
 F2r = cross(r(:,2),F2);
@@ -40,8 +39,13 @@ T = [T;F1r,F2r,F3r,F4r]
 K = eye(4,4);
 % K(3,3) = 0.2657/2;
 % K(4,4) = 0.2657/2;
-u = [10 10 0 0]' % Thruster force vector [N]
-tau = T*K*u
-% ta = T*K*(u+[0 0 24.8350/2 24.8350/2]')
-u_check = inv(K)*pinv(T)*tau
+u = [10 10 0 0]'; % Thruster force vector [N]
+tau = T*K*u;
+fprintf('X (surge)\t%f\n', tau(1))
+fprintf('Y (sway)\t%f\n', tau(2))
+fprintf('K (roll)\t%f\n', tau(3))
+fprintf('M (pitch)\t%f\n', tau(4))
+fprintf('N (yaw)\t\t%f\n', tau(5))
+
+% u_check = inv(K)*pinv(T)*tau
 
