@@ -52,6 +52,15 @@ jj = 1;
 % uf = [0 0 15 15]'; % Thruster force vector [N]
 % ta = T*K*(uf+[0 0 24.8350/2 24.8350/2]');
 
+T =[    0.9946    0.9946
+         0         0
+    0.0052   -0.0052
+    0.0995    0.0995
+   -0.0497    0.0497];
+K = eye(2,2);
+K(1,1) = 0.26565;
+K(2,2) = 0.26565;
+
 %% Waypoints
 % start = [100, 1000];
 % stop = [-1000,1000];
@@ -90,6 +99,11 @@ for k = 1:N
 
     % Computed control input
     tau(k,:)=[8 0 0 0 thrustdiff(k)];
+    
+    u = inv(K)*pinv(T)*tau(k,:)';
+    u = round(u);
+    tau(k,:) = (T*K*u)';
+
         
     % Simulation
     x(k+1,:) = aaushipsimmodel(x(k,:)', tau(k,:)','wip',wp);

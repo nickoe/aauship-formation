@@ -103,7 +103,7 @@ class Simulator(object):
     def llicbsim(self, data):
         #print(data.data[0])
         self.thrustdiff = data.data[0]   
-        self.tau = [8,0,0,0, self.thrustdiff]
+        #self.tau = [8,0,0,0, self.thrustdiff]
         print(self.tau)
         pass
     
@@ -134,9 +134,11 @@ class Simulator(object):
         self.K[1,1] = 0.26565
 
 	    # Calculation of forces from the input vector
-        self.u = np.array([0,0,self.rightthruster,self.leftthruster]) 
+        #self.u = np.array([0,0,self.rightthruster,self.leftthruster]) 
         self.u = np.array([self.rightthruster,self.leftthruster]) # Reducing our thrust allocation to only ues the main propellers
-        #self.tau = np.squeeze( np.asarray( self.T.dot(self.K.dot(self.u)) ) )
+        self.tau = np.squeeze( np.asarray( self.T.dot(self.K.dot(self.u)) ) )
+
+        # inv(K)*pinv(T)*tau
         #print(self.tau)
 
 	

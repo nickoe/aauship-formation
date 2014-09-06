@@ -37,14 +37,14 @@ class Control(object):
         self.thrustdiff =[]
         self.thrustdiff.append(0)
         
-        #Olk tuning, when using thrustdiff in yaw force
-        self.Kp = 4.0;
-        self.Ki = 0.0#51;
-        self.Kd = 50.0;
+        #Old tuning, when using thrustdiff in yaw force
+        #self.Kp = 4.0;
+        #self.Ki = 0.0#51;
+        #self.Kd = 50.0;
 
-        #self.Kp = 0.021
-        #self.Ki = 0.0
-        #self.Kd = 0.1
+        self.Kp = 0.051
+        self.Ki = 0.0
+        self.Kd = 0.0
 
         # Create path object in rviz
         self.pubpath = rospy.Publisher('path', Path, queue_size=3, latch=True)
@@ -149,7 +149,7 @@ class Control(object):
         print(self.u)
 
 
-
+        # (-100% = -500 to +100% = 500)
         # right thruster, devid 10, msgid 5
         # left thruster, devid 10, msgid 3
         self.pubmsg = LLIinput()
