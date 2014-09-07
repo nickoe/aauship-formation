@@ -22,7 +22,6 @@ class Control(object):
         self.n = 1 # used for wp gen logic
 
         rospy.init_node('control_node')
-        self.r = rospy.Rate(0.5) # Hz
         self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=3)
         self.pub = rospy.Publisher('lli_input', LLIinput, queue_size=4, latch=True)
 
@@ -42,9 +41,11 @@ class Control(object):
 
         # Create path object in rviz
         self.pubpath = rospy.Publisher('path', Path, queue_size=3, latch=True)
+
         # Create the struct to be printed
         self.pathmsg = Path()
-        # Assign fram
+
+        # Assign frame
         self.pathmsg.header.frame_id = "ned"
         h = Header()
         q = Quaternion(0,0,0,1)
@@ -74,9 +75,7 @@ class Control(object):
     # Angle in rad to the interval (-pi pi]
     def rad2pipi(self, rad):
         r = fmod((rad+np.sign(rad)*pi) , 2*pi) # remainder
-        #print(r)
         s = np.sign(np.sign(rad) + 2*(np.sign(abs( fmod((rad+pi), (2*pi)) /(2*pi)))-1));
-        #print(s)
         pipi = r - s*pi;
         return pipi
 
@@ -202,17 +201,13 @@ class Control(object):
         ##self.ctllog = open("logs/ctl.log",'w',BUFSIZE)
         ##print(self.ctllog.name)
 
-        #rospy.spin() # Keeps the node running untill stopped
-        while not rospy.is_shutdown():
-            #pub.publish("control signals should be sent here")
-            self.r.sleep()
+        rospy.spin() # Keeps the node running untill stopped
         print("\nClosing log file")
         ##self.ctllog.close()
-        print("Exiting")
+        print("Exiting the control node")
         exit()
 
 if __name__ == '__main__':
     w = Control()
     w.run()
-
 

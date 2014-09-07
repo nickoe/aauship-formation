@@ -9,19 +9,14 @@ from geometry_msgs.msg import Point, Quaternion, PoseStamped, Pose
 from aauship.msg import *
 import tf
 import scipy.io as sio
-
-# temporary way to simulate aauship
-import kalmanfilterfoo as kfoo
+import kalmanfilterfoo as kfoo # temporary implementation for the simulation
 import numpy as np
 from math import pi, sqrt, atan2, acos, sin, fmod, cos
 import scipy.linalg as linalg
-
 import time
 import os 
 
 # GPS frequencey counter
-#gpsc = []
-#gpsc.append(0)
 jj = 0
 
 # Counter for figuring out when to add the GPS sample
@@ -31,6 +26,24 @@ k = 0
 ## This is the simulaiton node, basically kind of the same as simaauship.m
 class Simulator(object):
     def __init__(self):
+        self.thrustdiff = 0
+        self.tau = np.zeros(5) # input vector
+        self.x = np.zeros(17) # state vector
+        #self.x[0] = -34
+        self.x_hat = self.x
+        self.v = np.array([0.1,0.1,13.5969e-006,0.2,0.2,0.00033,0.00033])#Measurement,noise
+        self.z = np.zeros(7)
+        
+        self.P_plus = np.zeros([17,17])
+        self.R = np.diag(self.v)
+        self.R_i = np.diag(self.v)
+        
+        # Construct the Kalman-filter
+        self.f = kfoo.KF()
+        
+        rospy.init_node('simulation_node')
+        self.r = rospy.Rate(40) # Hz
+
         self.sub = rospy.Subscriber('lli_input', LLIinput, self.llicb)
         self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=3)
         self.subahrs = rospy.Subscriber('attitude', Quaternion, self.ahrscb)
@@ -38,35 +51,22 @@ class Simulator(object):
         self.trackpath = rospy.Publisher('track', Path, queue_size=3)
         self.refpath = rospy.Publisher('refpath', Path, queue_size=3, latch=True)
         self.keepoutpath = rospy.Publisher('keepout', Path, queue_size=3, latch=True)
-        rospy.init_node('simulation_node')
-        self.r = rospy.Rate(40) # Hz
 
-        # Construct the Kalman-filter
-        self.f = kfoo.KF()
-
-        self.v = np.array([0.1,0.1,13.5969e-006,0.2,0.2,0.00033,0.00033])#Measurement,noise
-        self.z = np.zeros(7)
-
-        self.P_plus = np.zeros([17,17])
-        self.R = np.diag(self.v)
-        self.R_i = np.diag(self.v)
-
-        self.thrustdiff = 0
-        self.tau = np.zeros(5) # input vector
-        self.x = np.zeros(17) # state vector
-        #self.x[0] = -34
-        self.x_hat = self.x
+        # Construct variables for messages
         self.imumsg = ADIS16405()
         self.pubmsg = Float64MultiArray()
         self.refmsg = Path()
         self.refmsg.header.frame_id = "ned"
         self.keepoutmsg = Path()
         self.keepoutmsg.header.frame_id = "ned"
-        self.klingen = sio.loadmat('klingenberg.mat')
-        self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
         self.trackmsg = Path()
         self.trackmsg.header.frame_id = "ned"
 
+        # Load external staitc map and path data
+        self.klingen = sio.loadmat('klingenberg.mat')
+        self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
+
+        # Variables for the thrusters
         self.leftthruster = 0.0
         self.rightthruster = 0.0
 
@@ -146,6 +146,8 @@ class Simulator(object):
         self.z[3:5] = self.x[7:9] + np.array([self.v[3],self.v[4]])*np.random.randn(1,2)
         self.z[5:7] = self.x[12:14] + np.array([self.v[5],self.v[6]])*np.random.randn(1,2)
 
+        # Simulating that GPS is only once a second
+        # WARNING magic number here
         if k%20 != 0:
             self.R[0,0] = 10*10**10;
             self.R[1,1] = 10*10**10;
@@ -179,17 +181,8 @@ class Simulator(object):
         self.trackpath.publish(self.trackmsg)
 
         k = k+1
-        #print(k)
 
     def run(self):
-        # SAve a csv log with the control inputs
-        #BUFSIZE = 1024
-        #self.ctllog = open(os.getcwd() + "/../meas/ctl.log",'w')
-        ##self.ctllog = open("logs/ctl.log",'w',BUFSIZE)
-        ##print(self.ctllog.name)
-
-
-
         # Publish out static map data
         self.keepoutpath.publish(self.keepoutmsg)
         self.refpath.publish(self.refmsg)
@@ -255,11 +248,11 @@ class Simulator(object):
             #print(time.time())
 
             self.r.sleep()
-        print("\nClosing log file")
-        ##self.ctllog.close()
-        print("Exiting")
+        
+        print("Exiting simulation node")
         exit()
 
 if __name__ == '__main__':
     w = Simulator()
     w.run()
+
