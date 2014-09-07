@@ -31,7 +31,6 @@ k = 0
 ## This is the simulaiton node, basically kind of the same as simaauship.m
 class Simulator(object):
     def __init__(self):
-        self.subsim = rospy.Subscriber('lli_inputsim', Float64MultiArray, self.llicbsim)
         self.sub = rospy.Subscriber('lli_input', LLIinput, self.llicb)
         self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=3)
         self.subahrs = rospy.Subscriber('attitude', Quaternion, self.ahrscb)
@@ -98,14 +97,6 @@ class Simulator(object):
                         [spsi*cth,  cpsi*cphi+sphi*sth*spsi, -cpsi*sphi+sth*spsi*cphi],
                         [    -sth,                 cth*sphi,                 cth*cphi] ])
         return R
-
-    # /lli_inputsim callback
-    def llicbsim(self, data):
-        #print(data.data[0])
-        self.thrustdiff = data.data[0]   
-        #self.tau = [8,0,0,0, self.thrustdiff]
-        #print(self.tau)
-        pass
     
     # /lli_input callback
     def llicb(self, data):
@@ -133,7 +124,7 @@ class Simulator(object):
         self.K[0,0] = 0.26565
         self.K[1,1] = 0.26565
 
-	    # Calculation of forces from the input vector
+        # Calculation of forces from the input vector
         #self.u = np.array([0,0,self.rightthruster,self.leftthruster]) 
         self.u = np.array([self.rightthruster,self.leftthruster]) # Reducing our thrust allocation to only ues the main propellers
         self.tau = np.squeeze( np.asarray( self.T.dot(self.K.dot(self.u)) ) )
@@ -142,8 +133,6 @@ class Simulator(object):
         #print(self.tau)
 
 	
-
-
     # /attidude callback
     def ahrscb(self, data):
         #print(data.data[0])
@@ -175,14 +164,12 @@ class Simulator(object):
         self.pub.publish(self.pubmsg)
 
         # Send tf for the robot model visualisation
-        '''
         br = tf.TransformBroadcaster()
         br.sendTransform((self.x[0],self.x[1], 0),
                          tf.transformations.quaternion_from_euler(self.x[4], self.x[5], self.x[6]),
                          rospy.Time.now(),
                          "boat_link",
                          "ned")
-        '''
 
         # Endpoint of trail track
         #p = Point(self.x[0],self.x[1],0.0)

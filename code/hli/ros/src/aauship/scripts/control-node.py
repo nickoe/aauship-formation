@@ -26,8 +26,6 @@ class Control(object):
         self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=3)
         self.pub = rospy.Publisher('lli_input', LLIinput, queue_size=4, latch=True)
 
-        self.pubsim = rospy.Publisher('lli_inputsim', Float64MultiArray, queue_size=1)
-
         # Initilaze parapeters for the PID contorller
         self.error = []
         self.integral = []
@@ -82,13 +80,6 @@ class Control(object):
         pipi = r - s*pi;
         return pipi
 
-        '''
-        -2.6416 = rem( (-2*pi+0.5) + sign(-2*pi+0.5)*pi , 2*pi)
-        r = rem(angle+sign(angle)*pi,2*pi);
-        s = sign(sign(angle) + 2*(sign(abs(rem(angle+pi,2*pi)/(2*pi)))-1));
-        y = r - s*pi;
-        '''
-
     def callback(self, data):
         # send data to lli_input topic
 #        rospy.loginfo(rospy.get_caller_id()+"I heard %s",data.data)
@@ -112,12 +103,6 @@ class Control(object):
                 print('Finished path')
                 self.n = 1
 
-        br = tf.TransformBroadcaster()
-        br.sendTransform((data.data[0],data.data[1], 0),
-                         tf.transformations.quaternion_from_euler(0,0,headingdesired),
-                         rospy.Time.now(),
-                         "boat_link",
-                         "ned")
 
         # PID
         self.error.append(self.rad2pipi(headingdesired  - data.data[6]))
@@ -130,10 +115,6 @@ class Control(object):
         print("derivative " + str(self.derivative[self.k]))
         print("thrustdiff " + str(self.thrustdiff[self.k]))
 
-        # Temporay hax for control input for sim
-        self.pubmsgsim = Float64MultiArray()
-        self.pubmsgsim.data.append(self.thrustdiff[self.k])
-        self.pubsim.publish(self.pubmsgsim)
 
         # Desired control forces
         self.tau = np.array([8,0,0,0,self.thrustdiff[self.k]])
