@@ -36,9 +36,9 @@ class Control(object):
         self.thrustdiff.append(0)
         
         #Old tuning, when using thrustdiff in yaw force
-        self.Kp = 4.0;
-        self.Ki = 0.0#51;
-        self.Kd = 50.0;
+        self.Kp = 2.0
+        self.Ki = 0.0#51
+        self.Kd = 70.0 # Was 50.0 earlier
 
         # Create path object in rviz
         self.pubpath = rospy.Publisher('path', Path, queue_size=3, latch=True)
@@ -124,6 +124,15 @@ class Control(object):
         self.u = linalg.inv(self.K).dot( linalg.pinv(self.T).dot(self.tau) )
 
         #print(self.u)
+    
+        # Saturation in inputs (shoudl probably be in the simulaiton model instead
+        '''
+        threshold = 40
+        if -threshold <= self.u[0] <= threshold:
+            self.u[0] = 0
+        if -threshold <= self.u[1] <= threshold:
+            self.u[1] = 0
+        '''
 
 
         # (-100% = -500 to +100% = 500)
