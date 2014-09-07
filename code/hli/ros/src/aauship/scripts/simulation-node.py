@@ -213,8 +213,6 @@ class Simulator(object):
             #self.pubmsg.data = self.x
             
             # Calculate the IMU measurements from the aaushipsimmodel
-            # TODO wops wops, det skal vaere invers ikke transponeret
-
             accelbody = np.array([self.x[12], self.x[13], 0])
             accelimu = accelbody + self.RNED2BODY(self.x[4],self.x[5],self.x[6]).T.dot(np.array([0,0,9.82]))
 
