@@ -26,7 +26,7 @@ class Control(object):
         self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=3)
         self.pub = rospy.Publisher('lli_input', LLIinput, queue_size=4, latch=True)
 
-        # Initilaze parapeters for the PID contorller
+        # Initilaze parapeters for the simple PID heading contorller
         self.error = []
         self.integral = []
         self.integral.append(0)
@@ -35,10 +35,10 @@ class Control(object):
         self.thrustdiff =[]
         self.thrustdiff.append(0)
         
-        #Old tuning, when using thrustdiff in yaw force
+        # PID tuning parameters for the simple heading controller
         self.Kp = 2.0
-        self.Ki = 0.0#51
-        self.Kd = 70.0 # Was 50.0 earlier
+        self.Ki = 0.0
+        self.Kd = 70.0
 
         # Create path object in rviz
         self.pubpath = rospy.Publisher('path', Path, queue_size=3, latch=True)
@@ -81,11 +81,8 @@ class Control(object):
         return pipi
 
     def callback(self, data):
-        # send data to lli_input topic
-#        rospy.loginfo(rospy.get_caller_id()+"I heard %s",data.data)
-#        self.ctllog.write(data.data)
         # Publish data to lli_input
-        print "control callback" + str(time.time())
+        print "Control callback " + str(time.time())
 
         # First time we get a state estimate
         if self.k == 0:
@@ -110,20 +107,13 @@ class Control(object):
         if self.k!=1:
             self.derivative.append(self.error[self.k] - self.error[self.k-1])
         self.thrustdiff.append(self.Kp*self.error[self.k] + self.Ki*self.integral[self.k] + self.Kd*self.derivative[self.k])
-        print("error " + str(self.error[self.k]))
-        print("integral " + str(self.integral[self.k]))
-        print("derivative " + str(self.derivative[self.k]))
-        print("thrustdiff " + str(self.thrustdiff[self.k]))
-
 
         # Desired control forces
         self.tau = np.array([8,0,0,0,self.thrustdiff[self.k]])
-        print(self.tau)
+
         # Calculation of input vector from desired control forces    
         pinvT = np.asmatrix( linalg.pinv(self.T) )
         self.u = linalg.inv(self.K).dot( linalg.pinv(self.T).dot(self.tau) )
-
-        #print(self.u)
     
         # Saturation in inputs (shoudl probably be in the simulaiton model instead
         '''
@@ -134,7 +124,7 @@ class Control(object):
             self.u[1] = 0
         '''
 
-
+        # TODO Remember to test this, to make sure that u[0] is the right thruster
         # (-100% = -500 to +100% = 500)
         # right thruster, devid 10, msgid 5
         # left thruster, devid 10, msgid 3
@@ -151,7 +141,7 @@ class Control(object):
         self.pubmsg.Data  = self.u[1] # Reducing our thrust allocation to only ues the main propellers
         self.pub.publish(self.pubmsg)
 
-
+        # Increment loop counter
         self.k = self.k+1
 
 
