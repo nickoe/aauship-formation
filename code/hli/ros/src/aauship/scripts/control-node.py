@@ -24,7 +24,7 @@ class Control(object):
         rospy.init_node('control_node')
         self.r = rospy.Rate(0.5) # Hz
         self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=3)
-        self.pub = rospy.Publisher('lli_input', LLIinput, queue_size=2)
+        self.pub = rospy.Publisher('lli_input', LLIinput, queue_size=4, latch=True)
 
         self.pubsim = rospy.Publisher('lli_inputsim', Float64MultiArray, queue_size=1)
 
@@ -38,13 +38,9 @@ class Control(object):
         self.thrustdiff.append(0)
         
         #Old tuning, when using thrustdiff in yaw force
-        #self.Kp = 4.0;
-        #self.Ki = 0.0#51;
-        #self.Kd = 50.0;
-
-        self.Kp = 0.051
-        self.Ki = 0.0
-        self.Kd = 0.0
+        self.Kp = 4.0;
+        self.Ki = 0.0#51;
+        self.Kd = 50.0;
 
         # Create path object in rviz
         self.pubpath = rospy.Publisher('path', Path, queue_size=3, latch=True)
@@ -146,7 +142,7 @@ class Control(object):
         pinvT = np.asmatrix( linalg.pinv(self.T) )
         self.u = linalg.inv(self.K).dot( linalg.pinv(self.T).dot(self.tau) )
 
-        print(self.u)
+        #print(self.u)
 
 
         # (-100% = -500 to +100% = 500)
@@ -156,13 +152,13 @@ class Control(object):
         self.pubmsg.DevID = 10
         self.pubmsg.MsgID = 5
         #self.pubmsg.Data  = self.u[3]
-        self.pubmsg.Data  = self.u[1] # Reducing our thrust allocation to only ues the main propellers
+        self.pubmsg.Data  = self.u[0] # Reducing our thrust allocation to only ues the main propellers
         self.pub.publish(self.pubmsg)
 
         self.pubmsg.DevID = 10
         self.pubmsg.MsgID = 3
         #self.pubmsg.Data  = self.u[2]
-        self.pubmsg.Data  = self.u[0] # Reducing our thrust allocation to only ues the main propellers
+        self.pubmsg.Data  = self.u[1] # Reducing our thrust allocation to only ues the main propellers
         self.pub.publish(self.pubmsg)
 
 

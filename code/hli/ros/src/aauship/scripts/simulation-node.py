@@ -104,7 +104,7 @@ class Simulator(object):
         #print(data.data[0])
         self.thrustdiff = data.data[0]   
         #self.tau = [8,0,0,0, self.thrustdiff]
-        print(self.tau)
+        #print(self.tau)
         pass
     
     # /lli_input callback
