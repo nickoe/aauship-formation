@@ -1,6 +1,6 @@
 \chapter{Different control strategies}
 
-\head{"A control syste, that forces the system output $y(t)$ to track a desired output $y_d(t)$ solves a trajectory tracking problem" \citep{fossen}}.
+\head{"A control system, that forces the system output $y(t)$ to track a desired output $y_d(t)$ solves a trajectory tracking problem" \citep{fossen}}.
 
 \section{Trajectory Tracking control}
 When applying control to a vessel that needs to track a specified trajectory, then the type control will be classified according to the number of available actuators.This is usually split between surge, sway and yaw, which corresponds to forward motion, sideslip and turning.
@@ -49,18 +49,18 @@ On the figure is a green vessel that needs to get onto the blue path. The red po
 \subsubsection{The \ac{LOS} algorithm}
 The vessel has a generalized position in the ${n}$-frame given as
 \begin{align}
-\eta = col(\textbf{p},\psi)\quad , \quad \textbf{p} = col(x,y)
+\eta = (\textbf{p},\psi)^\top\quad , \quad \textbf{p} = (x,y)^\top
 \end{align}
 with dynamics given by
 \begin{align}
 \dot{\eta} = \textbf{R}(\psi)\boldsymbol{\nu}
 \end{align}
-where $\boldsymbol{\nu} = col(u,v,r)$.\\
+where $\boldsymbol{\nu} = (u,v,r)^\top$.\\
 The path can be parametrized by a set of points with
 \begin{align}
 \mathcal{P} = {\textbf{x}}\in\mathds{R}^2 : \quad \exists \theta \in \mathds{R} \quad s.t. \quad \textbf{x} = \textbf{p}_d(\theta)
 \end{align}
-where $\textbf{p}_d(\theta) := col(x_d(\theta),y_d(\theta))$ is a smooth function. The path needs to be smooth such that the \ac{LOS} algorithm makes the vessel converge to the path. When applying the \ac{LOS} algorithm it makes the setup immune to sideslip error. This is due to the minimization of $s$ and $e$ when the vessel surges towards the path.
+where $\textbf{p}_d(\theta) := (x_d(\theta),y_d(\theta))^\top$ is a smooth function. The path needs to be smooth such that the \ac{LOS} algorithm makes the vessel converge to the path. When applying the \ac{LOS} algorithm it makes the setup immune to sideslip error. This is due to the minimization of $s$ and $e$ when the vessel surges towards the path.
 
 For a given value of $\theta$, being a specific point on the path, is the tangent to the path introduced with origin located in $\textbf{p}_d(\theta)$. The orientation of the reference frame, being the desired heading, is given by
 \begin{align}
@@ -68,7 +68,7 @@ For a given value of $\theta$, being a specific point on the path, is the tangen
 \end{align}
 The position of the vessel from the desired position on the path is given in path-tangential coordinates according to
 \begin{align}
-\epsilon(\textbf{p},\theta) = col(s(\textbf{p},\theta),e(\textbf{p},\theta))
+\epsilon(\textbf{p},\theta) = (s(\textbf{p},\theta),e(\textbf{p},\theta))^\top
 \end{align}
 where $s(\textbf{p},\theta)$ is the along track error and $e(\textbf{p},\theta)$ is the cross track error. These are given on figure~\vref{fig:allinallframes}, and is the errors from the vessel to the desired point on the path. This position can also be expressed using the rotation of the $\epsilon$-vector by
 \begin{align}
