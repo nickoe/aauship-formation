@@ -40,11 +40,11 @@ class Simulator(object):
         self.R = np.diag(self.v)
         self.R_i = np.diag(self.v)
         
-        # Used for calculation of track angle
-        self.old_pos_of_ned_in_ecef = np.array([0,0]) # TODO zero zero is possibly
-                                                      # not a good initialization point
-        self.old_x = self.x
-        # Construct the Kalman-filter
+        self.old_z = np.ones(7) # Used for calculation of speed over ground and track angle for the GPS
+        self.old_x = np.ones(17) # Used for calculation of speed over ground and track angle for the GPS
+        print(self.z)
+        print(self.old_z)
+        # Construct kalmanfilterfoo, because it contains the aaushipsimmodel function
         self.f = kfoo.KF()
         
         rospy.init_node('simulation_node')
@@ -177,7 +177,7 @@ class Simulator(object):
         self.z[2]   = self.x[6] + self.v[2]*np.random.randn(1,1)
         self.z[3:5] = self.x[7:9] + np.array([self.v[3],self.v[4]])*np.random.randn(1,2)
         self.z[5:7] = self.x[12:14] + np.array([self.v[5],self.v[6]])*np.random.randn(1,2)
-
+        #print(self.z)
         # Simulating that GPS is only once a second
         # WARNING magic number here
         if k%20 != 0:
@@ -197,12 +197,21 @@ class Simulator(object):
 
             self.gpsmsg.latitude = pos_wgs84['lat']
             self.gpsmsg.longitude = pos_wgs84['lon']
-
-            self.gpsmsg.SOG = sqrt( (self.old_x[0]-self.x[0])**2 + (self.old_x[1]-self.x[1])**2 )
+            #print(self.old_z)
             self.gpsmsg.track_angle = self.rad2pipi(atan2(self.x[1]-self.old_x[1] , self.x[0]-self.old_x[0])) # angle between new and last GPS position
+            self.gpsmsg.SOG = sqrt( (self.old_x[0]-self.x[0])**2 + (self.old_x[1]-self.x[1])**2 )
+            # Jeppe kig her
+            #self.gpsmsg.SOG = sqrt( (self.old_z[0]-self.z[0])**2 + (self.old_z[1]-self.z[1])**2 )
+            #self.gpsmsg.track_angle = self.rad2pipi(atan2(self.z[1]-self.old_z[1] , self.z[0]-self.old_z[0])) # angle between new and last GPS position
+            print(self.gpsmsg.track_angle)
             self.pubgps1.publish(self.gpsmsg)
+
+            print(self.old_z-self.z)
+            self.old_z = self.z # used to calculate SOG and track_angle
             self.old_x = self.x # used to calculate SOG and track_angle
+
         
+        ### move to kalmanfilter-node start ###
         (self.x_hat,self.P_plus) = self.f.KalmanF(self.x_hat, self.tau, self.z, self.P_plus, self.R)
         
         self.pubmsg = Float64MultiArray()
@@ -210,6 +219,7 @@ class Simulator(object):
             self.pubmsg.data.append(a)
             #print(a)
         self.pub.publish(self.pubmsg)
+        ### move to kalmanfilter-node end ###
 
         # Send tf for the robot model visualisation
         br = tf.TransformBroadcaster()
