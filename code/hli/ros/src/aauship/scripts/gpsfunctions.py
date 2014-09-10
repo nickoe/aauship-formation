@@ -3,7 +3,7 @@ import numpy
 
 def wgs842ecef(lat,lon,h=None):
     if h == None:
-        h = 0   
+        h = 0.0
 
     '''
     # old implementation
@@ -18,15 +18,14 @@ def wgs842ecef(lat,lon,h=None):
     '''
 
     # Taken from MMS toolbox
-    r_e = 6378137; # WGS-84 data
-    r_p = 6356752;
-    e = 0.08181979099211;
-    N = r_e**2/sqrt( (r_e*cos(lat))**2 + (r_p*sin(lat))**2 );
+    r_e = 6378137.0 # WGS-84 data
+    r_p = 6356752.0
+    e = 0.08181979099211
+    N = r_e**2/sqrt( (r_e*cos(lat))**2 + (r_p*sin(lat))**2 )
     result = numpy.zeros((3,1))
-    result[0][0] = (N+h)*cos(lat)*cos(lon);
-    result[1][0] = (N+h)*cos(lat)*sin(lon);
-    result[2][0] = (N*(r_p/r_e)**2 + h)*sin(lat);
-
+    result[0][0] = (N+h)*cos(lat)*cos(lon)
+    result[1][0] = (N+h)*cos(lat)*sin(lon)
+    result[2][0] = (N*(r_p/r_e)**2 + h)*sin(lat)
 
     return result
 
@@ -58,7 +57,8 @@ def ecef2wgs82(x,y,z):
     lon = atan2(y,x);
     lat = atan2((z+ep**2.*b*sin(th)**3),(p-e**2*a*cos(th)**3));
     N   = a/sqrt(1-e**2.*sin(lat)**2);
-    alt = p/cos(lat)-N;
+    alt = p/cos(lat)-N; # The altitude does not seem precise comparing
+    # with ecef2llh.m from MSS toolbox
 
     # Return lon in range [0, 2*pi)
     lon = fmod(lon, 2*pi)
@@ -100,7 +100,7 @@ def nmea2decimal(lat,latsign,lon,lonsign):
 if __name__ == "__main__":
     lat = 57*pi/180
     lon = 10*pi/180
-    ecef = wgs842ecef(lat, lon, 0)
+    ecef = wgs842ecef(lat, lon, 0.0)
     wgs82 = ecef2wgs82(ecef[0], ecef[1], ecef[2])
     print(lat, lon, 0)
     print(ecef)

@@ -10,17 +10,22 @@ from aauship.msg import *
 import tf
 import scipy.io as sio
 import kalmanfilterfoo as kfoo # temporary implementation for the simulation
+import gpsfunctions as geo
 import numpy as np
 from math import pi, sqrt, atan2, acos, sin, fmod, cos
 import scipy.linalg as linalg
 import time
-import os 
+import os
 
 # GPS frequencey counter
 jj = 0
 
 # Counter for figuring out when to add the GPS sample
 k = 0
+
+# Used for calculation of track angle
+old_pos_of_ned_in_ecef = np.array([0,0]) # TODO zero zero is possibly
+                                         # not a good initialization point
 
 
 ## This is the simulaiton node, basically kind of the same as simaauship.m
@@ -42,15 +47,16 @@ class Simulator(object):
         self.f = kfoo.KF()
         
         rospy.init_node('simulation_node')
-        self.r = rospy.Rate(40) # Hz
+        self.r = rospy.Rate(20) # Hz
 
         self.sub = rospy.Subscriber('lli_input', LLIinput, self.llicb)
-        self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=3)
+        self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=3) # Thsi should eventually be removed when the kf-node is tested against this
         self.subahrs = rospy.Subscriber('attitude', Quaternion, self.ahrscb)
         self.pubimu = rospy.Publisher('imu', ADIS16405, queue_size=3, latch=True)
         self.trackpath = rospy.Publisher('track', Path, queue_size=3)
         self.refpath = rospy.Publisher('refpath', Path, queue_size=3, latch=True)
         self.keepoutpath = rospy.Publisher('keepout', Path, queue_size=3, latch=True)
+        self.pubgps1 = rospy.Publisher('gps1', GPS, queue_size=1, latch=False)
 
         # Construct variables for messages
         self.imumsg = ADIS16405()
@@ -61,10 +67,14 @@ class Simulator(object):
         self.keepoutmsg.header.frame_id = "ned"
         self.trackmsg = Path()
         self.trackmsg.header.frame_id = "ned"
+        self.gpsmsg = GPS()
 
         # Load external staitc map and path data
         self.klingen = sio.loadmat('klingenberg.mat')
         self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
+        
+        # Static rotation matrix
+        self.Rn2e = self.RNED2ECEF(self.klingen['rotlon'], self.klingen['rotlat'])
 
         # Variables for the thrusters
         self.leftthruster = 0.0
@@ -97,17 +107,31 @@ class Simulator(object):
                         [spsi*cth,  cpsi*cphi+sphi*sth*spsi, -cpsi*sphi+sth*spsi*cphi],
                         [    -sth,                 cth*sphi,                 cth*cphi] ])
         return R
+
+    # Rotation matrix from NED to ECEF frame
+    # Using the eq. (2.84) from Fossen
+    def RNED2ECEF(self, lon, lat):
+        clon = cos(lon)
+        slon = sin(lon)
+        clat = cos(lat)
+        slat = sin(lat)
+
+        R = np.matrix([ [-clon*slat,  -slon,   -clon*clat],
+                        [-slon*slat,   clon,   -slon*clat],
+                        [      clat,      0,        -slat] ])
+
+        return R
     
     # /lli_input callback
     def llicb(self, data):
-        print('/lli_input callback')
+        #print('/lli_input callback')
         if data.MsgID == 5:
             self.rightthruster = data.Data
 
         if data.MsgID == 3:
             self.leftthruster = data.Data
         
-        print(self.leftthruster, self.rightthruster)
+        #print(self.leftthruster, self.rightthruster)
 
         # Thust allocation matrix from calcTforthrustalloc.m
         self.T = np.matrix([[      0,         0,    0.9946,    0.9946],
@@ -154,8 +178,20 @@ class Simulator(object):
         else:
             self.R[0,0] = self.R_i[0,0]
             self.R[1,1] = self.R_i[1,1]
-            #gpsc[jj] = k;
             jj = jj+1;
+
+            # NED to ECEF
+            pos_of_ned_in_ecef = geo.wgs842ecef(self.klingen['rotlat'], self.klingen['rotlon'])
+            pos_ecef = self.Rn2e.dot( np.matrix([[self.x[0]], [self.x[1]], [0]]) ) + pos_of_ned_in_ecef
+            print(pos_ecef)
+
+            # ECEF to WGS84
+            pos_wgs84 = geo.ecef2wgs82(pos_ecef[0], pos_ecef[1], pos_ecef[2])
+
+            self.gpsmsg.latitude = pos_wgs84['lat']
+            self.gpsmsg.longitude = pos_wgs84['lon']
+            self.gpsmsg.track_angle = 42 # TODO angle between new and last GPS position
+            self.pubgps1.publish(self.gpsmsg)
         
         (self.x_hat,self.P_plus) = self.f.KalmanF(self.x_hat, self.tau, self.z, self.P_plus, self.R)
         
