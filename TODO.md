@@ -157,8 +157,8 @@ Hvad med formationskontrol med multibeam, formation skal ændres afhængig af dy
 Done - "Two controls and Trajectory-Tracking control" kalligrafisk S, osv.
 Et fragtskib der sejler gennem fjorden, det har sin egen sonar båd med.
 Vi kan måske bruge single beam til at lave grov skanning under opmåling med multibeam.
-Sørg for konsekvent citeringsmetode. evntuelt kombinere   "bla bla bla Jensen said that [42]"
+Done nogenlunde den samme nu - Sørg for konsekvent citeringsmetode. evntuelt kombinere   "bla bla bla Jensen said that [42]"
 Done - (3.7) ret col til ^\top
 Done måske - (4.13) argument for at den linære approximation er valid
 kaptiler 4, 5, 6 slutter brat
-Find ud af om der gør noget at båden ikke sejler precist, RTK log er nok fin. [BESKRIV DETTE ET STED]
+Done eller nu er det nævnt - Find ud af om der gør noget at båden ikke sejler precist, RTK log er nok fin. [BESKRIV DETTE ET STED]
