@@ -23,9 +23,6 @@ jj = 0
 # Counter for figuring out when to add the GPS sample
 k = 0
 
-# Used for calculation of track angle
-old_pos_of_ned_in_ecef = np.array([0,0]) # TODO zero zero is possibly
-                                         # not a good initialization point
 
 
 ## This is the simulaiton node, basically kind of the same as simaauship.m
@@ -43,6 +40,10 @@ class Simulator(object):
         self.R = np.diag(self.v)
         self.R_i = np.diag(self.v)
         
+        # Used for calculation of track angle
+        self.old_pos_of_ned_in_ecef = np.array([0,0]) # TODO zero zero is possibly
+                                                      # not a good initialization point
+        self.old_x = self.x
         # Construct the Kalman-filter
         self.f = kfoo.KF()
         
@@ -92,6 +93,13 @@ class Simulator(object):
         for i in self.klingen['inner']:
             p = Point(i[0],i[1],0)
             self.keepoutmsg.poses.append(PoseStamped(h, Pose(p, q)))
+
+    # Angle in rad to the interval (-pi pi]
+    def rad2pipi(self, rad):
+        r = fmod((rad+np.sign(rad)*pi) , 2*pi) # remainder
+        s = np.sign(np.sign(rad) + 2*(np.sign(abs( fmod((rad+pi), (2*pi)) /(2*pi)))-1));
+        pipi = r - s*pi;
+        return pipi
 
     # Rotation matrix from NED to BODY frame
     # Rotation order is zyx
@@ -183,15 +191,17 @@ class Simulator(object):
             # NED to ECEF
             pos_of_ned_in_ecef = geo.wgs842ecef(self.klingen['rotlat'], self.klingen['rotlon'])
             pos_ecef = self.Rn2e.dot( np.matrix([[self.x[0]], [self.x[1]], [0]]) ) + pos_of_ned_in_ecef
-            print(pos_ecef)
 
             # ECEF to WGS84
             pos_wgs84 = geo.ecef2wgs82(pos_ecef[0], pos_ecef[1], pos_ecef[2])
 
             self.gpsmsg.latitude = pos_wgs84['lat']
             self.gpsmsg.longitude = pos_wgs84['lon']
-            self.gpsmsg.track_angle = 42 # TODO angle between new and last GPS position
+
+            self.gpsmsg.SOG = sqrt( (self.old_x[0]-self.x[0])**2 + (self.old_x[1]-self.x[1])**2 )
+            self.gpsmsg.track_angle = self.rad2pipi(atan2(self.x[1]-self.old_x[1] , self.x[0]-self.old_x[0])) # angle between new and last GPS position
             self.pubgps1.publish(self.gpsmsg)
+            self.old_x = self.x # used to calculate SOG and track_angle
         
         (self.x_hat,self.P_plus) = self.f.KalmanF(self.x_hat, self.tau, self.z, self.P_plus, self.R)
         
