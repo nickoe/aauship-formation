@@ -41,9 +41,7 @@ class Simulator(object):
         self.R_i = np.diag(self.v)
         
         self.old_z = np.ones(7) # Used for calculation of speed over ground and track angle for the GPS
-        self.old_x = np.ones(17) # Used for calculation of speed over ground and track angle for the GPS
-        print(self.z)
-        print(self.old_z)
+
         # Construct kalmanfilterfoo, because it contains the aaushipsimmodel function
         self.f = kfoo.KF()
         
@@ -197,18 +195,14 @@ class Simulator(object):
 
             self.gpsmsg.latitude = pos_wgs84['lat']
             self.gpsmsg.longitude = pos_wgs84['lon']
-            #print(self.old_z)
-            self.gpsmsg.track_angle = self.rad2pipi(atan2(self.x[1]-self.old_x[1] , self.x[0]-self.old_x[0])) # angle between new and last GPS position
-            self.gpsmsg.SOG = sqrt( (self.old_x[0]-self.x[0])**2 + (self.old_x[1]-self.x[1])**2 )
-            # Jeppe kig her
-            #self.gpsmsg.SOG = sqrt( (self.old_z[0]-self.z[0])**2 + (self.old_z[1]-self.z[1])**2 )
-            #self.gpsmsg.track_angle = self.rad2pipi(atan2(self.z[1]-self.old_z[1] , self.z[0]-self.old_z[0])) # angle between new and last GPS position
+
+            self.gpsmsg.SOG = sqrt( (self.old_z[0]-self.z[0])**2 + (self.old_z[1]-self.z[1])**2 )
+            self.gpsmsg.track_angle = self.rad2pipi(atan2(self.z[1]-self.old_z[1] , self.z[0]-self.old_z[0])) # angle between new and last GPS position
             print(self.gpsmsg.track_angle)
             self.pubgps1.publish(self.gpsmsg)
 
             print(self.old_z-self.z)
-            self.old_z = self.z # used to calculate SOG and track_angle
-            self.old_x = self.x # used to calculate SOG and track_angle
+            self.old_z = self.z.copy() # used to calculate SOG and track_angles
 
         
         ### move to kalmanfilter-node start ###
