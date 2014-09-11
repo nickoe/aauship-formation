@@ -138,13 +138,13 @@ november til  test og resultatet dertil, noget addendum til de tests
 - Optional future work, could be described. Agent-agent avoidance, and maybe other objects too
 
 Kommentar fra Karl
-Noget med at lave digitale kort, som vi ikke har sagt. Hvis man vil lave en model af tilsanding, er dette projekt brugbart for at verifisere tilsandingsmodel. Dette er en næsteskridts motivation. 
+Done skrevet noget i intro som lidt ekstra motivation, og også nævnt ordene digital map - Noget med at lave digitale kort, som vi ikke har sagt. Hvis man vil lave en model af tilsanding, er dette projekt brugbart for at verifisere tilsandingsmodel. Dette er en næsteskridts motivation. 
 Multibeam - single beam; tænk på single beam formations kontrol versus multibeam. (tænk også på dette med formations topologien)
 Lige meget hvordan båden rent faktisk organiserer sig, hvis det er en virtula structure. Hvordan skal andre opfatte formationen, hvordan vil de undvige. 
 Han synes vi arbejder med en bottomup. Kan være farligt, måske vi skla lave ønsketænking med at starte fra toppen og håbe på at det neden under funker. (SLAM) Kunne bruge top down i stedet lidt, så vi kan få styr på nogle interfaces.
 Ryd op på bibliografi, find reference fra nogle af de mere kendte. [kan Karl sende navne og jorunaler]?
 Sørg for at få referencer fra mere kendte jornaler og sådant.
-Motivationsafsnittet. Grunder er ikke åbenlys, altså til hvorfor det skal være formatainskontrol.
+Done har skrevet lidt om en assumption at det vil gå hurtigere med både i formation end bare med en båd - Motivationsafsnittet. Grunder er ikke åbenlys, altså til hvorfor det skal være formatainskontrol.
 Skalering af formationen. (matemagisk resonering)
 Figur Figure 3.1 er ikke så precis, eller forklaret godt.
 Evnentuelt diskussion af path og trajectorie controllere.
@@ -153,7 +153,7 @@ Ide: Brug en statisk optagelse af støjen af GPS til at tilføje støj, i stedet
 
 
 Kommentar fra JAL
-Hvad med formationskontrol med multibeam, formation skal ændres afhængig af dybde, afhængig af hvor meget overlap der er.
+Lavet udkast på papir, måske skal det dokumenteres - Hvad med formationskontrol med multibeam, formation skal ændres afhængig af dybde, afhængig af hvor meget overlap der er.
 Done - "Two controls and Trajectory-Tracking control" kalligrafisk S, osv.
 Et fragtskib der sejler gennem fjorden, det har sin egen sonar båd med.
 Vi kan måske bruge single beam til at lave grov skanning under opmåling med multibeam.
