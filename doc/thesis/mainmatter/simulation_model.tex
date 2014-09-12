@@ -198,7 +198,21 @@ where $s \cdot = \sin(\cdot)$ and $c \cdot = \cos(\cdot)$. $\Theta_{nb}$ is the 
 
 The acceleration is made in a similar way as the magnetic body vector is made, except it adds the bodyframe accelerations caused by the ship itself.
 \begin{align}
-a_b = [a_x, a_y, 0]^T + R_n^b (\Theta_{nb}) [0,0,g]^\top
+a_\text{IMU} = [a_{bx}, a_{by}, 0]^T + R_n^b (\Theta_{nb}) [0,0,g]^\top
+\label{eq:accl_IMU_construction}
 \end{align}
 where $g$ is the gravity, defined as 9.82 m/s$^2$
+
+\section{Reconstruction of body accelerations}
+The ship is equipped with an accelerometer, but this does not mean that the accelerations measured is in the body frame, $a_b$, because it also measure the the added gravity vector. This gravity vector has to be subtracted before the body acceleration is know. This is calculated by defining the gravity vector in the NED frame $a_g$, then rotate that to the body frame and subtract it from the IMU measurement $a_\text{IMU}$.
+\begin{align}
+a_g = [0, 0, g]^\top \quad, \quad 
+a_\text{IMU} = [a_x, a_y, a_z]^\top \quad, \quad 
+a_b = [a_{bx}, a_{by}, a_{bz}]^\top
+\end{align}
+Where $g$ is the gravitational acceleration, and the computation is \vref{eq:accl_body_calc}, which is basically the opposite of~\vref{eq:accl_IMU_construction}.
+\begin{align}
+a_b = a_\text{IMU} - R_n^b (\Theta_{nb}) a_g
+\label{eq:accl_body_calc}
+\end{algin}
 
