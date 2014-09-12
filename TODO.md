@@ -162,3 +162,38 @@ Done - (3.7) ret col til ^\top
 Done måske - (4.13) argument for at den linære approximation er valid
 kaptiler 4, 5, 6 slutter brat
 Done eller nu er det nævnt - Find ud af om der gør noget at båden ikke sejler precist, RTK log er nok fin. [BESKRIV DETTE ET STED]
+
+
+
+
+
+
+Navne etc fra Karl:
+Det her er selvfølgelig ikke en udtømmende liste...
+
+Navne:
+
+    Vijay Kumar
+    Roland Siegwart
+    Daniella Rus
+    Sebastian Thrun
+    Tamio Arai
+    Lynne E. Parker
+    Howie Choset
+    Raffaello D'Andrea
+    Emillio Frazzoli
+    Brian Gerkey
+    Steven LaValle 
+
+
+Kanaler:
+Husk at der er forskel på tidsskrifter (også kaldet jounals, transactions, letters) og konferenceberetninger (proceedings). Tidsskrifter bliver nogle gange set som lidt finere. Det er i hvert fald sværere at få noget udgivet i et tidsskrift.
+
+    IEEE Robotics and Automation Magazine
+    Autonomous Robots (Springer)
+    Transactions in Advanced Robotics (Springer)
+    Robotica (Cambridge)
+    Robotics and Autonomous Systems (Elsevier)
+    Journal on Field Robotics (Wiley)
+    Proceedings from IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)
+    Proceedings from IEEE International Conference on Robotics and Automation (ICRA) 
