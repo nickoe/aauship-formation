@@ -50,7 +50,7 @@ class Simulator(object):
 
         self.sub = rospy.Subscriber('lli_input', LLIinput, self.llicb)
         self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=3) # Thsi should eventually be removed when the kf-node is tested against this
-        self.subahrs = rospy.Subscriber('attitude', Quaternion, self.ahrscb)
+        self.subahrs = rospy.Subscriber('attitude', Quaternion, self.ahrscb) # Should be removed from here when the kf-node is tested against this
         self.pubimu = rospy.Publisher('imu', ADIS16405, queue_size=3, latch=True)
         self.trackpath = rospy.Publisher('track', Path, queue_size=3)
         self.refpath = rospy.Publisher('refpath', Path, queue_size=3, latch=True)
@@ -74,6 +74,7 @@ class Simulator(object):
         
         # Static rotation matrix
         self.Rn2e = self.RNED2ECEF(self.klingen['rotlon'], self.klingen['rotlat'])
+        self.pos_of_ned_in_ecef = geo.wgs842ecef(self.klingen['rotlat'], self.klingen['rotlon'])
 
         # Variables for the thrusters
         self.leftthruster = 0.0
@@ -171,7 +172,7 @@ class Simulator(object):
         global jj
 
         # Generate noise vector
-        self.z[0:2] = self.x[0:2] + np.array([self.v[0],self.v[1]])*np.random.randn(1,2)
+        self.z[0:2] = self.x[0:2] #+ np.array([self.v[0],self.v[1]])*np.random.randn(1,2)
         self.z[2]   = self.x[6] + self.v[2]*np.random.randn(1,1)
         self.z[3:5] = self.x[7:9] + np.array([self.v[3],self.v[4]])*np.random.randn(1,2)
         self.z[5:7] = self.x[12:14] + np.array([self.v[5],self.v[6]])*np.random.randn(1,2)
@@ -187,8 +188,7 @@ class Simulator(object):
             jj = jj+1;
 
             # NED to ECEF
-            pos_of_ned_in_ecef = geo.wgs842ecef(self.klingen['rotlat'], self.klingen['rotlon'])
-            pos_ecef = self.Rn2e.dot( np.matrix([[self.x[0]], [self.x[1]], [0]]) ) + pos_of_ned_in_ecef
+            pos_ecef = self.Rn2e.dot( np.matrix([[self.x[0]], [self.x[1]], [0]]) ) + self.pos_of_ned_in_ecef
 
             # ECEF to WGS84
             pos_wgs84 = geo.ecef2wgs82(pos_ecef[0], pos_ecef[1], pos_ecef[2])
@@ -201,7 +201,7 @@ class Simulator(object):
             print(self.gpsmsg.track_angle)
             self.pubgps1.publish(self.gpsmsg)
 
-            print(self.old_z-self.z)
+            print(self.z[0:2])
             self.old_z = self.z.copy() # used to calculate SOG and track_angles
 
         
