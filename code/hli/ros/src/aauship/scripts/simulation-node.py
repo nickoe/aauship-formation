@@ -46,7 +46,7 @@ class Simulator(object):
         self.f = kfoo.KF()
         
         rospy.init_node('simulation_node')
-        self.r = rospy.Rate(20) # Hz
+        self.r = rospy.Rate(40) # Hz
 
         self.sub = rospy.Subscriber('lli_input', LLIinput, self.llicb)
         self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=3) # Thsi should eventually be removed when the kf-node is tested against this
@@ -197,11 +197,13 @@ class Simulator(object):
             self.gpsmsg.longitude = pos_wgs84['lon']
 
             self.gpsmsg.SOG = sqrt( (self.old_z[0]-self.z[0])**2 + (self.old_z[1]-self.z[1])**2 )
-            self.gpsmsg.track_angle = self.rad2pipi(atan2(self.z[1]-self.old_z[1] , self.z[0]-self.old_z[0])) # angle between new and last GPS position
+
+            #     print(fmod( atan2(A[x,0] , A[x,1])+2*pi, 2*pi))   # TODO try to use this - yay this works it seems
+            self.gpsmsg.track_angle = fmod(atan2(self.z[1]-self.old_z[1] , self.z[0]-self.old_z[0])+2*pi, 2*pi) # angle between new and last GPS position
             print(self.gpsmsg.track_angle)
             self.pubgps1.publish(self.gpsmsg)
 
-            print(self.z[0:2])
+            #print(self.z[0:2])
             self.old_z = self.z.copy() # used to calculate SOG and track_angles
 
         
@@ -216,12 +218,14 @@ class Simulator(object):
         ### move to kalmanfilter-node end ###
 
         # Send tf for the robot model visualisation
+        '''
         br = tf.TransformBroadcaster()
         br.sendTransform((self.x[0],self.x[1], 0),
                          tf.transformations.quaternion_from_euler(self.x[4], self.x[5], self.x[6]),
                          rospy.Time.now(),
-                         "boat_link",
-                         "ned")
+                         "ned",
+                         "boat_link")
+        '''
 
         # Endpoint of trail track
         #p = Point(self.x[0],self.x[1],0.0)

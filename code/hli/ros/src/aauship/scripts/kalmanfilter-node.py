@@ -14,7 +14,7 @@ from math import sin, cos
 import numpy as np
 import scipy.io as sio
 import scipy.linalg as linalg
-
+from math import pi, fmod
 import gpsfunctions as geo
 
 class KF(object):
@@ -150,6 +150,14 @@ class KF(object):
 
         return R
 
+    # Angle in rad to the interval (-pi pi]
+    def rad2pipi(self, rad):
+        r = fmod((rad+np.sign(rad)*pi) , 2*pi) # remainder
+        s = np.sign(np.sign(rad) + 2*(np.sign(abs( fmod((rad+pi), (2*pi)) /(2*pi)))-1));
+        pipi = r - s*pi;
+        return pipi
+
+
     # GPS1 callback
     def gps1cb(self, data):
         #z = [N E psi u v udot vdot]
@@ -161,10 +169,14 @@ class KF(object):
         self.z[0:2] =  np.squeeze( pos_ned[0:2] )
         
         # Body velocities
+        #print('')
+        #print('track angle: ' + str(data.track_angle))
+        #print('heading ang: ' + str(self.z[2]))
         beta = data.track_angle - self.z[2] # sideslip angle = track_angle - heading
+        #print(beta)
         U_b = np.array([cos(beta), sin(beta)]) * data.SOG
         self.z[3:5] = np.squeeze( U_b )
-        #print(self.z[3:5]) # TODO verify this when the IMU callback is working
+        #print(self.z[3:5])
    
     # GPS2 callback
     def gps2cb(self, data):
@@ -178,25 +190,36 @@ class KF(object):
     # number of the GPS header.
     def imucb(self, data):
         #self.KalmanF()
-        # print(data)
+        #print(data)
 
-        # TODO calculate the measurement vector z and compare with the simulation note
-        #heading, sog, track angle
+        # TODO calculate the measurement vector z and compare with the simulation node
         Rn2b = self.RNED2BODY(self.roll, self.pitch, self.yaw)
-        # a_b = a_imu - Rn2b.dot(np.array([0,0,9.82]))
-        self.z[5:7]
+        a_imu = np.array([data.xaccl, data.yaccl, data.zaccl])
+        a_b = a_imu - Rn2b.dot(np.array([0,0,-9.82]))
+        #print('a_xb ' + str(a_b[0,0]))
+        #print('a_yb ' + str(a_b[0,2]))
+        #print('')
+        self.z[5:7] = np.array([a_b[0,0], a_b[0,1]]) # TODO is the entirely correct? Maybe the sign is opposite?
+        print(self.z[5:7])
 
         # TODO move the KF stuff from the simulation node in here, now it should still work
         pass
 
     def ahrscb(self, data):
         (self.roll, self.pitch, self.yaw) = tf.transformations.euler_from_quaternion([data.x, data.y, data.z, data.w])
-        #Rm2n  = self.RNED2BODY(1.5707963267948966, 0.0, 3.141592653589793)
+        #Rm2n  = self.RNED2BODY(pi/2, 0, pi )
         #att = Rm2n.dot(np.array([self.roll, self.pitch, self.yaw]))
         #print(att)
-        print( (self.roll, self.pitch, self.yaw))
-        #print(-self.roll+1.570796)
-        self.z[2] = -self.roll+1.570796  # TODO this is strange, but seems to be the actual heading
+        #print( (self.roll, self.pitch, self.yaw))
+        
+        # Hax for attitude in euler angles
+        self.roll = -self.roll
+        #print(self.roll)
+        self.pitch = -self.pitch
+        #print(self.pitch)
+        self.yaw = fmod( -self.yaw+2*pi+pi/2, 2*pi)
+        #print(self.yaw)
+        self.z[2] = self.yaw 
 
     def run(self):
         '''
