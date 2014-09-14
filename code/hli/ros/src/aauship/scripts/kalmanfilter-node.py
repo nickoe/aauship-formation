@@ -6,10 +6,11 @@ import roslib; roslib.load_manifest('aauship')
 import rospy
 from std_msgs.msg import String
 from aauship.msg import *
-from std_msgs.msg import Float64MultiArray
+from std_msgs.msg import Float64MultiArray, Header
 from geometry_msgs.msg import Point, Quaternion, PoseStamped, Pose
 import tf
 from math import sin, cos
+from nav_msgs.msg import Path
 
 import numpy as np
 import scipy.io as sio
@@ -21,10 +22,16 @@ class KF(object):
     def __init__(self):
         # Load discretised model constants
         self.ssmat = sio.loadmat('../../../../../matlab/ssaauship.mat')
-        
+
+        self.tau = np.zeros(5) # input vector
+        self.x = np.zeros(17) # state vector
+        self.x_hat = self.x
+
         # Measurement noise vector and covarince matrix
-        #self.v = np.array([3.0, 3.0, 13.5969e-006, 0.2, 0.2, 0.00033, 0.00033])
-        #self.R = np.diag(self.v)
+        self.v = np.array([0.1,0.1,13.5969e-006,0.2,0.2,0.00033,0.00033])#Measurement,noise
+        self.P_plus = np.zeros([17,17])
+        self.R = np.diag(self.v)
+        self.R_i = np.diag(self.v)
 
         # Process noise vector and covariance matrix
         self.w = np.array([0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.01, 0.01, 0.01, 0.01, 0.01, 0.033, 0.033, 0.033, 0.033, 0.033])
@@ -33,6 +40,10 @@ class KF(object):
 
         # Measurement vector
         self.z = np.zeros(7)
+
+        self.kftrackpath = rospy.Publisher('kftrack', Path, queue_size=3)
+        self.kftrackmsg = Path()
+        self.kftrackmsg.header.frame_id = "ned"
 
         # Static rotation matrix
         self.klingen = sio.loadmat('klingenberg.mat')
@@ -45,7 +56,7 @@ class KF(object):
         self.subgps2 = rospy.Subscriber('gps2', GPS, self.gps2cb)
         self.subimu  = rospy.Subscriber('imu', ADIS16405, self.imucb)
         self.subahrs = rospy.Subscriber('attitude', Quaternion, self.ahrscb)
-        self.pub = rospy.Publisher('kf_statesnew', Float64MultiArray, queue_size=3)
+        self.pub = rospy.Publisher('kf_statesnew', Float64MultiArray, queue_size=1)
 
         rospy.init_node('klamanfilter_node')
 
@@ -157,6 +168,40 @@ class KF(object):
         pipi = r - s*pi;
         return pipi
 
+    # /lli_input callback (same as in the simulation node) TODO move to another file?
+    def llicb(self, data):
+        #print('/lli_input callback')
+        if data.MsgID == 5:
+            self.rightthruster = data.Data
+
+        if data.MsgID == 3:
+            self.leftthruster = data.Data
+        
+        #print(self.leftthruster, self.rightthruster)
+
+        # Thust allocation matrix from calcTforthrustalloc.m
+        self.T = np.matrix([[      0,         0,    0.9946,    0.9946],
+                            [ 1.0000,    1.0000,         0,         0],
+                            [-0.0500,   -0.0500,    0.0052,   -0.0052],
+                            [      0,         0,    0.0995,    0.0995],
+                            [ 0.4100,   -0.1800,   -0.0497,    0.0497]])
+
+        self.T = self.T[:,2:4] # Reducing our thrust allocation to only ues the main propellers
+
+        # Thust coefficient matrix
+        #self.K = np.eye(4)
+        self.K = np.eye(2) # Reducing our thrust allocation to only ues the main propellers
+        self.K[0,0] = 0.26565
+        self.K[1,1] = 0.26565
+
+        # Calculation of forces from the input vector
+        #self.u = np.array([0,0,self.rightthruster,self.leftthruster]) 
+        self.u = np.array([self.rightthruster,self.leftthruster]) # Reducing our thrust allocation to only ues the main propellers
+        self.tau = np.squeeze( np.asarray( self.T.dot(self.K.dot(self.u)) ) )
+
+        # inv(K)*pinv(T)*tau
+        #print(self.tau)
+
 
     # GPS1 callback
     def gps1cb(self, data):
@@ -167,7 +212,8 @@ class KF(object):
         pos_ecef = geo.wgs842ecef(data.latitude, data.longitude, 0.0)
         pos_ned = self.Re2n.dot( pos_ecef - self.pos_of_ned_in_ecef )
         self.z[0:2] =  np.squeeze( pos_ned[0:2] )
-        
+        print((self.z[0], self.z[1]))        
+
         # Body velocities
         #print('')
         #print('track angle: ' + str(data.track_angle))
@@ -177,6 +223,7 @@ class KF(object):
         U_b = np.array([cos(beta), sin(beta)]) * data.SOG
         self.z[3:5] = np.squeeze( U_b )
         #print(self.z[3:5])
+        print('GPS recieved')
    
     # GPS2 callback
     def gps2cb(self, data):
@@ -192,17 +239,50 @@ class KF(object):
         #self.KalmanF()
         #print(data)
 
-        # TODO calculate the measurement vector z and compare with the simulation node
+        # TODO calculate the measurement vector z and compare this constructed z with the one from the simulation node
         Rn2b = self.RNED2BODY(self.roll, self.pitch, self.yaw)
         a_imu = np.array([data.xaccl, data.yaccl, data.zaccl])
         a_b = a_imu - Rn2b.dot(np.array([0,0,-9.82]))
         #print('a_xb ' + str(a_b[0,0]))
         #print('a_yb ' + str(a_b[0,2]))
         #print('')
-        self.z[5:7] = np.array([a_b[0,0], a_b[0,1]]) # TODO is the entirely correct? Maybe the sign is opposite?
-        print(self.z[5:7])
+        self.z[5:7] = np.array([0,0])#np.array([a_b[0,0], a_b[0,1]]) # TODO is the entirely correct? Maybe the sign is opposite?
+        #print(self.z)
+        print('N:   ' + str(self.z[0]))
+        print('E:   ' + str(self.z[1]))
+        print('psi: ' + str(self.z[2]))
+        print('u:   ' + str(self.z[3]))
+        print('v:   ' + str(self.z[4]))
+        print('du:  ' + str(self.z[5]))
+        print('dv:  ' + str(self.z[6]))
+        print('')
 
         # TODO move the KF stuff from the simulation node in here, now it should still work
+        ### move to kalmanfilter-node start ###
+        
+        # Headpoint of trail track
+        p = Point(self.x_hat[0],self.x_hat[1],0.0)
+        q = Quaternion(0,0,0,1)
+        self.kftrackmsg.poses[0] = PoseStamped(Header(), Pose(p, q))
+
+        (self.x_hat,self.P_plus) = self.KalmanF(self.x_hat, self.tau, self.z, self.P_plus, self.R)
+        
+
+        # Endpoint of trail track
+        p = Point(self.x_hat[0],self.x_hat[1],0.0)
+        q = Quaternion(0,0,0,1)
+        self.kftrackmsg.poses[1] = PoseStamped(Header(), Pose(p, q))
+        self.kftrackpath.publish(self.kftrackmsg)
+
+
+        self.pubmsg = Float64MultiArray()
+        for a in self.x_hat:
+            self.pubmsg.data.append(a)
+            #print(a)
+        self.pub.publish(self.pubmsg)
+        #print(self.pubmsg)
+   
+        ### move to kalmanfilter-node end ###
         pass
 
     def ahrscb(self, data):
@@ -233,10 +313,17 @@ class KF(object):
         (xest,self.P_plus) = self.KalmanF(x, u, z, self.P_plus, R)
         print(self.P_plus)
         '''
+        # Initialize an poses array for the trackmsg
+        h = Header()
+        p = Point(0,0,0)
+        q = Quaternion(0,0,0,1)
+        self.kftrackmsg.poses.append(PoseStamped(h, Pose(p, q)))
+        self.kftrackmsg.poses.append(PoseStamped(h, Pose(p, q)))
+
 
         rospy.spin()
 
-        print("Exiting simulaiton node")
+        print("Exiting kalmanfilter node")
         exit()
 
 

@@ -49,9 +49,9 @@ class Simulator(object):
         self.r = rospy.Rate(40) # Hz
 
         self.sub = rospy.Subscriber('lli_input', LLIinput, self.llicb)
-        self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=3) # Thsi should eventually be removed when the kf-node is tested against this
+        self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=1) # Thsi should eventually be removed when the kf-node is tested against this
         self.subahrs = rospy.Subscriber('attitude', Quaternion, self.ahrscb) # Should be removed from here when the kf-node is tested against this
-        self.pubimu = rospy.Publisher('imu', ADIS16405, queue_size=3, latch=True)
+        self.pubimu = rospy.Publisher('imu', ADIS16405, queue_size=1, latch=True)
         self.trackpath = rospy.Publisher('track', Path, queue_size=3)
         self.refpath = rospy.Publisher('refpath', Path, queue_size=3, latch=True)
         self.keepoutpath = rospy.Publisher('keepout', Path, queue_size=3, latch=True)
@@ -129,7 +129,7 @@ class Simulator(object):
 
         return R
     
-    # /lli_input callback
+    # /lli_input callback (same as in the kalmanfilter node) TODO move to another file?
     def llicb(self, data):
         #print('/lli_input callback')
         if data.MsgID == 5:
@@ -173,10 +173,10 @@ class Simulator(object):
 
         # Generate noise vector
         self.z[0:2] = self.x[0:2] #+ np.array([self.v[0],self.v[1]])*np.random.randn(1,2)
-        self.z[2]   = self.x[6] + self.v[2]*np.random.randn(1,1)
-        self.z[3:5] = self.x[7:9] + np.array([self.v[3],self.v[4]])*np.random.randn(1,2)
-        self.z[5:7] = self.x[12:14] + np.array([self.v[5],self.v[6]])*np.random.randn(1,2)
-        #print(self.z)
+        self.z[2]   = fmod(self.x[6]+2*pi, 2*pi) #+ self.v[2]*np.random.randn(1,1)
+        self.z[3:5] = self.x[7:9] #+ np.array([self.v[3],self.v[4]])*np.random.randn(1,2)
+
+
         # Simulating that GPS is only once a second
         # WARNING magic number here
         if k%20 != 0:
@@ -187,6 +187,8 @@ class Simulator(object):
             self.R[1,1] = self.R_i[1,1]
             jj = jj+1;
 
+            self.z[5:7] = self.x[12:14] #+ np.array([self.v[5],self.v[6]])*np.random.randn(1,2)
+            print('Setting self.z GPS')
             # NED to ECEF
             pos_ecef = self.Rn2e.dot( np.matrix([[self.x[0]], [self.x[1]], [0]]) ) + self.pos_of_ned_in_ecef
 
@@ -198,14 +200,23 @@ class Simulator(object):
 
             self.gpsmsg.SOG = sqrt( (self.old_z[0]-self.z[0])**2 + (self.old_z[1]-self.z[1])**2 )
 
-            #     print(fmod( atan2(A[x,0] , A[x,1])+2*pi, 2*pi))   # TODO try to use this - yay this works it seems
             self.gpsmsg.track_angle = fmod(atan2(self.z[1]-self.old_z[1] , self.z[0]-self.old_z[0])+2*pi, 2*pi) # angle between new and last GPS position
-            print(self.gpsmsg.track_angle)
+            #print(self.gpsmsg.track_angle)
             self.pubgps1.publish(self.gpsmsg)
+            print('Publishing GPS')
 
             #print(self.z[0:2])
             self.old_z = self.z.copy() # used to calculate SOG and track_angles
 
+        #print(self.old_z)
+        print('N:   ' + str(self.z[0]))
+        print('E:   ' + str(self.z[1]))
+        print('psi: ' + str(self.z[2]))
+        print('u:   ' + str(self.z[3]))
+        print('v:   ' + str(self.z[4]))
+        print('du:  ' + str(self.z[5]))
+        print('dv:  ' + str(self.z[6]))
+        print('')
         
         ### move to kalmanfilter-node start ###
         (self.x_hat,self.P_plus) = self.f.KalmanF(self.x_hat, self.tau, self.z, self.P_plus, self.R)
@@ -215,17 +226,16 @@ class Simulator(object):
             self.pubmsg.data.append(a)
             #print(a)
         self.pub.publish(self.pubmsg)
+        #print(self.pubmsg)
         ### move to kalmanfilter-node end ###
 
         # Send tf for the robot model visualisation
-        '''
         br = tf.TransformBroadcaster()
         br.sendTransform((self.x[0],self.x[1], 0),
                          tf.transformations.quaternion_from_euler(self.x[4], self.x[5], self.x[6]),
                          rospy.Time.now(),
-                         "ned",
-                         "boat_link")
-        '''
+                         "boat_link",
+                         "ned")
 
         # Endpoint of trail track
         #p = Point(self.x[0],self.x[1],0.0)
