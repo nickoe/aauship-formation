@@ -22,7 +22,7 @@
     name="ned_static_transform_publisher"
     pkg="tf"
     type="static_transform_publisher"
-    args="0 0 0 1.5707963267948966 0 3.141592653589793 ned map 100"/>
+    args="0 0 0 1.5707963267948966 0 3.141592653589793 map ned 100"/>
   <node
     name="rviz"
     pkg="rviz"
