@@ -35,6 +35,7 @@ public:
 
     /* Mahony filter results */
     tf::Quaternion q(u.getQuaternions(1),u.getQuaternions(2),u.getQuaternions(3),u.getQuaternions(0));
+    //tf::Quaternion q(u.getQuaternions(0),u.getQuaternions(1),u.getQuaternions(2),u.getQuaternions(3));
 
     /* Debug output */
     //u.calculateEulerAngles();
@@ -49,10 +50,10 @@ public:
 
     // Publish attitude information (for use with i.e. the Kalman filter)
     geometry_msgs::Quaternion msgq;
-    msgq.w = u.getQuaternions(1);
-    msgq.x = u.getQuaternions(2);
-    msgq.y = u.getQuaternions(3);
-    msgq.z = u.getQuaternions(0);
+    msgq.x = u.getQuaternions(1);
+    msgq.y = u.getQuaternions(2);
+    msgq.z = u.getQuaternions(3);
+    msgq.w = u.getQuaternions(0);
     attitudepub.publish(msgq);
 
   }
