@@ -1,5 +1,5 @@
 from math import sqrt, sin, cos, pi, floor, atan2, fmod
-import numpy
+import numpy as np
 
 def wgs842ecef(lat,lon,h=None):
     if h == None:
@@ -11,7 +11,7 @@ def wgs842ecef(lat,lon,h=None):
     e = 0.0818
     N = a / sqrt(1-e**2*sin(lat))
     
-    result = numpy.zeros((3,1))
+    result = np.zeros((3,1))
     result[0][0] = (N+h)*cos(lat)*cos(lon)
     result[1][0] = (N+h)*cos(lat)*sin(lon)
     result[2][0] = (N*(1-e**2)+h)*sin(lat)
@@ -22,7 +22,7 @@ def wgs842ecef(lat,lon,h=None):
     r_p = 6356752.0
     e = 0.08181979099211
     N = r_e**2/sqrt( (r_e*cos(lat))**2 + (r_p*sin(lat))**2 )
-    result = numpy.zeros((3,1))
+    result = np.zeros((3,1))
     result[0][0] = (N+h)*cos(lat)*cos(lon)
     result[1][0] = (N+h)*cos(lat)*sin(lon)
     result[2][0] = (N*(r_p/r_e)**2 + h)*sin(lat)
@@ -74,7 +74,7 @@ def ecef2wgs82(x,y,z):
     return {'lat':lat,'lon':lon,'alt':alt}
 
 def get_rot_matrix(centerlat,centerlon):
-    Rot = numpy.matrix([[-sin(centerlat)*cos(centerlon), -sin(centerlat)*sin(centerlon), cos(centerlat)],
+    Rot = np.matrix([[-sin(centerlat)*cos(centerlon), -sin(centerlat)*sin(centerlon), cos(centerlat)],
                         [-sin(centerlon), cos(centerlon), 0],
                         [-cos(centerlat)*cos(centerlon), - cos(centerlat)*sin(centerlon), -sin(centerlat)]])
     return Rot
@@ -96,6 +96,42 @@ def nmea2decimal(lat,latsign,lon,lonsign):
     angle = [majorangle[0] + minorangle[0],majorangle[1] + minorangle[1]]
 
     return angle
+
+# Angle in rad to the interval (-pi pi]
+def rad2pipi(rad):
+    r = fmod((rad+np.sign(rad)*pi) , 2*pi) # remainder
+    s = np.sign(np.sign(rad) + 2*(np.sign(abs( fmod((rad+pi), (2*pi)) /(2*pi)))-1));
+    pipi = r - s*pi;
+    return pipi
+
+# Rotation matrix from NED to BODY frame
+# Rotation order is zyx
+def RNED2BODY(phi, theta, psi):
+    cphi = cos(phi)
+    sphi = sin(phi)
+    cth  = cos(theta)
+    sth  = sin(theta)
+    cpsi = cos(psi)
+    spsi = sin(psi)
+     
+    R = np.matrix([ [cpsi*cth, -spsi*cphi+cpsi*sth*sphi,  spsi*sphi+cpsi*cphi*sth],
+                    [spsi*cth,  cpsi*cphi+sphi*sth*spsi, -cpsi*sphi+sth*spsi*cphi],
+                    [    -sth,                 cth*sphi,                 cth*cphi] ])
+    return R
+
+# Rotation matrix from NED to ECEF frame
+# Using the eq. (2.84) from Fossen
+def RNED2ECEF(lon, lat):
+    clon = cos(lon)
+    slon = sin(lon)
+    clat = cos(lat)
+    slat = sin(lat)
+
+    R = np.matrix([ [-clon*slat,  -slon,   -clon*clat],
+                    [-slon*slat,   clon,   -slon*clat],
+                    [      clat,      0,        -slat] ])
+
+    return R
 
 if __name__ == "__main__":
     lat = 57*pi/180

@@ -73,7 +73,7 @@ class Simulator(object):
         self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
         
         # Static rotation matrix
-        self.Rn2e = self.RNED2ECEF(self.klingen['rotlon'], self.klingen['rotlat'])
+        self.Rn2e = geo.RNED2ECEF(self.klingen['rotlon'], self.klingen['rotlat'])
         self.pos_of_ned_in_ecef = geo.wgs842ecef(self.klingen['rotlat'], self.klingen['rotlon'])
 
         # Variables for the thrusters
@@ -92,42 +92,6 @@ class Simulator(object):
         for i in self.klingen['inner']:
             p = Point(i[0],i[1],0)
             self.keepoutmsg.poses.append(PoseStamped(h, Pose(p, q)))
-
-    # Angle in rad to the interval (-pi pi]
-    def rad2pipi(self, rad):
-        r = fmod((rad+np.sign(rad)*pi) , 2*pi) # remainder
-        s = np.sign(np.sign(rad) + 2*(np.sign(abs( fmod((rad+pi), (2*pi)) /(2*pi)))-1));
-        pipi = r - s*pi;
-        return pipi
-
-    # Rotation matrix from NED to BODY frame
-    # Rotation order is zyx
-    def RNED2BODY(self, phi, theta, psi):
-        cphi = cos(phi)
-        sphi = sin(phi)
-        cth  = cos(theta)
-        sth  = sin(theta)
-        cpsi = cos(psi)
-        spsi = sin(psi)
-         
-        R = np.matrix([ [cpsi*cth, -spsi*cphi+cpsi*sth*sphi,  spsi*sphi+cpsi*cphi*sth],
-                        [spsi*cth,  cpsi*cphi+sphi*sth*spsi, -cpsi*sphi+sth*spsi*cphi],
-                        [    -sth,                 cth*sphi,                 cth*cphi] ])
-        return R
-
-    # Rotation matrix from NED to ECEF frame
-    # Using the eq. (2.84) from Fossen
-    def RNED2ECEF(self, lon, lat):
-        clon = cos(lon)
-        slon = sin(lon)
-        clat = cos(lat)
-        slat = sin(lat)
-
-        R = np.matrix([ [-clon*slat,  -slon,   -clon*clat],
-                        [-slon*slat,   clon,   -slon*clat],
-                        [      clat,      0,        -slat] ])
-
-        return R
     
     # /lli_input callback (same as in the kalmanfilter node) TODO move to another file?
     def llicb(self, data):
@@ -278,11 +242,11 @@ class Simulator(object):
             
             # Calculate the IMU measurements from the aaushipsimmodel
             accelbody = np.array([self.x[12], self.x[13], 0])
-            accelimu = accelbody + self.RNED2BODY(self.x[4],self.x[5],self.x[6]).T.dot(np.array([0,0,9.82]))
+            accelimu = accelbody + geo.RNED2BODY(self.x[4],self.x[5],self.x[6]).T.dot(np.array([0,0,9.82]))
 
             declination = 2.1667*pi/180 # angle from north
             inclination = 70.883*pi/180 # angle from north-east plane
-            magnimu = self.RNED2BODY(self.x[4],self.x[5],self.x[6]).T.dot(np.array([0,inclination,declination]))
+            magnimu = geo.RNED2BODY(self.x[4],self.x[5],self.x[6]).T.dot(np.array([0,inclination,declination]))
 
             self.imumsg.xgyro = self.x[14] # dot_p
             self.imumsg.ygyro = self.x[15] # dot_q

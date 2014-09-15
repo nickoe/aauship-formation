@@ -51,7 +51,7 @@ class KF(object):
 
         # Static rotation matrix
         self.klingen = sio.loadmat('klingenberg.mat')
-        self.Rn2e = self.RNED2ECEF(self.klingen['rotlon'], self.klingen['rotlat'])
+        self.Rn2e = geo.RNED2ECEF(self.klingen['rotlon'], self.klingen['rotlat'])
         self.Re2n = self.Rn2e.T
         self.pos_of_ned_in_ecef = geo.wgs842ecef(self.klingen['rotlat'], self.klingen['rotlon'])
 
@@ -65,41 +65,6 @@ class KF(object):
 
         rospy.init_node('klamanfilter_node')
 
-    # Rotation matrix from NED to BODY frame
-    # Rotation order is zyx
-    def RNED2BODY(self, phi, theta, psi):
-        cphi = cos(phi)
-        sphi = sin(phi)
-        cth  = cos(theta)
-        sth  = sin(theta)
-        cpsi = cos(psi)
-        spsi = sin(psi)
-         
-        R = np.matrix([ [cpsi*cth, -spsi*cphi+cpsi*sth*sphi,  spsi*sphi+cpsi*cphi*sth],
-                        [spsi*cth,  cpsi*cphi+sphi*sth*spsi, -cpsi*sphi+sth*spsi*cphi],
-                        [    -sth,                 cth*sphi,                 cth*cphi] ])
-        return R
-
-    # Rotation matrix from NED to ECEF frame
-    # Using the eq. (2.84) from Fossen
-    def RNED2ECEF(self, lon, lat):
-        clon = cos(lon)
-        slon = sin(lon)
-        clat = cos(lat)
-        slat = sin(lat)
-
-        R = np.matrix([ [-clon*slat,  -slon,   -clon*clat],
-                        [-slon*slat,   clon,   -slon*clat],
-                        [      clat,      0,        -slat] ])
-
-        return R
-
-    # Angle in rad to the interval (-pi pi]
-    def rad2pipi(self, rad):
-        r = fmod((rad+np.sign(rad)*pi) , 2*pi) # remainder
-        s = np.sign(np.sign(rad) + 2*(np.sign(abs( fmod((rad+pi), (2*pi)) /(2*pi)))-1));
-        pipi = r - s*pi;
-        return pipi
 
     # /lli_input callback (same as in the simulation node) TODO move to another file?
     def llicb(self, data):
@@ -173,7 +138,7 @@ class KF(object):
         #print(data)
 
         # TODO calculate the measurement vector z and compare this constructed z with the one from the simulation node
-        Rn2b = self.RNED2BODY(self.roll, self.pitch, self.yaw)
+        Rn2b = geo.RNED2BODY(self.roll, self.pitch, self.yaw)
         a_imu = np.array([data.xaccl, data.yaccl, data.zaccl])
         a_b = a_imu - Rn2b.dot(np.array([0,0,-9.82]))
         #print('a_xb ' + str(a_b[0,0]))
@@ -220,7 +185,7 @@ class KF(object):
 
     def ahrscb(self, data):
         (self.roll, self.pitch, self.yaw) = tf.transformations.euler_from_quaternion([data.x, data.y, data.z, data.w])
-        #Rm2n  = self.RNED2BODY(pi/2, 0, pi )
+        #Rm2n  = geo.RNED2BODY(pi/2, 0, pi )
         #att = Rm2n.dot(np.array([self.roll, self.pitch, self.yaw]))
         #print(att)
         #print( (self.roll, self.pitch, self.yaw))
