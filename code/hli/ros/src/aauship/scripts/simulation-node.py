@@ -135,8 +135,7 @@ class Simulator(object):
         global k
         global jj
 
-        # Generate noise vector
-        self.z[0:2] = self.x[0:2] #+ np.array([self.v[0],self.v[1]])*np.random.randn(1,2)
+        # Generate noise vector data from IMU
         self.z[2]   = fmod(self.x[6]+2*pi, 2*pi) #+ self.v[2]*np.random.randn(1,1)
         self.z[3:5] = self.x[7:9] #+ np.array([self.v[3],self.v[4]])*np.random.randn(1,2)
 
@@ -151,7 +150,10 @@ class Simulator(object):
             self.R[1,1] = self.R_i[1,1]
             jj = jj+1;
 
+            # Generate noise vector data from GPS
+            self.z[0:2] = self.x[0:2] #+ np.array([self.v[0],self.v[1]])*np.random.randn(1,2)
             self.z[5:7] = self.x[12:14] #+ np.array([self.v[5],self.v[6]])*np.random.randn(1,2)
+
             print('Setting self.z GPS')
             # NED to ECEF
             pos_ecef = self.Rn2e.dot( np.matrix([[self.x[0]], [self.x[1]], [0]]) ) + self.pos_of_ned_in_ecef
