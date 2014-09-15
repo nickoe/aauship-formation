@@ -34,6 +34,10 @@ class KF(object):
         self.R = np.diag(self.v)
         self.R_i = np.diag(self.v)
 
+        # Initialisation of thruster input variables
+        self.rightthruster = 0
+        self.leftthruster = 0
+
         # Construct kalmanfilterfoo, because it contains the aaushipsimmodel function
         self.f = kfoo.KF()
 
@@ -162,7 +166,7 @@ class KF(object):
         p = Point(self.x_hat[0],self.x_hat[1],0.0)
         q = Quaternion(0,0,0,1)
         self.kftrackmsg.poses[0] = PoseStamped(Header(), Pose(p, q))
-        print(self.tau)
+
         (self.x_hat,self.P_plus) = self.f.KalmanF(self.x_hat, self.tau, self.z, self.P_plus, self.R)
         
 
