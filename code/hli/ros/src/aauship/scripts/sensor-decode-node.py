@@ -67,7 +67,7 @@ class Estimator(object):
             print("self.stat = " + str(self.stat))
 
         #print "Running parser"
-	### if IMU device ###
+        ### if IMU device ###
         tmp = {'DevID':str(data.DevID), 'MsgID':str(data.MsgID),'Data': (data.Data)}
         self.parser.parse(tmp)
         self.imu['supply'] = numpy.asscalar(self.samples[0,0])*0.002418
@@ -98,9 +98,8 @@ class Estimator(object):
         pr = self.pitchroll(self.imu['xaccl'],self.imu['yaccl'],self.imu['zaccl'])
         head = self.yaw(self.imu['xmagn'],self.imu['ymagn'],self.imu['zmagn'],pr['pitch'],pr['roll'])
 
-	### if GPS device ###
-	# publish GPS topic here
-
+        ### if GPS device ###
+        # publish GPS topic here
 
         #self.pub_attitude.publish(pr['pitch'],pr['roll'],head) # We use the cpp ahrs methods insted
 
@@ -128,7 +127,7 @@ class Estimator(object):
         self.parser = fapsParse.packetParser(
                 self.imulog,
                 self.gps1log,
-		self.gps1sample,
+                self.gps1sample,
                 self.samples,
                 self.mixedlog,
                 self.plog)

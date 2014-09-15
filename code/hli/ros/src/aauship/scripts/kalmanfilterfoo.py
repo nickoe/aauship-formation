@@ -101,6 +101,7 @@ class KF(object):
         
 
     def run(self):
+        print('Testing Kalman filter function')
         x = numpy.array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]) # state vector
         u = numpy.array([8,0,0,0,0]) # input vector
         z = numpy.array([1,1,1,1,1,1,1]) # measurement vector
@@ -111,25 +112,7 @@ class KF(object):
         R = numpy.diag([3.0, 3.0, 13.5969, 0.1, 0.1, 0.0524, 0.0524])
         (xest,self.P_plus) = self.KalmanF(x, u, z, self.P_plus, R)
         print(self.P_plus)
-
-
-        '''
-        pylab.figure()
-        pylab.plot(z,'k+',label='noisy measurements')
-        pylab.plot(xhat,'b-',label='a posteri estimate')
-        pylab.axhline(x,color='g',label='truth value')
-        pylab.legend()
-        pylab.xlabel('Iteration')
-        pylab.ylabel('Voltage')
-
-        pylab.figure()
-        valid_iter = range(1,n_iter) # Pminus not valid at step 0
-        pylab.plot(valid_iter,Pminus[valid_iter],label='a priori error estimate')
-        pylab.xlabel('Iteration')
-        pylab.ylabel('$(Voltage)^2$')
-        pylab.setp(pylab.gca(),'ylim',[0,.01])
-        pylab.show()
-        '''
+        print('Done testing Kalman filter function')
 
 if __name__ == '__main__':
     w = KF()

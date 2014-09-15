@@ -49,7 +49,7 @@ class Simulator(object):
         self.r = rospy.Rate(40) # Hz
 
         self.sub = rospy.Subscriber('lli_input', LLIinput, self.llicb)
-        self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=1) # Thsi should eventually be removed when the kf-node is tested against this
+        self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=1) # This should eventually be removed when the kf-node is tested against this
         self.subahrs = rospy.Subscriber('attitude', Quaternion, self.ahrscb) # Should be removed from here when the kf-node is tested against this
         self.pubimu = rospy.Publisher('imu', ADIS16405, queue_size=1, latch=True)
         self.trackpath = rospy.Publisher('track', Path, queue_size=3)

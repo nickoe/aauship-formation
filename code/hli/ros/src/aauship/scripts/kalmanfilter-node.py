@@ -10,6 +10,7 @@ from std_msgs.msg import Float64MultiArray, Header
 from geometry_msgs.msg import Point, Quaternion, PoseStamped, Pose
 import tf
 from math import sin, cos
+import kalmanfilterfoo as kfoo # temporary implementation for the simulation
 from nav_msgs.msg import Path
 
 import numpy as np
@@ -32,6 +33,9 @@ class KF(object):
         self.P_plus = np.zeros([17,17])
         self.R = np.diag(self.v)
         self.R_i = np.diag(self.v)
+
+        # Construct kalmanfilterfoo, because it contains the aaushipsimmodel function
+        self.f = kfoo.KF()
 
         # Process noise vector and covariance matrix
         self.w = np.array([0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.01, 0.01, 0.01, 0.01, 0.01, 0.033, 0.033, 0.033, 0.033, 0.033])
@@ -56,81 +60,10 @@ class KF(object):
         self.subgps2 = rospy.Subscriber('gps2', GPS, self.gps2cb)
         self.subimu  = rospy.Subscriber('imu', ADIS16405, self.imucb)
         self.subahrs = rospy.Subscriber('attitude', Quaternion, self.ahrscb)
+        self.sub = rospy.Subscriber('lli_input', LLIinput, self.llicb)
         self.pub = rospy.Publisher('kf_statesnew', Float64MultiArray, queue_size=1)
 
         rospy.init_node('klamanfilter_node')
-
-
-    def aaushipsimmodel(self, x, u):
-        # Linear simulation step
-        xn = self.ssmat['Ad'].dot(x[2:12]) + self.ssmat['Bd'].dot(u)
-
-        eta   = np.zeros(5)
-        nu    = np.zeros(5)
-        nudot = np.zeros(5)
-        xs    = np.zeros(self.no_of_states)
-
-        # Calculate positions with euler integration
-        xn[4] = xn[9]*self.ssmat['ts'] + x[6]
-        Rz    = np.matrix([[cos(xn[4]), -sin(xn[4])], [sin(xn[4]), cos(xn[4])]])
-        eta[0:2] = x[0:2] + Rz.dot(xn[5:7])*float(self.ssmat['ts'])
-
-        # Compute Fossen vectors
-        eta[2:5] = xn[7:10]*self.ssmat['ts'] + x[4:7]
-        nu       = xn[5:10]
-        nudot    = xn[5:10]-x[7:12]
-
-        # Full state simulaiton vector
-        xs[0:2] = eta[0:2]
-        xs[2:4] = xn[0:2]
-        xs[4:7] = eta[2:5]
-        xs[7:12] = nu
-        xs[12:17] = nudot
-
-        return xs
-
-
-    # Seems like the KalmanF does not return the same as the matlab implementation at the moment!!!
-    def KalmanF(self, x, u, z, P_plus, R):
-        # System matrix
-        PHI = np.zeros([17,17])
-        PHI[0:2,0:2] = np.matrix([[1,0],[0,1]])
-        PHI[2:12,2:12] = self.ssmat['Ad']
-        PHI[12:17,12:17] = np.diag([1,1,1,1,1])
-        PHI[12:17,7:12] = self.ssmat['Ad'][5:10,5:10]
-
-        # Measurement matrix
-        h = np.zeros([7,17])
-        h[0:2,0:2] = np.diag([1,1])
-        h[2:5,6:9] = np.diag([1,1,1])
-        h[5:7,12:14] = np.diag([1,1])
-        H = h;
-
-        # The nonlinear contribution to the system
-        PHI[0:2,7:9] = np.matrix([ [float(self.ssmat['ts'])*cos(x[6]),-float(self.ssmat['ts'])*sin(x[6])], 
-                       [float(self.ssmat['ts'])*sin(x[6]), float(self.ssmat['ts'])*cos(x[6])] ])
-        # PHI(1:2,8:9) = [ts*cos(x(7)) -ts*sin(x(7)); ts*sin(x(7)) ts*cos(x(7))]; 
-        # print(PHI[0:2,7:9]) # seems to be ok now
-
-        #Q = np.diag(np.ones([17]))
-        Q = np.diag([0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.01,0.01,0.01,0.01,0.01,0.033,0.033,0.033,0.033,0.033])
-        # Prediction
-        x_hat_minus = self.aaushipsimmodel(x,u);
-        P_minus = PHI*P_plus*PHI + Q;
-        
-        # Update
-        z_bar = z - h.dot(x_hat_minus);
-        #print(R)
-        S = H.dot(P_minus.dot(H.T)) + R; # test the individual vars and operators in this line
-        #print(S) # Something is wrong with S
-        # S = H*P_minus*H' + R
-
-        K = P_minus.dot(H.T).dot(linalg.inv(S));
-        x_hat_plus = x_hat_minus + K.dot(z_bar);
-        P_plus = (np.eye(17) - K.dot(H)).dot(P_minus).dot( (np.eye(17) - K.dot(H)).T ) + K.dot(R).dot(K.T);
-       
-        # Return estimated state vector
-        return (x_hat_plus,P_plus)
 
     # Rotation matrix from NED to BODY frame
     # Rotation order is zyx
@@ -264,8 +197,8 @@ class KF(object):
         p = Point(self.x_hat[0],self.x_hat[1],0.0)
         q = Quaternion(0,0,0,1)
         self.kftrackmsg.poses[0] = PoseStamped(Header(), Pose(p, q))
-
-        (self.x_hat,self.P_plus) = self.KalmanF(self.x_hat, self.tau, self.z, self.P_plus, self.R)
+        print(self.tau)
+        (self.x_hat,self.P_plus) = self.f.KalmanF(self.x_hat, self.tau, self.z, self.P_plus, self.R)
         
 
         # Endpoint of trail track

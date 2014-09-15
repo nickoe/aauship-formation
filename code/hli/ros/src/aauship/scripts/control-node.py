@@ -22,7 +22,7 @@ class Control(object):
         self.n = 1 # used for wp gen logic
 
         rospy.init_node('control_node')
-        self.sub = rospy.Subscriber('kf_statesnew', Float64MultiArray, self.callback, queue_size=3)
+        self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=1)
         self.pub = rospy.Publisher('lli_input', LLIinput, queue_size=4, latch=True)
 
         # Initilaze parameters for the simple PID heading contorller

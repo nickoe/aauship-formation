@@ -264,7 +264,7 @@ class packetParser():
 
                     #print str("".join(packet['Data']))
                     content = "".join(packet['Data']).split(',')
-                    #print(content)
+                    print(content)
 
                     if content[0] == "$GPGGA":
                         # The GPGGA packet contain the following information:
@@ -284,7 +284,7 @@ class packetParser():
                         # [13] DGPS stuff, ignore
                         # [14] DGPS stuff, ignore
                         # [15] Checksum
-
+                        print("GGA")
                         self.gpsmsg.fix = int(content[6])
                         self.gpsmsg.sats = int(content[7])
                         self.gpsmsg.HDOP = float(content[8])
@@ -294,7 +294,7 @@ class packetParser():
 
                     if content[0] == "$GPRMC" and content[2] == 'A':
                         #print ",".join("".join(packet['Data']).split(',')[1:8])
-
+                        print("RMC")
                         # The GPRMC packet contain the following information:
                         # [0] Message type ($GPRMC)
                         # [1] Timestamp
