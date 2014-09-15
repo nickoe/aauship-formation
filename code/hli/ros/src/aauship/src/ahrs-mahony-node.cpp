@@ -21,7 +21,7 @@ public:
   SubscribeAndPublish()
   {
     adissub = n.subscribe("imu", 1, &SubscribeAndPublish::adisCallback, this);
-    ahrssub = n.subscribe("ahrs", 2, &SubscribeAndPublish::ahrsCallback, this); // not implemented, supposed to be live update of filter parameters
+    ahrssub = n.subscribe("ahrscfg", 2, &SubscribeAndPublish::ahrscfgCallback, this); // not implemented, supposed to be live update of filter parameters
     attitudepub = n.advertise<geometry_msgs::Quaternion>("attitude", 2, true);
   }
 
@@ -59,7 +59,7 @@ public:
   }
 
   // Used to configure the filter
-  void ahrsCallback(const aauship::ADIS16405::ConstPtr& msg)
+  void ahrscfgCallback(const aauship::ADIS16405::ConstPtr& msg)
   {
   //  MahonyAHRS::setTuning(float kp, float ki)
   }
