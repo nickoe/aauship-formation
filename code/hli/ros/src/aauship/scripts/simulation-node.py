@@ -46,7 +46,7 @@ class Simulator(object):
         self.f = kfoo.KF()
         
         rospy.init_node('simulation_node')
-        self.r = rospy.Rate(40) # Hz
+        self.r = rospy.Rate(20) # Hz
 
         self.sub = rospy.Subscriber('lli_input', LLIinput, self.llicb)
         self.pub = rospy.Publisher('kf_states', Float64MultiArray, queue_size=1) # This should eventually be removed when the kf-node is tested against this
@@ -243,8 +243,11 @@ class Simulator(object):
             #self.pubmsg.data = self.x
             
             # Calculate the IMU measurements from the aaushipsimmodel
+            Rn2b = geo.RNED2BODY(self.x[4],self.x[5],self.x[6])
             accelbody = np.array([self.x[12], self.x[13], 0])
-            accelimu = accelbody + geo.RNED2BODY(self.x[4],self.x[5],self.x[6]).T.dot(np.array([0,0,9.82]))
+            gravity = Rn2b.dot(np.array([0,0,9.82]))
+            print('gravity ' + str(gravity))
+            accelimu = accelbody + gravity
 
             declination = 2.1667*pi/180 # angle from north
             inclination = 70.883*pi/180 # angle from north-east plane

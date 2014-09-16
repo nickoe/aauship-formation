@@ -144,12 +144,17 @@ class KF(object):
         # TODO calculate the measurement vector z and compare this constructed z with the one from the simulation node
         Rn2b = geo.RNED2BODY(self.roll, self.pitch, self.yaw)
         a_imu = np.array([data.xaccl, data.yaccl, data.zaccl])
-        a_b = a_imu - Rn2b.dot(np.array([0,0,-9.82]))
+        gravity = Rn2b.dot(np.array([0,0,9.82]))
+        #print('gravity ' + str(gravity))
+        a_b = a_imu - gravity
         #print('a_xb ' + str(a_b[0,0]))
-        #print('a_yb ' + str(a_b[0,2]))
+        #print('a_yb ' + str(a_b[0,1]))
+        #print('a_zb ' + str(a_b[0,2]))
+        print(a_b)
         #print('')
-        self.z[5:7] = np.array([0,0])#np.array([a_b[0,0], a_b[0,1]]) # TODO is the entirely correct? Maybe the sign is opposite?
+        self.z[5:7] = np.array([a_b[0,0], a_b[0,1]]) # TODO is the entirely correct? Maybe the sign is opposite?
         #print(self.z)
+        '''
         print('N:   ' + str(self.z[0]))
         print('E:   ' + str(self.z[1]))
         print('psi: ' + str(self.z[2]))
@@ -158,6 +163,7 @@ class KF(object):
         print('du:  ' + str(self.z[5]))
         print('dv:  ' + str(self.z[6]))
         print('')
+        '''
 
         # TODO move the KF stuff from the simulation node in here, now it should still work
         ### move to kalmanfilter-node start ###
@@ -189,19 +195,23 @@ class KF(object):
 
     def ahrscb(self, data):
         (self.roll, self.pitch, self.yaw) = tf.transformations.euler_from_quaternion([data.x, data.y, data.z, data.w])
+
+        #print('attitude before: ' + str((self.roll, self.pitch, self.yaw)))
         #Rm2n  = geo.RNED2BODY(pi/2, 0, pi )
         #att = Rm2n.dot(np.array([self.roll, self.pitch, self.yaw]))
         #print(att)
         #print( (self.roll, self.pitch, self.yaw))
         
         # Hax for attitude in euler angles
-        self.roll = -self.roll
+#        self.roll = self.roll+pi
         #print(self.roll)
-        self.pitch = -self.pitch
+#        self.pitch = -self.pitch
         #print(self.pitch)
-        self.yaw = fmod( -self.yaw+2*pi+pi/2, 2*pi)
+#        self.yaw = fmod( -self.yaw+2*pi+pi/2, 2*pi)
         #print(self.yaw)
         self.z[2] = self.yaw 
+        #print('attitude after: ' + str((self.roll, self.pitch, self.yaw)))
+        print('')
 
     def run(self):
         '''
