@@ -40,19 +40,22 @@ public:
     /* Madgwick filter results */
     tf::Quaternion q(u.getQuaternions(1),u.getQuaternions(2),u.getQuaternions(3),u.getQuaternions(0));
 
+    // It seems like the filter computes the attitude in ENU not in NED, so we rotate.
+    tf::Quaternion v(0,0,0,1);
+    v = tf::createQuaternionFromRPY(3.1514, 0, 0);
+
     /* Publish rviz transform information */
     static tf::TransformBroadcaster tfbc;
     tf::Transform transform;
     transform.setOrigin( tf::Vector3(0,0,0) );
-    transform.setRotation(q);
+    tf::Quaternion nedq;
+    nedq = v*q;
+    transform.setRotation(nedq);
     //tfbc.sendTransform( tf::StampedTransform(transform, ros::Time::now(), "map", "boat_link"));
 
     // Publish attitude information (for use with i.e. the Kalman filter)
     geometry_msgs::Quaternion msgq;
-    msgq.w = u.getQuaternions(1);
-    msgq.x = u.getQuaternions(2);
-    msgq.y = u.getQuaternions(3);
-    msgq.z = u.getQuaternions(0);
+    tf::quaternionTFToMsg(nedq, msgq);
     attitudepub.publish(msgq);
   }
 
