@@ -150,7 +150,7 @@ class KF(object):
         #print('a_xb ' + str(a_b[0,0]))
         #print('a_yb ' + str(a_b[0,1]))
         #print('a_zb ' + str(a_b[0,2]))
-        print(a_b)
+        #print(a_b)
         #print('')
         self.z[5:7] = np.array([a_b[0,0], a_b[0,1]]) # TODO is the entirely correct? Maybe the sign is opposite?
         #print(self.z)
@@ -191,26 +191,28 @@ class KF(object):
         #print(self.pubmsg)
    
         ### move to kalmanfilter-node end ###
+
+        # Send tf for the robot model visualisation
+        br = tf.TransformBroadcaster()
+        br.sendTransform((self.x_hat[0],self.x_hat[1], 0),
+                         tf.transformations.quaternion_from_euler(self.x_hat[4], self.x_hat[5], self.x_hat[6]),
+                         rospy.Time.now(),
+                         "boat_link",
+                         "ned")
         pass
 
     def ahrscb(self, data):
         (self.roll, self.pitch, self.yaw) = tf.transformations.euler_from_quaternion([data.x, data.y, data.z, data.w])
 
-        #print('attitude before: ' + str((self.roll, self.pitch, self.yaw)))
+        print('attitude before: ' + str((self.roll, self.pitch, self.yaw)))
         #Rm2n  = geo.RNED2BODY(pi/2, 0, pi )
         #att = Rm2n.dot(np.array([self.roll, self.pitch, self.yaw]))
         #print(att)
         #print( (self.roll, self.pitch, self.yaw))
-        
-        # Hax for attitude in euler angles
-#        self.roll = self.roll+pi
-        #print(self.roll)
-#        self.pitch = -self.pitch
-        #print(self.pitch)
-#        self.yaw = fmod( -self.yaw+2*pi+pi/2, 2*pi)
-        #print(self.yaw)
+
+        self.yaw = fmod( self.yaw+2*pi+pi/2, 2*pi)
         self.z[2] = self.yaw 
-        #print('attitude after: ' + str((self.roll, self.pitch, self.yaw)))
+        print('attitude after: ' + str((self.roll, self.pitch, self.yaw)))
         print('')
 
     def run(self):
