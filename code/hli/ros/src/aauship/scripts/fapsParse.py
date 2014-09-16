@@ -285,11 +285,14 @@ class packetParser():
                         # [14] DGPS stuff, ignore
                         # [15] Checksum
                         print("GGA")
-                        self.gpsmsg.fix = int(content[6])
-                        self.gpsmsg.sats = int(content[7])
-                        self.gpsmsg.HDOP = float(content[8])
-                        self.gpsmsg.altitude = float(content[9])
-                        self.gpsmsg.height = float(content[11])
+                        if content[11] == '':
+                            print('GGA parsing, no fix')
+                        else:
+                            self.gpsmsg.fix = int(content[6])
+                            self.gpsmsg.sats = int(content[7])
+                            self.gpsmsg.HDOP = float(content[8])
+                            self.gpsmsg.altitude = float(content[9])
+                            self.gpsmsg.height = float(content[11])
 
 
                     if content[0] == "$GPRMC" and content[2] == 'A':

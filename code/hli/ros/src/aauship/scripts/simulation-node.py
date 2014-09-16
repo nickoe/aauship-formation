@@ -101,7 +101,21 @@ class Simulator(object):
 
         if data.MsgID == 3:
             self.leftthruster = data.Data
-        
+
+        # Saturation in inputs
+        threshold = 40
+
+
+        if self.rightthruster > 0:
+            self.rightthruster = self.rightthruster -40
+        if self.rightthruster < 0:
+            self.rightthruster = self.rightthruster +40
+
+        if self.leftthruster > 0:
+            self.leftthruster = self.leftthruster -40
+        if self.leftthruster < 0:
+            self.leftthruster = self.leftthruster +40
+
         #print(self.leftthruster, self.rightthruster)
 
         # Thust allocation matrix from calcTforthrustalloc.m
@@ -145,9 +159,13 @@ class Simulator(object):
         if k%20 != 0:
             self.R[0,0] = 10*10**10;
             self.R[1,1] = 10*10**10;
+            self.R[3,3] = 10*10**10;
+            self.R[4,4] = 10*10**10;
         else:
             self.R[0,0] = self.R_i[0,0]
             self.R[1,1] = self.R_i[1,1]
+            self.R[3,3] = self.R_i[3,3]
+            self.R[4,4] = self.R_i[4,4]
             jj = jj+1;
 
             # Generate noise vector data from GPS
@@ -196,12 +214,14 @@ class Simulator(object):
         ### move to kalmanfilter-node end ###
 
         # Send tf for the robot model visualisation
+        '''
         br = tf.TransformBroadcaster()
         br.sendTransform((self.x[0],self.x[1], 0),
                          tf.transformations.quaternion_from_euler(self.x[4], self.x[5], self.x[6]),
                          rospy.Time.now(),
                          "boat_link",
                          "ned")
+        '''
 
         # Endpoint of trail track
         #p = Point(self.x[0],self.x[1],0.0)
@@ -246,7 +266,7 @@ class Simulator(object):
             Rn2b = geo.RNED2BODY(self.x[4],self.x[5],self.x[6])
             accelbody = np.array([self.x[12], self.x[13], 0])
             gravity = Rn2b.dot(np.array([0,0,9.82]))
-            print('gravity ' + str(gravity))
+            #print('gravity ' + str(gravity))
             accelimu = accelbody + gravity
 
             declination = 2.1667*pi/180 # angle from north

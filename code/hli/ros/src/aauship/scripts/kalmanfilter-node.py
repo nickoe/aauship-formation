@@ -79,6 +79,18 @@ class KF(object):
         if data.MsgID == 3:
             self.leftthruster = data.Data
         
+
+        if self.rightthruster > 0:
+            self.rightthruster = self.rightthruster -40
+        if self.rightthruster < 0:
+            self.rightthruster = self.rightthruster +40
+
+        if self.leftthruster > 0:
+            self.leftthruster = self.leftthruster -40
+        if self.leftthruster < 0:
+            self.leftthruster = self.leftthruster +40
+
+
         #print(self.leftthruster, self.rightthruster)
 
         # Thust allocation matrix from calcTforthrustalloc.m
@@ -114,7 +126,7 @@ class KF(object):
         pos_ecef = geo.wgs842ecef(data.latitude, data.longitude, 0.0)
         pos_ned = self.Re2n.dot( pos_ecef - self.pos_of_ned_in_ecef )
         self.z[0:2] =  np.squeeze( pos_ned[0:2] )
-        print((self.z[0], self.z[1]))        
+        #print((self.z[0], self.z[1]))        
 
         # Body velocities
         #print('')
@@ -125,7 +137,12 @@ class KF(object):
         U_b = np.array([cos(beta), sin(beta)]) * data.SOG
         self.z[3:5] = np.squeeze( U_b )
         #print(self.z[3:5])
-        print('GPS recieved')
+        #print('GPS recieved')
+
+        self.R[0,0] = self.R_i[0,0]
+        self.R[1,1] = self.R_i[1,1]
+        self.R[3,3] = self.R_i[3,3]
+        self.R[4,4] = self.R_i[4,4]
    
     # GPS2 callback
     def gps2cb(self, data):
@@ -154,7 +171,6 @@ class KF(object):
         #print('')
         self.z[5:7] = np.array([a_b[0,0], a_b[0,1]]) # TODO is the entirely correct? Maybe the sign is opposite?
         #print(self.z)
-        '''
         print('N:   ' + str(self.z[0]))
         print('E:   ' + str(self.z[1]))
         print('psi: ' + str(self.z[2]))
@@ -163,7 +179,6 @@ class KF(object):
         print('du:  ' + str(self.z[5]))
         print('dv:  ' + str(self.z[6]))
         print('')
-        '''
 
         # TODO move the KF stuff from the simulation node in here, now it should still work
         ### move to kalmanfilter-node start ###
@@ -175,6 +190,10 @@ class KF(object):
 
         (self.x_hat,self.P_plus) = self.f.KalmanF(self.x_hat, self.tau, self.z, self.P_plus, self.R)
         
+        self.R[0,0] = 10*10**10;
+        self.R[1,1] = 10*10**10;
+        self.R[3,3] = 10*10**10;
+        self.R[4,4] = 10*10**10;
 
         # Endpoint of trail track
         p = Point(self.x_hat[0],self.x_hat[1],0.0)
@@ -196,6 +215,7 @@ class KF(object):
         br = tf.TransformBroadcaster()
         br.sendTransform((self.x_hat[0],self.x_hat[1], 0),
                          tf.transformations.quaternion_from_euler(self.x_hat[4], self.x_hat[5], self.x_hat[6]),
+                         #tf.transformations.quaternion_from_euler(self.roll, self.pitch, self.yaw),
                          rospy.Time.now(),
                          "boat_link",
                          "ned")
@@ -204,7 +224,7 @@ class KF(object):
     def ahrscb(self, data):
         (self.roll, self.pitch, self.yaw) = tf.transformations.euler_from_quaternion([data.x, data.y, data.z, data.w])
 
-        print('attitude before: ' + str((self.roll, self.pitch, self.yaw)))
+        #print('attitude before: ' + str((self.roll, self.pitch, self.yaw)))
         #Rm2n  = geo.RNED2BODY(pi/2, 0, pi )
         #att = Rm2n.dot(np.array([self.roll, self.pitch, self.yaw]))
         #print(att)
@@ -212,8 +232,8 @@ class KF(object):
 
         self.yaw = fmod( self.yaw+2*pi+pi/2, 2*pi)
         self.z[2] = self.yaw 
-        print('attitude after: ' + str((self.roll, self.pitch, self.yaw)))
-        print('')
+        #print('attitude after: ' + str((self.roll, self.pitch, self.yaw)))
+        #print('')
 
     def run(self):
         '''
