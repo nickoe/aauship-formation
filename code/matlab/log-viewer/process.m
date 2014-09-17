@@ -13,7 +13,7 @@ linewidth = 1;
 % logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 % testname = 'magnetometertest-lab2';
 logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
-testname = 'magnetometertest-lab6/test02';
+testname = 'kalmantest';
 % testname = 'statictest-lab';
 
 %% Data files
@@ -130,7 +130,6 @@ for ll = 1:length(aux_adc)
 %         tst = tst +1 ;
 %     end
 end
-tst
 
 
 %
@@ -181,6 +180,7 @@ figure(50)
 % bias = [0.2582 0.1225 -0.6860];
 % bias = [0 0 0];
 bias = [0.28 0.15 -0.18]; % magnetometertest-lab6, on office chair
+bias = [0 0 0]; % kalmantest, parkeringsplads
 % bias = [(max(magn(:,1))-min(magn(:,1)))/2+min(magn(:,1)),...
 %         (max(magn(:,2))-min(magn(:,2)))/2+min(magn(:,2)),...
 %         (max(magn(:,3))-min(magn(:,3)))/2+min(magn(:,3))]
