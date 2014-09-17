@@ -162,11 +162,6 @@ add_executable(matlab-ahrs-helper-node src/matlab-ahrs-helper-node.cpp)
 add_dependencies(matlab-ahrs-helper-node ${catkin_EXPORTED_TARGETS})
 target_link_libraries(matlab-ahrs-helper-node aauship ${gsl_LIBRARIES} ${catkin_LIBRARIES})
 
-add_executable(kf-node src/kf-node.cpp)
-add_dependencies(kf-node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(kf-node aauship ${gsl_LIBRARIES} ${catkin_LIBRARIES})
-
-
 #############
 ## Install ##
 #############
