@@ -29,7 +29,7 @@ class KF(object):
         self.x_hat = self.x
 
         # Measurement noise vector and covarince matrix
-        self.v = np.array([0.1,0.1,13.5969e-006,0.2,0.2,0.00033,0.00033])#Measurement,noise
+        self.v = np.array([0.1,0.1,13.5969e-006,0.2,0.2,0.033,0.033])#Measurement,noise
         self.P_plus = np.zeros([17,17])
         self.R = np.diag(self.v)
         self.R_i = np.diag(self.v)
@@ -210,6 +210,15 @@ class KF(object):
         #print(self.pubmsg)
    
         ### move to kalmanfilter-node end ###
+
+        v = tf.transformations.quaternion_from_euler(pi,0,0)
+        imuq = tf.transformations.quaternion_from_euler(self.roll,self.pitch,self.yaw)
+        vimuq = tf.transformations.quaternion_multiply(v,imuq)
+        neweuler = tf.transformations.euler_from_quaternion(vimuq)
+
+        self.x_hat[4] = neweuler[0]
+        self.x_hat[5] = -neweuler[1]
+        self.x_hat[6] = -neweuler[2]
 
         # Send tf for the robot model visualisation
         br = tf.TransformBroadcaster()

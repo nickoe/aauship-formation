@@ -11,7 +11,7 @@
 // in rviz.
 
 // Construct filter
-MahonyAHRS u(18, 8, 12); // Magic numbers here
+MahonyAHRS u(18, 15, 12); // Magic numbers here
 
 
 class SubscribeAndPublish
@@ -42,7 +42,7 @@ public:
 
     // It seems like the filter computes the attitude in ENU not in NED, so we rotate.
     tf::Quaternion v(0,0,0,1);
-    v = tf::createQuaternionFromRPY(3.1514, 0, 0);
+    v = tf::createQuaternionFromRPY(3.1514, 0, -3.1415/2);
 
     /* Publish rviz transform information */
     static tf::TransformBroadcaster tfbc;
