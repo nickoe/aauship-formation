@@ -60,6 +60,7 @@ clean:
 	rm -f $(TARGET).lox
 	rm -f $(TARGET).out
 	rm -f *.aux
+	rm -f */*.aux
 	rm -f *.bak
 	rm -f $(FIGS_EPS_GEN)
 	rm -f $(FIGS_PDF_GEN)
