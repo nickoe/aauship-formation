@@ -163,7 +163,7 @@ Done måske - (4.13) argument for at den linære approximation er valid
 kaptiler 4, 5, 6 slutter brat
 Done eller nu er det nævnt - Find ud af om der gør noget at båden ikke sejler precist, RTK log er nok fin. [BESKRIV DETTE ET STED]
 
-
+https://github.com/nickoe/aauship-formation/commit/e6ec6c29eb7ab6736cedb969bc16a15cdd5e8d34#commitcomment-7837394
 
 
 
