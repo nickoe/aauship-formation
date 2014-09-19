@@ -175,9 +175,9 @@ class KF(object):
         print('E:   ' + str(self.z[1]))
         print('psi: ' + str(self.z[2]))
         print('u:   ' + str(self.z[3]))
-        print('v:   ' + str(self.z[4]))
-        print('du:  ' + str(self.z[5]))
-        print('dv:  ' + str(self.z[6]))
+        #print('v:   ' + str(self.z[4]))
+        #print('du:  ' + str(self.z[5]))
+        #print('dv:  ' + str(self.z[6]))
         print('')
 
         # TODO move the KF stuff from the simulation node in here, now it should still work
