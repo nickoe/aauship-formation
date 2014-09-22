@@ -217,7 +217,7 @@ class KF(object):
         neweuler = tf.transformations.euler_from_quaternion(vimuq)
 
         self.x_hat[4] = neweuler[0]
-        self.x_hat[5] = -neweuler[1]
+        self.x_hat[5] = neweuler[1]
         self.x_hat[6] = neweuler[2]
 
         # Send tf for the robot model visualisation

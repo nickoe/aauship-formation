@@ -34,7 +34,9 @@ class Estimator(object):
                     'adc':0.0}
         #self.magnbias = {'x':0.25825, 'y':0.1225, 'z':-0.686}
         #self.magnbias = {'x':0.28, 'y':0.15, 'z':-0.18}
-        self.magnbias = {'x':0, 'y':0, 'z':0}
+        #self.magnbias = {'x':0, 'y':0, 'z':0}
+        self.magnbias = {'x':0.29, 'y':0.15, 'z':-0.15} # magnetometertest-lab7, in hands swinging
+
 
 
     def pitchroll(self,ax,ay,az):
