@@ -91,6 +91,14 @@ class Control(object):
         # Publish data to lli_input
         print "Control callback " + str(time.time())
 
+        # Send tf for the robot model visualisation
+        br = tf.TransformBroadcaster()
+        br.sendTransform((data.data[0],data.data[1], 0),
+                         tf.transformations.quaternion_from_euler(data.data[4], data.data[5], data.data[6]),
+                         rospy.Time.now(),
+                         "boat_link",
+                         "ned")
+
         # First time we get a state estimate
         if self.k == 0:
             # Include initial point to path once

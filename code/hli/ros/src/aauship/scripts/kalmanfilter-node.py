@@ -221,6 +221,7 @@ class KF(object):
         self.x_hat[6] = neweuler[2]
 
         # Send tf for the robot model visualisation
+        '''
         br = tf.TransformBroadcaster()
         br.sendTransform((self.x_hat[0],self.x_hat[1], 0),
                          tf.transformations.quaternion_from_euler(self.x_hat[4], self.x_hat[5], self.x_hat[6]),
@@ -228,6 +229,7 @@ class KF(object):
                          rospy.Time.now(),
                          "boat_link",
                          "ned")
+        '''
         pass
 
     def ahrscb(self, data):
