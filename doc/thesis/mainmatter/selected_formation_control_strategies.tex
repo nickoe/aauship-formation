@@ -2,3 +2,19 @@
 \label{ch:selformctrl}
 \head{This chapter investigates the previously mentioned formation control aspects with deeper considerations with focus in three different types of formation control. These three types are analysed with focus on the specific task applied at the Port of Aalborg, afterwards simulated to be able to conclude which of these are the most beneficial to implement at the AAUSHIP fleet.}
 
+
+\section{Relevant Characteristics}
+To have a tool to determine what strategy is the best suited for the problem described in \vref{sc:mission}.
+
+\begin{description}
+\item[Communication] This should describe what topology form the communicaiton has to have, it should also tell what will happen if some link breaks.
+\item[Control architecture] This should describe what kind of control exists, this is also associated with the communicaiton between agents.
+\item[Formation deviation] How strict is the formation, is it rigid, can it change formation dynamically if one agent fails?
+\item[Obstable avoidance] Is the formation able to avoid obstacles? How will it avoid obstacles, no matter if they are known pre mission or during mission.
+\item[Transients of formation] How will the formation act when turning?
+\item[Energy efficiency] We need a theoritical measure of the formation efficiency, but the formation should be the same to be comparable.
+\item[Wear and tear] Is the controller aggressive? Agressive controllers is know make more wear and tear on the actuators.
+\item[Scalability] How does the formation strategy scale with addition of more agents?
+\item[Prepreation time] This is related to the mission setup time. How much manual labour is needed to prepare the agents for a mission?
+\item[Time] The mission time for covering the area in a bosphorous pattern.
+\end{description}
