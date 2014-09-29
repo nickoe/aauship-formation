@@ -1,17 +1,17 @@
 \input{preamble}
-\def\wkno{7}
+\def\wkno{9}
 \hypersetup{
   pdfsubject={Worksheet \#\wkno},
 }
-%\includeonly{mainmatter/sanity_check_on_model}
-%\includeonly{appendix/identification_of_hydrodynamic_derivatives} 
+\includeonly{mainmatter/formation_control_overview,mainmatter/summary_of_papers}
+
 \begin{document}
 \author{14gr1034}
 \title{Worksheet \#\wkno}
 \date{\today}
 \maketitle
 \begin{center}
-\textit{This worksheet contains the documentation as is.}
+\textit{This worksheet contains the introduction chapter to the state of the art in formation control. Also added notes from papers written by worth to look at people and the publications that sounded relevant to our scope of formation control topic.}
 \end{center}
 
 \frontmatter
@@ -27,27 +27,36 @@
 \input{../manual/acronyms}
 
 \mainmatter
-\descpart{System design}{%
-All the magic about the system}
+\descpart{Problem Analysis}{%
+This part contains an analysis about the project background and its goal, leading to a problem statement and a requirement specification.}
 \include{mainmatter/introduction} % Talk specifically about the data from havnen?
-\include{mainmatter/formcontrol}
-\include{mainmatter/designs}
-\include{mainmatter/modelling}
+\include{mainmatter/formation_control_overview}
+\include{mainmatter/summary_of_papers}
 
-\include{mainmatter/thrust_allocation}
+
+\descpart{System Design}{%
+This is the main part of the report documenting all the engineering that is essential for the project.}
+\include{mainmatter/designs}
+\include{mainmatter/selected_formation_control_strategies}
+\include{mainmatter/modelling}
 \include{mainmatter/path_generation}
 \include{mainmatter/ahrs}
-
-\descpart{Simulation}{%
-All the magic about the numerical part}
 \include{mainmatter/simulation_model}
-\input{mainmatter/model_verification}
-\input{mainmatter/simulation_model_kf}
+%\input{mainmatter/thrust_allocation}
+%\input{mainmatter/model_verification}
+%\input{mainmatter/simulation_model_kf}
+\include{mainmatter/ros}
+
+
+\descpart{Conclusion}{%
+The end of the project is the conclusion and perspective.}
+% Acceptance test
+% Conclusion
+% Perspectives
 
 \cleardoublepage\descpart{Appendix}{%
 The appendix includes chapters which are important for the project, but not necessarily interesting to the reader of the report.}
 \appendix
-\include{appendix/ros}
 \include{appendix/identification_of_hydrodynamic_derivatives}
 \include{appendix/bollard_pull}
 \include{appendix/verification-of-attitude-with-a-camera}
@@ -61,4 +70,3 @@ The appendix includes chapters which are important for the project, but not nece
 %\settocdepth{section}
 \listoftodos
 \end{document}
-
