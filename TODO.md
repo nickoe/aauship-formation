@@ -111,12 +111,12 @@ JAL og Damkjær skal skrive RTK på indkøbslisten
 Skal have skaffet computerer til de nye både
 
 - (37) Succesfull seatrail in Klingenberg
-  - Fix /lli_input interface in simulation and real process
-  - Get GPS data properly into the NED frame, use the rotation origin from the map data, from Klingenberg.
+OK  - Fix /lli_input interface in simulation and real process
+OK  - Get GPS data properly into the NED frame, use the rotation origin from the map data, from Klingenberg.
   - Test thrust allocation on boat
-  - Implement thrust allocation in ROS in the control node and simulation node
-  - Test with boat hardware, HIL testing
-- Finish off the esitmation and modelling stuff
+OK  - Implement thrust allocation in ROS in the control node and simulation node
+OK  - Test with boat hardware, HIL testing
+- Finish off the esitmation and modelling stuff in the report
 - (?) Assembly of two other boats, same as the one we have
 - Analyse different formation control strategies in more detail (documentaiton, with conclusion)  [slutningen af september]
 
