@@ -7,20 +7,20 @@
 To have a tool to determine what strategy is the best suited for the problem described in \vref{sc:mission}.
 
 \begin{description}
-\item[Communication] This should describe what topology form the communicaiton has to have, it should also tell what will happen if some link breaks.
-\item[Control architecture] This should describe what kind of control exists, this is also associated with the communicaiton between agents.
+\item[Communication] This should describe what topology form the communication has to have, it should also tell what will happen if some link breaks. In the topology of the communication can handling of task allocation be taken into account when it is of importance how the agents will handle the individual tasks.
+\item[Control architecture] This should describe what kind of control exists, this is also associated with the communication between agents. Under each type of strategy different types of control can be applied, which can be chosen based on the other parameters in this description.
 \item[Formation deviation] How strict is the formation, is it rigid, can it change formation dynamically if one agent fails?
-\item[Obstable avoidance] Is the formation able to avoid obstacles? How will it avoid obstacles, no matter if they are known pre mission or during mission.
+\item[Obstacle avoidance] Is the formation able to avoid obstacles? How will it avoid obstacles, no matter if they are known pre mission or during mission. How this is done will also be very dependent on the formation deviation. If the formation needs to be strictly rigid, when obstacle avoidance could be done in other ways while the whole formation needs to move together.
 \item[Transients of formation] How will the formation act when turning?
-\item[Energy efficiency] We need a theoritical measure of the formation efficiency, but the formation should be the same to be comparable.
-\item[Wear and tear] Is the controller aggressive? Agressive controllers is know make more wear and tear on the actuators.
+\item[Energy efficiency] We need a theoretical measure of the formation efficiency, but the formation should be the same to be comparable.
+\item[Wear and tear] Is the controller aggressive? Aggressive controllers is known to make more wear and tear on the actuators. So if the strategy can be chosen to minimize the wear and tear this could be of benefit to the hardware.
 \item[Scalability] How does the formation strategy scale with addition of more agents?
-\item[Prepreation time] This is related to the mission setup time. How much manual labour is needed to prepare the agents for a mission?
+\item[Preparation time] This is related to the mission setup time. How much manual labour is needed to prepare the agents for a mission? This could for instance be trajectory generation and how the specific pattern needs to be generated.
 \item[Time] The mission time for covering the area in a bosphorous pattern.
 \end{description}
 
 \section{Energy efficiency}
-The energy efficiency of any autonomous systems is relevant because it limits how long the autonomous system can operate autonomously, given that it cannot easyly recharge or is fatal for the mission. This means that optimising the energy efficiency is desireable.
+The energy efficiency of any autonomous systems is relevant because it limits how long the autonomous system can operate autonomously, given that it cannot easily recharge or is fatal for the mission. This means that optimising the energy efficiency is desirable.
 
 \section{Stragegy 1: Potential field formation}
 \section{Stragegy 2: Leader-follower}
