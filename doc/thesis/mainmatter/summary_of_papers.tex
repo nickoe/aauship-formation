@@ -47,17 +47,19 @@
 \paragraph{Multi-Robot Cooperation}
 	Hard to find, not much effort done.}
 
+{\vskip0pt\color{gray}
 \paragraph{Cooperative control of UAVs for Search and Coverage}
 	Quite interesting, but focuses on motion planning with different
 	types of agents, with different sensor systems. This is used for
 	surveillance. It considers different constraints for this, these
 	are: number of heterogeneous agents, boundary conditions, coverage
-	area, keepout zones, sensor footprint mapping and a time budget.
+	area, keepout zones, sensor footprint mapping and a time budget.}
 
+{\vskip0pt\color{gray}
 \paragraph{Critical Cooperative Surveillance and Coverage with Unmanned Aerial Vehicles}
 	Cannot be found anywhere, does not exist in the "Experimental
 	Robotics: The 10th International Symposium on Experimental Robotics"
-	\url{http://link.springer.com/book/10.1007/978-3-540-77457-0}
+	\url{http://link.springer.com/book/10.1007/978-3-540-77457-0}}
 
 {\vskip0pt\color{gray}
 \paragraph{Architecture, Abstractions, and Algorithms for Controlling Large Teams of Robots: Experimental Testbed and Results}
@@ -65,19 +67,23 @@
 	for controlling a large team of bonholenomis ground robots. Not
 		really what we want.}
 
+{\vskip0pt\color{gray}
 \paragraph{Decentralized feedback controllers for Multi-Agent teams in environments with obstacles}
 	This is about using decentralized feedback controllers that can
-	avoid obstables and collisions. This is not about formation control.
+	avoid obstables and collisions. This is not about formation control.}
 
+{\vskip0pt\color{gray}
 \paragraph{Cooperative Control of Autonomous Surface Vehicles for Oil Skimming and Cleanup}
 	Modelling of the skimmer rope between two boats when towed by two
 	boats. This paper describes a method of controlling the shape of the
 	rope and tries to maximize skimming efficiency. Not related to our
-	form of formation control as such.
+	form of formation control as such. Could be relevant to describe uses for
+    formation control.}
 
+{\vskip0pt\color{gray}
 \paragraph{Robust Control of Mobility and Communications in Autonomous Robot Teams}
 	About comminication aware control of robot treams with an ad-hoc
-	netowrk. This is more like an exploration 
+	netowrk. This is more like an exploration}
 
 \paragraph{Distributed Multi-Robot Task Assignment and Formation Control}
 They focus on the task allocation part of the distribution of assignments for a multi-robot network. They do this in a very specific way which can be interesting to look into, but first after the tasks have been decided.
@@ -95,16 +101,18 @@ It can be interesting to look into, but maybe only the part about the DPC algori
 This paper considers the dubins path with respect to a modification to the dubins car. This is to generate time optimal trajectories for an air plane, with small radius in turns, straight line segments and pieces of planer elastica.
 This is relevant when time comes to look into path generation, so not necessary for us at the moment.
 
+{\vskip0pt\color{gray}
 \paragraph{Using randomization to find and optimize feasible trajectories for nonlinear systems}
 This focuses on trajectory generation and optimization algorithms for nonlinear systems that have significant state-space constraints.
-This is also for path generation, which is not in focus at the moment.
+This is also for path generation, which is not in focus at the moment.}
 
 \paragraph{Algorithms for computing numerical optimal feedback motion strategies}
 They compute a navigation function which serves as a feedback motion strategy when looking at the specific constraints, nonconvex collision constraints and optimization of the constraints. They look at the expansion of the state space representation which expands during the expansion of the constraints. The algorithm brings both down in order.
 This is also more in focus when we have a strategy to implement by ourselves.
 
+{\vskip0pt\color{gray}
 \paragraph{A framework for planning feedback motion strategies based on a random neighborhood graph}
-This is, like the others, more a focus on the path planning and how changes in these can be recorrected fast in the navigation function.
+This is, like the others, more a focus on the path planning and how changes in these can be recorrected fast in the navigation function.}
 
 
 \subsection{Brian Gerkey}
@@ -114,20 +122,24 @@ This is, like the others, more a focus on the path planning and how changes in t
 Trying to make a framework to the question of “which robot should execute which task?”. They derive a model that helps describe multi-robot systems to provide the common framework in which to study them.
 This seems more like a review of how the framework of task allocatin can be generalized and analysed. This it not directly something we need at the moment.}
 
+{\vskip0pt\color{gray}
 \paragraph{A formal analysis and taxonomy of task allocation in multi-robot systems}
 Making a ontop build of the previously and analyses and making "greater understanding" of existing approaches to task allocation.
-Goes the same for this as the last - We do not have that much focus on the task allocation at the moment as such.
+Goes the same for this as the last - We do not have that much focus on the task allocation at the moment as such.}
 
+{\vskip0pt\color{gray}
 \paragraph{ROS: An Open-Source Robot Operating System}
 They discuss how ROS relates to existing robot software frameworks, and briefly overview some of the available application software which uses ROS.
-So this was not as I expected and something we already know.
+So this was not as I expected and something we already know.}
 
+{\vskip0pt\color{gray}
 \paragraph{Long term autonomy in office environments}
 This is from willow garage and they explore options for improving the robustness of robotic systems by identifying failures and executing recovery behaviours, including asking for help from a human operator.
-This is not quite what we are looking for, but maybe the robustness of the system and identification of failures can be used maybe for Kevin.
+This is not quite what we are looking for, but maybe the robustness of the system and identification of failures can be used maybe for Kevin.}
 
+{\vskip0pt\color{gray}
 \paragraph{And all the robots merely Players}
-This is also from willow garage. The Player is a middleware for robots, quite similar to ROS, but on a little bit lower level -- sort of. But the Player is a piece of software that are used with some of willow garages hardware and the paper is a history of development of the Player. ROS extends the concept of Player. Not relevant at all.
+This is also from willow garage. The Player is a middleware for robots, quite similar to ROS, but on a little bit lower level -- sort of. But the Player is a piece of software that are used with some of willow garages hardware and the paper is a history of development of the Player. ROS extends the concept of Player. Not relevant at all.}
 
 
 \subsection{Raffaello D'Andrea}
@@ -146,13 +158,15 @@ Not relevant at all.}
 This paper focuses on the task allocation problems and has the point of view from a game theory in respective. They make a branch and bound solver which finds near optimal assignments for the robots.
 This is still a lot of task allocation and not needed.}
 
+{\vskip0pt\color{gray}
 \paragraph{Distributed control of heterogeneous systems}
 This paper concerns control design for distributed systems where the controller preserves the distributed spatial structure of the nominal system. Thus this focuses more on the individual system.
-This is not that relevant at the moment.
+This is not that relevant at the moment.}
 
+{\vskip0pt\color{gray}
 \paragraph{Distributed control of heterogeneous systems interconnected over an arbitrary graph}
 Deals with output feedback controller with H infinite performance for systems composed of different sub units where the underlying graph structure is arbitrary.
-This can be relevant when we look at the structure of how the formation needs to shape, but not as much in the formation control aspect.
+This can be relevant when we look at the structure of how the formation needs to shape, but not as much in the formation control aspect.}
 
 \paragraph{Near-optimal dynamic trajectory generation and control of an omnidirectional vehicle}
 This paper has also highly focus on the trajectory generation algorithms. This has focus of this with respect to omnidirectional vehicles.
@@ -161,17 +175,19 @@ Like the other trajectory generating papers, this has not so much influence at t
 
 \subsection{Howie Choset}
 
+{\vskip0pt\color{gray}
 \paragraph{A Complete Multirobot Path Planning Algorithm with Performance Bounds}
 The paper deals with multirobot path planning where they decrease the configuration space by couple the relevant robots to each other. In our case we have already done this, because the two or three ships all are in the configuration space.
-Therefore this paper is not that useful when we do not have more ships.
+Therefore this paper is not that useful when we do not have more ships.}
 
 \paragraph{Development and Deployment of a Line of Sight Virtual Sensor for Heterogeneous Teams }
 In this paper they develop a 'virtual sensor' that holds information to verify if the LOS is available. It contains more references on first page to some formation control that can be interesting. But it makes the basis of the communication between the robots and how they should exchange information.
 This can be useful for us, since it both have references to formation control and has focus on the communication aspects.
 
+{\vskip0pt\color{gray}
 \paragraph{Multi-Agent Deterministic Graph Mapping via Robot Rendezvous }
 This paper builds on top of SLAM which is not in the scope of the project at all.
-Not relevant at all.
+Not relevant at all.}
 
 
 \subsection{Lynne E. Parker}
@@ -186,9 +202,10 @@ This is a cut from Springer and takes into account a lot of aspects regarding bo
 This paper makes a more practical implementation of the Null Space based Behavioural approach that that above mentioned section from Springer explains about. They develop a fully decentralized algorithm for multi robot border patrolling in the framework of the NSB.
 This might be good after looking in the 'paper' from Springer, the above mentioned.
 
+{\vskip0pt\color{gray}
 \paragraph{Distributed Intelligence: Overview of the Field and its Application in Multi-Robot Systems}
 Looking at distributed intelligence and the importance of choosing the right paradigm for this. Dependent on which paradigm chosen, there are use of different task allocations. The paper describes the importance of this, based on the requirements from the system.
-The last mentioned is the most important, but nothing that we already knew.
+The last mentioned is the most important, but nothing that we already knew.}
 
 \paragraph{Current Research in Multirobot Systems}
 This paper is a short survey with 8 different topics implemented in physical robots. The interesting topics for us are communication and architecture.
@@ -209,14 +226,17 @@ This seems as a good paper that deals with some of the aspects that we also need
 
 \subsection{Sebastian Thrun}
 
+{\vskip0pt\color{gray}
 \paragraph{Collaborative multi-robot exploration}
-The paper has the focus on coordinating robots that need to explore a certain area. There are not in formation, so it optimizes based on time used and other stuff. But this does not seem so interesting because it is not a formation that are used, at least not a very rigid one.
+The paper has the focus on coordinating robots that need to explore a certain area. There are not in formation, so it optimizes based on time used and other stuff. But this does not seem so interesting because it is not a formation that are used, at least not a very rigid one.}
 
+{\vskip0pt\color{gray}
 \paragraph{Integrating grid-based and topological maps for mobile robot navigation}
-In here is described two "major" paradigms for mapping indoor environments, gridbased and topoligical. This seems at the moment not relevant.
+In here is described two "major" paradigms for mapping indoor environments, gridbased and topoligical. This seems at the moment not relevant.}
 
+{\vskip0pt\color{gray}
 \paragraph{Planning with an adaptive world model}
-This paper is about obstacle avoidance and is not so relevant. There are also many black boxes in the paper, so not all information is there.
+This paper is about obstacle avoidance and is not so relevant. There are also many black boxes in the paper, so not all information is there.}
 
 
 \subsection{Roland Siegward}
