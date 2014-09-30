@@ -79,6 +79,15 @@
 	About comminication aware control of robot treams with an ad-hoc
 	netowrk. This is more like an exploration 
 
+\paragraph{Distributed Multi-Robot Task Assignment and Formation Control}
+They focus on the task allocation part of the distribution of assignments for a multi-robot network. They do this in a very specific way which can be interesting to look into, but first after the tasks have been decided.
+
+\paragraph{Abstractions and Controllers for Groups of Robots in Environments with Obstacles}
+This paper addresses the problem of planning and control of single group with homogeneous robots, which is what we have. They focus on obstacle avoidance, but the principle could be used in other methods and might be very useful.
+
+\paragraph{Multi-agent Path Planning with Multiple Tasks and Distance Constraints}
+In this paper they deal with a DPC algorithm, which is a Distance something Constraint algorithm. It is made to make timeparameterized constraints on the distances between pairs of robots. They expand this to a multi robot task space, such that the individual robots can, before reaching the final destination, can make a certain amount of tasks defined previously to the mission.
+It can be interesting to look into, but maybe only the part about the DPC algorithm.
 
 \subsection{Steven LaValle}
 
@@ -181,3 +190,36 @@ This might be good after looking in the 'paper' from Springer, the above mention
 Looking at distributed intelligence and the importance of choosing the right paradigm for this. Dependent on which paradigm chosen, there are use of different task allocations. The paper describes the importance of this, based on the requirements from the system.
 The last mentioned is the most important, but nothing that we already knew.
 
+\paragraph{Current Research in Multirobot Systems}
+This paper is a short survey with 8 different topics implemented in physical robots. The interesting topics for us are communication and architecture.
+But these seem to be described in other papers also and with a more in depth analysis.
+
+\paragraph{Techniques for Learning in Multi-Robot Teams}
+This are some chapters from a book where L E Parker is co author. It describes the adaptive learning in multi-robot systems and the research of time. It focuses on several aspects, but three more that the others. One of them are the learning of inherently co-operative tasks, tasks that cannot be broken into distinct subtasks. The summary tells about the the aspects in assembly robots but then expands and deal with the multi-robot systems.
+This is somewhat relevant for us, but not related to the formation control aspect as such for now.
+
+\paragraph{A Distributed and Optimal Motion Planning Approach for Multiple Mobile Robots}
+The paper looks at the path planning and velocity planning to a trajectory. They use a search method called D* based on either geometric formulation or schedule formulation. They try to implement this in a distributed manor regarding centralized and exhaustive computation and distributed implementation without optimization concerns.
+This is also more relevant after the formation has been determined.
+
+\paragraph{Cooperative Leader Following in a Distributed Multi-Robot System}
+This paper is very relevant and deals with the leader follower approach. They both describe design and implementation of a distributed technique to coordinate team level and robot level behaviours. They set up different tasks both for the individual robots and the team as such to describe the tasks.
+This seems as a good paper that deals with some of the aspects that we also need to consider.
+
+
+\subsection{Sebastian Thrun}
+
+\paragraph{Collaborative multi-robot exploration}
+The paper has the focus on coordinating robots that need to explore a certain area. There are not in formation, so it optimizes based on time used and other stuff. But this does not seem so interesting because it is not a formation that are used, at least not a very rigid one.
+
+\paragraph{Integrating grid-based and topological maps for mobile robot navigation}
+In here is described two "major" paradigms for mapping indoor environments, gridbased and topoligical. This seems at the moment not relevant.
+
+\paragraph{Planning with an adaptive world model}
+This paper is about obstacle avoidance and is not so relevant. There are also many black boxes in the paper, so not all information is there.
+
+
+\subsection{Roland Siegward}
+
+\paragraph{Path Planning, Replanning, and Execution for Autonomous Driving in Urban and Offroad Environments}
+The work of this paper is about a single robot, a car, that needs to drive by itself. The focus is on the path planning and following the path. This can be relevant for us to look at, but at the moment not relevant regarding the formation control aspect.
