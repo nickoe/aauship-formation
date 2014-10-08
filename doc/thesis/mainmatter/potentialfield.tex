@@ -1,0 +1,14 @@
+\subsection{potentialfield}
+In potential fields it is commonly used that a multi-robot group should move in an environment, either with or without obstacles. In the environment there needs to be specified some relative measurements, or states, such that the robots are capable to manoeuvre relative to something. This reference, that the robots should manoeuvre with is in this case the potential fields. When looking at robots that should keep distance from each other, in a formation, or should move to a desired position, trajectory tracking, the implementation of potential fields come in handy. These fields can be defined from attraction and repulsion potential fields, dependent on if the robots needs to move toward or away from a target. A attractive potential can be written in a quadratic way as:
+\begin{align}
+V_{io}^a = \frac{1}{2}k_{io}r_{io}^2
+\end{align}
+\todo{Der skal lige læses i ref [8, 17] for at finde de helt præcise beskrivelser}
+which depends on the position vectors of the robots and the objective, or end position. Likewise can a repulsive potential be expressed as:
+\begin{align}
+V_{ij}^r = k_{ij}/r_{ij}
+\end{align}
+which is dependent on the euclidean distance between the robots.
+The gradient of the potential fields defines the driving force of the robots and the trajectory should be calculated by simulating based on the dynamics of the system.
+
+\todo{Det er vildt svært at finde ud af det her.}
