@@ -57,6 +57,8 @@ strategies after implementation.
 The energy efficiency of any autonomous systems is relevant because it limits how long the autonomous system can operate autonomously, given that it cannot easily recharge or is fatal for the mission. This means that optimising the energy efficiency is desirable.
 
 %% Oversigt af control stats
+
+\section{Methods}
 \begin{itemize}
 \item \textbf{Direct LOS guidance leading to a duckling formation}\\
 This strategy takes the rise in a duckling or snake formation. In principle is this a leader that has a follower that has a follower and so on. Thereby will the formation take shape as a snake, when the leader takes off and the followers keep the line of sight to their respective leaders. This can be applied when a formation i.e. needs to manoeuvre through tight spaces between obstacle. This method is not relevant for the application of the AAUSHIP fleet, since these needs to make a spread out formation to cover a larger area when mapping the sea bed.
@@ -64,7 +66,7 @@ This strategy takes the rise in a duckling or snake formation. In principle is t
 	\begin{itemize}
 	\item \textbf{Adaptive formation. Is the time goal reached at each time step for all agents?}\\
 	The implementation of this strategy needs to know for each time step for each agent when the goal is. By doing this it is possible to make the agents be in formation at all times because they have individual positions at their respective paths to specific times. If one of the agents does not reach its position in time, the rest of the agents should stop, or slow down, such that the missing agent has the possibility to catch up. This will change the 'time goals' for the rest of the agents, but the agents will keep the formation.
-	\item \textbf{No information share between agents}\\
+	\item \textbf{No information shared between agents}\\
 	If no information is shared between the agents it is assumed that they do not experience any faults. If one of the agents has a fault, that it changes course or slows down, it will make the formation to fail. The individual agents will still follow their respective paths, and therefore reach their end goals, but not at the same time.
 	\end{itemize}
 \item \textbf{One path with individual relative positions for each agent}\\
@@ -72,11 +74,11 @@ This method only makes use of one path for the whole formation. The agents in th
 \item \textbf{One \ac{FRP} with agents relative to this}\\
 \todo{ehm, er denne ikke ligedan med ovenstående? Ellers har jeg bare skrevet noget forkert i den ovenover..}
 \item \textbf{Multiple \ac{FRP}s where a formation follows another formation}\\
-When more agents are present it could be of benefit to have these in individual groups and formations. This can be done by defining multiple \ac{FRP}s such that the formations are made relative to these points. Then it is the \ac{FRP}s that needs to be in formation and utilize their informations as formations follow the formation in front. This could be beneficial if a given formation needs to cover a specific area and the rest of the formation needs to continue.
+When more agents are present it could be of benefit to have these in individual subformations. This can be done by defining multiple \ac{FRP}s such that the formations are made relative to these points. Then it is the \ac{FRP}s that needs to be in formation and utilize their informations as formations follow the formation in front. This could be beneficial if a given formation needs to cover a specific area and the rest of the formation needs to continue. This is a tree like leader follower hierachy.
 \todo{Det her er en MEGET vag formulering, men jeg er på vej ud af doeren.}
 \item \textbf{One minima potential field formation}\\
 Within the use of potential fields there can be applied on various ways. One way is to determine the formation based on one minima potential field and maxima at the agents. By different designs of these potential fields one can determine how the specific formation should be. One example could be with three agents where their potential maxima are equal both in magnitude and radius. If these three agents are placed near a single potential minima, they would go in direction of the steepest descent, which would be to the centre of the minima. Meanwhile would the agent's local maxima repulse each other which would result in a equally distributed formation around the potential minima, making a triangle formation around the minima.
-This design can vary dependent on how the minima are chosen and also how the magnitude of the agent's potential fields are chosen. If multiple agents are added to the setup, and under the same assumptions as before, they would still distribute evenly around the potential minima, but do the more agents they would make a circle formation.
+This design can vary dependent on how the minima are chosen and also how the magnitude of the agent's potential fields are chosen. If multiple agents are added to the setup, and under the same assumptions as before, they would still distribute evenly around the potential minima, but do the more agents they would make a circle formation. \todo{This method cannot contorl the heading of the formation}
 \item \textbf{Multiple minima potential field formation}\\
 If an more uneven distribution is needed it could be of benefit to implement more local minima. These are not the minima that the formation should follow, but a higher level potential field, only to define the formation. This could be made of several local minima i.e. one for each agent if the triangle formation is performed. If a more complex formation is needed it would be impossible to make from potential fields if only one local minima could be used, as described in the item above. If a line formation is preferable it would need more local minima to make the distribution even.
 \item \textbf{Non strict potential field with rain gutter principle}\\
