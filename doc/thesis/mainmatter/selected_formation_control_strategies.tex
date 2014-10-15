@@ -56,6 +56,22 @@ strategies after implementation.
 \subsection{Energy efficiency}
 The energy efficiency of any autonomous systems is relevant because it limits how long the autonomous system can operate autonomously, given that it cannot easily recharge or is fatal for the mission. This means that optimising the energy efficiency is desirable.
 
+%% Oversigt af control stats
+\begin{itemize}
+\item Direct LOS guidance leading to a duckling formation
+\item Formation via precomputed time parametrised individual paths
+	\begin{itemize}
+	\item Adaptive formation. Is the time goal reached at each time step for all agents?
+	\item No information share between agents
+	\end{itemize}
+\item One path with individual relative positions for each agent
+\item One \ac{FRP} with agents relative to this
+\item Multiple \ac{FRP}s where a formation follows another formation
+\item One minima potential field formation
+\item Multiple minima potential field formation
+\item Non strict potential field with rain gutter principle
+\end{itemize}
+
 %% Aproaches
 \input{mainmatter/potentialfield}
 
