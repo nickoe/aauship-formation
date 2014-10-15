@@ -58,18 +58,25 @@ The energy efficiency of any autonomous systems is relevant because it limits ho
 
 %% Oversigt af control stats
 \begin{itemize}
-\item Direct LOS guidance leading to a duckling formation
-\item Formation via precomputed time parametrised individual paths
+\item \textbf{Direct LOS guidance leading to a duckling formation}\\
+This strategy takes the rise in a duckling or snake formation. In principle is this a leader that has a follower that has a follower and so on. Thereby will the formation take shape as a snake, when the leader takes off and the followers keep the line of sight to their respective leaders. This can be applied when a formation i.e. needs to manoeuvre through tight spaces between obstacle. This method is not relevant for the application of the AAUSHIP fleet, since these needs to make a spread out formation to cover a larger area when mapping the sea bed.
+\item \textbf{Formation via precomputed time parametrised individual paths}
 	\begin{itemize}
-	\item Adaptive formation. Is the time goal reached at each time step for all agents?
-	\item No information share between agents
+	\item \textbf{Adaptive formation. Is the time goal reached at each time step for all agents?}\\
+	The implementation of this strategy needs to know for each time step for each agent when the goal is. By doing this it is possible to make the agents be in formation at all times because they have individual positions at their respective paths to specific times. If one of the agents does not reach its position in time, the rest of the agents should stop, or slow down, such that the missing agent has the possibility to catch up. This will change the 'time goals' for the rest of the agents, but the agents will keep the formation.
+	\item \textbf{No information share between agents}\\
+	If no information is shared between the agents it is assumed that they do not experience any faults. If one of the agents has a fault, that it changes course or slows down, it will make the formation to fail. The individual agents will still follow their respective paths, and therefore reach their end goals, but not at the same time.
 	\end{itemize}
-\item One path with individual relative positions for each agent
-\item One \ac{FRP} with agents relative to this
-\item Multiple \ac{FRP}s where a formation follows another formation
-\item One minima potential field formation
-\item Multiple minima potential field formation
-\item Non strict potential field with rain gutter principle
+\item \textbf{One path with individual relative positions for each agent}\\
+This method only makes use of one path for the whole formation. The agents in the setup will be defined with relative positions to the path at each time step, such that the formation stays rigid and the arms from the path to the agents are constants. This setup will work as a virtual leader in a rigid formation where only the point on the path has information to the agents around it. The individual agents will not be able to communicate, due to the rigid formation.
+\item \textbf{One \ac{FRP} with agents relative to this}\\
+\todo{ehm, er denne ikke ligedan med ovenstående? Ellers har jeg bare skrevet noget forkert i den ovenover..}
+\item \textbf{Multiple \ac{FRP}s where a formation follows another formation}\\
+When more agents are present it could be of benefit to have these in individual groups and formations. This can be done by defining multiple \ac{FRP}s such that the formations are made relative to these points. Then it is the \ac{FRP}s that needs to be in formation and utilize their informations as formations follow the formation in front. This could be beneficial if a given formation needs to cover a specific area and the rest of the formation needs to continue.
+\todo{Det her er en MEGET vag formulering, men jeg er på vej ud af doeren.}
+\item \textbf{One minima potential field formation}\\
+\item \textbf{Multiple minima potential field formation}\\
+\item \textbf{Non strict potential field with rain gutter principle}\\
 \end{itemize}
 
 %% Aproaches
