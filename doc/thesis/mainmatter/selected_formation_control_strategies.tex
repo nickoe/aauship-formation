@@ -82,10 +82,8 @@ This strategy takes the rise in a duckling or snake formation. In principle is t
 	\item \textbf{No information shared between agents}\\
 	If no information is shared between the agents it is assumed that they do not experience any faults. If one of the agents has a fault, that it changes course or slows down, it will make the formation to fail. The individual agents will still follow their respective paths, and therefore reach their end goals, but not at the same time.
 	\end{itemize}
-\item \textbf{One path with individual relative positions for each agent}\\
-This method only makes use of one path for the whole formation. The agents in the setup will be defined with relative positions to the path at each time step, such that the formation stays rigid and the arms from the path to the agents are constants. This setup will work as a virtual leader in a rigid formation where only the point on the path has information to the agents around it. The individual agents will not be able to communicate, due to the rigid formation.
 \item \textbf{One \ac{FRP} with agents relative to this}\\
-\todo{ehm, er denne ikke ligedan med ovenstående? Ellers har jeg bare skrevet noget forkert i den ovenover..}
+This method only makes use of one path for the whole formation. The agents in the setup will be defined with relative positions to a \ac{FRP} at each time step, such that the formation stays rigid and the arms from the \ac{FRP} to the agents are constants. This setup will work as a virtual leader in a rigid formation where only the point on the path (the \ac{FRP}) has information to the agents around it. The individual agents will not be able to communicate, due to the rigid formation.
 \item \textbf{Multiple \ac{FRP}s where a formation follows another formation}\\
 When more agents are present it could be of benefit to have these in individual subformations. This can be done by defining multiple \ac{FRP}s such that the formations are made relative to these points. Then it is the \ac{FRP}s that needs to be in formation and utilize their informations as formations follow the formation in front. This could be beneficial if a given formation needs to cover a specific area and the rest of the formation needs to continue. This is a tree like leader follower hierachy.
 \todo{Det her er en MEGET vag formulering, men jeg er på vej ud af doeren.}
@@ -96,6 +94,8 @@ This design can vary dependent on how the minima are chosen and also how the mag
 If an more uneven distribution is needed it could be of benefit to implement more local minima. These are not the minima that the formation should follow, but a higher level potential field, only to define the formation. This could be made of several local minima i.e. one for each agent if the triangle formation is performed. If a more complex formation is needed it would be impossible to make from potential fields if only one local minima could be used, as described in the item above. If a line formation is preferable it would need more local minima to make the distribution even.
 \item \textbf{Non strict potential field with rain gutter principle}\\
 The underlying potential field can be used when designing the path for the formation. This is done from the same principle of potential fields, but instead of the traditional fields that attract and repel evenly around a point, it can be designed as a rain gutter, which runs from the high magnitude to the lowest magnitude. This will make the formation run in the direction of the steepest descent, and therefore the path can be designed using this. If the formation is allowed to diverge from the path, and the requirement is not so strict, one can design the rain gutter more flat, like a 'u' instead of a 'v', where the 'v' would make the formation stay more precise on the determined path.
+\item \textbf{Null Space Behaviour}
+
 \end{itemize}
 
 %% Aproaches
