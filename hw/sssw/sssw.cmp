@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-06-12 BZR 4941)-kicad   date = Fri 13 Jun 2014 15:04:25 CEST
+Cmp-Mod V01 Created by Cvpcb (2014-10-18 BZR 5203)-kicad   date = Sun 19 Oct 2014 13:59:18 CEST
 
 BeginCmp
 TimeStamp = /52F7A220;
@@ -11,21 +11,21 @@ BeginCmp
 TimeStamp = /52F7A037;
 Reference = P1;
 ValeurCmp = INPUT;
-IdModule  = Pin_Headers:Pin_Header_Angled_1x02;
+IdModule  = sssw:G3.5_Bullet_Edge;
 EndCmp
 
 BeginCmp
 TimeStamp = /52F7A13E;
 Reference = P2;
 ValeurCmp = ACTIVATE;
-IdModule  = ;
+IdModule  = Pin_Headers:Pin_Header_Angled_1x02;
 EndCmp
 
 BeginCmp
 TimeStamp = /52F7A049;
 Reference = P3;
 ValeurCmp = OUTPUT;
-IdModule  = ;
+IdModule  = sssw:G3.5_Bullet_Edge;
 EndCmp
 
 BeginCmp
