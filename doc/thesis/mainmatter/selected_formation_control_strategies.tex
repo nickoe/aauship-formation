@@ -113,12 +113,18 @@ Individual paths for the vessels where they follow their respective trajectories
 \toprule
 \textbf{Approach} & \textbf{Communication} & \textbf{Control architecture} & \textbf{Obstacle avoidance} & \textbf{Transients} & \textbf{Scalability}\\
 \hline
-Leader follower with LOS&&&&&\\
-Leader follower with Potential field&&&&&\\
-NSB&&&&&\\
-Leader follower with LOS&&&&&\\
-Leader follower with LOS&&&&&\\
-Leader follower with LOS&&&&&\\
+\textbf{Leader follower:}&&&&&\\
+Duckling with LOS& Simple - Good & Simple LOS - Good & None - Poor & Choosing/Poor & Easy duplicate - Good\\
+\textbf{Precomputed individual paths:}&&&&&\\
+Full communication& High bw - Poor & Multi agent info - Poor & None - Poor & Choosing/Good & OK\\
+Limited communication& Middle bw - OK & Local agent info - OK & None - Poor & Choosing/Good & Good\\
+No communication& Low bw - Good & Single agent info - Good & None - Poor & Choosing/Good & Good\\
+Single \ac{FRP} with path& Low communication - Good & Simple - Good & None - Poor & Choosing/OK & OK\\
+Multiple \ac{FRP} with path& Middle communication - OK & More agents - Poor & None - Poor & Choosing/Poor & OK\\
+\textbf{Potential field:}&&&&&\\
+Full communication& High bw - Poor & Multi agent info - Poor & Natural - Good & Good & OK\\
+Limited communication& Middle bw - OK & Local agent info - OK & Natural - Good & Good & Good\\
+No communication& Low bw - Good & Single agent info - Good & Natural - Good & Good & Good\\
 \bottomrule
 \end{tabular}
 \caption{Decision matrix for the formation strategies}
