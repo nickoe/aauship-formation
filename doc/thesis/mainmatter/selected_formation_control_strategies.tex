@@ -29,32 +29,17 @@ strategies after implementation.
 \item[Preparation time] This is related to the mission setup time. How
 	much manual labour is needed to prepare the agents for a mission?
 	This could for instance be trajectory generation and how the
-	specific pattern needs to be generated.
+	specific pattern needs to be generated. If the formation control strategy is chosen such that the agents needs to be close to the specific formation this will also take preparation time to place them relative to the desired formation.
 \item[Time] The mission time for covering the area in a boustrophedon
-	pattern.
-\item[Energy efficiency] We need a theoretical measure of the
-	formation efficiency, but the formation should be the same to be
-	comparable.
+	pattern. This will be from the start of the mission to a complete mission.
+\item[Energy efficiency] This is a theoretical measure of the
+	formation efficiency. The energy efficiency of any autonomous systems is relevant because it limits how long the autonomous system can operate autonomously, given that it cannot easily recharge or is fatal for the mission. This means that optimising the energy efficiency is desirable.
 \item[Wear and tear] Is the controller aggressive? Aggressive
 	controllers is known to make more wear and tear on the actuators. So
 	if the strategy can be chosen to minimize the wear and tear this
 	could be of benefit to the hardware.
 \end{description}
 
-\subsection{Energy efficiency}
-The energy efficiency of any autonomous systems is relevant because it limits how long the autonomous system can operate autonomously, given that it cannot easily recharge or is fatal for the mission. This means that optimising the energy efficiency is desirable.
-
-
-For the decision matrix, the options are rated as:
-
-Communication, no comm, limited/local com, no comm
-
-Control arch, rate by complexity judged by the numbers inputs and
-outputs together with the control algorithm computing complexity.
-
-Formation deviation, could be defined by us at the path generation
-
-failure
 
 
 %% Oversigt af control stats
