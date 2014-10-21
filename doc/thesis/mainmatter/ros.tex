@@ -135,4 +135,28 @@ real sensor nodes that use real sensor data is used.
 \missingfigure{ROS system used for multiple ships, when doing autonomous
 formation control}
 
-\todo{Invistigate ROS bruge for inter ship comms}
+\section{Multiple AAUSHIP's}
+All of the above design only describes the ROS layout on one ship.
+Given that this project is about formation control, that implicitly
+means that multiple ships has to operate at the same time, which in
+the case of cooperative formation some information has to be shared
+between ships. AAUSHIP is equipped with WiFi, which in turn means that
+it uses an \ac{IP} based networking scheme. This means that one can
+easily add up to 255 ships on one subnet with \ac{IPv4}. If the
+formation needs to scale to more than that, some networking design is
+needed maybe using \ac{IPv6}.
+
+The degree of information of the information that needs to be share
+depends on the formation method chosen. The \ac{ROS} system should
+accommodate some arbitrarily defined schemes in a way that is defined
+by the control node of the ship. Since every boat is connected with a
+via WiFi it is assuming that all ships can reach everyone. This
+simplification is used for the testing implementations for now. A more
+advanced system, that should take into account that not every ship can
+communicate with each other can be developed for large formations or
+scalability, but in this project the implementation assumes small
+formations with small distance, that is that all ships are reachable
+on the whole network. In practice the networks consists of an access
+point on any random ship where the others connects to.
+
+\todo{Investigate ROS bruge for inter ship comms}
