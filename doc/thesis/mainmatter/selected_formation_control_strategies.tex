@@ -11,33 +11,21 @@ description of each key parameter, also mentioning what is desired for
 the mission at hand.
 
 \begin{description}
-\item[Communication] This should describe what topology form the
-	communication has to have, it should also tell what will happen if
-	some link breaks. In the topology of the communication can handling
-	of task allocation be taken into account when it is of importance
-	how the agents will handle the individual tasks.
-\item[Control architecture] This should describe what kind of control
-	exists, this is also associated with the communication between
-	agents. Under each type of strategy different types of control can
-	be applied, which can be chosen based on the other parameters in
-	this description.
-\item[Obstacle avoidance] Is the formation able to avoid obstacles?
-	How will it avoid obstacles, no matter if they are known pre mission
-	or during mission. How this is done will also be very dependent on
-	the formation deviation. If the formation needs to be strictly
-	rigid, when obstacle avoidance could be done in other ways while the
-	whole formation needs to move together.
-\item[Transients of formation] How will the formation act when
-	turning?
-\item[Scalability] How does the formation strategy scale with addition
-	of more agents?
+\item[Communication] The communication requirements should be a measure of how much bandwidth is used. If the communication bandwidth usage is low it should be rated as a good thing, since the low bandwidth implies that the communication can be performed more easy and the scalability will become less complicated. It is not of importance if the communication breaks a link of the agents, this will be discussed in the individual formation control categories.
+
+\item[Control architecture] The control architecture is a weighting of the complexity of the control structure. A high weighting will mean that the complexity is low and thus less complicated to implement. It will also be combined with a relation to the type of controller, where a more simple controller can be better if the overall objective can be accomplished. If the control can be done with a less complicated controller, i.e. a \ac{LOS} controller instead of some a more complex controller like \ac{MPC}, this can be preferred.
+
+\item[Obstacle avoidance] The obstacle avoidance does not have a specific rating in the use case of the AAUSHIP due to the assumption of a open water manoeuvring. This means that the weighting of this should be taken as neutral and the implementation will be further work. Yet it is described in the specific control strategies because the implementation of this can be useful in the further work of the AAUSHIP projects. The obstacles can be known pre mission or they can be detected during mission and avoided and the task of the avoidance will take different shapes dependent of the specific task.
+
+\item[Transients] The transients will be a weighting of how well the formation can make a turn and meanwhile keep the formation relative to the path. If the formation are unable to track the path during a turn it will be weighted low and will be the primary weighting. If the formation are able to track the path, but the formation will deviate a little, this will also be a down rating but not as much as if it is unable to track the path. Some formation problems during transients can be solved by the generation of the path but this will result as a limitation to the path generation.
+
+\item[Scalability] The weighting of the scaling is done on two criteria. It is a combination of the structure of the complete formation and a estimate of the bandwidth usage from the higher need of communication. This weighting will be a summed weighting, thus both bandwidth and formation complexity is weighted equally. A rather simple expansion of the formation structure will be preferable, and a relative low bandwidth usage is good. If only communication from a single leader to one respective follower is required, this will be a good thing because if will half the bandwidth usage.
 \end{description}
+
 There are also some parameters that is hard to tell by the principle
 of the method, which is listed below. These can be used to compare the
 strategies after implementation.
 \begin{description}
-\item[Formation deviation] How strict is the formation, is it rigid,
-	can it change formation dynamically if one agent fails?
 \item[Preparation time] This is related to the mission setup time. How
 	much manual labour is needed to prepare the agents for a mission?
 	This could for instance be trajectory generation and how the
@@ -138,6 +126,7 @@ No communication& Low bw - Good & Single agent info - Good & Natural - Good & Go
 \hline
 \textbf{Leader follower:}&&&\\
 Duckling with LOS& Simple - Good & Simple LOS - Good & None - Poor \\
+Skewed duckling with LOS& Simple - Good & Simple LOS - Good & None - Poor \\
 \textbf{Precomputed individual paths:}&&&\\
 Full communication& High bw - Poor & Multi agent info - Poor & None - Poor \\
 Limited communication& Middle bw - OK & Local agent info - OK & None - Poor \\
@@ -153,6 +142,7 @@ No communication& Low bw - Good & Single agent info - Good & Natural - Good\\
 \hline
 \textbf{Leader follower:}&&&\\
 Duckling with LOS   & Choosing/Poor & Easy duplicate - Good\\
+Skewed duckling with LOS & Choosing/Poor & Easy duplicate - Good\\
 \textbf{Precomputed individual paths:}&&&\\
 Full communication   & Choosing/Good & OK\\
 Limited communication   & Choosing/Good & Good\\
