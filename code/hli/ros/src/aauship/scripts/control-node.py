@@ -41,15 +41,12 @@ class Control(object):
 
         # Create path object in rviz
         self.pubpath = rospy.Publisher('path', Path, queue_size=3, latch=True)
-        self.campuspath = rospy.Publisher('campuspath', Path, queue_size=3, latch=True)
 
         # Create the struct to be printed
         self.pathmsg = Path()
-        self.campusmsg = Path()
 
         # Assign frame
         self.pathmsg.header.frame_id = "ned"
-        self.campusmsg.header.frame_id = "ned"
         h = Header()
         q = Quaternion(0,0,0,1)
 
@@ -68,11 +65,6 @@ class Control(object):
 
         # Load the lawnmower generated path
         self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
-
-        self.campus = sio.loadmat('campus.mat')
-        for i in self.campus['all']:
-            p = Point(i[0],i[1],0)
-            self.campusmsg.poses.append(PoseStamped(h, Pose(p, q)))
 
         # Fill in the path on the rviz path
         for i in self.path['track']:
@@ -163,6 +155,10 @@ class Control(object):
 
         print((self.u[0], self.u[1]))
 
+        ## DEBUG
+        #self.u[0] = 0
+        #self.u[1] = 0
+        ## DEBUG
 
         # TODO Remember to test this, to make sure that u[0] is the right thruster
         # (-100% = -500 to +100% = 500)
@@ -241,9 +237,7 @@ class Control(object):
         #self.ctllog = open(os.getcwd() + "/../meas/ctl.log",'w')
         ##self.ctllog = open("logs/ctl.log",'w',BUFSIZE)
         ##print(self.ctllog.name)
-
-        #self.campuspath.publish(self.campusmsg)
-
+        
         rospy.spin() # Keeps the node running untill stopped
         print("\nClosing log file")
         ##self.ctllog.close()
