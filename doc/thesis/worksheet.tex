@@ -1,9 +1,9 @@
 \input{preamble}
-\def\wkno{9}
+\def\wkno{10}
 \hypersetup{
   pdfsubject={Worksheet \#\wkno},
 }
-\includeonly{mainmatter/formation_control_overview,mainmatter/summary_of_papers}
+\includeonly{mainmatter/selected_formation_control_strategies,mainmatter/ros}
 
 \begin{document}
 \author{14gr1034}
@@ -11,19 +11,9 @@
 \date{\today}
 \maketitle
 \begin{center}
-\textit{This worksheet contains the introduction chapter to the state of the art in formation control. Also added notes from papers written by worth to look at people and the publications that sounded relevant to our scope of formation control topic.}
+\textit{This worksheet contains the relevant chapters for discussion. These are chapter four and nine, still with old and previous text that is outdated, new and updated sections are 4.1, 4.6 and 9.3.}
 \end{center}
 
-\frontmatter
-\include{frontmatter/frontpage}
-%\chapterstyle{nickoe}
-\cleardoublepage
-\include{frontmatter/titlepage}
-\include{frontmatter/preface}
-
-\cleardoublepage
-\tableofcontents
-\printnomenclature[2cm]
 \input{../manual/acronyms}
 
 \mainmatter
@@ -31,7 +21,7 @@
 This part contains an analysis about the project background and its goal, leading to a problem statement and a requirement specification.}
 \include{mainmatter/introduction} % Talk specifically about the data from havnen?
 \include{mainmatter/formation_control_overview}
-\include{mainmatter/summary_of_papers}
+\include{mainmatter/summary_of_papers} % should only be included as is in the draft
 
 
 \descpart{System Design}{%
@@ -42,9 +32,9 @@ This is the main part of the report documenting all the engineering that is esse
 \include{mainmatter/path_generation}
 \include{mainmatter/ahrs}
 \include{mainmatter/simulation_model}
-%\input{mainmatter/thrust_allocation}
-%\input{mainmatter/model_verification}
-%\input{mainmatter/simulation_model_kf}
+\input{mainmatter/thrust_allocation}
+\input{mainmatter/model_verification}
+\input{mainmatter/simulation_model_kf}
 \include{mainmatter/ros}
 
 
@@ -61,6 +51,7 @@ The appendix includes chapters which are important for the project, but not nece
 \include{appendix/bollard_pull}
 \include{appendix/verification-of-attitude-with-a-camera}
 \include{appendix/manual}
+\include{appendix/paper}
 
 \backmatter
 \bibliographystyle{apalike}
@@ -70,3 +61,4 @@ The appendix includes chapters which are important for the project, but not nece
 %\settocdepth{section}
 \listoftodos
 \end{document}
+
