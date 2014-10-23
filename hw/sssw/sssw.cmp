@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-10-18 BZR 5203)-kicad   date = Sun 19 Oct 2014 13:59:18 CEST
+Cmp-Mod V01 Created by Cvpcb (2014-10-18 BZR 5203)-kicad   date = Sun 19 Oct 2014 20:30:35 CEST
 
 BeginCmp
 TimeStamp = /52F7A220;
@@ -11,7 +11,7 @@ BeginCmp
 TimeStamp = /52F7A037;
 Reference = P1;
 ValeurCmp = INPUT;
-IdModule  = sssw:G3.5_Bullet_Edge;
+IdModule  = sssw:G3.5_Bullet_Edge_Short;
 EndCmp
 
 BeginCmp
@@ -25,7 +25,7 @@ BeginCmp
 TimeStamp = /52F7A049;
 Reference = P3;
 ValeurCmp = OUTPUT;
-IdModule  = sssw:G3.5_Bullet_Edge;
+IdModule  = sssw:G3.5_Bullet_Edge_Short;
 EndCmp
 
 BeginCmp
