@@ -59,6 +59,20 @@ class KF(object):
         self.Re2n = self.Rn2e.T
         self.pos_of_ned_in_ecef = geo.wgs842ecef(self.klingen['rotlat'], self.klingen['rotlon'])
 
+        # Define the path poses for the map to display in rviz
+        self.refmsg = Path()
+        self.refmsg.header.frame_id = "ned"
+        self.keepoutmsg = Path()
+        self.keepoutmsg.header.frame_id = "ned"
+        q = Quaternion(0,0,0,1)
+        h = Header()
+        for i in self.klingen['outer']:
+            p = Point(i[0],i[1],0)
+            self.refmsg.poses.append(PoseStamped(h, Pose(p, q)))
+        for i in self.klingen['inner']:
+            p = Point(i[0],i[1],0)
+            self.keepoutmsg.poses.append(PoseStamped(h, Pose(p, q)))
+
         # Topics
         self.subgps1 = rospy.Subscriber('gps1', GPS, self.gps1cb)
         self.subgps2 = rospy.Subscriber('gps2', GPS, self.gps2cb)
@@ -258,14 +272,18 @@ class KF(object):
         (xest,self.P_plus) = self.KalmanF(x, u, z, self.P_plus, R)
         print(self.P_plus)
         '''
-        # Initialize an poses array for the trackmsg
+        # Do the publishing of the mission boundary path and keeoput
+        # zone
         h = Header()
         p = Point(0,0,0)
         q = Quaternion(0,0,0,1)
         self.kftrackmsg.poses.append(PoseStamped(h, Pose(p, q)))
         self.kftrackmsg.poses.append(PoseStamped(h, Pose(p, q)))
-
-
+        self.refpath = rospy.Publisher('refpath', Path, queue_size=3, latch=True)
+        self.refpath.publish(self.refmsg)
+        self.keepoutpath = rospy.Publisher('keepout', Path, queue_size=3, latch=True)
+        self.keepoutpath.publish(self.keepoutmsg)
+        
         rospy.spin()
 
         print("Exiting kalmanfilter node")
