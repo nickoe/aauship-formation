@@ -53,17 +53,11 @@ class Simulator(object):
         self.subahrs = rospy.Subscriber('attitude', Quaternion, self.ahrscb) # Should be removed from here when the kf-node is tested against this
         self.pubimu = rospy.Publisher('imu', ADIS16405, queue_size=1, latch=True)
         self.trackpath = rospy.Publisher('track', Path, queue_size=3)
-        self.refpath = rospy.Publisher('refpath', Path, queue_size=3, latch=True)
-        self.keepoutpath = rospy.Publisher('keepout', Path, queue_size=3, latch=True)
         self.pubgps1 = rospy.Publisher('gps1', GPS, queue_size=1, latch=False)
 
         # Construct variables for messages
         self.imumsg = ADIS16405()
         self.pubmsg = Float64MultiArray()
-        self.refmsg = Path()
-        self.refmsg.header.frame_id = "ned"
-        self.keepoutmsg = Path()
-        self.keepoutmsg.header.frame_id = "ned"
         self.trackmsg = Path()
         self.trackmsg.header.frame_id = "ned"
         self.gpsmsg = GPS()
@@ -83,16 +77,6 @@ class Simulator(object):
         h = Header()
         q = Quaternion(0,0,0,1)
 
-        # klingen['inner'][0]  is northing
-        # klingen['inner'][1]  is easting
-        for i in self.klingen['outer']:
-            p = Point(i[0],i[1],0)
-            self.refmsg.poses.append(PoseStamped(h, Pose(p, q)))
-
-        for i in self.klingen['inner']:
-            p = Point(i[0],i[1],0)
-            self.keepoutmsg.poses.append(PoseStamped(h, Pose(p, q)))
-    
     # /lli_input callback (same as in the kalmanfilter node) TODO move to another file?
     def llicb(self, data):
         #print('/lli_input callback')
@@ -233,10 +217,6 @@ class Simulator(object):
         k = k+1
 
     def run(self):
-        # Publish out static map data
-        self.keepoutpath.publish(self.keepoutmsg)
-        self.refpath.publish(self.refmsg)
-
         # Initialize an poses array for the trackmsg
         h = Header()
         p = Point(0,0,0)
