@@ -45,9 +45,30 @@ strategies after implementation.
 %% Oversigt af control stats
 
 \section{Methods}
+
+\subsection{Direct LOS guidance}
+The \ac{LOS} guidance makes the basis for a formation where one leader has a single follower connected and this follower has another single follower. \todo{Her skal nok stå en overordnet beskrivelse..}
+\subsubsection{Duckling formation}
+\label{sc:duckling}
+This strategy takes the rise in a duckling or snake formation. In principle is this a leader that has a follower that has a follower and so on. Thereby will the formation take shape as a snake, when the leader takes off and the followers keep the line of sight to their respective leaders. The communication needed in the case of followers only follow one leader, and the communication only works in one direction, then the bandwidth usage is minimal. This implies that the communication it low and simple which is preferable. Similar to the communication will the control architecture become of the simple type where each agent only need to have a \ac{LOS} controller, such that they track their respective leaders. As such is obstacle avoidance not a native implementation of the formation, but can be implemented for the main leader of the formation. By doing this arises a problem of transients where the followers will 'cut corners'. They will directly pursuit their respective leaders, such that the formation will take sharper corners than the main leader. Although the formation does not perform well it has the advantage that the scalability is simple. When linking the formation in the duckling formation a new follower can be attached at the last agent and a new follower to this agent and so on. This implies that, in theory, an infinite tail of followers can be attached.
+
+\subsubsection{Echelon formation}
+The echelon formation is a branch from the duckling formation. In this formation the followers to the leader is not in a tail of the leader, but is offset into a echelon formation. The principle being the simple \ac{LOS} controller and the communication as followers to their respective leaders still apply in this branch. This implies that the problem statements from section \ref{sc:duckling} also applies to the echelon formation, and the main difference is the shape of the formation.
+\subsubsection{Single \ac{FRP} with path}
+\subsubsection{Multiple \ac{FRP} with path}
+
+\subsection{Precomputed individual paths}
+
+\subsubsection{Full communication}
+\subsubsection{Limited communication}
+\subsubsection{No communication}
+
+\subsection{Potential field}
+\subsubsection{Full communication}
+\subsubsection{Limited communication}
+\subsubsection{No communication}
+
 \begin{itemize}
-\item \textbf{Direct LOS guidance leading to a duckling formation}\\
-This strategy takes the rise in a duckling or snake formation. In principle is this a leader that has a follower that has a follower and so on. Thereby will the formation take shape as a snake, when the leader takes off and the followers keep the line of sight to their respective leaders. This can be applied when a formation i.e. needs to manoeuvre through tight spaces between obstacle. This method is not relevant for the application of the AAUSHIP fleet, since these needs to make a spread out formation to cover a larger area when mapping the sea bed.
 \item \textbf{Formation via precomputed time parametrised individual paths}
 	\begin{itemize}
 	\item \textbf{Adaptive formation. Is the time goal reached at each time step for all agents?}\\
@@ -71,7 +92,7 @@ The underlying potential field can be used when designing the path for the forma
 
 \end{itemize}
 
-%% Aproaches
+%% Approaches
 \input{mainmatter/potentialfield}
 
 \input{mainmatter/leaderfollower}
