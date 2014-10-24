@@ -13,7 +13,7 @@ linewidth = 1;
 % logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 % testname = 'magnetometertest-lab2';
 logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
-testname = 'kalmantest';
+testname = 'kfpk';
 % testname = 'statictest-lab';
 
 %% Data files
@@ -28,64 +28,72 @@ starttime = imudata(1,13); % Earliest timestamp
 % ctl = textscan(ctlfile, '%f%f%f', 'Delimiter', ',');
 
 %% Reading GPS data
-line = textscan(gps1file,'%f,%c,%f,%c,%f,%c,%f,%f');
-time = line{1};
-nmealat = line{3};
-latsign = line{4};
-nmealon = line{5};
-lonsign = line{6};
-nmeaspeed = line{7};
-walltime = line{8};
+% line = textscan(gps1file,'%f,%c,%f,%c,%f,%c,%f,%f'); %For old logs
+%time = line{1};
+%nmealat = line{3};
+%latsign = line{4};
+%nmealon = line{5};
+%lonsign = line{6};
+%nmeaspeed = line{7};
+%walltime = line{8};
+line = textscan(gps1file,'%6c,%f,%c,%f,%c,%f,%c,%f,%f,%f,,,%4c,%f'); %For new log
+time = line{2};
+nmealat = line{4};
+latsign = line{5};
+nmealon = line{6};
+lonsign = line{7};
+nmeaspeed = line{8};
+walltime = line{12};
 
 %% Converts the latitude an longitide to decimal coordinates
 [pos] = nmea2decimal({nmealat,latsign,nmealon,lonsign});
 lat = pos(1,:);
 lon = pos(2,:);
 
-% figure(1)
-% plot(lon,lat,'.r')
-% plot_google_map('maptype','satellite')
-% title('WGS84')
+figure(1)
+plot(lon,lat,'.r')
+plot_google_map('maptype','satellite')
+title('WGS84')
 
 %% Tangent plance coordinates xyz (not verified)
-% latrad = lat*pi/180;
-% lonrad = lon*pi/180;
+latrad = lat*pi/180;
+lonrad = lon*pi/180;
 % hei = gpsdata(:,3);
-% N = length(lat);
-% hei=zeros(N,1);
-% x=zeros(N,1);
-% y=zeros(N,1);
-% z=zeros(N,1);
-% for kk = 1:N
-%     %[x(kk) y(kk) z(kk)] = wgs842ecef(latrad(kk),lonrad(kk),0);
-%     [x(kk) y(kk) z(kk)] = geodetic2ecef(latrad(kk),lonrad(kk),hei(kk),referenceEllipsoid('wgs84'));
-% end
-% 
-% %% Transform 
-% %index = 4;
-% %meanlat = latrad(1);
-% %meanlon = lonrad(1);
-%  meanlat = 57.015179789287792*pi/1
+N = length(lat);
+hei=zeros(N,1);
+x=zeros(N,1);
+y=zeros(N,1);
+z=zeros(N,1);
+for kk = 1:N
+    %[x(kk) y(kk) z(kk)] = wgs842ecef(latrad(kk),lonrad(kk),0);
+    [x(kk) y(kk) z(kk)] = geodetic2ecef(latrad(kk),lonrad(kk),hei(kk),referenceEllipsoid('wgs84'));
+end
 
-%  meanlon = 9.985062449450744*pi/180;
-% meanhei = hei(1);
-% % [a b c]=wgs842ecef(meanlat,meanlon,meanhei);
-% [a b c]=geodetic2ecef(meanlat,meanlon,meanhei,referenceEllipsoid('wgs84'));
-% % plot3(a,b,c,'r*')
-% R_e2t = [-sin(meanlat)*cos(meanlon) -sin(meanlat)*sin(meanlon) cos(meanlat);...
-%     -sin(meanlon) cos(meanlon) 0;...
-%     -cos(meanlat)*cos(meanlon) -cos(meanlat)*sin(meanlon) -sin(meanlat)];
-% 
-% T = zeros(3,N);
-% for kk = 1:N
-%     T(:,kk) = R_e2t*([x(kk);y(kk);z(kk)]-[a;b;c]);
-% end
-% T = T';
-% 
-% figure(1)
-% % T(300:360,:) = 0
-% plot(T(:,2),T(:,1))
-% title('Raw GPS log (localframe)')
+%% Transform 
+%index = 4;
+%meanlat = latrad(1);
+%meanlon = lonrad(1);
+ meanlat = 57.015179789287792*pi/180
+
+ meanlon = 9.985062449450744*pi/180;
+meanhei = 0;%hei(1);
+% [a b c]=wgs842ecef(meanlat,meanlon,meanhei);
+[a b c]=geodetic2ecef(meanlat,meanlon,meanhei,referenceEllipsoid('wgs84'));
+% plot3(a,b,c,'r*')
+R_e2t = [-sin(meanlat)*cos(meanlon) -sin(meanlat)*sin(meanlon) cos(meanlat);...
+    -sin(meanlon) cos(meanlon) 0;...
+    -cos(meanlat)*cos(meanlon) -cos(meanlat)*sin(meanlon) -sin(meanlat)];
+
+T = zeros(3,N);
+for kk = 1:N
+    T(:,kk) = R_e2t*([x(kk);y(kk);z(kk)]-[a;b;c]);
+end
+T = T';
+
+figure(1)
+% T(300:360,:) = 0
+plot(T(:,2),T(:,1))
+title('Raw GPS log (localframe)')
 
 %% ADIS16405 Inertial Measurement Unit
 supply = imudata(:,1)*0.002418; % Scale 2.418 mV
@@ -288,11 +296,11 @@ while(filenotdone > 0)
     end
     
 end
-figure(4)
-plot(echo.depth.timestamp,echo.depth.value,echo.temperature.timestamp',echo.temperature.value)
-xlabel('Timestamp [s]')
-ylabel('Depth [m] / Temperature [degree C]')
-legend('Depth','Temperature')
+% figure(4)
+% plot(echo.depth.timestamp,echo.depth.value,echo.temperature.timestamp',echo.temperature.value)
+% xlabel('Timestamp [s]')
+% ylabel('Depth [m] / Temperature [degree C]')
+% legend('Depth','Temperature')
 
 
 
