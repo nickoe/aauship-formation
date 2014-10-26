@@ -22,7 +22,8 @@ class Control(object):
         self.n = 1 # used for wp gen logic
 
         rospy.init_node('control_node')
-        self.sub = rospy.Subscriber('kf_statesnew', Float64MultiArray, self.callback, queue_size=1)
+        #self.sub = rospy.Subscriber('kf_statesnew', Float64MultiArray, self.callback, queue_size=1)
+        self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=1)
         self.pub = rospy.Publisher('lli_input', LLIinput, queue_size=4, latch=True)
 
         # Initilaze parameters for the simple PID heading contorller
@@ -84,11 +85,12 @@ class Control(object):
         print "Control callback " + str(time.time())
 
         # Send tf for the robot model visualisation
+        ns = rospy.get_namespace()
         br = tf.TransformBroadcaster()
         br.sendTransform((data.data[0],data.data[1], 0),
                          tf.transformations.quaternion_from_euler(data.data[4], data.data[5], data.data[6]),
                          rospy.Time.now(),
-                         "boat_link",
+                         ns + "boat_link",
                          "ned")
 
         # First time we get a state estimate
