@@ -51,7 +51,8 @@ lat = pos(1,:);
 lon = pos(2,:);
 
 figure(1)
-plot(lon,lat,'.r')
+plot(lon(1,161),lat(1,161),'*g')
+plot(lon,lat,'.-r')
 plot_google_map('maptype','satellite')
 title('WGS84')
 
@@ -302,5 +303,20 @@ end
 % ylabel('Depth [m] / Temperature [degree C]')
 % legend('Depth','Temperature')
 
+%% Plot headings to compare with the GPS data
+AHRS = MahonyAHRS('SamplePeriod', 1/10, 'Kp', 8.8 , 'Ki', 0.5);
+N = length(gyro);
+for n = 1:N;
+AHRS.Update(gyro(n,:) * (pi/180), accl(n,:), magn(n,:));	% gyroscope units must be radians
+quaternion(n,:) = AHRS.Quaternion;
+end
+euler = quatern2euler(quaternConj(quaternion)) * (180/pi);	% use conjugate for sensor frame relative to Earth and convert to degrees.
+
+figure('Name', 'Euler Angles');
+plot(1:N, euler(:,1), '.r', 1:N, euler(:,2), '.g', 1:N, -euler(:,3), '.b'); % Ikke overbevist om at yaw skal være minus
+title('Euler angles');
+xlabel('Samples');
+ylabel('Angle (deg)');
+legend('phi', 'theta', 'psi');
 
 
