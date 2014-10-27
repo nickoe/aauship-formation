@@ -70,10 +70,14 @@ n = 1;
 error = zeros(1,N);
 integral = zeros(1,N);
 derivative = zeros(1,N);
+serror = zeros(1,N);
+sintegral = zeros(1,N);
+sderivative = zeros(1,N);
 Kp = 10;
 Ki = 0.1;
 Kd = 50;
 thrustdiff = zeros(1,N);
+speeddiff = zeros(1,N);
 heading = zeros(N,1);
 headingdesired = zeros(N,1);
 
@@ -98,7 +102,7 @@ for k = 1:N
     end
 
     % Computed control input
-    tau(k,:)=[8 0 0 0 thrustdiff(k)];
+    tau(k,:)=[speeddiff(k) 0 0 0 thrustdiff(k)];
     
     u = inv(K)*pinv(T)*tau(k,:)';
     u = round(u);
@@ -167,7 +171,15 @@ for k = 1:N
         heading(k) = x(k+1,7);
     end
     
-    % PID
+    % PID for speed
+    serror(k) = 1 - x(k,8);
+    sintegral(k) = sintegral(k) + serror(k);
+    if k~=1
+        sderivative(k) = serror(k) - serror(k-1);
+    end
+    speeddiff(k+1) = 20*serror(k) + 50*sintegral(k) + 10*sderivative(k);
+    
+    % PID for heading
     error(k) = rad2pipi(headingdesired(k)  - heading(k));
     integral(k) = integral(k) + error(k);
     if k~=1
