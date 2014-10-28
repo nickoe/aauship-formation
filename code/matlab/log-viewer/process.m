@@ -51,7 +51,7 @@ lat = pos(1,:);
 lon = pos(2,:);
 
 figure(1)
-plot(lon(1,161),lat(1,161),'*g')
+%plot(lon(1,161),lat(1,161),'*g')
 plot(lon,lat,'.-r')
 plot_google_map('maptype','satellite')
 title('WGS84')

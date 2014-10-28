@@ -136,19 +136,19 @@
 \end{figure}
 \end{frame}
 
-\begin{frame}{Introduction}{1st Half Goals}
-Development of a single working testing platform
-  \begin{itemize}
-  \item Research of formation control paradigms
-  \item Decide feasibility for using ROS as the software platform
-  \item Subsystem test of the ship system, manual control
-  \item Modelling of the ship
-  \item Design and implementation of a state estimator
-  \item Creation of a simulation environment (Matlab and ROS)
-  \item \textit{Testing of autonomous control for a single ship}
-  \item \textit{Further research for the formation control task}
-  \end{itemize}
-\end{frame}
+%\begin{frame}{Introduction}{1st Half Goals}
+%Development of a single working testing platform
+%  \begin{itemize}
+%  \item Research of formation control paradigms
+%  \item Decide feasibility for using ROS as the software platform
+%  \item Subsystem test of the ship system, manual control
+%  \item Modelling of the ship
+%  \item Design and implementation of a state estimator
+%  \item Creation of a simulation environment (Matlab and ROS)
+%  \item \textit{Testing of autonomous control for a single ship}
+%  \item \textit{Further research for the formation control task}
+%  \end{itemize}
+%\end{frame}
 
 
 %%%%%%%%%%%%%%%%
@@ -244,31 +244,31 @@ Implementation with ROS
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Simulation and Verificaiton}{Kalman Filter}
-Acceleration tuning
-  \begin{figure}
-    \includegraphics[width=0.9\textwidth]{../../code/matlab/accel0,00001}
-    \caption{\scriptsize Tuned acceleration with the ending Q matrix.}
-    \label{fig:acceltuning}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{Simulation and Verificaiton}{Kalman Filter}
-Velocity tuning
-  \begin{figure}
-    \includegraphics[width=0.9\textwidth]{../../code/matlab/uv0,00001}
-    \caption{\scriptsize Tuned velocity with the ending Q matrix.}
-    \label{fig:uvtuning}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{Simulation and Verificaiton}{Kalman Filter}
-  \begin{figure}
-    \includegraphics[width=0.65\textwidth]{../../code/matlab/q0,001}
-    \caption{\scriptsize Position tuning, $Q_{1:2,1:2}$ = 0.001. The mean/max error is 0.53m/1.67m.}
-    \label{fig:q0.001}
-  \end{figure}
-\end{frame}
+%\begin{frame}{Simulation and Verificaiton}{Kalman Filter}
+%Acceleration tuning
+%  \begin{figure}
+%    \includegraphics[width=0.9\textwidth]{../../code/matlab/accel0,00001}
+%    \caption{\scriptsize Tuned acceleration with the ending Q matrix.}
+%    \label{fig:acceltuning}
+%  \end{figure}
+%\end{frame}
+%
+%\begin{frame}{Simulation and Verificaiton}{Kalman Filter}
+%Velocity tuning
+%  \begin{figure}
+%    \includegraphics[width=0.9\textwidth]{../../code/matlab/uv0,00001}
+%    \caption{\scriptsize Tuned velocity with the ending Q matrix.}
+%    \label{fig:uvtuning}
+%  \end{figure}
+%\end{frame}
+%
+%\begin{frame}{Simulation and Verificaiton}{Kalman Filter}
+%  \begin{figure}
+%    \includegraphics[width=0.65\textwidth]{../../code/matlab/q0,001}
+%    \caption{\scriptsize Position tuning, $Q_{1:2,1:2}$ = 0.001. The mean/max error is 0.53m/1.67m.}
+%    \label{fig:q0.001}
+%  \end{figure}
+%\end{frame}
 
 \begin{frame}{Simulation and Verificaiton}{Kalman Filter}
   \begin{figure}
@@ -278,13 +278,13 @@ Velocity tuning
   \end{figure}
 \end{frame}
 
-\begin{frame}{Simulation and Verificaiton}{Kalman Filter}
-  \begin{figure}
-    \includegraphics[width=0.65\textwidth]{../../code/matlab/q0,00001}
-    \caption{\scriptsize Position tuning, $Q_{1:2,1:2}$ = 0.00001. The mean/max error is 0.19m/0.44m.}
-    \label{fig:q0.00001}
-  \end{figure}
-\end{frame}
+%\begin{frame}{Simulation and Verificaiton}{Kalman Filter}
+%  \begin{figure}
+%    \includegraphics[width=0.65\textwidth]{../../code/matlab/q0,00001}
+%    \caption{\scriptsize Position tuning, $Q_{1:2,1:2}$ = 0.00001. The mean/max error is 0.19m/0.44m.}
+%    \label{fig:q0.00001}
+%  \end{figure}
+%\end{frame}
 
 \begin{frame}{Simulation and Verificaiton}{Comparision between KF and AHRS}
   \begin{figure}
@@ -298,30 +298,102 @@ Velocity tuning
 <video>
 \end{frame}
 
-\begin{frame}{Simulation and Verificaiton}{Loose Ends}
-\begin{itemize}
-  \item Interface between the \texttt{/lli\_input} topic is not compatible with the LLI
-  \item Optionally extend the KF with the second GPS and use dilution of precision to modify the observational covariance matrix
-  \item Thrust allocation needs testing and implementation
-  \item The GPS data needs to be handled in ROS
-  \item Lab test with the hardware in the loop to test that interfaces work
-  \item Sea-trail needed to verify that it all works
+%\begin{frame}{Simulation and Verificaiton}{Loose Ends}
+%\begin{itemize}
+%  \item Interface between the \texttt{/lli\_input} topic is not compatible with the LLI
+%  \item Optionally extend the KF with the second GPS and use dilution of precision to modify the observational covariance matrix
+%  \item Thrust allocation needs testing and implementation
+%  \item The GPS data needs to be handled in ROS
+%  \item Lab test with the hardware in the loop to test that interfaces work
+%  \item Sea-trail needed to verify that it all works
+%\end{itemize}
+%\end{frame}
+
+%%%%%%%%%%%%%%%%%
+%\section{Schedule}
+%\begin{frame}{Schedule}{2nd Half Goals}
+%Design and implementation of formation control on the platforms
+%  \begin{itemize}
+%  \item Assembly of two other boats, same as the one we have
+%  \item Analyse different formation control strategies in more detail
+%  \item Determination of practical group coordination (initialisation task)
+%  \item Implementation of leader-follower formation control (tracking task)
+%  \item Formation control is according to a given path of interest
+%  \item Extend simulation model with environmental disturbances
+%  \item Agent-agent avoidance, and maybe other objects too
+%  \end{itemize}
+%\end{frame}
+
+\begin{frame}{Formation strategies}{Which to choose}
+Several different strategies
+  \begin{itemize}
+    \item Leader follower
+    \begin{itemize}
+      \item Duckling/Echelon/FRP
+    \end{itemize}
+    \item Individual paths:
+      \begin{itemize}
+        \item No/Limited/Full communication
+      \end{itemize}
+    \item Potential fields:
+      \begin{itemize}
+        \item No/Limited/Full communication
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Formation strategies}{The chosen}
+The three chosen strategies are:
+\begin{enumerate}
+  \item Echelon formation
+  \item Potential field
+  \begin{itemize}
+    \item Limited
+  \end{enumerate}
+  \begin{itemize}
+    \item Full communication
+  \end{itemize}
 \end{itemize}
 \end{frame}
 
-%%%%%%%%%%%%%%%%
-\section{Schedule}
-\begin{frame}{Schedule}{2nd Half Goals}
-Design and implementation of formation control on the platforms
-  \begin{itemize}
-  \item Assembly of two other boats, same as the one we have
-  \item Analyse different formation control strategies in more detail
-  \item Determination of practical group coordination (initialisation task)
-  \item Implementation of leader-follower formation control (tracking task)
-  \item Formation control is according to a given path of interest
-  \item Extend simulation model with environmental disturbances
-  \item Agent-agent avoidance, and maybe other objects too
-  \end{itemize}
+\begin{frame}{Formation strategies}{Why these}
+Estimate of performance in categories
+\begin{itemize}
+  \item Communication
+  \item Control architecture
+  \item Obstacle avoidance
+  \item Transients
+  \item Scalability
+  \item Failure
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Leader follower}{Echelon formation}
+
+\end{frame}
+
+\begin{frame}{Potential field}{Limited communication}
+
+\end{frame}
+
+\begin{frame}{Potential field}{Full communication}
+
+\end{frame}
+
+\begin{frame}{Conclusion}{Status now}
+\begin{itemize}
+  \item Full model of vessel
+  \item Analysed and selected strategies
+  \item Implementation started
+\end{itemize}
+\end{frame} 
+
+\begin{frame}{Conclusion}{Future work}
+\begin{itemize}
+  \item Simulation of chosen strategies
+  \item Build more vessels
+  \item Implementation of chosen strategies
+\end{itemize}
 \end{frame}
 
 {
