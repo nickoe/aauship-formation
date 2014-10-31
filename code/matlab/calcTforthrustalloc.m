@@ -1,6 +1,9 @@
 % Thrust allocation 
 clear all;
 
+% Dette er til at kontrollere alle thrusters
+% Husk at yaw er relativt lille, men dette er ok
+
 % Arm
 r(1:3,1) = [0.41;0.00;0.05];
 r(1:3,2) = [-0.18;0.00;0.05];
@@ -41,7 +44,7 @@ K = eye(4,4);
 
 % K(3,3) = 0.2657/2;
 % K(4,4) = 0.2657/2;
-u = [0 0 10 10]'; % Thruster force vector [N]
+u = [0 0 2 10]'; % Thruster force vector [N]
 tau = T*K*u;
 fprintf('X (surge)\t%f\n', tau(1))
 fprintf('Y (sway)\t%f\n', tau(2))
@@ -49,19 +52,27 @@ fprintf('K (roll)\t%f\n', tau(3))
 fprintf('M (pitch)\t%f\n', tau(4))
 fprintf('N (yaw)\t\t%f\n', tau(5))
 
-tau= [8;0;0;0;0.1];
+%tau= [tau(1);tau(2);tau(3);tau(4);tau(5)];
+
 u_check = inv(K)*pinv(T)*tau
 
 
 
-%%
+%% 
+% Dette er til at kontrollere de to main thrusters for sig selv
+% Husk at yaw er relativt lille, men dette er ok
+
 T = [F3,F4];
 T = T(1:2,:);
-T = [T;F3r,F4r];
+T = [T;F3r,F4r]
 
 K = eye(2,2);
 K(1,1) = 0.26565;
 K(2,2) = 0.26565;
+
+u = u(3:4);
+
+tau = T*K*u
 
 u_check = inv(K)*pinv(T)*tau
 

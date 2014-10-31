@@ -52,11 +52,16 @@ class Control(object):
         q = Quaternion(0,0,0,1)
 
         # Thust allocation matrix from calcTforthrustalloc.m
-        self.T = np.matrix([[      0,         0,    0.9946,    0.9946],
-                            [ 1.0000,    1.0000,         0,         0],
-                            [-0.0500,   -0.0500,    0.0052,   -0.0052],
-                            [      0,         0,    0.0995,    0.0995],
-                            [ 0.4100,   -0.1800,   -0.0497,    0.0497]])
+        self.T = np.matrix([[     0,       0, 1.0000, 1.0000],
+                            [1.0000,  1.0000,      0,       0],
+                            [0.0500,  0.0500, 0.0498, -0.0498],
+                            [     0,       0, 0.0000,  0.0000],
+                            [0.4100, -0.1800,-0.0047,  0.0047]])
+        #self.T = np.matrix([[      0,         0,    0.9946,    0.9946],
+        #                    [ 1.0000,    1.0000,         0,         0],
+        #                    [-0.0500,   -0.0500,    0.0052,   -0.0052],
+        #                    [      0,         0,    0.0995,    0.0995],
+        #                    [ 0.4100,   -0.1800,   -0.0497,    0.0497]])
         self.T = self.T[:,2:4] # Reducing our thrust allocation to only ues the main propellers
         # Thust coefficient matrix
         #self.K = np.eye(4)
