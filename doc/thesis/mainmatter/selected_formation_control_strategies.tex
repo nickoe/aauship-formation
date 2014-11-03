@@ -44,16 +44,6 @@ strategies after implementation.
 \end{description}
 
 
-%% Approaches
-\input{mainmatter/potentialfield}
-
-\input{mainmatter/leaderfollower}
-
-\section{Strategy 3: Multi Path following}
-Individual paths for the vessels where they follow their respective trajectories with respect to the time. This needs to make a formation for the vessels. They might only need to know from each other how far they are on their respective trajectories, Christoffer Thorvaldsen.
-
-\input{mainmatter/nsbapproach}
-
 
 %% Oversigt af control stats
 
@@ -100,6 +90,7 @@ In the case where no communication are to find in the system the agents will act
 %The underlying potential field can be used when designing the path for the formation. This is done from the same principle of potential fields, but instead of the traditional fields that attract and repel evenly around a point, it can be designed as a rain gutter, which runs from the high magnitude to the lowest magnitude. This will make the formation run in the direction of the steepest descent, and therefore the path can be designed using this. If the formation is allowed to diverge from the path, and the requirement is not so strict, one can design the rain gutter more flat, like a 'u' instead of a 'v', where the 'v' would make the formation stay more precise on the determined path.
 
 
+
 \begin{sidewaystable}
 \begin{tabular}{l|lll}
 \toprule
@@ -137,3 +128,12 @@ No communication  & -1 & 3 & -1 \\
 \label{tab:decision-matrix}
 \end{sidewaystable}
 
+%% Approaches
+\input{mainmatter/potentialfield}
+
+\input{mainmatter/leaderfollower}
+
+\section{Strategy 3: Multi Path following}
+Individual paths for the vessels where they follow their respective trajectories with respect to the time. This needs to make a formation for the vessels. They might only need to know from each other how far they are on their respective trajectories, Christoffer Thorvaldsen.
+
+\input{mainmatter/nsbapproach}
