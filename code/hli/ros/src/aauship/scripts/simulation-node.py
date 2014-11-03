@@ -54,21 +54,13 @@ class Simulator(object):
         self.pubimu = rospy.Publisher('imu', ADIS16405, queue_size=1, latch=True)
         self.trackpath = rospy.Publisher('track', Path, queue_size=3)
         self.pubgps1 = rospy.Publisher('gps1', GPS, queue_size=1, latch=False)
-        self.jeppepub = rospy.Publisher('kfjeppe_states', Path, queue_size=1)
 
-        h = Header()
-        p = Point(0,0,0)
-        q = Quaternion(0,0,0,1)
         # Construct variables for messages
         self.imumsg = ADIS16405()
         self.pubmsg = Float64MultiArray()
         self.trackmsg = Path()
         self.trackmsg.header.frame_id = "ned"
         self.gpsmsg = GPS()
-        self.jeppemsg = Path()
-        self.jeppemsg.header.frame_id = "ned"
-        self.jeppemsg.poses.append(PoseStamped(h, Pose(p, q)))
-        self.jeppemsg.poses.append(PoseStamped(h, Pose(p, q)))
 
         # Load external staitc map and path data
         self.klingen = sio.loadmat('klingenberg.mat')
@@ -203,13 +195,6 @@ class Simulator(object):
             #print(a)
         self.pub.publish(self.pubmsg)
         #print(self.pubmsg)
-
-        #Jeppeskallavetingogsager
-        p = Point(self.x_hat[0],self.x_hat[1],0.0)
-        q = Quaternion(0,0,0,1)
-        self.jeppemsg.poses[1] = PoseStamped(Header(), Pose(p, q))
-        self.jeppepub.publish(self.jeppemsg)
-
 
         ### move to kalmanfilter-node end ###
 
