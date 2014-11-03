@@ -1,9 +1,9 @@
 \input{preamble}
-\def\wkno{10}
+\def\wkno{11}
 \hypersetup{
   pdfsubject={Worksheet \#\wkno},
 }
-\includeonly{mainmatter/selected_formation_control_strategies,mainmatter/ros}
+%\includeonly{mainmatter/selected_formation_control_strategies,mainmatter/ros}
 
 \begin{document}
 \author{14gr1034}
@@ -11,9 +11,22 @@
 \date{\today}
 \maketitle
 \begin{center}
-\textit{This worksheet contains the relevant chapters for discussion. These are chapter four and nine, still with old and previous text that is outdated, new and updated sections are 4.1, 4.6 and 9.3.}
+\textit{This worksheet is the full report as is, changed since last
+time is the and added section on ``One approach for Potential
+Fields'' under section~\vref{sc:potential-fields}.}
 \end{center}
 
+
+\frontmatter
+\include{frontmatter/frontpage}
+%\chapterstyle{nickoe}
+\cleardoublepage
+\include{frontmatter/titlepage}
+\include{frontmatter/preface}
+
+\cleardoublepage
+\tableofcontents
+\printnomenclature[2cm]
 \input{../manual/acronyms}
 
 \mainmatter
@@ -61,4 +74,3 @@ The appendix includes chapters which are important for the project, but not nece
 %\settocdepth{section}
 \listoftodos
 \end{document}
-
