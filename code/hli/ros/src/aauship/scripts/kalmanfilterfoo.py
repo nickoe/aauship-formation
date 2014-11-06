@@ -111,7 +111,7 @@ class KF(object):
         self.P_plus = numpy.zeros([17,17])
         R = numpy.diag([3.0, 3.0, 13.5969, 0.1, 0.1, 0.0524, 0.0524])
         (xest,self.P_plus) = self.KalmanF(x, u, z, self.P_plus, R)
-        print(self.P_plus)
+        print(xest)
         print('Done testing Kalman filter function')
 
 if __name__ == '__main__':

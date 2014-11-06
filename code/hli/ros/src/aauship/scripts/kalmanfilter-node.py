@@ -81,6 +81,12 @@ class KF(object):
         self.sub = rospy.Subscriber('lli_input', LLIinput, self.llicb)
         self.pub = rospy.Publisher('kf_statesnew', Float64MultiArray, queue_size=1)
 
+        self.roll = 0
+        self.pitch = 0
+        self.yaw = 0
+        self.rightthruster = 0
+        self.leftthruster = 0
+
         rospy.init_node('klamanfilter_node')
 
 
@@ -184,14 +190,15 @@ class KF(object):
         #print(a_b)
         #print('')
         self.z[5:7] = np.array([a_b[0,0], a_b[0,1]]) # TODO is the entirely correct? Maybe the sign is opposite?
-        #print(self.z)
+        #print(str(self.z[2]) + "kal")
+        print('Kalmanfilter node')
         print('N:   ' + str(self.z[0]))
         print('E:   ' + str(self.z[1]))
         print('psi: ' + str(self.z[2]))
         print('u:   ' + str(self.z[3]))
-        #print('v:   ' + str(self.z[4]))
-        #print('du:  ' + str(self.z[5]))
-        #print('dv:  ' + str(self.z[6]))
+        print('v:   ' + str(self.z[4]))
+        print('du:  ' + str(self.z[5]))
+        print('dv:  ' + str(self.z[6]))
         print('')
 
         # TODO move the KF stuff from the simulation node in here, now it should still work
@@ -203,6 +210,7 @@ class KF(object):
         self.kftrackmsg.poses[0] = PoseStamped(Header(), Pose(p, q))
 
         (self.x_hat,self.P_plus) = self.f.KalmanF(self.x_hat, self.tau, self.z, self.P_plus, self.R)
+        print(self.x_hat)
         
         self.R[0,0] = 10*10**10;
         self.R[1,1] = 10*10**10;
@@ -225,7 +233,12 @@ class KF(object):
    
         ### move to kalmanfilter-node end ###
 
-        v = tf.transformations.quaternion_from_euler(pi,0,0)
+
+        # This transformation seesm to not be nessesary, this will make the
+        # kalmanfilter-node estimate dead reckon in the wrong direction. Looks
+        # mirrored around the North axis.
+        '''
+        v = tf.transformations.quaternion_from_euler(0,0,0)
         imuq = tf.transformations.quaternion_from_euler(self.roll,self.pitch,self.yaw)
         vimuq = tf.transformations.quaternion_multiply(v,imuq)
         neweuler = tf.transformations.euler_from_quaternion(vimuq)
@@ -233,6 +246,12 @@ class KF(object):
         self.x_hat[4] = neweuler[0]
         self.x_hat[5] = neweuler[1]
         self.x_hat[6] = neweuler[2]
+        '''
+        '''
+        self.x_hat[4] = self.roll
+        self.x_hat[5] = self.pitch
+        self.x_hat[6] = self.yaw
+        '''
 
         # Send tf for the robot model visualisation
         '''
@@ -255,8 +274,8 @@ class KF(object):
         #print(att)
         #print( (self.roll, self.pitch, self.yaw))
 
-        self.yaw = fmod( self.yaw+2*pi+pi/2, 2*pi)
-        self.z[2] = self.yaw 
+        self.yaw = fmod( self.yaw+2*pi+pi/2+pi/2, 2*pi)
+        self.z[2] = self.yaw
         #print('attitude after: ' + str((self.roll, self.pitch, self.yaw)))
         #print('')
 

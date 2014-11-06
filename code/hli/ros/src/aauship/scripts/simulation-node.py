@@ -44,6 +44,12 @@ class Simulator(object):
 
         # Construct kalmanfilterfoo, because it contains the aaushipsimmodel function
         self.f = kfoo.KF()
+
+        self.roll = 0
+        self.pitch = 0
+        self.yaw = 0
+        self.rightthruster = 0
+        self.leftthruster = 0
         
         rospy.init_node('simulation_node')
         self.r = rospy.Rate(20) # Hz
@@ -134,7 +140,11 @@ class Simulator(object):
         global jj
 
         # Generate noise vector data from IMU
-        self.z[2]   = fmod(self.x[6]+2*pi, 2*pi) #+ self.v[2]*np.random.randn(1,1)
+        ###self.z[2]   = fmod(self.x[6]+2*pi, 2*pi) #+ self.v[2]*np.random.randn(1,1)
+        (self.roll, self.pitch, self.yaw) = tf.transformations.euler_from_quaternion([data.x, data.y, data.z, data.w])
+        self.yaw = fmod( self.yaw+2*pi+pi/2+pi/2, 2*pi)
+        self.z[2] = self.yaw
+
         self.z[3:5] = self.x[7:9] #+ np.array([self.v[3],self.v[4]])*np.random.randn(1,2)
 
 
@@ -177,6 +187,8 @@ class Simulator(object):
             self.old_z = self.z.copy() # used to calculate SOG and track_angles
 
         #print(self.old_z)
+        #print(str(self.z[2]) + "sim")
+        print('Simulation node')
         print('N:   ' + str(self.z[0]))
         print('E:   ' + str(self.z[1]))
         print('psi: ' + str(self.z[2]))
@@ -188,6 +200,7 @@ class Simulator(object):
         
         ### move to kalmanfilter-node start ###
         (self.x_hat,self.P_plus) = self.f.KalmanF(self.x_hat, self.tau, self.z, self.P_plus, self.R)
+        print(self.x_hat)
         
         self.pubmsg = Float64MultiArray()
         for a in self.x_hat:
