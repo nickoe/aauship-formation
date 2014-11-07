@@ -86,10 +86,10 @@ class Simulator(object):
     # /lli_input callback (same as in the kalmanfilter node) TODO move to another file?
     def llicb(self, data):
         #print('/lli_input callback')
-        if data.MsgID == 5:
+        if data.MsgID == 3:
             self.rightthruster = data.Data
 
-        if data.MsgID == 3:
+        if data.MsgID == 5:
             self.leftthruster = data.Data
 
         # Saturation in inputs
