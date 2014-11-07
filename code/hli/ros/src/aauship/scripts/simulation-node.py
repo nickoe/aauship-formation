@@ -200,7 +200,6 @@ class Simulator(object):
         
         ### move to kalmanfilter-node start ###
         (self.x_hat,self.P_plus) = self.f.KalmanF(self.x_hat, self.tau, self.z, self.P_plus, self.R)
-        print(self.x_hat)
         
         self.pubmsg = Float64MultiArray()
         for a in self.x_hat:

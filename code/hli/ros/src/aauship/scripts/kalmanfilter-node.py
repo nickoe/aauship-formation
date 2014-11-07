@@ -210,7 +210,6 @@ class KF(object):
         self.kftrackmsg.poses[0] = PoseStamped(Header(), Pose(p, q))
 
         (self.x_hat,self.P_plus) = self.f.KalmanF(self.x_hat, self.tau, self.z, self.P_plus, self.R)
-        print(self.x_hat)
         
         self.R[0,0] = 10*10**10;
         self.R[1,1] = 10*10**10;
