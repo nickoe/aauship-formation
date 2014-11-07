@@ -23,7 +23,7 @@ class Control(object):
 
         rospy.init_node('control_node')
         #self.sub = rospy.Subscriber('kf_statesnew', Float64MultiArray, self.callback, queue_size=1)
-        self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=1)
+        self.sub = rospy.Subscriber('kf_statesnew', Float64MultiArray, self.callback, queue_size=1)
         self.pub = rospy.Publisher('lli_input', LLIinput, queue_size=4, latch=True)
 
         # Initilaze parameters for the simple PID heading contorller
@@ -157,25 +157,17 @@ class Control(object):
 
         print((self.u[0], self.u[1]))
 
-        ## DEBUG
-        #self.u[0] = 0
-        #self.u[1] = 0
-        ## DEBUG
-
-        # TODO Remember to test this, to make sure that u[0] is the right thruster
         # (-100% = -500 to +100% = 500)
-        # right thruster, devid 10, msgid 5
-        # left thruster, devid 10, msgid 3
+        # right thruster, devid 10, msgid 3
+        # left thruster, devid 10, msgid 5
         self.pubmsg = LLIinput()
         self.pubmsg.DevID = 10
-        self.pubmsg.MsgID = 5
-        #self.pubmsg.Data  = self.u[3]
+        self.pubmsg.MsgID = 3
         self.pubmsg.Data  = self.u[0] # Reducing our thrust allocation to only ues the main propellers
         self.pub.publish(self.pubmsg)
 
         self.pubmsg.DevID = 10
-        self.pubmsg.MsgID = 3
-        #self.pubmsg.Data  = self.u[2]
+        self.pubmsg.MsgID = 5
         self.pubmsg.Data  = self.u[1] # Reducing our thrust allocation to only ues the main propellers
         self.pub.publish(self.pubmsg)
 
