@@ -26,7 +26,10 @@ class KF(object):
 
         self.tau = np.zeros(5) # input vector
         self.x = np.zeros(17) # state vector
+        self.x[0] = 20
         self.x_hat = self.x
+        self.x_hat[0] = -40
+        self.x_hat[1] = -50
 
         # Measurement noise vector and covarince matrix
         self.v = np.array([0.1,0.1,13.5969e-006,0.2,0.2,0.033,0.033])#Measurement,noise
@@ -48,6 +51,7 @@ class KF(object):
 
         # Measurement vector
         self.z = np.zeros(7)
+        self.z[0] = 20
 
         self.kftrackpath = rospy.Publisher('kftrack', Path, queue_size=3)
         self.kftrackmsg = Path()
@@ -66,11 +70,13 @@ class KF(object):
         self.keepoutmsg.header.frame_id = "ned"
         q = Quaternion(0,0,0,1)
         h = Header()
+
+        offset = 3
         for i in self.klingen['outer']:
-            p = Point(i[0],i[1],0)
+            p = Point(i[0]-offset,i[1],0)
             self.refmsg.poses.append(PoseStamped(h, Pose(p, q)))
         for i in self.klingen['inner']:
-            p = Point(i[0],i[1],0)
+            p = Point(i[0]-offset,i[1],0)
             self.keepoutmsg.poses.append(PoseStamped(h, Pose(p, q)))
 
         # Topics

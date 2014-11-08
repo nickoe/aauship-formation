@@ -31,7 +31,9 @@ class Simulator(object):
         self.thrustdiff = 0
         self.tau = np.zeros(5) # input vector
         self.x = np.zeros(17) # state vector
-        #self.x[0] = -34
+        self.x[0] = -40
+        self.x[1] = -50
+
         self.x_hat = self.x
         self.v = np.array([0.1,0.1,13.5969e-006,0.2,0.2,0.00033,0.00033])#Measurement,noise
         self.z = np.zeros(7)

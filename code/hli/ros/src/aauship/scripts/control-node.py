@@ -66,7 +66,8 @@ class Control(object):
 
         # Load the lawnmower generated path
         self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
-
+        self.path['track'] = self.path['track'] - np.array([+3,0])  # offset of the map
+        
         # Fill in the path on the rviz path
         for i in self.path['track']:
             p = Point(i[0],i[1],0)
