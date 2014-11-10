@@ -79,10 +79,10 @@ class Playback(object):
             else:
                 # Send GPS data
                 self.gpsmsg.time = self.mat['time'][g][0]
-                self.gpsmsg.latitude = self.mat['lat'][0][g]
-                self.gpsmsg.longitude = self.mat['lon'][0][g]
+                self.gpsmsg.latitude = self.mat['lat'][0][g]*pi/180.0
+                self.gpsmsg.longitude = self.mat['lon'][0][g]*pi/180.0
                 self.gpsmsg.track_angle = self.mat['nmea_track_angle'][g][0]*pi/180.0
-                #self.gpsmsg.data =  bla bla bla TODO
+                self.gpsmsg.date = int(self.mat['nmeadate'][g][0])
                 self.gpsmsg.SOG = self.mat['nmeaspeed'][g][0]*0.514444444
                 self.pub_gps.publish(self.gpsmsg)
                 print(g)
