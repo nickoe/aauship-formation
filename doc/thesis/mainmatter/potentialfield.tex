@@ -67,6 +67,7 @@ F_{vl} &= K_{vl}(p_{vl}^n-p_i^n-[p_{vl}^n-p_{i0}^n])\\
 &= K_{vl}(d_i-d_{i0})
 \end{align}
 $K_{vl}$ is a tuning parameter. $p_{vl}$ is position of the virtual leader, $p_i$ is position of agent $i$, $p_{i0}$ is desired position of agent $i$ and the $d$ is a shorter notation for the distances in between. The virtual leader component guides the agents directly to their desired positions relative to the virtual leader.
+
 \item $F_{ij}$ inter vehicle influence\\
 This is the contribution of other vehicles to the potential field, which is expressed as:
 \begin{align}
@@ -77,6 +78,7 @@ Similar to the previously the $p$s are positions, $K_{ij}$ is a tuning parameter
 \begin{align}
 F_{ij}^{tot} = \sum\limits_{j=1}^NF_{ij}(i,j) \text{ for } j\neq i
 \end{align}
+
 \item $F_{ca}$ collision avoidance\\
 The collision avoidance takes effect when the agents get closer than a pre defined distance of each other. It generates an additional field component for the vehicle $i$ which points away from the entering agent causing the agents to move away from each other. To ensure the avoidance the component converges towards infinity in the centre of the $i$'th agent. The $F_{ca}$ is expressed as:
 \[
@@ -86,10 +88,12 @@ The collision avoidance takes effect when the agents get closer than a pre defin
     0,              & \text{otherwise}
 \end{cases}
 \]
-which can be expressed in a total term of the collision avoidance:
+where $K_{ca}$ is a tuning parameter. $r$ is the safety radius for collision and $d_{ij}$ is the distance between the individual agents.
+The collision avoidance can be expressed in a total term of the collision avoidance:
 \begin{align}
 F_{ca}^{tot} = \sum\limits_{j=1}^NF_{ca}^{ij} \text{ for } i\neq j
 \end{align}
+
 \item $F_{oa}$ obstacle avoidance\\
 The same principle as for collision avoidance can be applied to obstacle avoidance. Now each obstacle needs to be handled as an agent, which will make the same result, but the reference is a little different:
 \[
@@ -99,11 +103,22 @@ The same principle as for collision avoidance can be applied to obstacle avoidan
     0,              & \text{otherwise}
 \end{cases}
 \]
+where $k$ denotes the counter for obstacles instead of other agents. $K_{oa}$ is also a tuning parameter for the obstacle avoidance. $d_{ki}$ is the distance between an agent and the obstacle.
 which in a total term is summed up as:
 \begin{align}
 F_{oa}^{tot} = \sum\limits_{k=1}^MF_{oa}^{ik} \text{ for } i\neq k
 \end{align}
 Here $d_{ki}$ represents one of the $M$ place vectors which has the effect as a detected obstacle.
+The distance $r$ can be determined dynamically depending on the velocity of the agent:
+\begin{align}
+r = r^{min} + K_r||\dot{p^n}||
+\end{align}
+
+\item Potential field\\
+Now these forces needs to be summed together to get $\tilde{F}_i^{tot}$ which gives the magnitude and direction of the potential field for vehicle $i$ at its current position. As the potential field does not need to expand to infinity it is reasonable to define a maximum amplitude for the vector, while still keeping its direction:
+\begin{align}
+F_i^{tot} = min\{\,\,\,||\tilde(F)_i^{tot}||\,\,\,,\,\,F_{max}\,\,\,\}\frac{\tilde{F}_i^{tot}}{||\tilde{F}_i^{tot}||}
+\end{align}
+
 \end{itemize}
-Now these forces needs to be summed together to get $\tilde{F}_i^{tot}$ which gives the magnitude and direction of the potential field for vehicle $i$ at its current position.
-\todo{Dette er en hurtigere gennemgang af denne metode, som ikke giver SÅ meget mening uden et billede. Men der anvendes et potentiale felt pr agent, som skal placeres ud fra et lokalt minima, som igen flyttes rundt.}
+\todo{Dette er en hurtigere gennemgang af denne metode, som ikke giver SÅ meget mening uden et billede. Men der anvendes et potentiale felt pr agent, som skal placeres ud fra et FRP, som igen flyttes rundt i det givne miljø.}
