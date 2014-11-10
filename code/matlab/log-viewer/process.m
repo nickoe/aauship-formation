@@ -13,7 +13,7 @@ linewidth = 1;
 % logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 % testname = 'magnetometertest-lab2';
 logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
-testname = 'kfpk';
+testname = 'nysoetur';
 % testname = 'statictest-lab';
 
 %% Data files
@@ -304,6 +304,8 @@ end
 % legend('Depth','Temperature')
 
 %% Plot headings to compare with the GPS data
+addpath('../x-io')
+addpath('../x-io/quaternion_library')
 AHRS = MahonyAHRS('SamplePeriod', 1/10, 'Kp', 8.8 , 'Ki', 0.5);
 N = length(gyro);
 for n = 1:N;
