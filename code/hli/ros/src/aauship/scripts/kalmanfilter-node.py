@@ -86,7 +86,17 @@ class KF(object):
         self.subahrs = rospy.Subscriber('attitude', Quaternion, self.ahrscb)
         self.sub = rospy.Subscriber('lli_input', LLIinput, self.llicb)
         self.pub = rospy.Publisher('kf_statesnew', Float64MultiArray, queue_size=1)
+        self.refpath = rospy.Publisher('refpath', Path, queue_size=3, latch=True)
+        self.keepoutpath = rospy.Publisher('keepout', Path, queue_size=3, latch=True)
+        
+        # Initialise pose for the graphic path segment for rviz
+        h = Header()
+        p = Point(0,0,0)
+        q = Quaternion(0,0,0,1)
+        self.kftrackmsg.poses.append(PoseStamped(h, Pose(p, q)))
+        self.kftrackmsg.poses.append(PoseStamped(h, Pose(p, q)))
 
+        # Initialize common variables
         self.roll = 0
         self.pitch = 0
         self.yaw = 0
@@ -298,14 +308,7 @@ class KF(object):
         '''
         # Do the publishing of the mission boundary path and keeoput
         # zone
-        h = Header()
-        p = Point(0,0,0)
-        q = Quaternion(0,0,0,1)
-        self.kftrackmsg.poses.append(PoseStamped(h, Pose(p, q)))
-        self.kftrackmsg.poses.append(PoseStamped(h, Pose(p, q)))
-        self.refpath = rospy.Publisher('refpath', Path, queue_size=3, latch=True)
         self.refpath.publish(self.refmsg)
-        self.keepoutpath = rospy.Publisher('keepout', Path, queue_size=3, latch=True)
         self.keepoutpath.publish(self.keepoutmsg)
         
         rospy.spin()
