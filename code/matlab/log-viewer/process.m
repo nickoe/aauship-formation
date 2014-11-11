@@ -187,9 +187,9 @@ heading = atan2(-magn(:,2),magn(:,1))*180/pi;
 %%
 figure(50)
 % bias = [0.2582 0.1225 -0.6860];
-% bias = [0 0 0];
-bias = [0.28 0.15 -0.18]; % magnetometertest-lab6, on office chair
-bias = [0 0 0]; % kalmantest, parkeringsplads
+% bias = [0.28 0.15 -0.18]; % magnetometertest-lab6, on office chair
+% bias = [0 0 0]; % kalmantest, parkeringsplads
+bias = [0.31 0.15 -0.15]; % nysoetur
 % bias = [(max(magn(:,1))-min(magn(:,1)))/2+min(magn(:,1)),...
 %         (max(magn(:,2))-min(magn(:,2)))/2+min(magn(:,2)),...
 %         (max(magn(:,3))-min(magn(:,3)))/2+min(magn(:,3))]
