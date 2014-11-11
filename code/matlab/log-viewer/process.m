@@ -43,6 +43,8 @@ latsign = line{5};
 nmealon = line{6};
 lonsign = line{7};
 nmeaspeed = line{8};
+nmea_track_angle = line{9};
+nmeadate = line{10};
 walltime = line{12};
 
 %% Converts the latitude an longitide to decimal coordinates
@@ -187,9 +189,10 @@ heading = atan2(-magn(:,2),magn(:,1))*180/pi;
 %%
 figure(50)
 % bias = [0.2582 0.1225 -0.6860];
-% bias = [0.28 0.15 -0.18]; % magnetometertest-lab6, on office chair
+% bias = [0 0 0];
+%bias = [0.28 0.15 -0.18]; % magnetometertest-lab6, on office chair
+bias =  [0.29, 0.15, -0.15]; % bias on nysoetest
 % bias = [0 0 0]; % kalmantest, parkeringsplads
-bias = [0.31 0.15 -0.15]; % nysoetur
 % bias = [(max(magn(:,1))-min(magn(:,1)))/2+min(magn(:,1)),...
 %         (max(magn(:,2))-min(magn(:,2)))/2+min(magn(:,2)),...
 %         (max(magn(:,3))-min(magn(:,3)))/2+min(magn(:,3))]
@@ -320,5 +323,8 @@ title('Euler angles');
 xlabel('Samples');
 ylabel('Angle (deg)');
 legend('phi', 'theta', 'psi');
+
+%% Save workspace data to mat file
+save('processdotm.mat')
 
 

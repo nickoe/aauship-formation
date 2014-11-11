@@ -64,7 +64,7 @@ u_check = inv(K)*pinv(T)*tau
 
 T = [F3,F4];
 T = T(1:2,:);
-T = [T;F3r,F4r]
+T = [T;F3r,F4r];
 
 K = eye(2,2);
 K(1,1) = 0.26565;

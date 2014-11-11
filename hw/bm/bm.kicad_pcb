@@ -1,4 +1,4 @@
-(kicad_pcb (version 4) (host pcbnew "(2014-07-07 BZR 4985)-kicad")
+(kicad_pcb (version 4) (host pcbnew "(2014-11-02 BZR 5249)-kicad")
 
   (general
     (links 110)
@@ -34,6 +34,7 @@
   (setup
     (last_trace_width 0.4)
     (user_trace_width 3)
+    (user_trace_width 10.668)
     (trace_clearance 0.254)
     (zone_clearance 0.508)
     (zone_45_only no)
@@ -44,6 +45,7 @@
     (via_drill 0.635)
     (via_min_size 0.889)
     (via_min_drill 0.508)
+    (user_via 10.668 1.0668)
     (uvia_size 0.508)
     (uvia_drill 0.2)
     (uvias_allowed no)
@@ -79,9 +81,9 @@
       (plotinvisibletext false)
       (padsonsilk false)
       (subtractmaskfromsilk false)
-      (outputformat 4)
+      (outputformat 1)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
       (outputdirectory pdf/))
   )

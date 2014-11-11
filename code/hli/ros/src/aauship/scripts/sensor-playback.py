@@ -27,7 +27,7 @@ import os
 class Playback(object):
     def __init__(self):
         rospy.init_node('playback_node')
-        self.r = rospy.Rate(20) # Hz
+        self.r = rospy.Rate(50) # Hz
         
         # Define the topics
         self.pub_imu = rospy.Publisher('imu', ADIS16405, queue_size=1)
@@ -57,14 +57,14 @@ class Playback(object):
             self.pub_imu.publish(
                   self.mat['supply'][i][0],
                   self.mat['gyro'][i][0],
-                  self.mat['gyro'][i][1],
-                  self.mat['gyro'][i][2],
+                  -self.mat['gyro'][i][1],
+                  -self.mat['gyro'][i][2],
                   self.mat['accl'][i][0],
-                  self.mat['accl'][i][1],
-                  self.mat['accl'][i][2],
+                  -self.mat['accl'][i][1],
+                  -self.mat['accl'][i][2],
                   self.mat['magn'][i][0],
-                  self.mat['magn'][i][1],
-                  self.mat['magn'][i][2],
+                  -self.mat['magn'][i][1],
+                  -self.mat['magn'][i][2],
                   self.mat['temp'][i][0],
                   self.mat['aux_adc'][i][0])
 
