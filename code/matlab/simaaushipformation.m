@@ -10,7 +10,7 @@ AHRS = MahonyAHRS('SamplePeriod', 1/10, 'Kp', 18 , 'Ki', 8);
 % set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
 
 %% Pre allocation of variables
-N = 5000;
+N = 10000;
 es = N;
 ts = 0.05;
 x = zeros(N,17);
@@ -88,14 +88,13 @@ derivative2 = zeros(1,N);
 derror = zeros(1,N);
 dintegral = zeros(1,N);
 dderivative = zeros(1,N);
-Kp2 = 10;
-Ki2 = 0.1;
-Kd2 = 50;
 thrustdiff2 = zeros(1,N);
 speeddiff2 = zeros(1,N);
 heading2 = zeros(N,1);
 headingdesired2 = zeros(N,1);
 x2 = zeros(N,17);
+x2(1,1:2) = [-10,7];
+x2(7) = pi/2;
 tau2 = [0 0 0 0 0];
 %% Simulation
 figure(1)
@@ -189,6 +188,14 @@ for k = 1:N
         heading(k) = x(k+1,7);
     end
     
+    psi=x2(k+1,7);
+    Rz = [cos(psi) -sin(psi);
+          sin(psi)  cos(psi)];
+    
+    if k ~=  1
+        heading2(k) = x2(k+1,7);
+    end
+    
     % (Båd 1)
     % PID for speed
     serror(k) = 1 - x(k,8);
@@ -209,29 +216,43 @@ for k = 1:N
 
     % (Båd 2)
     % PID for dist
-    derror(k) = 1 - norm(x(k,1:2)-x2(k,1:2));
+    Kp2d = 2;
+    Ki2d = 1;
+    Kd2d = 0;
+    derror(k) = -1 +norm(x(k,1:2)-x2(k,1:2));
     dintegral(k) = dintegral(k) + derror(k);
     if k~=1
         dderivative(k) = derror(k) - derror(k-1);
     end
-    speeddiff2(k+1) = 4*derror(k) + 40*dintegral(k) + 0.2*dderivative(k);
+    speeddiff2(k+1) = Kp2d*derror(k) + Ki2d*dintegral(k) + Kd2d*dderivative(k);
+    if speeddiff2(k+1) > 5
+        speeddiff2(k+1) = 5;
+    end
+%     speeddiff2(k+1) = 2;
     
-    headingdesired2(k) = rad2pipi(atan2(x(k,2)-x2(k,2),x(k,1)-x2(k,1)));
-
+    
+%     headingdesired2(k) = rad2pipi(atan2(x(k,1)-x2(k,1),x(k,2)-x2(k,2)));
+    now = x2(k,1:2);
+    wpe = x(k,1:2);
+    [headingdesired2(k), foo1, foo2] = wp_gen(now,wpe,now);
     % PID for heading
+    Kp2 = 10;
+    Ki2 = 0.1;
+    Kd2 = 50;
     error2(k) = rad2pipi(headingdesired2(k)  - heading2(k));
     integral2(k) = integral2(k) + error2(k);
     if k~=1
         derivative2(k) = error2(k) - error2(k-1);
     end
     thrustdiff2(k+1) = Kp2*error2(k) + Ki2*integral2(k) + Kd2*derivative2(k);
+
 end
 
 %% Plot the results
 t = 0:ts:es*ts-ts;
 tt = ts:ts:es*ts;
 
-sailsim = figure(1)
+sailsim = figure(1);
 % set(gcf,'Visible','on'); % Hides the matlab plot because it is ugly
 % set(gcf,'paperunits','centimeters')
 % set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
@@ -242,8 +263,14 @@ for k = 1:79:es
     ship(x(k+1,2),x(k+1,1),-x(k+1,7)+pi/2,'y')
 end
 for k = 1:79:es
-    ship(x2(k+1,2),x2(k+1,1),-x2(k+1,7)+pi/2,'b')
+%     ship(x2(k+1,2),x2(k+1,1),-x2(k+1,7)+pi/2,'b')
+% So heading seems to be calculated correctly according to the below ship
+% plots
+ship(x2(k+1,2),x2(k+1,1),-headingdesired2(k+1)+pi/2,'b')
 end
+
+
+
 % for k = 1:100:N
 %     ship(NED(k,2),NED(k,1),pi/2-headingdesired(k),'y')
 % end
@@ -252,10 +279,13 @@ h1 = plot(track(:,2),track(:,1),'b-o', x(1:es,2),x(1:es,1),'-r', x_hat(gpsc,2),x
 h2 = plot(x_hat(1:es,2),x_hat(1:es,1),'-k');
 h3 = plot(z(gpsc,2),z(gpsc,1),'g.-');
 % plot(track(n,2),track(n,1),'ro')
-plot(x2(1:es,2),x2(1:es,1),'+r')
+plot(x2(1:es,2),x2(1:es,1),'+-r')
 legend([h1;h2;h3],'Trajectory','State','Marker for recieved GPS','Estimate','GPS meas','Location','eastoutside')
 xlabel('Easting [m]');
 ylabel('Northing [m]');
 grid on
 axis equal
 hold off
+
+% xlim([-5 10])
+% ylim([-2 10])
