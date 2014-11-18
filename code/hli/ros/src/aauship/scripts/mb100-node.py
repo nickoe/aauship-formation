@@ -62,9 +62,11 @@ class MB100(object):
                 data = selfmb100rcv.readline()
                 if data != "":
                     data = data.rstrip()
-                    self.parse(data)
+                    parsed = self.parse(data)
             except Exception:
                 pass
+
+            #TODO actually publish the parsed data here
 
             # End of loop, wait to keep the rate
             r.sleep()
