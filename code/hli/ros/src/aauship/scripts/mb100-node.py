@@ -10,6 +10,7 @@ from aauship.msg import *
 
 from std_msgs.msg import Float64MultiArray, Header
 from geometry_msgs.msg import Point, Quaternion, PoseStamped, Pose
+from nav_msgs.msg import Path
 import tf
 
 import serial
@@ -24,7 +25,6 @@ import gpsfunctions as geo
 
 class MB100(object):
     def __init__(self):
-
         # Open the file descriptors
         BUFSIZE = 1024
         self.mb100log = open("logs/mb100.log",'wb',BUFSIZE)
@@ -35,6 +35,18 @@ class MB100(object):
         self.Rn2e = geo.RNED2ECEF(self.klingen['rotlon'], self.klingen['rotlat'])
         self.Re2n = self.Rn2e.T
         self.pos_of_ned_in_ecef = geo.wgs842ecef(self.klingen['rotlat'], self.klingen['rotlon'])
+
+        # Create objects for the kftrack stuff
+        self.kftrackpath = rospy.Publisher('kftrack', Path, queue_size=3)
+        self.kftrackmsg = Path()
+        self.kftrackmsg.header.frame_id = "ned"
+
+        # Initialise pose for the graphic path segment for rviz
+        h = Header()
+        p = Point(0,0,0)
+        q = Quaternion(0,0,0,1)
+        self.kftrackmsg.poses.append(PoseStamped(h, Pose(p, q)))
+        self.kftrackmsg.poses.append(PoseStamped(h, Pose(p, q)))
 
         # Some init
         self.pubmsg = Float64MultiArray()
@@ -77,6 +89,33 @@ class MB100(object):
         rospy.init_node('mb100')
         r = rospy.Rate(200)
 
+        # Do the publishing of the mission boundary path and keeoput
+        # zone
+
+        self.refpath = rospy.Publisher('refpath', Path, queue_size=3, latch=True)
+        self.keepoutpath = rospy.Publisher('keepout', Path, queue_size=3, latch=True)
+
+
+        # Define the path poses for the map to display in rviz
+        self.refmsg = Path()
+        self.refmsg.header.frame_id = "ned"
+        self.keepoutmsg = Path()
+        self.keepoutmsg.header.frame_id = "ned"
+        q = Quaternion(0,0,0,1)
+        h = Header()
+
+        offset = 3
+        for i in self.klingen['outer']:
+            p = Point(i[0]-offset,i[1],0)
+            self.refmsg.poses.append(PoseStamped(h, Pose(p, q)))
+        for i in self.klingen['inner']:
+            p = Point(i[0]-offset,i[1],0)
+            self.keepoutmsg.poses.append(PoseStamped(h, Pose(p, q)))
+
+
+        self.refpath.publish(self.refmsg)
+        self.keepoutpath.publish(self.keepoutmsg)
+
         while not rospy.is_shutdown():
             # Grabbing the data
             try:
@@ -98,10 +137,20 @@ class MB100(object):
                     #     it is probably of interest to calculate the u and v speeds
                     #     also.
 
+                    # Headpoint of trail track
+                    p = Point(self.x_hat[0],self.x_hat[1],0.0)
+                    q = Quaternion(0,0,0,1)
+                    self.kftrackmsg.poses[0] = PoseStamped(Header(), Pose(p, q))
+
                     # Fill in the message to be published in ROS
                     for a in self.x_hat:
                         self.pubmsg.data.append(a)
                     pub.publish(self.pubmsg)
+
+                    # Endpoint of trail track
+                    p = Point(self.x_hat[0],self.x_hat[1],0.0)
+                    self.kftrackmsg.poses[1] = PoseStamped(Header(), Pose(p, q))
+                    self.kftrackpath.publish(self.kftrackmsg)
 
                     print("parsed")
             except Exception:
