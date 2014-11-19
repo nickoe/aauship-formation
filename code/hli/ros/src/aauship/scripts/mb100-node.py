@@ -48,9 +48,6 @@ class MB100(object):
         self.kftrackmsg.poses.append(PoseStamped(h, Pose(p, q)))
         self.kftrackmsg.poses.append(PoseStamped(h, Pose(p, q)))
 
-        # Some init
-        self.pubmsg = Float64MultiArray()
-        self.x_hat = np.zeros(17)
 
     def parse(self,line):
         self.mb100log.write(line + ',' + str(time.time()) + "\r\n")
@@ -64,7 +61,12 @@ class MB100(object):
             mb100['lat'] = latdec*pi/180.0
             mb100['lon'] = londec*pi/180.0
             mb100['alt'] = float(line[9])
-            mb100['ageofdiff'] = float(line[10])
+            #TODO Fix this, when the the float() gets and empty stirng, it will fail the try in the self.run()
+            #print(line[9])
+            #print("woo")
+            #print(type(line[10]))
+            #mb100['ageofdiff'] = float(line[10])
+            #print(line[10])
             mb100['cog'] = float(line[11])*pi/180.0
             mb100['sog'] = float(line[12])*0.514444444
             mb100['verticalvel'] = float(line[13])
@@ -76,13 +78,15 @@ class MB100(object):
             return mb100
         elif line[0] == "magicstringhere":  # TODO the string the gps sends when booting
             rospy.logwarn("It seems like the MB100 has restarted. Is the powersupply ok?")
+            print("magi")
             return None
         else:
+            print("nooo")
             return None
 
     def run(self):
         # Example of data
-        line = "$PASHR,POS,1,10,134035.35,5700.8745400,N,00959.1551112,E,059.318,10.4,077.3,000.459,+000.069,1.7,0.9,1.4,0.9,Hp23*30"
+        #line = "$PASHR,POS,1,10,134035.35,5700.8745400,N,00959.1551112,E,059.318,10.4,077.3,000.459,+000.069,1.7,0.9,1.4,0.9,Hp23*30"
         #print(self.parse(line))
 
         pub = rospy.Publisher('kf_statesnew', Float64MultiArray, queue_size=1)
@@ -91,10 +95,8 @@ class MB100(object):
 
         # Do the publishing of the mission boundary path and keeoput
         # zone
-
         self.refpath = rospy.Publisher('refpath', Path, queue_size=3, latch=True)
         self.keepoutpath = rospy.Publisher('keepout', Path, queue_size=3, latch=True)
-
 
         # Define the path poses for the map to display in rviz
         self.refmsg = Path()
@@ -116,13 +118,18 @@ class MB100(object):
         self.refpath.publish(self.refmsg)
         self.keepoutpath.publish(self.keepoutmsg)
 
+        modecount = 0
+
         while not rospy.is_shutdown():
             # Grabbing the data
             try:
-                data = selfmb100rcv.readline()
+                data = self.mb100rcv.readline()
                 if data != "":
                     data = data.rstrip()
                     parsed = self.parse(data)
+                    
+                    self.pubmsg = Float64MultiArray()
+                    self.x_hat = np.zeros(17)
 
                     # Positoin in NED
                     pos_ecef = geo.wgs842ecef(parsed['lat'], parsed['lon'], 0.0)
@@ -151,8 +158,10 @@ class MB100(object):
                     p = Point(self.x_hat[0],self.x_hat[1],0.0)
                     self.kftrackmsg.poses[1] = PoseStamped(Header(), Pose(p, q))
                     self.kftrackpath.publish(self.kftrackmsg)
-
-                    print("parsed")
+                    if modecount >= 20:
+                        modecount = 0
+                        print("Position mode from MB100: " + str(parsed['posmode']))
+                    modecount = modecount + 1
             except Exception:
                 pass
 
