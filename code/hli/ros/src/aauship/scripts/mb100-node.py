@@ -76,7 +76,7 @@ class MB100(object):
             mb100['tdop'] = float(line[17])
             mb100['crc'] = line[18]
             return mb100
-        elif line[0] == "magicstringhere":  # TODO the string the gps sends when booting
+        elif line[0] == "RomBOOT":  # TODO the string the gps sends when booting
             rospy.logwarn("It seems like the MB100 has restarted. Is the powersupply ok?")
             print("magi")
             return None
