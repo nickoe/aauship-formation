@@ -47,6 +47,8 @@ class MB100(object):
         q = Quaternion(0,0,0,1)
         self.kftrackmsg.poses.append(PoseStamped(h, Pose(p, q)))
         self.kftrackmsg.poses.append(PoseStamped(h, Pose(p, q)))
+        
+        self.x_hat = np.zeros(17)
 
 
     def parse(self,line):
@@ -140,7 +142,11 @@ class MB100(object):
                     parsed = self.parse(data)
                     
                     self.pubmsg = Float64MultiArray()
-                    self.x_hat = np.zeros(17)
+                    
+                    # Headpoint of trail track
+                    p = Point(self.x_hat[0],self.x_hat[1],0.0)
+                    q = Quaternion(0,0,0,1)
+                    self.kftrackmsg.poses[0] = PoseStamped(Header(), Pose(p, q))
 
                     # Positoin in NED
                     pos_ecef = geo.wgs842ecef(parsed['lat'], parsed['lon'], 0.0)
@@ -154,11 +160,6 @@ class MB100(object):
                     #TODO When implementing for multi control, e.g. the duckling, then
                     #     it is probably of interest to calculate the u and v speeds
                     #     also.
-
-                    # Headpoint of trail track
-                    p = Point(self.x_hat[0],self.x_hat[1],0.0)
-                    q = Quaternion(0,0,0,1)
-                    self.kftrackmsg.poses[0] = PoseStamped(Header(), Pose(p, q))
 
                     # Fill in the message to be published in ROS
                     for a in self.x_hat:
