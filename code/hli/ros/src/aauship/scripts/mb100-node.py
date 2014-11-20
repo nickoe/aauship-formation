@@ -28,7 +28,7 @@ class MB100(object):
         # Open the file descriptors
         BUFSIZE = 1024
         self.mb100log = open("logs/mb100.log",'wb',BUFSIZE)
-        self.mb100rcv = serial.Serial("/dev/ttyUSB0",115200,timeout=0.04)
+        self.mb100rcv = serial.Serial("/dev/ttyUSB1",115200,timeout=0.04)
 
         # Static rotation matrix
         self.klingen = sio.loadmat('klingenberg.mat')
@@ -52,6 +52,19 @@ class MB100(object):
     def parse(self,line):
         self.mb100log.write(line + ',' + str(time.time()) + "\r\n")
         line = line.split(',')
+
+        # Make sure that there is no empty strings, which will make
+        # the float() and int() conversions fail, which in turn will
+        # make the parsing except silently, because of the try
+        # catching in the self.run().
+        for k in range(len(line)):
+            if line[k] == '':
+                line[k] = 0
+                rospy.logwarn("Empty element sin the $PASHR,POS message, do not sail.")
+        # Note that is might not be the best idea to set it to zero
+        # only. We might need to handle this downstream, such that we
+        # don't change them maybe.
+
         if line[0] == "$PASHR" and line[1] == "POS":
             mb100 = {}
             mb100['posmode'] = int(line[2])
@@ -78,10 +91,8 @@ class MB100(object):
             return mb100
         elif line[0] == "RomBOOT":  # TODO the string the gps sends when booting
             rospy.logwarn("It seems like the MB100 has restarted. Is the powersupply ok?")
-            print("magi")
             return None
         else:
-            print("nooo")
             return None
 
     def run(self):
