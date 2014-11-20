@@ -28,7 +28,7 @@ class MB100(object):
         # Open the file descriptors
         BUFSIZE = 1024
         self.mb100log = open("logs/mb100.log",'wb',BUFSIZE)
-        self.mb100rcv = serial.Serial("/dev/ttyUSB1",115200,timeout=0.04)
+        self.mb100rcv = serial.Serial("/dev/mb100rover",115200,timeout=0.04)
 
         # Static rotation matrix
         self.klingen = sio.loadmat('klingenberg.mat')
