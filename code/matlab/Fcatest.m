@@ -78,7 +78,7 @@ Kij = 0.2;
 % Fij_12 = Kij*(d0(i,j));
 % 
 % % Frastødning mellem skibe
-% Kca = 200;
+Kca = 200;
 % for k=1:N
 %     if d12(k) < rsav
 %         Fca(k) = ( (Kca*rsav)/abs(d12(k))-Kca ) * d12(k)/abs(d12(k));
@@ -90,7 +90,7 @@ Kij = 0.2;
 % 
 % 
 % % Frastødning mellem skibe og objekter
-% Koa = 200;
+Koa = 200;
 % 
 % % Placering af objekt
 % po1 = [4,4];
@@ -123,17 +123,38 @@ for m = 1:length(X);
         Fvl = Kvl*(p-vl-(p0-vl));
         Fvlmagn(m,n) = norm(Fvl);
         
-        pj = [-2 , -2];
+        pj = [1 , 1];
         dist = p - pj;
         d0ij = p0 - pj;
         Fij = Kij*(dist-d0ij);
         Fijmagn(m,n) = norm(Fij);
+              
+        if (dist) < rsav
+            Fca = ((Kca*rsav)/norm(dist)-Kca)*(dist/norm(dist));
+        else
+            Fca = 0;
+        end
+        
+        po1 = [-3,-3];
+        dist = p - po1;
+        if (dist) < rsav
+            Foa = (Koa/norm(dist)-Koa/rsav)*(dist/norm(dist));
+        else
+            Foa = 0;
+        end
                 
-        Ftot = Fvl+Fij;
+        Ftot = Fvl+Fij+Fca+Foa;
         Ftotmagn(m,n) = norm(Ftot);
-
     end
 end
+
+% for k=1:N
+%     if d(k) < rsav
+%         F(k) = ( (Koa/abs(d(k)))-Koa/rsav ) * d(k)/abs(d(k));
+%     else
+%         F(k) = 0;
+%     end
+% end
 
 figure(1)
 clf;
