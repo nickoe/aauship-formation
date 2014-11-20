@@ -74,7 +74,7 @@ Fvl = Kvl*(de);
 % d12_e = d12 - d12_0;
 % 
 % % Tiltrækning mellem skib i og j, minimerer imod dij0
-% Kij = 0.2;
+Kij = 0.2;
 % Fij_12 = Kij*(d0(i,j));
 % 
 % % Frastødning mellem skibe
@@ -121,39 +121,42 @@ for m = 1:length(X);
     for n = 1:length(Y);
         p = [X(1,m),Y(n,1)];
         Fvl = Kvl*(p-vl-(p0-vl));
-            for j = 1:N;
-                pj = [X(1,m),Y(n,1)]
-                p
-                dij = p - pj;
-                de(:) = dij;
-                %d0ij = p0 - pj0;
-                %Fij = Kij*(dij-d0ij);
-            end
+        Fvlmagn(m,n) = norm(Fvl);
         
-            
-        
-        Ftot(m,n,1:2) = Fvl;
-        Ftotmagn(m,n) = norm(Fvl);
+        pj = [-2 , -2];
+        dist = p - pj;
+        d0ij = p0 - pj;
+        Fij = Kij*(dist-d0ij);
+        Fijmagn(m,n) = norm(Fij);
+                
+        Ftot = Fvl+Fij;
+        Ftotmagn(m,n) = norm(Ftot);
+
     end
 end
 
 figure(1)
-% quiver(X,Y,Ftot(:,:,1),Ftot(:,:,2));
 clf;
 hold on
 axis equal
-[xvel,yvel] = gradient(-Ftotmagn,step,step);
-contour(X, Y, Ftotmagn)
-quiver(X(1,:),Y(:,1),xvel,yvel)
+[xvel,yvel] = gradient(-Fvlmagn,step,step);
+contour(X, Y, Fvlmagn);
+quiver(X(1,:),Y(:,1),xvel,yvel);
 hold off
 figure(2)
 clf;
 hold on
-surf(X, Y, Ftotmagn);
-contour(X, Y, Ftotmagn)
+surf(X, Y, Fvlmagn);
+contour(X, Y, Fvlmagn);
 hold off
-
-
+figure(3)
+hold on
+surf(X, Y, Fijmagn);
+hold off
+figure(4)
+hold on
+surf(X,Y,Ftotmagn);
+hold off
 
 
 
