@@ -28,7 +28,7 @@ pos = [[data{:,1}]';[data{:,3}]'];
 majorangle = floor(pos/100);
 minorangle =  (pos - majorangle*100)/60;
 angle = majorangle + minorangle;
-% fprintf('N%.9f E%.9f\n',[abs(angle(1,:)),abs(angle(1,:))])
+% fprintf('N%.9f E%.9f\n',[abs(angle(1,:))',abs(angle(2,:))']')
 
 output_args = [angle(1,:);angle(2,:)];
 end
