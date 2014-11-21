@@ -13,14 +13,16 @@ linewidth = 1;
 % logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 % testname = 'magnetometertest-lab2';
 logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
-testname = 'nysoetur';
+testname = 'mb100walkingklingen';
+% testname = 'nysoetur';
 % testname = 'statictest-lab';
 
 %% Data files
 gps1file = fopen([logpath,testname,'/gps1.log']);
+mb100file = fopen([logpath,testname,'/mb100.log']);
 imudata = load([logpath,testname,'/imu.log']);
 echofile = fopen([logpath,testname,'/echo.log']);
-starttime = imudata(1,13); % Earliest timestamp
+% % % starttime = imudata(1,13); % Earliest timestamp
 % annotatefile = fopen([logpath,testname,'/annotate1399289431.26.log'],'r');
 % ctlfile = fopen([logpath,testname,'/ctl.log'],'r');
 
@@ -29,23 +31,61 @@ starttime = imudata(1,13); % Earliest timestamp
 
 %% Reading GPS data
 % line = textscan(gps1file,'%f,%c,%f,%c,%f,%c,%f,%f'); %For old logs
-%time = line{1};
-%nmealat = line{3};
-%latsign = line{4};
-%nmealon = line{5};
-%lonsign = line{6};
-%nmeaspeed = line{7};
-%walltime = line{8};
-line = textscan(gps1file,'%6c,%f,%c,%f,%c,%f,%c,%f,%f,%f,,,%4c,%f'); %For new log
-time = line{2};
-nmealat = line{4};
-latsign = line{5};
-nmealon = line{6};
-lonsign = line{7};
-nmeaspeed = line{8};
-nmea_track_angle = line{9};
-nmeadate = line{10};
-walltime = line{12};
+% time = line{1};
+% nmealat = line{3};
+% latsign = line{4};
+% nmealon = line{5};
+% lonsign = line{6};
+% nmeaspeed = line{7};
+% walltime = line{8};
+
+
+% line = textscan(gps1file,'%6c,%f,%c,%f,%c,%f,%c,%f,%f,%f,,,%4c,%f'); %For new log
+% time = line{2};
+% nmealat = line{4};
+% latsign = line{5};
+% nmealon = line{6};
+% lonsign = line{7};
+% nmeaspeed = line{8};
+% nmea_track_angle = line{9};
+% nmeadate = line{10};
+% walltime = line{12};
+
+% line = textscan(mb100file,'%s %*[^\n]', 'delimiter',',')
+% line = textscan(mb100file,'%10c,%f,%f,%f,%f,%c,%f,%c,%f,,%f,%f,%f,%f,%f,%f,%f,%7c,%f','EmptyValue',-Inf) %For new log
+% line = textscan(mb100file,'%10c,%f,%f,%f,%f,%c,%f,%c,%f,,%f,%f,%f,%f,%f,%f,%f,%7c,%f','TreatAsEmpty',',,,') %For new log
+% line = textscan(mb100file,'%10c,%f,%f,%f,%f,%c,%f,%c,%f%*[^\n]') %For new log
+
+line = textscan(mb100file,'%s', 'Delimiter','\n');
+datlen = length(line{1});
+errorcount = 0;
+for k = 1:datlen
+    b = strsplit(line{1}{k},',','CollapseDelimiters',false);
+    if length(b) ~= 20
+        disp('bad line')
+        disp(k)
+        disp(line{1}{k})
+        errorcount = errorcount+1;
+        
+    else
+        posmode(k-errorcount,1) = str2double(b{3});
+        satcount(k-errorcount,1) = str2double(b{4});
+        nmealat(k-errorcount,1) = str2double(b{6});
+        latsign(k-errorcount,1) = b{7};
+        nmealon(k-errorcount,1) = str2double(b{8});
+        lonsign(k-errorcount,1) = b{9};
+        nmeaalt(k-errorcount,1) = str2double(b{10});
+        nmeaspeed(k-errorcount,1) = str2double(b{13});
+        nmea_track_angle(k-errorcount,1) = str2double(b{12});
+        walltime(k-errorcount,1) = str2double(b{20});
+
+    end
+
+    if mod(k,1000) == 0
+        fprintf('Parsed %d of %d lines of $PASHR\n', k, datlen)
+    end
+end
+
 
 %% Converts the latitude an longitide to decimal coordinates
 [pos] = nmea2decimal({nmealat,latsign,nmealon,lonsign});
@@ -53,6 +93,7 @@ lat = pos(1,:);
 lon = pos(2,:);
 
 figure(1)
+clf
 %plot(lon(1,161),lat(1,161),'*g')
 plot(lon,lat,'.-r')
 plot_google_map('maptype','satellite')
@@ -86,7 +127,6 @@ meanhei = 0;%hei(1);
 R_e2t = [-sin(meanlat)*cos(meanlon) -sin(meanlat)*sin(meanlon) cos(meanlat);...
     -sin(meanlon) cos(meanlon) 0;...
     -cos(meanlat)*cos(meanlon) -cos(meanlat)*sin(meanlon) -sin(meanlat)];
-
 T = zeros(3,N);
 for kk = 1:N
     T(:,kk) = R_e2t*([x(kk);y(kk);z(kk)]-[a;b;c]);
