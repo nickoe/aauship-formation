@@ -45,10 +45,8 @@ ss = load('ssaauship.mat');
 
 if strcmp(intyp, 'input') == 1 
 %     if (length(in) ~= 2),error('tau-vector must have dimension 2!');end
-    disp('herrj')
     tau = (T*K*in); % control input actuator
 elseif strcmp(intyp, 'tau') == 1
-    disp('nick')
     if (length(in) ~= 5),error('tau-vector must have dimension 5!');end
     tau = in; % body frame force
 else

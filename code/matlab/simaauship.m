@@ -74,7 +74,7 @@ serror = zeros(1,N);
 sintegral = zeros(1,N);
 sderivative = zeros(1,N);
 Kp = 2;
-Ki = 0.01;
+Ki = 0.0;
 Kd = 40;
 thrustdiff = zeros(1,N);
 speeddiff = zeros(1,N);
@@ -361,7 +361,9 @@ plot(t,euler(1:es,1),'g',t,euler(1:es,2),'b',t,euler(1:es,3),'r')
 % Plot af thrustdiff til error detection
 figure(8)
 plot(tt,thrustdiff(1:length(tt))')
-
+title('Thrustdiff')
+xlabel('time')
+ylabel('Thrustdiff')
 
 
 
