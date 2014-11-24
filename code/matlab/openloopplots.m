@@ -84,7 +84,7 @@ B = [zeros(5,5)
  
 C = eye(10,10);
 
-ts= 0.05; % sample time
+ts= 0.1; % sample time
 
 sys = ss(A,B,C,0);
 sysd = c2d(sys,ts,'zoh');

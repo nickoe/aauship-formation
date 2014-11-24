@@ -10,9 +10,11 @@ AHRS = MahonyAHRS('SamplePeriod', 1/10, 'Kp', 18 , 'Ki', 8);
 % set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
 
 %% Pre allocation of variables
+ss = load('ssaauship.mat');
 N = 5000;
 es = N;
-ts = 0.05;
+ts = ss.ts;
+clear ss;
 x = zeros(N,17);
 x(1,:) = [-25 -49 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]';
 z = zeros(N,7);
@@ -65,7 +67,7 @@ K(2,2) = 0.26565;
 % start = [100, 1000];
 % stop = [-1000,1000];
 track = load('lawnmoversmall.mat');
-track = [x(1,1:2);track.allwps];
+track = [x(1,1:2);track.track];
 n = 1;
 error = zeros(1,N);
 integral = zeros(1,N);
