@@ -16,6 +16,7 @@ logpath = '/tmp/';
 % testname = 'mb100walkingklingen';
 % testname = 'gosejladsnaesten';
 testname = 'nightseatuning';
+% testname = 'mb100walkingklingen';
 % testname = 'nysoetur';
 % testname = 'statictest-lab';
 

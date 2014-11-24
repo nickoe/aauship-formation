@@ -6,6 +6,17 @@ x_hat_plus = zeros(states);
 P_minus = zeros(states,states);
 x_hat_minus = zeros(states);
 
+
+T =[    0.9946    0.9946
+         0         0
+    0.0052   -0.0052
+    0.0995    0.0995
+   -0.0497    0.0497];
+K = eye(2,2);
+K(1,1) = 0.26565;
+K(2,2) = 0.26565;
+
+
 % Process noise
 % w = [0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.00000001 0.00000001 0.00000001 0.10 0.00000010 0.00000010 0.00000010 0.00000010]';
 % states = [N E x y phi theta psi u v p q r dotu dotv dotphi dottheta dotpsi]
@@ -40,8 +51,15 @@ H(:,:) = h;
 
 PHI(1:2,8:9) = [ts*cos(x(7)) -ts*sin(x(7)); ts*sin(x(7)) ts*cos(x(7))]; % The nonlinear contribution to the system
 
+
+
+% Computed control input
+uu = inv(K)*pinv(T)*u; % u is really tau, uu is the control input vector
+uu = round(uu);
+% tau(k,:) = (T*K*u)';
+
 % Prediction
-x_hat_minus = aaushipsimmodel(x,u,'nop');
+x_hat_minus = aaushipsimmodel(x,uu,'input','nop');
 P_minus = PHI*P_plus*PHI + Q;
 
 % Update

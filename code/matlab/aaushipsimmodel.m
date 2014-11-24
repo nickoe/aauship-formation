@@ -1,4 +1,4 @@
-function [ xs, eta, nu, nudot] = aaushipsimmodel( x, tau, pn, wp )
+function [ xs, eta, nu, nudot] = aaushipsimmodel( x, in, intyp, pn, wp )
 %#codegen
 %AAUSHIP Control Model of AAUSHIHP
 %   This is a simple model of AAUSHIP, supposed to be a simulation model
@@ -14,7 +14,6 @@ function [ xs, eta, nu, nudot] = aaushipsimmodel( x, tau, pn, wp )
 
 % Check of input and state dimensions
 if (length(x)  ~= 17),error('x-vector must have dimension 17!');end
-if (length(tau) ~= 5),error('tau-vector must have dimension 5!');end
 
 % TODO Add control allocation matrix and saturation with printable warnings
 % Thrust allocation 
@@ -32,10 +31,33 @@ if (length(tau) ~= 5),error('tau-vector must have dimension 5!');end
 % K(4,4) = 0.2657/2;
 % uf = [0 0 15 15]'; % Thruster force vector [N]
 % ta = T*K*(uf+[0 0 24.8350/2 24.8350/2]');
+T =[    0.9946    0.9946
+         0         0
+    0.0052   -0.0052
+    0.0995    0.0995
+   -0.0497    0.0497];
+K = eye(2,2);
+K(1,1) = 0.26565;
+K(2,2) = 0.26565;
 
 % Linear simulation step
 ss = load('ssaauship.mat');
+
+if strcmp(intyp, 'input') == 1 
+%     if (length(in) ~= 2),error('tau-vector must have dimension 2!');end
+    disp('herrj')
+    tau = (T*K*in); % control input actuator
+elseif strcmp(intyp, 'tau') == 1
+    disp('nick')
+    if (length(in) ~= 5),error('tau-vector must have dimension 5!');end
+    tau = in; % body frame force
+else
+    disp('youareretard')
+end
+
+% xn=ss.Ad*ones(10,1)+ss.Bd*ones(5,1)
 xn = ss.Ad*x(3:12) + ss.Bd*tau;
+
 
 eta   = zeros(5,1);
 nu    = zeros(5,1);
