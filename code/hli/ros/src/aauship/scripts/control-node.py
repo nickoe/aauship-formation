@@ -70,7 +70,16 @@ class Control(object):
         self.K[1,1] = 0.26565
 
         # Load the lawnmower generated path
-        self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
+        # Original track
+        #self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
+        # Original track, just smaller
+        self.path = sio.loadmat('../../../../../matlab/lawnmoversmall.mat')
+        # Only a line segment in the middle
+        #self.path = sio.loadmat('../../../../../matlab/linesegment.mat')
+        # Just a simple triangle wp
+        #self.path = sio.loadmat('../../../../../matlab/triangletrack.mat')
+        # Just a small line segment in the cornor
+        #self.path = sio.loadmat('../../../../../matlab/verysmalllinesegment.mat')
         self.path['track'] = self.path['track'] - np.array([+3,0])  # offset of the map
         
         # Fill in the path on the rviz path
