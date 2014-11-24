@@ -2,11 +2,11 @@
 %%%%lawn mower generator%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%
+%% Updated smaller track
 clear all
 % Box options
 boxheigth = 45;
-boxwidth = 44;
+boxwidth = 30;
 
 % ll = [0,0];
 lr = [boxwidth,0];
@@ -85,13 +85,46 @@ figure(1)
 plot(allwps(:,1),allwps(:,2),'.-')
 axis equal
 
+% allwps(:,2) = allwps(:,2)+(-57);
+% allwps(:,1) = allwps(:,1)+(-46.5);
 allwps(:,2) = allwps(:,2)+(-57);
-allwps(:,1) = allwps(:,1)+(-46.5);
+allwps(:,1) = allwps(:,1)+(-34);
 
 allwps(1,2) = -49;
-allwps(1,1) = -34;
+allwps(1,1) = -20;
 
 figure(2)
 plot(inner(:,2),inner(:,1),'b', outer(:,2),outer(:,1),'g', allwps(:,2),allwps(:,1),'.-r')
+axis equal
 track = [allwps(:,1) allwps(:,2)];
-% save('2mmargintrack.mat','track')
+save('lawnmoversmall.mat','track')
+
+
+%% Just a simple triangle wp
+clear all;
+load('/afs/ies.auc.dk/group/14gr1034/Private/matlab/gpx2local/klingenberg.mat')
+
+allwps(:,1) = [-30 -13 -15];
+allwps(:,2) = [-35 -30 -50];
+track = [allwps(:,1) allwps(:,2)];
+
+figure(3)
+plot(inner(:,2),inner(:,1),'b', outer(:,2),outer(:,1),'g',allwps(:,2),allwps(:,1),'.-r')
+axis equal
+save('triangletrack.mat','track')
+
+%% Only a small line segment
+clear all;
+load('/afs/ies.auc.dk/group/14gr1034/Private/matlab/gpx2local/klingenberg.mat')
+
+allwps(:,1) = [-28 -15];
+allwps(:,2) = [-45 -30];
+track = [allwps(:,1) allwps(:,2)];
+
+figure(4)
+plot(inner(:,2),inner(:,1),'b', outer(:,2),outer(:,1),'g',allwps(:,2),allwps(:,1),'.-r')
+axis equal
+save('linesegment.mat','track')
+
+
+
