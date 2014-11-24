@@ -64,6 +64,9 @@
 #define BUTTON_CROSS_RIGHT     5
 #define BUTTON_CROSS_DOWN      6
 #define BUTTON_CROSS_LEFT      7
+
+#define MAX_SETPOINT  300
+#define MAX_DIFFPOINT 300
 /**
  * This is the joy tele operation node
  */
@@ -75,6 +78,8 @@ public:
   {
     pub = n.advertise<aauship::LLIinput>("lli_input", 1000);
     sub = n.subscribe("joy", 1000, &JoyTeleOperation::chatterCallback, this);
+		setpoint = 150;
+		diffpoint = 150;
   }
 
   void chatterCallback(const sensor_msgs::Joy::ConstPtr& msg)
@@ -88,7 +93,6 @@ public:
     int16_t thrust_diff = 5;
     int16_t thrust_step = 10;
 
-    int16_t setpoint = 150;
 
     int16_t was_pressed = 0;
 
@@ -100,7 +104,7 @@ public:
       vel_right = vel_right*-1;
     ROS_INFO("[%f, %f]", vel_left, vel_right);
 
-    if ( (vel_left == 150 || vel_right == 150) && started==0 ) {
+    if ( (vel_left == setpoint || vel_right == setpoint) && started==0 ) {
        printf("User is not ready yet");
        return;
     } else {
@@ -144,7 +148,7 @@ public:
           valc = (int16_t)-setpoint;
           if (msg->buttons[i] == 0 && button_state[i] == 1) valc = (int16_t) 0;
           if (msg->buttons[i] == 0 && button_state[i] == 0) break;
-           button_state[i] = 1;
+          button_state[i] = 1;
 
           printf("cross down\n");
           msg2.DevID = 10;
@@ -163,8 +167,10 @@ public:
           break;
 
         case BUTTON_CROSS_LEFT:
-          vel_left = -setpoint;
-          vel_right = setpoint;
+          vel_left =  setpoint-diffpoint;
+          vel_right = setpoint+diffpoint;
+          //vel_left  = -setpoint;
+          //vel_right =  setpoint;
           if (msg->buttons[i] == 0 && button_state[i] == 1) {
             vel_left = 0;
             vel_right = 0;
@@ -186,12 +192,12 @@ public:
           msg2.Time = msg->buttons[BUTTON_CROSS_UP];
           pub.publish(msg2);
 
-          if ((vel_left == 0) || (vel_right == 0)) button_state[i] = 0;
+          if ((vel_left == 0) && (vel_right == 0)) button_state[i] = 0;
           break;
 
         case BUTTON_CROSS_RIGHT:
-          vel_left = setpoint;
-          vel_right = -setpoint;
+          vel_left  = setpoint+diffpoint;
+          vel_right = setpoint-diffpoint;
           if (msg->buttons[i] == 0 && button_state[i] == 1) {
             vel_left = 0;
             vel_right = 0;
@@ -212,8 +218,48 @@ public:
           msg2.Time = msg->buttons[BUTTON_CROSS_DOWN];
           pub.publish(msg2);
 
-          if ((vel_left == 0) || (vel_right == 0)) button_state[i] = 0;
+          if ((vel_left == 0) && (vel_right == 0)) button_state[i] = 0;
           break;
+
+				case PS3_AXIS_BUTTON_ACTION_TRIANGLE:
+					if (msg->buttons[i] == 0) break;
+					printf("Triangle pressed\r\n");
+					setpoint = setpoint + 10;
+					if (setpoint >= MAX_SETPOINT) {
+						setpoint = MAX_SETPOINT;
+					}
+					printf("setpoint %d\r\n", setpoint);
+					break;
+				
+				case PS3_AXIS_BUTTON_ACTION_CROSS:
+					if (msg->buttons[i] == 0) break;
+					printf("Cross pressed\r\n");
+					setpoint = setpoint - 10;
+					if (setpoint <= 0) {
+						setpoint = 0;
+					}
+					printf("setpoint %d\r\n", setpoint);
+					break;
+
+				case PS3_AXIS_BUTTON_ACTION_CIRCLE:
+					if (msg->buttons[i] == 0) break;
+					printf("Circle pressed\r\n");
+					diffpoint = diffpoint + 10;
+					if (diffpoint >= MAX_DIFFPOINT) {
+						diffpoint = MAX_DIFFPOINT;
+					}
+					printf("diffpoint %d\r\n", diffpoint);
+					break;
+
+				case PS3_AXIS_BUTTON_ACTION_SQUARE:
+					if (msg->buttons[i] == 0) break;
+					printf("Square pressed\r\n");
+					diffpoint = diffpoint - 10;
+					if (diffpoint <= 0) {
+						diffpoint = 0;
+					}
+					printf("diffpoint %d\r\n", diffpoint);
+					break;
 
         default:
           if (was_pressed != 1) {
@@ -252,7 +298,8 @@ private:
   ros::Subscriber sub;
   volatile int button_state[20];
   volatile int started;
-
+  int16_t setpoint;
+  int16_t diffpoint;
 }; // End of class JoyTeleOperation
 
 int main(int argc, char **argv)
