@@ -12,8 +12,14 @@ linewidth = 1;
 % testname = 'logs';
 % logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 % testname = 'magnetometertest-lab2';
+<<<<<<< HEAD
 % logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 % testname = 'mb100walkingklingen';
+=======
+logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
+% testname = 'mb100walkingklingen';
+testname = 'gosejladsnaesten';
+>>>>>>> 324f27abe9fd48194fe8daedeb48c1e544834257
 % testname = 'nysoetur';
 % testname = 'statictest-lab';
 logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
@@ -25,7 +31,7 @@ gps1file = fopen([logpath,testname,'/gps1.log']);
 mb100file = fopen([logpath,testname,'/mb100.log']);
 imudata = load([logpath,testname,'/imu.log']);
 echofile = fopen([logpath,testname,'/echo.log']);
-% % % starttime = imudata(1,13); % Earliest timestamp
+starttime = imudata(1,13); % Earliest timestamp
 % annotatefile = fopen([logpath,testname,'/annotate1399289431.26.log'],'r');
 % ctlfile = fopen([logpath,testname,'/ctl.log'],'r');
 
@@ -59,17 +65,23 @@ echofile = fopen([logpath,testname,'/echo.log']);
 % line = textscan(mb100file,'%10c,%f,%f,%f,%f,%c,%f,%c,%f,,%f,%f,%f,%f,%f,%f,%f,%7c,%f','TreatAsEmpty',',,,') %For new log
 % line = textscan(mb100file,'%10c,%f,%f,%f,%f,%c,%f,%c,%f%*[^\n]') %For new log
 
+% Examples of $PASHR,POS messages, first one is initial with no fox, second
+% is missing altitude info and sugh, the last one is a good message.
+% $PASHR,POS,,0,,,,,,,,,,,,,,,Hp23*1D,1416742042.04
+% $PASHR,POS,0,6,122516.50,5700.8886914,N,00959.0944350,E,046.185,,,,,3.5,2.4,2.6,2.2,Hp23*16,1416745828.21
+% $PASHR,POS,0,6,122516.55,5700.8896215,N,00959.0970895,E,046.847,,097.0,003.159,-000.194,3.5,2.4,2.6,2.2,Hp23*15,1416745828.27
+
 line = textscan(mb100file,'%s', 'Delimiter','\n');
 datlen = length(line{1});
 errorcount = 0;
+
 for k = 1:datlen
     b = strsplit(line{1}{k},',','CollapseDelimiters',false);
-    if length(b) ~= 20
+    if ( length(b) ~= 20 || isempty(b{7}) )
         disp('bad line')
         disp(k)
         disp(line{1}{k})
-        errorcount = errorcount+1;
-        
+        errorcount = errorcount+1;        
     else
         posmode(k-errorcount,1) = str2double(b{3});
         satcount(k-errorcount,1) = str2double(b{4});
@@ -81,7 +93,6 @@ for k = 1:datlen
         nmeaspeed(k-errorcount,1) = str2double(b{13});
         nmea_track_angle(k-errorcount,1) = str2double(b{12});
         walltime(k-errorcount,1) = str2double(b{20});
-
     end
 
     if mod(k,1000) == 0
