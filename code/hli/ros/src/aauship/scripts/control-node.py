@@ -36,9 +36,14 @@ class Control(object):
         self.thrustdiff.append(0)
         
         # PID tuning parameters for the simple heading controller
+        '''
         self.Kp = 2.0
         self.Ki = 0.0
         self.Kd = 70.0
+        '''
+        self.Kp = 2.0
+        self.Ki = 0.0
+        self.Kd = 40.0
 
         # Create path object in rviz
         self.pubpath = rospy.Publisher('path', Path, queue_size=3, latch=True)
@@ -119,15 +124,16 @@ class Control(object):
         self.thrustdiff.append(self.Kp*self.error[self.k] + self.Ki*self.integral[self.k] + self.Kd*self.derivative[self.k])
 
         # Desired control forces
-        self.tau = np.array([8,0,0,0,self.thrustdiff[self.k]])
+        self.tau = np.array([80,0,0,0,self.thrustdiff[self.k]])
 
         # Calculation of input vector from desired control forces    
         pinvT = np.asmatrix( linalg.pinv(self.T) )
         self.u = linalg.inv(self.K).dot( linalg.pinv(self.T).dot(self.tau) )
     
         # Saturation in inputs (shoudl probably be in the simulaiton model instead)
+        
+        threshold = 45
         '''
-        threshold = 40
         if -threshold < self.u[0]:
             self.u[0] = self.u[0] -40
         if threshold < self.u[0]:
@@ -137,16 +143,17 @@ class Control(object):
         if threshold < self.u[1]:
             self.u[1] = self.u[1] +40
         '''
-        if self.u[0] > 0:
-            self.u[0] = self.u[0] + 40
-        if self.u[0] < 0:
-            self.u[0] = self.u[0] - 40
-        if self.u[1] > 0:
-            self.u[1] = self.u[1] + 40
-        if self.u[1] < 0:
-            self.u[1] = self.u[1] - 40
         
-        maksimal = 120
+        if self.u[0] > 0:
+            self.u[0] = self.u[0] + threshold
+        if self.u[0] < 0:
+            self.u[0] = self.u[0] - threshold
+        if self.u[1] > 0:
+            self.u[1] = self.u[1] + threshold
+        if self.u[1] < 0:
+            self.u[1] = self.u[1] - threshold
+        
+        maksimal = 200
         if self.u[0] > maksimal:
             self.u[0] = maksimal
         elif self.u[0] < -maksimal:
@@ -156,7 +163,7 @@ class Control(object):
         elif self.u[1] < -maksimal:
             self.u[1] = -maksimal
 
-        print((self.u[0], self.u[1]))
+        print((int(self.u[0]), int(self.u[1])))
 
         # (-100% = -500 to +100% = 500)
         # right thruster, devid 10, msgid 3
