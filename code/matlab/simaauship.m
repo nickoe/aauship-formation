@@ -73,9 +73,9 @@ derivative = zeros(1,N);
 serror = zeros(1,N);
 sintegral = zeros(1,N);
 sderivative = zeros(1,N);
-Kp = 10;
-Ki = 0.1;
-Kd = 50;
+Kp = 50;
+Ki = 0;
+Kd = 190;
 thrustdiff = zeros(1,N);
 speeddiff = zeros(1,N);
 heading = zeros(N,1);
@@ -110,7 +110,8 @@ for k = 1:N
 
         
     % Simulation
-    x(k+1,:) = aaushipsimmodel(x(k,:)', tau(k,:)','wip',wp);
+    x(k+1,:) = aaushipsimmodel(x(k,:)', u,'input','wip',wp);
+%     aaushipsimmodel(zeros(17,1),ones(2,1),'input','wip',1)
     
 % % 	For test of acceleration - Right now seems weird
 % %     if x(k,8) >= 2.75
@@ -178,6 +179,7 @@ for k = 1:N
         sderivative(k) = serror(k) - serror(k-1);
     end
     speeddiff(k+1) = 20*serror(k) + 50*sintegral(k) + 10*sderivative(k);
+    speeddiff(k+1) = 8;
     
     % PID for heading
     error(k) = rad2pipi(headingdesired(k)  - heading(k));
@@ -356,6 +358,9 @@ figure(7)
 euler = quatern2euler(quaternConj(quaternion)) * (180/pi);	% use conjugate for sensor frame relative to Earth and convert to degrees.
 plot(t,euler(1:es,1),'g',t,euler(1:es,2),'b',t,euler(1:es,3),'r')
 
+% Plot af thrustdiff til error detection
+figure(8)
+plot(tt,thrustdiff(1:length(tt))')
 
 
 

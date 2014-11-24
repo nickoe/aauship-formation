@@ -12,12 +12,17 @@ linewidth = 1;
 % testname = 'logs';
 % logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 % testname = 'magnetometertest-lab2';
-logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
-testname = 'nysoetur';
+logpath = '/tmp/';
+% testname = 'mb100walkingklingen';
+% testname = 'gosejladsnaesten';
+testname = 'nightseatuning';
+% testname = 'mb100walkingklingen';
+% testname = 'nysoetur';
 % testname = 'statictest-lab';
 
 %% Data files
 gps1file = fopen([logpath,testname,'/gps1.log']);
+mb100file = fopen([logpath,testname,'/mb100.log']);
 imudata = load([logpath,testname,'/imu.log']);
 echofile = fopen([logpath,testname,'/echo.log']);
 starttime = imudata(1,13); % Earliest timestamp
@@ -28,37 +33,81 @@ starttime = imudata(1,13); % Earliest timestamp
 % ctl = textscan(ctlfile, '%f%f%f', 'Delimiter', ',');
 
 %% Reading GPS data
+% This can parse the very old logs
 % line = textscan(gps1file,'%f,%c,%f,%c,%f,%c,%f,%f'); %For old logs
-%time = line{1};
-%nmealat = line{3};
-%latsign = line{4};
-%nmealon = line{5};
-%lonsign = line{6};
-%nmeaspeed = line{7};
-%walltime = line{8};
-line = textscan(gps1file,'%6c,%f,%c,%f,%c,%f,%c,%f,%f,%f,,,%4c,%f'); %For new log
-time = line{2};
-nmealat = line{4};
-latsign = line{5};
-nmealon = line{6};
-lonsign = line{7};
-nmeaspeed = line{8};
-nmea_track_angle = line{9};
-nmeadate = line{10};
-walltime = line{12};
+% time = line{1};
+% nmealat = line{3};
+% latsign = line{4};
+% nmealon = line{5};
+% lonsign = line{6};
+% nmeaspeed = line{7};
+% walltime = line{8};
+
+% This can parse the current logs, which uses the normal NMEA sentences
+% line = textscan(gps1file,'%6c,%f,%c,%f,%c,%f,%c,%f,%f,%f,,,%4c,%f'); %For new log
+% time = line{2};
+% nmealat = line{4};
+% latsign = line{5};
+% nmealon = line{6};
+% lonsign = line{7};
+% nmeaspeed = line{8};
+% nmea_track_angle = line{9};
+% nmeadate = line{10};
+% walltime = line{12};
+
+% Below is the parsing for the MB100 log
+% Examples of $PASHR,POS messages, first one is initial with no fox, second
+% is missing altitude info and sugh, the last one is a good message.
+% $PASHR,POS,,0,,,,,,,,,,,,,,,Hp23*1D,1416742042.04
+% $PASHR,POS,0,6,122516.50,5700.8886914,N,00959.0944350,E,046.185,,,,,3.5,2.4,2.6,2.2,Hp23*16,1416745828.21
+% $PASHR,POS,0,6,122516.55,5700.8896215,N,00959.0970895,E,046.847,,097.0,003.159,-000.194,3.5,2.4,2.6,2.2,Hp23*15,1416745828.27
+
+fprintf('Parsing GPS log file...\n')
+line = textscan(mb100file,'%s', 'Delimiter','\n');
+datlen = length(line{1});
+errorcount = 0;
+
+for k = 1:datlen
+    b = strsplit(line{1}{k},',','CollapseDelimiters',false);
+    if ( length(b) ~= 20 || isempty(b{7}) )
+        fprintf('Bad line found, line was: %d\n', k)
+        % disp(line{1}{k})
+        errorcount = errorcount+1;        
+    else
+        posmode(k-errorcount,1) = str2double(b{3});
+        satcount(k-errorcount,1) = str2double(b{4});
+        nmealat(k-errorcount,1) = str2double(b{6});
+        latsign(k-errorcount,1) = b{7};
+        nmealon(k-errorcount,1) = str2double(b{8});
+        lonsign(k-errorcount,1) = b{9};
+        nmeaalt(k-errorcount,1) = str2double(b{10});
+        nmeaspeed(k-errorcount,1) = str2double(b{13});
+        nmea_track_angle(k-errorcount,1) = str2double(b{12});
+        walltime(k-errorcount,1) = str2double(b{20});
+    end
+
+    if mod(k,1000) == 0
+        fprintf('Parsed %d of %d lines of $PASHR\n', k, datlen)
+    end
+end
+fprintf('There was %d bad lines.\n', errorcount)
+
 
 %% Converts the latitude an longitide to decimal coordinates
+fprintf('Converting NMEA latitudes and longitudes...\n')
 [pos] = nmea2decimal({nmealat,latsign,nmealon,lonsign});
 lat = pos(1,:);
 lon = pos(2,:);
 
 figure(1)
+clf
 %plot(lon(1,161),lat(1,161),'*g')
 plot(lon,lat,'.-r')
 plot_google_map('maptype','satellite')
 title('WGS84')
 
 %% Tangent plance coordinates xyz (not verified)
+fprintf('Calculating NED coordinates...\n')
 latrad = lat*pi/180;
 lonrad = lon*pi/180;
 % hei = gpsdata(:,3);
@@ -76,9 +125,8 @@ end
 %index = 4;
 %meanlat = latrad(1);
 %meanlon = lonrad(1);
- meanlat = 57.015179789287792*pi/180
-
- meanlon = 9.985062449450744*pi/180;
+meanlat = 57.015179789287792*pi/180;
+meanlon = 9.985062449450744*pi/180;
 meanhei = 0;%hei(1);
 % [a b c]=wgs842ecef(meanlat,meanlon,meanhei);
 [a b c]=geodetic2ecef(meanlat,meanlon,meanhei,referenceEllipsoid('wgs84'));
@@ -86,7 +134,6 @@ meanhei = 0;%hei(1);
 R_e2t = [-sin(meanlat)*cos(meanlon) -sin(meanlat)*sin(meanlon) cos(meanlat);...
     -sin(meanlon) cos(meanlon) 0;...
     -cos(meanlat)*cos(meanlon) -cos(meanlat)*sin(meanlon) -sin(meanlat)];
-
 T = zeros(3,N);
 for kk = 1:N
     T(:,kk) = R_e2t*([x(kk);y(kk);z(kk)]-[a;b;c]);
@@ -187,7 +234,6 @@ heading = atan2(-magn(:,2),magn(:,1))*180/pi;
 % % subplot(2,1,1)
 % plot(imutime,Azimuth)
 %%
-figure(50)
 % bias = [0.2582 0.1225 -0.6860];
 % bias = [0 0 0];
 %bias = [0.28 0.15 -0.18]; % magnetometertest-lab6, on office chair
@@ -196,19 +242,15 @@ bias =  [0.29, 0.15, -0.15]; % bias on nysoetest
 % bias = [(max(magn(:,1))-min(magn(:,1)))/2+min(magn(:,1)),...
 %         (max(magn(:,2))-min(magn(:,2)))/2+min(magn(:,2)),...
 %         (max(magn(:,3))-min(magn(:,3)))/2+min(magn(:,3))]
-plot3(magn(:,1)-bias(1),magn(:,2)-bias(2),magn(:,3)-bias(3))
-xlabel('x');ylabel('y');zlabel('z');
-axis equal
-grid on
-% hold on
-% plot3(bias(1), bias(2), bias(3),'r*')
-% hold off
+% figure(50)
+% plot3(magn(:,1)-bias(1),magn(:,2)-bias(2),magn(:,3)-bias(3))
+% xlabel('x');ylabel('y');zlabel('z');
+% axis equal
+% grid on
 
-%
-xcb = 0;
-ycb = 0;
-zcb = 0;
-r = 0.5;
+% The equation of the circle, used for bound of ball to determine the
+% magnetometer bias.
+xcb = 0; ycb = 0; zcb = 0; r = 0.5;
 xc = xcb-r:0.01:xcb+r;
 yc = ycb - real(sqrt((r^2 - xc.^2 + 2 * xcb .* xc - xcb.^2)));
 
@@ -219,20 +261,21 @@ xlabel('x')
 ylabel('y')
 axis equal
 grid on
+title('Bias verification, xy-plane')
 subplot(312)
 plot(magn(:,1)-bias(1),magn(:,3)-bias(3),xc,yc,xc,-yc+2*ycb,xcb,ycb,'r*')
 xlabel('x')
 ylabel('z')
 axis equal
 grid on
+title('Bias verification, xz-plane')
 subplot(313)
 plot(magn(:,2)-bias(2),magn(:,3)-bias(3),xc,yc,xc,-yc+2*ycb,xcb,ycb,'r*')
 xlabel('y')
 ylabel('z')
 axis equal
 grid on
-
-
+title('Bias verification, yz-plane')
 
 %% MEMSENS stuff
 magnbias = [magn(:,1)-bias(1) magn(:,2)-bias(2) magn(:,3)-bias(3)];
@@ -253,6 +296,7 @@ beh = calc_beh_main('testfile.mat',false,true,true,false);
 % hold off
 
 %% Echosounder data
+fprintf('Parsing echosounder data...\n')
 echo.depth.value=NaN;
 echo.depth.timestamp=NaN;
 echo.temperature.value=NaN;

@@ -113,7 +113,7 @@ Koa = 200;
 %% 3D plot with force magnitude
 
 step = 0.5;
-[X,Y] = meshgrid(-10:step:10,-10:step:10);
+[X,Y] = meshgrid(-20:step:20,-20:step:20);
 Ftot = zeros(length(X), length(Y),2);
 
 
@@ -123,12 +123,12 @@ for m = 1:length(X);
         Fvl = Kvl*(p-vl-(p0-vl));
         Fvlmagn(m,n) = norm(Fvl);
         
-        pj = [1 , 1];
+        pj = [4 , 4];
         dist = p - pj;
         d0ij = p0 - pj;
         Fij = Kij*(dist-d0ij);
         Fijmagn(m,n) = norm(Fij);
-              
+        
         if (dist) < rsav
             Fca = ((Kca*rsav)/norm(dist)-Kca)*(dist/norm(dist));
         else
@@ -142,7 +142,7 @@ for m = 1:length(X);
         else
             Foa = 0;
         end
-                
+        
         Ftot = Fvl+Fij+Fca+Foa;
         Ftotmagn(m,n) = norm(Ftot);
     end
@@ -174,10 +174,15 @@ figure(3)
 hold on
 surf(X, Y, Fijmagn);
 hold off
-figure(4)
-hold on
+figure(5)
+Fcamagn(m,n) = norm(Fca);
+surf(X,Y,Fcamagn)
+figure(6)
+Foamagn(m,n) = norm(Foa);
+surf(X,Y,Foamagn)
+figure(7)
 surf(X,Y,Ftotmagn);
-hold off
+
 
 
 
