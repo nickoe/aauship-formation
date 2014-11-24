@@ -40,7 +40,7 @@ class LLI(object):
 
         BUFSIZE = 1024
         echolog = open("logs/echo.log",'w',BUFSIZE)
-        gps2log = open("logs/gps2.log",'wb',BUFSIZE)
+        #gps2log = open("logs/gps2.log",'wb',BUFSIZE)
 
         time.sleep(5)
         self.packet.start()
@@ -63,6 +63,7 @@ class LLI(object):
 
 
             # Grabbing the GPS2 data (tempory implementation)
+            '''
             try:
                 gps2 = gps2rcv.readline()
                 if gps2 != "":
@@ -70,6 +71,7 @@ class LLI(object):
                     gps2log.write(gps2 + ',' +str(time.time()) + "\r\n")
             except Exception:
                 pass
+            '''
 
             # Grabbing the echosounder data (tempory implementation)
             try:
@@ -85,7 +87,7 @@ class LLI(object):
             r.sleep()
 
         echolog.close()
-        gps2log.close()
+        #gps2log.close()
         self.ctllog.close()
         self.packet.close()
         self.packet.join()
