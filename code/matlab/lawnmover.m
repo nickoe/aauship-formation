@@ -79,7 +79,7 @@ elseif mod(n,2)==0 %lige
     n = n+1
 end
 end
-save('track.mat','allwps')
+% save('track.mat','track')
 
 figure(1)
 plot(allwps(:,1),allwps(:,2),'.-')
@@ -97,7 +97,7 @@ figure(2)
 plot(inner(:,2),inner(:,1),'b', outer(:,2),outer(:,1),'g', allwps(:,2),allwps(:,1),'.-r')
 axis equal
 track = [allwps(:,1) allwps(:,2)];
-save('lawnmoversmall.mat','allwps')
+save('lawnmoversmall.mat','track')
 
 
 %% Just a simple triangle wp
@@ -110,7 +110,9 @@ allwps(:,2) = [-35 -30 -50];
 figure(3)
 plot(inner(:,2),inner(:,1),'b', outer(:,2),outer(:,1),'g',allwps(:,2),allwps(:,1),'.-r')
 axis equal
-save('triangletrack.mat','allwps')
+
+track = [allwps(:,1) allwps(:,2)];
+save('triangletrack.mat','track')
 
 %% Only a small line segment
 clear all;
@@ -122,7 +124,9 @@ allwps(:,2) = [-40 -30];
 figure(4)
 plot(inner(:,2),inner(:,1),'b', outer(:,2),outer(:,1),'g',allwps(:,2),allwps(:,1),'.-r')
 axis equal
-save('linesegment.mat','allwps')
+
+track = [allwps(:,1) allwps(:,2)];
+save('linesegment.mat','track')
 
 %% Very small line segment
 clear all;
@@ -134,7 +138,9 @@ allwps(:,2) = [-20 -19];
 figure(5)
 plot(inner(:,2),inner(:,1),'b', outer(:,2),outer(:,1),'g',allwps(:,2),allwps(:,1),'.-r')
 axis equal
-save('verysmalllinesegment.mat','allwps')
+
+track = [allwps(:,1) allwps(:,2)];
+save('verysmalllinesegment.mat','track')
 
 
 
