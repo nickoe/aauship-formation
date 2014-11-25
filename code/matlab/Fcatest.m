@@ -1,42 +1,5 @@
 clear all; 
 
-% %% Fca
-% rsav = 3;
-% Kca = 30;
-% d = 0.01:0.1:10;
-% N = length(d);
-% 
-% % exmple pf eg. (4) from helicopter potential field paper
-% for k=1:N
-%     if d(k) < rsav
-%         F(k) = ( (Kca*rsav)/abs(d(k))-Kca ) * d(k)/abs(d(k));
-%     else
-%         F(k) = 0;
-%     end
-% end
-% figure(1)
-% plot(d,abs(F))
-% xlabel('d')
-% ylabel('|F|')
-% 
-% %% Foa
-% rsav = 3;
-% Koa = 30;
-% d = 0.01:0.1:10;
-% N = length(d);
-% 
-% for k=1:N
-%     if d(k) < rsav
-%         F(k) = ( (Koa/abs(d(k)))-Koa/rsav ) * d(k)/abs(d(k));
-%     else
-%         F(k) = 0;
-%     end
-% end
-% figure(2)
-% plot(d,abs(F))
-% xlabel('d')
-% ylabel('|F|')
-
 %% Formation generation
 % Eksempel med to skibe
 
@@ -65,7 +28,7 @@ d0 = vl - p0;
 de = d - d0;
 
 % Kraft mellem skib i og vl
-Kvl = 1;
+Kvl = 20;
 Fvl = Kvl*(de);
 
 % % Dist mellem skibe
@@ -74,7 +37,7 @@ Fvl = Kvl*(de);
 % d12_e = d12 - d12_0;
 % 
 % % Tiltrækning mellem skib i og j, minimerer imod dij0
-Kij = 0.2;
+Kij = 0.1;
 % Fij_12 = Kij*(d0(i,j));
 % 
 % % Frastødning mellem skibe
@@ -86,9 +49,8 @@ Kca = 200;
 %         Fca(k) = 0;
 %     end
 % end
-% 
-% 
-% 
+
+
 % % Frastødning mellem skibe og objekter
 Koa = 200;
 % 
@@ -120,41 +82,35 @@ Ftot = zeros(length(X), length(Y),2);
 for m = 1:length(X);
     for n = 1:length(Y);
         p = [X(1,m),Y(n,1)];
-        Fvl = Kvl*(p-vl-(p0-vl));
+        Fvl = Kvl*(vl-p-(vl-p0));
         Fvlmagn(m,n) = norm(Fvl);
         
-        pj = [4 , 4];
+        pj = [0 , 0];
         dist = p - pj;
         d0ij = p0 - pj;
         Fij = Kij*(dist-d0ij);
         Fijmagn(m,n) = norm(Fij);
         
-        if (dist) < rsav
+        if norm(dist) < rsav
             Fca = ((Kca*rsav)/norm(dist)-Kca)*(dist/norm(dist));
         else
             Fca = 0;
         end
+        Fcamagn(m,n) = norm(Fca);
         
         po1 = [-3,-3];
         dist = p - po1;
-        if (dist) < rsav
+        if norm(dist) < rsav
             Foa = (Koa/norm(dist)-Koa/rsav)*(dist/norm(dist));
         else
             Foa = 0;
         end
+        Foamagn(m,n) = norm(Foa);
         
         Ftot = Fvl+Fij+Fca+Foa;
         Ftotmagn(m,n) = norm(Ftot);
     end
 end
-
-% for k=1:N
-%     if d(k) < rsav
-%         F(k) = ( (Koa/abs(d(k)))-Koa/rsav ) * d(k)/abs(d(k));
-%     else
-%         F(k) = 0;
-%     end
-% end
 
 figure(1)
 clf;
@@ -171,16 +127,18 @@ surf(X, Y, Fvlmagn);
 contour(X, Y, Fvlmagn);
 hold off
 figure(3)
+clf;
 hold on
 surf(X, Y, Fijmagn);
 hold off
-figure(5)
-Fcamagn(m,n) = norm(Fca);
+figure(4)
+clf;
 surf(X,Y,Fcamagn)
-figure(6)
-Foamagn(m,n) = norm(Foa);
+figure(5)
+clf;
 surf(X,Y,Foamagn)
-figure(7)
+figure(6)
+clf;
 surf(X,Y,Ftotmagn);
 
 
