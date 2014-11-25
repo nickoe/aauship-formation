@@ -4,7 +4,8 @@ function [ output_args ] = annotatefill( start, stop, description, min, max )
 %   annotatefill function to overlay the annotations, alternatively, plot
 %   the annotatefills before to make them appear below your graph.
 %
-%   The arguments are annotatefill( start, stop, description, min, max )
+%   The arguments are:
+%     annotatefill( start, stop, description, min, max )
 %
 %   Example usage:
 %     annotatefile = fopen([logpath,testname,'/annotate1416836228.84.log'],'r');
