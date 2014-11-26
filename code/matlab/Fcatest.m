@@ -5,9 +5,9 @@ clear all;
 step = 0.2;
 [X,Y] = meshgrid(-20:step:20,-20:step:20);
 Ftot = zeros(length(X), length(Y),2);
-rsav = 3;
+rsav = 5;
 vl = [10,10];
-p0 = [0,0];
+p0 = [2,2];
 Kvl = 1;
 Kij = 0.1;
 Kca = 20;
@@ -42,10 +42,9 @@ for m = 1:length(X);
         Foamagn(m,n) = norm(Foa);
         
         Fmax = 80;
-        Ftot = Fvl+Fij+Fca+Foa;
-
-        Ftot = min([norm(Ftot),Fmax])*Ftot/norm(Ftot);
-        Ftotmagn(m,n) = norm(Ftot);
+        Ftotmagn(m,n) = Fvlmagn(m,n)+Fijmagn(m,n)+Fcamagn(m,n)+Foamagn(m,n);
+        Ftotmagn(m,n) = min([norm(Ftotmagn(m,n)),Fmax])*Ftotmagn(m,n)/norm(Ftotmagn(m,n));
+        
         if isnan(Ftotmagn(m,n))
             Ftotmagn(m,n)  = Fmax;
         end
@@ -59,34 +58,32 @@ axis equal
 [xvel,yvel] = gradient(-Fvlmagn,step,step);
 contour(X, Y, Fvlmagn);
 quiver(X(1,:),Y(:,1),xvel,yvel);
+title('Contour and quiver plot of Fvl')
 hold off
 figure(2)
 clf;
 hold on
 surf(X, Y, Fvlmagn);
 contour(X, Y, Fvlmagn);
+title('Fvlmagn')
 hold off
 figure(3)
 clf;
 hold on
 surf(X, Y, Fijmagn);
+title('Fijmagn')
 hold off
 figure(4)
 clf;
 surf(X,Y,Fcamagn)
+title('Fcamagn')
 figure(5)
 clf;
 surf(X,Y,Foamagn)
+title('Foamagn')
 figure(6)
 clf;
 surf(X,Y,Ftotmagn);
-
-
-
-
-
-
-
-
+title('Ftotmagn')
 
 
