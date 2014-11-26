@@ -10,12 +10,13 @@ linewidth = 1;
 %% Data files
 % logpath = '~/aauship-formation/code/hli/ros/src/aauship/scripts/';
 % testname = 'logs';
-% logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
+logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 % testname = 'magnetometertest-lab2';
-logpath = '/tmp/';
+% logpath = '/tmp/';
 % testname = 'mb100walkingklingen';
 % testname = 'gosejladsnaesten';
-testname = 'nightseatuning';
+% testname = 'nightseatuning';
+testname = 'jesperdag2';
 % testname = 'mb100walkingklingen';
 % testname = 'nysoetur';
 % testname = 'statictest-lab';
@@ -26,11 +27,13 @@ mb100file = fopen([logpath,testname,'/mb100.log']);
 imudata = load([logpath,testname,'/imu.log']);
 echofile = fopen([logpath,testname,'/echo.log']);
 starttime = imudata(1,13); % Earliest timestamp
-% annotatefile = fopen([logpath,testname,'/annotate1399289431.26.log'],'r');
+annotatefile = fopen([logpath,testname,'/annotate1416836228.84.log'],'r');
+annotate = textscan(annotatefile, '%f%f%s', 'Delimiter', ';');
 % ctlfile = fopen([logpath,testname,'/ctl.log'],'r');
-
-% annotate = textscan(annotatefile, '%f%f%s', 'Delimiter', ';');
 % ctl = textscan(ctlfile, '%f%f%f', 'Delimiter', ',');
+lliinput = load([logpath,testname,'/lli_input.csv']);
+lliinput(:,1) = lliinput(:,1)/10e8; % Rewrite time unit
+% lliinput(1,1), starttime
 
 %% Reading GPS data
 % This can parse the very old logs
@@ -66,7 +69,7 @@ fprintf('Parsing GPS log file...\n')
 line = textscan(mb100file,'%s', 'Delimiter','\n');
 datlen = length(line{1});
 errorcount = 0;
-
+tic
 for k = 1:datlen
     b = strsplit(line{1}{k},',','CollapseDelimiters',false);
     if ( length(b) ~= 20 || isempty(b{7}) )
@@ -90,6 +93,7 @@ for k = 1:datlen
         fprintf('Parsed %d of %d lines of $PASHR\n', k, datlen)
     end
 end
+toc
 fprintf('There was %d bad lines.\n', errorcount)
 
 
@@ -104,7 +108,49 @@ clf
 %plot(lon(1,161),lat(1,161),'*g')
 plot(lon,lat,'.-r')
 plot_google_map('maptype','satellite')
+range = [48000:49000, 58000:58700, 22000:22700];
+plot(lon(range), lat(range),'b.')
+range = [48000:49000, 53000:54200];
+plot(lon(range), lat(range),'g.')
 title('WGS84')
+
+%%
+llirange = [min(find(walltime(48000) < lliinput(:,1))) :...
+            max(find(walltime(48000) < lliinput(:,1)))];
+left = zeros(length(llirange),1);
+right = zeros(length(llirange),1);
+mll = min(llirange)-1;
+i = 0; j = 0; 
+for k = llirange
+    if lliinput(k,3) == 3
+                j = j+1;
+
+        left(k-mll-i) = lliinput(k,4);
+    elseif lliinput(k,3) == 5
+                i = i+1;
+
+        right(k-mll-j) = lliinput(k,4);
+    end
+end
+% TODO, remove loose samples
+
+%%
+left(k-mll-i:length(left)) = [];
+right(k-mll-j:length(right)) = [];
+figure(2)
+clf
+hold on
+plot(left,'b-')
+plot(right,'r-')
+hold off
+
+
+%% This is supposed to plot the track on the google map also, but the
+%  ned2geodetic function deos not seem to work
+% track = load('../triangletrack.mat');
+% [tracklat,tracklon,trackh] = ned2geodetic(track.track(:,1), track.track(:,2),...
+%              zeros(length(track.track),1),...
+%              meanlat*180/pi, meanlon*180/pi, 0, 'wgs84')
 
 %% Tangent plance coordinates xyz (not verified)
 fprintf('Calculating NED coordinates...\n')
@@ -125,8 +171,12 @@ end
 %index = 4;
 %meanlat = latrad(1);
 %meanlon = lonrad(1);
-meanlat = 57.015179789287792*pi/180;
-meanlon = 9.985062449450744*pi/180;
+% meanlat = 57.015179789287792*pi/180;
+% meanlon = 9.985062449450744*pi/180;
+klingen = load('../../hli/ros/src/aauship/scripts/klingenberg.mat');
+meanlat = klingen.rotlat;
+meanlon = klingen.rotlon;
+clear klingen
 meanhei = 0;%hei(1);
 % [a b c]=wgs842ecef(meanlat,meanlon,meanhei);
 [a b c]=geodetic2ecef(meanlat,meanlon,meanhei,referenceEllipsoid('wgs84'));
