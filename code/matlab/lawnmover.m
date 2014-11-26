@@ -142,6 +142,21 @@ axis equal
 track = [allwps(:,1) allwps(:,2)];
 save('verysmalllinesegment.mat','track')
 
+%% Larger line segment
+clear all;
+load('/afs/ies.auc.dk/group/14gr1034/Private/matlab/gpx2local/klingenberg.mat')
+
+allwps(:,1) = [-30 -11];
+allwps(:,2) = [-50 -19];
+
+figure(5)
+plot(inner(:,2),inner(:,1),'b', outer(:,2),outer(:,1),'g',allwps(:,2),allwps(:,1),'.-r')
+axis equal
+
+track = [allwps(:,1) allwps(:,2)];
+save('largelinesegment.mat','track')
+
+
 
 
 

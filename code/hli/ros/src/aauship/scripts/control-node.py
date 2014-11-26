@@ -140,7 +140,7 @@ class Control(object):
         self.thrustdiff.append(self.Kp*self.error[self.k] + self.Ki*self.integral[self.k] + self.Kd*self.derivative[self.k])
 
         # Desired control forces
-        self.tau = np.array([90,0,0,0,self.thrustdiff[self.k]])
+        self.tau = np.array([8,0,0,0,self.thrustdiff[self.k]])
 
         # Calculation of input vector from desired control forces    
         pinvT = np.asmatrix( linalg.pinv(self.T) )

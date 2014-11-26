@@ -38,12 +38,12 @@ forward=figure(1)
 set(gcf,'paperunits','centimeters')
 set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
 set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
-plot(both_step1,both_force1,both_step2,both_force2,left_step,left_force,right_step,right_force,left_step,left_force+right_force);
+plot(both_step1,both_force1,both_step2,both_force2,left_step,left_force,right_step,right_force,left_step,left_force+right_force,both_step1,both_step1*0.1698-18);
 grid on
 xlabel('Motor input')
 ylabel('Force [N]')
 legend('Both thrusters, 1. test','Both thrusters, 2. test','Left thruster only','Right thruster only','Left and right thruster added','Propellor regression','Location','NorthWest')
-%title('Forward thruster tests')
+title('Forward thruster tests')
 % TODO sammenlign nogle regresionskurver, bestem fejl vurder ud derfra hvad
 % der er bedst
 
@@ -62,7 +62,7 @@ grid on
 xlabel('Motor input')
 ylabel('Force [N]')
 legend('Both thrusters','Left thruster only','Right thruster only','Left and right thruster added','Propellor regression','Location','NorthWest')
-%title('Backward thruster tests')
+title('Backward thruster tests')
 
 saveas(forward,'forwardthrust.pdf')
 saveas(backward,'backthrust.pdf')
