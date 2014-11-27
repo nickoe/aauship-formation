@@ -36,15 +36,21 @@ class Control(object):
         self.thrustdiff.append(0)
         
         # PID tuning parameters for the simple heading controller
-        '''
-        self.Kp = 2.0
+        
+        self.Kp = 0.1
         self.Ki = 0.0
-        self.Kd = 70.0
+        self.Kd = 0.0
+        
         '''
-        self.Kp = 2.0
+        self.Kp = 3.0
         self.Ki = 0.0
-        self.Kd = 40.0
-
+        self.Kd = 35.0
+        '''
+        '''
+        self.Kp = 3.0
+        self.Ki = 0.0
+        self.Kd = 60.0
+        '''
         # Create path object in rviz
         self.pubpath = rospy.Publisher('path', Path, queue_size=3, latch=True)
 
@@ -77,7 +83,7 @@ class Control(object):
         # Only a line segment in the middle
         #self.path = sio.loadmat('../../../../../matlab/linesegment.mat')
         # Just a simple triangle wp
-        #self.path = sio.loadmat('../../../../../matlab/triangletrack.mat')
+        self.path = sio.loadmat('../../../../../matlab/triangletrack.mat')
         # Just a small line segment in the cornor
         #self.path = sio.loadmat('../../../../../matlab/verysmalllinesegment.mat')
         self.path['track'] = self.path['track'] - np.array([+3,0])  # offset of the map
@@ -122,7 +128,8 @@ class Control(object):
             if self.n >= len(self.path['track']):
                 #es = k;
                 print('Finished path')
-                self.n = 1
+                exit()
+                #self.n = 1
 
 
         # PID
@@ -162,7 +169,7 @@ class Control(object):
         if self.u[1] < 0:
             self.u[1] = self.u[1] - threshold
         
-        maksimal = 200
+        maksimal = 250
         if self.u[0] > maksimal:
             self.u[0] = maksimal
         elif self.u[0] < -maksimal:
@@ -197,9 +204,9 @@ class Control(object):
         
         #P_c = [now, 0]; # [x y angle]
         P_c = now; # [x y]
-        wp_r = 1.5; # Waypoint Radius
+        wp_r = 2; # Waypoint Radius
         wp_reached = 0; # Waypoint not reached
-        v_i_len = 1.2; # length of intermediate vector
+        v_i_len = 2; # length of intermediate vector
         
         ## Initial calculations
         #track = [wps;wpe];
