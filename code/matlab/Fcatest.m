@@ -2,13 +2,13 @@ clear all;
 
 %% 3D plot with force magnitude
 
-step = 0.2;
+step = 0.1;
 [X,Y] = meshgrid(-20:step:20,-20:step:20);
 Ftot = zeros(length(X), length(Y),2);
 rsav = 5;
 vl = [10,10];
 p0 = [2,2];
-Kvl = 1;
+Kvl = 2;
 Kij = 0.1;
 Kca = 20;
 Koa = 20;
@@ -41,7 +41,7 @@ for m = 1:length(X);
         end
         Foamagn(m,n) = norm(Foa);
         
-        Fmax = 80;
+        Fmax = 100;
         Ftotmagn(m,n) = Fvlmagn(m,n)+Fijmagn(m,n)+Fcamagn(m,n)+Foamagn(m,n);
         Ftotmagn(m,n) = min([norm(Ftotmagn(m,n)),Fmax])*Ftotmagn(m,n)/norm(Ftotmagn(m,n));
         
@@ -55,9 +55,10 @@ figure(1)
 clf;
 hold on
 axis equal
-[xvel,yvel] = gradient(-Fvlmagn,step,step);
+density = 10;
+[xvel,yvel] = gradient(-Fvlmagn(1:density:m,1:density:n),step,step);
 contour(X, Y, Fvlmagn);
-quiver(X(1,:),Y(:,1),xvel,yvel);
+quiver(X(1:density:m,1:density:n), Y(1:density:m,1:density:n),xvel,yvel);
 title('Contour and quiver plot of Fvl')
 hold off
 figure(2)
@@ -85,5 +86,36 @@ figure(6)
 clf;
 surf(X,Y,Ftotmagn);
 title('Ftotmagn')
+figure(7)
+clf;
+hold on
+density = 4;
+[totxvel,totyvel] = gradient(-Ftotmagn(1:density:m,1:density:n),step,step);
+contour(X, Y, Ftotmagn);
+quiver(X(1:density:m,1:density:n), Y(1:density:m,1:density:n),totxvel,totyvel);
+clear m, clear n
+m(1) = 40;
+n(1) = 40;
+for k = 1:1000;
+    A = Ftotmagn(m(k)-1:m(k)+1,n(k)-1:n(k)+1);
+    [minval,index] = min(A(:));
+    [i,j] = ind2sub(size(A),index);
+    m(k+1) = m(k)+(i-2);
+    n(k+1) = n(k)+(j-2);
+    xny(k) = X(m(k),n(k));
+    yny(k) = Y(m(k),n(k));
+end
+plot(xny,yny)
+plot(X(m(1),n(1)),Y(m(1),n(1)),'r*')
+surf(X,Y,Ftotmagn-100);
+axis equal
+hold off
+
+
+
+
+
+
+
 
 
