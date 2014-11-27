@@ -18,6 +18,8 @@ Kca = 20;
 Koa = 20;
 
 Fijmagn = zeros(lenx,leny);
+Fcamagn = zeros(lenx,leny);
+
 
 for m = 1:lenx;
     for n = 1:leny;
@@ -29,20 +31,22 @@ for m = 1:lenx;
         pj(2,1:2) = [15 , 0];
         pj0(1,1:2) = [-5 , -1];
         pj0(2,1:2) = [15 , 0];
-        for j = 1:1
+        for j = 1:2
             Fij(j,1:2) = Kij*(pj(j,1:2)-pi-(pj0(j,1:2)-pi0));
             dij(j,1:2) = pj(j,1:2) - pi;%0,-1
 %             d0ij(j,1:2) = pj0(j,1:2) - pi0;%-7,-3
 %             Fij(j,1:2) = Kij*(dij(j,1:2)-(d0ij(j,1:2)));%7,3
-            Fijmagn(m,n) = norm(Fij(j,1:2));
+            Fijmagn(m,n) = Fijmagn(m,n) + norm(Fij(j,1:2));
         end
-                
-        if norm(dij) < rsav
-            Fca = ((Kca*rsav)/norm(dij)-Kca)*(dist/norm(dij));
+        
+        for j = 1:2
+        if norm(dij(j,1:2)) < rsav
+            Fca = ((Kca*rsav)/norm(dij(j,1:2))-Kca)*(dij(j,1:2)/norm(dij(j,1:2)));
         else
             Fca = 0;
         end
-        Fcamagn(m,n) = norm(Fca);
+        Fcamagn(m,n) = Fcamagn(m,n) + norm(Fca);
+        end
         
         po1 = [-6,-6];
         dist = pi - po1;
@@ -120,7 +124,7 @@ clear m, clear n
 % end
 % plot(xny,yny,'r-*')
 % plot(X(m(1),n(1)),Y(m(1),n(1)),'r*')
-surf(X,Y,Ftotmagn-100);
+surf(X,Y,Ftotmagn-100,'EdgeColor','none');
 axis equal
 xlabel('x')
 ylabel('y')
