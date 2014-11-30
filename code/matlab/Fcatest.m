@@ -116,7 +116,7 @@ for k = 1:1000;
     Ftotmagnny(k) = Ftotmagn(m(k),n(k));
 end
 plot3(xny,yny,Ftotmagnny,'r-*')
-plot3(X(m(1),n(1)),Y(m(1),n(1)),Ftotmagnny(m(1),n(1)),'bo')
+plot3(X(m(1),n(1)),Y(m(1),n(1)),Ftotmagn(m(1),n(1)),'bo')
 surf(X,Y,Ftotmagn,'EdgeColor','none');
 axis equal
 xlabel('x')
