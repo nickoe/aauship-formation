@@ -3,7 +3,7 @@ clear all;
 %% 3D plot with force magnitude
 
 step = 0.3;
-[X,Y] = meshgrid(-30:step:20,-40:step:40);
+[X,Y] = meshgrid(-40:step:40,-40:step:40);
 X=X';
 Y=Y';
 lenx=length(X(:,1));
@@ -12,14 +12,14 @@ Ftot = zeros(lenx, leny,2);
 rsav = 5;
 vl = [10,10];
 pi0 = [2,2];
-Kvl = 2;
+Kvl = 1;
 Kij = 0.1;
-Kca = 20;
-Koa = 20;
+Kca = 200;
+Koa = 200;
 
 Fijmagn = zeros(lenx,leny);
 Fcamagn = zeros(lenx,leny);
-
+Foamagn = zeros(lenx,leny);
 
 for m = 1:lenx;
     for n = 1:leny;
@@ -27,11 +27,13 @@ for m = 1:lenx;
         Fvl = Kvl*(vl-pi-(vl-pi0));
         Fvlmagn(m,n) = norm(Fvl);
 
-        pj(1,1:2) = [10 , 10];
+        pj(1,1:2) = [10 , 5];
         pj(2,1:2) = [15 , 0];
+        pj(3,1:2) = [-20 , 20];
         pj0(1,1:2) = [-5 , -1];
         pj0(2,1:2) = [15 , 0];
-        for j = 1:2
+        pj0(3,1:2) = [-10 , 10];
+        for j = 1:length(pj)
             Fij(j,1:2) = Kij*(pj(j,1:2)-pi-(pj0(j,1:2)-pi0));
             dij(j,1:2) = pj(j,1:2) - pi;%0,-1
 %             d0ij(j,1:2) = pj0(j,1:2) - pi0;%-7,-3
@@ -39,23 +41,27 @@ for m = 1:lenx;
             Fijmagn(m,n) = Fijmagn(m,n) + norm(Fij(j,1:2));
         end
         
-        for j = 1:2
-        if norm(dij(j,1:2)) < rsav
-            Fca = ((Kca*rsav)/norm(dij(j,1:2))-Kca)*(dij(j,1:2)/norm(dij(j,1:2)));
-        else
-            Fca = 0;
-        end
+        for j = 1:length(pj)
+            if norm(dij(j,1:2)) < rsav
+                Fca = ((Kca*rsav)/norm(dij(j,1:2))-Kca)*(dij(j,1:2)/norm(dij(j,1:2)));
+            else
+                Fca = 0;
+            end
         Fcamagn(m,n) = Fcamagn(m,n) + norm(Fca);
         end
         
-        po1 = [-6,-6];
-        dist = pi - po1;
-        if norm(dist) < rsav
-            Foa = (Koa/norm(dist)-Koa/rsav)*(dist/norm(dist));
-        else
-            Foa = 0;
+        po(1,1:2) = [-6,-6];
+        po(2,1:2) = [-2,-2];
+        po(3,1:2) = [5,15];
+        for j = 1:length(po)
+            dki(j,1:2) = po(j,1:2) - pi;
+            if norm(dki(j,1:2)) < rsav
+                Foa = (Koa/norm(dki(j,1:2))-Koa/rsav)*(dki(j,1:2)/norm(dki(j,1:2)));
+            else
+                Foa = 0;
+            end
+        Foamagn(m,n) = Foamagn(m,n) + norm(Foa);
         end
-        Foamagn(m,n) = norm(Foa);
         
         Fmax = 100;
         Ftotmagn(m,n) = Fvlmagn(m,n)+Fijmagn(m,n)+Fcamagn(m,n)+Foamagn(m,n);
