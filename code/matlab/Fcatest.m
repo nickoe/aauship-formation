@@ -31,11 +31,11 @@ Foamagn = zeros(lenx,leny);
 
 % Placering (start og slut) af andre både udover båd i
 pj(1,1:2) = [90 , 50];
-pj(2,1:2) = [35 , 0];
-pj(3,1:2) = [-80 , 80];
+pj(2,1:2) = [90 , -90];
+pj(3,1:2) = [-80,80];
 pj0(1,1:2) = [-35 , -1];
-pj0(2,1:2) = [15 , 0];
-pj0(3,1:2) = [-10 , 10];
+pj0(2,1:2) = [100 , -100];
+pj0(3,1:2) = [-10,-10];
 
 % Placering af forhindinger
 po(1,1:2) = [-40,-40];
@@ -102,8 +102,8 @@ toc
 figure(7)
 clf;
 hold on
-density = 4;
-[totxvel,totyvel] = gradient(-Ftotmagn(1:density:m,1:density:n),step,step);
+% density = 4;
+% [totxvel,totyvel] = gradient(-Ftotmagn(1:density:m,1:density:n),step,step);
 % contour(X, Y, Ftotmagn);
 % quiver(X(1:density:m,1:density:n), Y(1:density:m,1:density:n),totxvel,totyvel);
 clear m, clear n
@@ -129,21 +129,12 @@ zlabel('z')
 % hold off
 
 % New path planner thing
-n = 60;
-for m = 1:n
-    x0(m) = sin(2*MPI/n*m);
-    y0(m) = cos(2*MPI/n*m);
-end
-clear pi
-pip(1,1:2) = [-95,-95];
-for k = 1:600
-    for l = 1:n
-        pi(l,:) = pip(k,:) + [x0(l),y0(l)]*0.3;
-        [Fvlmagn, Fijmagn, Fcamagn, Foamagn] = potfield(pi(l,:), pi0, pj, pj0, po, vl, Fmax, Kvl, Kij, Kca, Koa, rsav);
-        Ftotmagn2(l) = Fvlmagn + Fijmagn + Fcamagn + Foamagn;
-    end
-    [minval,l] = min(Ftotmagn2);
-    pip(k+1,:) = pi(l,:);
+n = 600;
+pip = zeros(n,2);
+pip(1,1:2) = [-90,-90];
+Ftotmagn3 = zeros(n,1);
+for k = 1:n
+    [pip(k+1,:) , minval] = pathgen(60, 1, pip(k,:), pi0, pj, pj0, po, vl, Fmax, Kvl, Kij, Kca, Koa, rsav);
     Ftotmagn3(k+1) = minval;
 end
 

@@ -13,39 +13,39 @@ function [ Fvlmagn, Fijmagn, Fcamagn, Foamagn ] = potfield( pi, pi0, pj, pj0, po
 % Kca, gain på collision avoidance
 % Koa, gain på obkect avoidance
 % rsav, safety radius
-        Fcamagn = 0;
-        Foamagn = 0;
-        Fijmagn = 0;
-        % Force virtuel leader
-        Fvl = Kvl*(vl-pi-(vl-pi0));
-        Fvlmagn = norm(Fvl);
-        
-        % Force inter vehicle, emllem i og j (Trækker dem lidt sammen)
-        for j = 1:length(pj)
-            Fij(j,1:2) = Kij*(pj(j,1:2)-pi-(pj0(j,1:2)-pi0));
-            dij(j,1:2) = pj(j,1:2) - pi;% Udregning til senere brug under Fca
-            Fijmagn = Fijmagn + norm(Fij(j,1:2));
+    Fcamagn = 0;
+    Foamagn = 0;
+    Fijmagn = 0;
+    % Force virtuel leader
+    Fvl = Kvl*(vl-pi-(vl-pi0));
+    Fvlmagn = norm(Fvl);
+
+    % Force inter vehicle, emllem i og j (Trækker dem lidt sammen)
+    for j = 1:length(pj)
+        Fij(j,1:2) = Kij*(pj(j,1:2)-pi-(pj0(j,1:2)-pi0));
+        dij(j,1:2) = pj(j,1:2) - pi;% Udregning til senere brug under Fca
+        Fijmagn = Fijmagn + norm(Fij(j,1:2));
+    end
+
+    %Force collision avoidance (For at undgå sammenstød)
+    for j = 1:length(pj)
+        if norm(dij(j,1:2)) < rsav
+            Fca = ((Kca*rsav)/norm(dij(j,1:2))-Kca)*(dij(j,1:2)/norm(dij(j,1:2)));
+        else
+            Fca = 0;
         end
-        
-        %Force collision avoidance (For at undgå sammenstød)
-        for j = 1:length(pj)
-            if norm(dij(j,1:2)) < rsav
-                Fca = ((Kca*rsav)/norm(dij(j,1:2))-Kca)*(dij(j,1:2)/norm(dij(j,1:2)));
-            else
-                Fca = 0;
-            end
-        Fcamagn = Fcamagn + norm(Fca);
+    Fcamagn = Fcamagn + norm(Fca);
+    end
+
+    % Force object avoidance (For at undgå stillestående objekter)
+    for j = 1:length(po)
+        dki(j,1:2) = po(j,1:2) - pi;
+        if norm(dki(j,1:2)) < rsav
+            Foa = (Koa/norm(dki(j,1:2))-Koa/rsav)*(dki(j,1:2)/norm(dki(j,1:2)));
+        else
+            Foa = 0;
         end
-        
-        % Force object avoidance (For at undgå stillestående objekter)
-        for j = 1:length(po)
-            dki(j,1:2) = po(j,1:2) - pi;
-            if norm(dki(j,1:2)) < rsav
-                Foa = (Koa/norm(dki(j,1:2))-Koa/rsav)*(dki(j,1:2)/norm(dki(j,1:2)));
-            else
-                Foa = 0;
-            end
-        Foamagn = Foamagn +  norm(Foa);
-        end
+    Foamagn = Foamagn +  norm(Foa);
+    end
 end
 
