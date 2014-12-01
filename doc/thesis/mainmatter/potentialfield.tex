@@ -84,7 +84,7 @@ The collision avoidance takes effect when the agents get closer than a pre defin
 \[
     F_{ca}^{ij}= 
 \begin{cases}
-    \frac{K_{ca}r}{||d_{ji}||},& \text{for } ||d_{ji}||<r\\
+    \frac{K_{ca}r}{||d_{ij}||}-K_{ca},& \text{for } ||d_{ij}||<r\\
     0,              & \text{otherwise}
 \end{cases}
 \]
@@ -103,8 +103,7 @@ The same principle as for collision avoidance can be applied to obstacle avoidan
     0,              & \text{otherwise}
 \end{cases}
 \]
-where $k$ denotes the counter for obstacles instead of other agents. $K_{oa}$ is also a tuning parameter for the obstacle avoidance. $d_{ki}$ is the distance between an agent and the obstacle.
-which in a total term is summed up as:
+where $k$ denotes the counter for obstacles instead of other agents. $K_{oa}$ is also a tuning parameter for the obstacle avoidance. $d_{ki}$ is the distance between an agent and the obstacle, which in a total term is summed up as:
 \begin{align}
 F_{oa}^{tot} = \sum\limits_{k=1}^MF_{oa}^{ik} \text{ for } i\neq k
 \end{align}
@@ -122,3 +121,6 @@ F_i^{tot} = min\{\,\,\,||\tilde(F)_i^{tot}||\,\,\,,\,\,F_{max}\,\,\,\}\frac{\til
 
 \end{itemize}
 \todo{Dette er en hurtigere gennemgang af denne metode, som ikke giver SÅ meget mening uden et billede. Men der anvendes et potentiale felt pr agent, som skal placeres ud fra et FRP, som igen flyttes rundt i det givne miljø.}
+
+
+
