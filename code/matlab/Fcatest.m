@@ -23,6 +23,8 @@ Kca = 240;
 Koa = 120;
 % Init af felterne
 Ftot = zeros(lenx, leny,2);
+Ftotmagn = zeros(lenx,leny);
+Fvlmagn = zeros(lenx,leny);
 Fijmagn = zeros(lenx,leny);
 Fcamagn = zeros(lenx,leny);
 Foamagn = zeros(lenx,leny);
@@ -41,7 +43,8 @@ po(2,1:2) = [-60,-60];
 po(3,1:2) = [40,40];
 
 Fmax = 80;
-        
+
+tic
 for m = 1:lenx;
     for n = 1:leny;
         pi = [X(m,1),Y(1,n)];
@@ -58,7 +61,7 @@ for m = 1:lenx;
         end
     end
 end
-
+toc
 %%
 % figure(1)
 % clf;
@@ -125,7 +128,7 @@ ylabel('y')
 zlabel('z')
 % hold off
 
-%
+% New path planner thing
 n = 60;
 for m = 1:n
     x0(m) = sin(2*MPI/n*m);
@@ -144,7 +147,4 @@ for k = 1:600
     Ftotmagn3(k+1) = minval;
 end
 
-
 plot3(pip(:,1),pip(:,2),Ftotmagn3+2,'r-*')
-
-
