@@ -1,20 +1,21 @@
 clear all; 
 
 %% 3D plot with force magnitude
+MPI = pi;
 % Laver grid med meshgrid, step bestemmer 'opløsning'
-step = 0.01;
-[X,Y] = meshgrid(-40:step:40,-40:step:40);
+step = 0.5;
+[X,Y] = meshgrid(-25:step:25,-25:step:25);
 % Vi transponerer her da det ellers ikke passer, af en eller anden årsag
 X=X';
 Y=Y';
 lenx=length(X(:,1));
 leny=length(Y(1,:));
 % Safe avoidance radius
-rsav = 3;
+rsav = 7;
 % Placering af virtuel leader, pt underordnet
 vl = [10,10];
 % Pos af hvor baad i skal ende (Midten af plot)
-pi0 = [2,2];
+pi0 = [7,3];
 % Gains til funktionerne
 Kvl = 2;
 Kij = 0.1;
@@ -39,14 +40,12 @@ pj0(3,1:2) = [-10 , 10];
 % Placering af forhindinger
 po(1,1:2) = [-6,-6];
 po(2,1:2) = [-2,-2];
-po(3,1:2) = [5,15];
+po(3,1:2) = [15,15];
 
 Fmax = 100;
-myCluster = parcluster('local');
-myCluster.NumWorkers = 4;  % 'Modified' property now TRUE
-F = parpool(4);
+
 tic
-parfor m = 1:lenx;
+for m = 1:lenx;
     for n = 1:leny;
         pi = [X(m,1),Y(1,n)];
         
@@ -100,14 +99,14 @@ toc
 % clf;
 % surf(X,Y,Ftotmagn);
 % title('Ftotmagn')
-% figure(7)
-% clf;
-% hold on
-% density = 4;
-% [totxvel,totyvel] = gradient(-Ftotmagn(1:density:m,1:density:n),step,step);
-% % contour(X, Y, Ftotmagn);
-% % quiver(X(1:density:m,1:density:n), Y(1:density:m,1:density:n),totxvel,totyvel);
-% clear m, clear n
+figure(7)
+clf;
+hold on
+density = 4;
+[totxvel,totyvel] = gradient(-Ftotmagn(1:density:m,1:density:n),step,step);
+% contour(X, Y, Ftotmagn);
+% quiver(X(1:density:m,1:density:n), Y(1:density:m,1:density:n),totxvel,totyvel);
+clear m, clear n
 % m(1) = 40;
 % n(1) = 40;
 % for k = 1:1000;
@@ -122,10 +121,30 @@ toc
 % end
 % plot3(xny,yny,Ftotmagnny,'r-*')
 % plot3(X(m(1),n(1)),Y(m(1),n(1)),Ftotmagn(m(1),n(1)),'bo')
-% surf(X,Y,Ftotmagn,'EdgeColor','none');
-% axis equal
-% xlabel('x')
-% ylabel('y')
-% zlabel('z')
+surf(X,Y,Ftotmagn,'EdgeColor','none');
+axis equal
+xlabel('x')
+ylabel('y')
+zlabel('z')
 % hold off
-% 
+
+% New path planner thing
+n = 60;
+for m = 1:n
+    x0(m) = sin(2*MPI/n*m);
+    y0(m) = cos(2*MPI/n*m);
+end
+clear pi
+pip(1,1:2) = [20,25];
+for k = 1:200
+    for l = 1:n
+        pi(l,:) = pip(k,:) + [x0(l),y0(l)]*0.3;
+        [Fvlmagn, Fijmagn, Fcamagn, Foamagn] = potfield(pi(l,:), pi0, pj, pj0, po, vl, Fmax, Kvl, Kij, Kca, Koa, rsav);
+        Ftotmagn2(l) = Fvlmagn + Fijmagn + Fcamagn + Foamagn;
+    end
+    [minval,l] = min(Ftotmagn2);
+    pip(k+1,:) = pi(l,:);
+    Ftotmagn3(k+1) = minval;
+end
+
+plot3(pip(:,1),pip(:,2),Ftotmagn3+2,'r-*')
