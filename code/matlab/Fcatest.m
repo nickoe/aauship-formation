@@ -3,7 +3,7 @@ clear all;
 %% 3D plot with force magnitude
 MPI = pi;
 % Laver grid med meshgrid, step bestemmer 'opløsning'
-step = 1;
+step = 0.2;
 [X,Y] = meshgrid(-100:step:100,-100:step:100);
 % Vi transponerer her da det ellers ikke passer, af en eller anden årsag
 X=X';
@@ -40,7 +40,7 @@ pj0(3,1:2) = [-10,-10];
 % Placering af forhindinger
 po(1,1:2) = [-40,-40];
 po(2,1:2) = [-60,-60];
-po(3,1:2) = [40,40];
+po(3,1:2) = [-30,10];
 
 Fmax = 80;
 
