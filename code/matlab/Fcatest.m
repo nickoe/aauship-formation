@@ -1,26 +1,26 @@
-clear all; 
+clear all;
 
 %% 3D plot with force magnitude
 MPI = pi;
 % Laver grid med meshgrid, step bestemmer 'opløsning'
-step = 0.5;
-[X,Y] = meshgrid(-25:step:25,-25:step:25);
+step = 1;
+[X,Y] = meshgrid(-100:step:100,-100:step:100);
 % Vi transponerer her da det ellers ikke passer, af en eller anden årsag
 X=X';
 Y=Y';
 lenx=length(X(:,1));
 leny=length(Y(1,:));
 % Safe avoidance radius
-rsav = 7;
+rsav = 30;
 % Placering af virtuel leader, pt underordnet
 vl = [10,10];
 % Pos af hvor baad i skal ende (Midten af plot)
 pi0 = [7,3];
 % Gains til funktionerne
-Kvl = 2;
+Kvl = 0.3;
 Kij = 0.1;
-Kca = 200;
-Koa = 200;
+Kca = 240;
+Koa = 120;
 % Init af felterne
 Ftot = zeros(lenx, leny,2);
 Fijmagn = zeros(lenx,leny);
@@ -28,19 +28,19 @@ Fcamagn = zeros(lenx,leny);
 Foamagn = zeros(lenx,leny);
 
 % Placering (start og slut) af andre både udover båd i
-pj(1,1:2) = [10 , 5];
-pj(2,1:2) = [15 , 0];
-pj(3,1:2) = [-20 , 20];
-pj0(1,1:2) = [-5 , -1];
+pj(1,1:2) = [90 , 50];
+pj(2,1:2) = [35 , 0];
+pj(3,1:2) = [-80 , 80];
+pj0(1,1:2) = [-35 , -1];
 pj0(2,1:2) = [15 , 0];
 pj0(3,1:2) = [-10 , 10];
 
 % Placering af forhindinger
-po(1,1:2) = [-6,-6];
-po(2,1:2) = [-2,-2];
-po(3,1:2) = [15,15];
+po(1,1:2) = [-40,-40];
+po(2,1:2) = [-60,-60];
+po(3,1:2) = [40,40];
 
-Fmax = 100;
+Fmax = 80;
         
 for m = 1:lenx;
     for n = 1:leny;
@@ -132,8 +132,8 @@ for m = 1:n
     y0(m) = cos(2*MPI/n*m);
 end
 clear pi
-pip(1,1:2) = [20,25];
-for k = 1:200
+pip(1,1:2) = [-95,-95];
+for k = 1:600
     for l = 1:n
         pi(l,:) = pip(k,:) + [x0(l),y0(l)]*0.3;
         [Fvlmagn, Fijmagn, Fcamagn, Foamagn] = potfield(pi(l,:), pi0, pj, pj0, po, vl, Fmax, Kvl, Kij, Kca, Koa, rsav);
