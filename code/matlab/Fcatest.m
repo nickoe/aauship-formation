@@ -15,10 +15,10 @@ rsav = 5;
 % Placering af virtuel leader, pt underordnet
 vl = [10,10];
 % Pos af hvor baad i skal ende (Midten af plot)
-pi0 = [7,3];
+pi0 = [70,3];
 % Gains til funktionerne
-Kvl = 0.3;
-Kij = 0.1;
+Kvl = 1.3;
+Kij = 1.1;
 Kca = 240;
 Koa = 120;
 % Init af felterne
@@ -129,13 +129,14 @@ zlabel('z')
 % hold off
 
 %% Moar boats
-n = 300;
+n = 650;
 no_boats = 4;
 vl = [0,0];
-
+Kvl = 50;
+Kij = 40.3;
 % Desired pos, spans the formation
 pi0 = zeros(no_boats,2);
-pi0(1,1:2) = [0,10];
+pi0(1,1:2) = [0,20];
 pi0(2,1:2) = [10,0];
 pi0(3,1:2) = [0,-10];
 pi0(4,1:2) = [-10,0];
@@ -147,12 +148,14 @@ pij(2,1:2,1) = [-20,-90];
 pij(3,1:2,1) = [-90,-30];
 pij(4,1:2,1) = [20,-30];
 
+pvl = zeros(n,2);
+pvl(1,:) = vl;
+
 Ftotmagn3 = zeros(n+1,no_boats);
 for k = 1:n
     for i = 1:no_boats
         j = 1:no_boats; j(i) = []; % Construct j from i
-%         jeppe = [pij(k,:,j(1));pij(k,:,j(2));pij(k,:,j(3))] % TODO construct normal i times two array
-        [pij(i,:,k+1) , minval] = pathgen(60, 1, pij(i,:,k), pi0(i,1:2), pij(j,:,k), pi0(j,1:2), po, vl, Fmax, Kvl, Kij, Kca, Koa, rsav);
+        [pij(i,:,k+1), minval] = pathgen(60, 1, pij(i,:,k), pi0(i,1:2)+0.6*[k,k], pij(j,:,k), pi0(j,1:2)+0.6*[k,k;k,k;k,k], po, vl+0.6*[k,k], Fmax, Kvl, Kij, Kca, Koa, rsav);
         Ftotmagn3(k+1,i) = minval;
     end
 end
@@ -160,36 +163,37 @@ end
 % for i = 1:no_boats
 %     plot3(pij(:,1,i),pij(:,2,i),Ftotmagn3(:,i)+2,'r-*')
 % end
-%%
+%
 figure(10)
 clf
 hold on
+axis equal
+grid on
 for i = 1:no_boats
+  
     % Trajectory
     out = reshape(pij(i,1:2,:),[2 size(pij,3)])';
     plot(out(:,1),out(:,2),'.-')
-
+    
     % Start
     plot(pij(i,1,1), pij(i,2,1),'ro')
     text(pij(i,1,1), pij(i,2,1),num2str(i))
 
     % Connections
-%     plot(pij(i,1,n),pij(i,2,n),'r*-')
-    out = reshape(pij(:,1:2,n),[2 4 ])';
-    plot(out(:,1),out(:,2),'r*-')
-    
-
+%     out = reshape(pij(:,1:2,n),[2 4 ])';
+%     plot(out(:,2),out(:,1),'r*-')
 end
 
 % Plotting time correlated points
 A = pij(:,1:2,20:20:n);
 for k = 1:length(A)
-   pause(2)
+   pause(0.2)
    plot(A(:,1,k),A(:,2,k),'ko-')
 end
-
+% figure(11)
+% out = reshape(pij(i,1:2,:),[2 size(pij,3)])';
+% plot(out)
 
 hold off
-axis equal
-grid on
+
 

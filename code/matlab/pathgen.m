@@ -26,7 +26,7 @@ function [ pip, minval  ] = pathgen( n, r, pip, pi0, pj, pj0, po, vl, Fmax, Kvl,
         [Fvlmagn, Fijmagn, Fcamagn, Foamagn] = potfield(pil(l,:), pi0, pj, pj0, po, vl, Fmax, Kvl, Kij, Kca, Koa, rsav);
         Ftotmagn2(l) = Fvlmagn + Fijmagn + Fcamagn + Foamagn;
     end
-    [minval,l] = min(Ftotmagn2);
-    pip = pil(l,:);
+    [minval,lol] = min(Ftotmagn2);
+    pip = pil(lol,:);
 end
 

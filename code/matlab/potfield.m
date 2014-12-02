@@ -23,12 +23,12 @@ function [ Fvlmagn, Fijmagn, Fcamagn, Foamagn ] = potfield( pi, pi0, pj, pj0, po
     % Force inter vehicle, emllem i og j (Trækker dem lidt sammen)
     for j = 1:length(pj)
         Fij(j,1:2) = Kij*(pj(j,1:2)-pi-(pj0(j,1:2)-pi0));
-        dij(j,1:2) = pj(j,1:2) - pi;% Udregning til senere brug under Fca
         Fijmagn = Fijmagn + norm(Fij(j,1:2));
     end
 
     %Force collision avoidance (For at undgå sammenstød)
     for j = 1:length(pj)
+        dij(j,1:2) = pj(j,1:2) - pi;% Udregning til senere brug under Fca
         if norm(dij(j,1:2)) < rsav
             Fca = ((Kca*rsav)/norm(dij(j,1:2))-Kca)*(dij(j,1:2)/norm(dij(j,1:2)));
         else
