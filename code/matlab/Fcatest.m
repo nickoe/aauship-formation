@@ -3,7 +3,7 @@ clear all;
 %% 3D plot with force magnitude
 MPI = pi;
 % Laver grid med meshgrid, step bestemmer 'opløsning'
-step = 0.2;
+step = 2;
 [X,Y] = meshgrid(-100:step:100,-100:step:100);
 % Vi transponerer her da det ellers ikke passer, af en eller anden årsag
 X=X';
@@ -11,7 +11,7 @@ Y=Y';
 lenx=length(X(:,1));
 leny=length(Y(1,:));
 % Safe avoidance radius
-rsav = 30;
+rsav = 5;
 % Placering af virtuel leader, pt underordnet
 vl = [10,10];
 % Pos af hvor baad i skal ende (Midten af plot)
@@ -38,9 +38,9 @@ pj0(2,1:2) = [100 , -100];
 pj0(3,1:2) = [-10,-10];
 
 % Placering af forhindinger
-po(1,1:2) = [-40,-40];
-po(2,1:2) = [-60,-60];
-po(3,1:2) = [-30,10];
+po(1,1:2) = [-400,-400];
+po(2,1:2) = [-600,-600];
+po(3,1:2) = [-300,100];
 
 Fmax = 80;
 
@@ -128,14 +128,68 @@ ylabel('y')
 zlabel('z')
 % hold off
 
-% New path planner thing
-n = 600;
-pip = zeros(n,2);
-pip(1,1:2) = [-90,-90];
-Ftotmagn3 = zeros(n,1);
+%% Moar boats
+n = 300;
+no_boats = 4;
+vl = [0,0];
+
+% Desired pos, spans the formation
+pi0 = zeros(no_boats,2);
+pi0(1,1:2) = [0,10];
+pi0(2,1:2) = [10,0];
+pi0(3,1:2) = [0,-10];
+pi0(4,1:2) = [-10,0];
+
+% Initial positions
+pij = zeros(no_boats,2,n);
+pij(1,1:2,1) = [-70,-10];
+pij(2,1:2,1) = [-20,-90];
+pij(3,1:2,1) = [-90,-30];
+pij(4,1:2,1) = [20,-30];
+
+Ftotmagn3 = zeros(n+1,no_boats);
 for k = 1:n
-    [pip(k+1,:) , minval] = pathgen(60, 1, pip(k,:), pi0, pj, pj0, po, vl, Fmax, Kvl, Kij, Kca, Koa, rsav);
-    Ftotmagn3(k+1) = minval;
+    for i = 1:no_boats
+        j = 1:no_boats; j(i) = []; % Construct j from i
+%         jeppe = [pij(k,:,j(1));pij(k,:,j(2));pij(k,:,j(3))] % TODO construct normal i times two array
+        [pij(i,:,k+1) , minval] = pathgen(60, 1, pij(i,:,k), pi0(i,1:2), pij(j,:,k), pi0(j,1:2), po, vl, Fmax, Kvl, Kij, Kca, Koa, rsav);
+        Ftotmagn3(k+1,i) = minval;
+    end
 end
 
-plot3(pip(:,1),pip(:,2),Ftotmagn3+2,'r-*')
+% for i = 1:no_boats
+%     plot3(pij(:,1,i),pij(:,2,i),Ftotmagn3(:,i)+2,'r-*')
+% end
+%%
+figure(10)
+clf
+hold on
+for i = 1:no_boats
+    % Trajectory
+    out = reshape(pij(i,1:2,:),[2 size(pij,3)])';
+    plot(out(:,1),out(:,2),'.-')
+
+    % Start
+    plot(pij(i,1,1), pij(i,2,1),'ro')
+    text(pij(i,1,1), pij(i,2,1),num2str(i))
+
+    % Connections
+%     plot(pij(i,1,n),pij(i,2,n),'r*-')
+    out = reshape(pij(:,1:2,n),[2 4 ])';
+    plot(out(:,1),out(:,2),'r*-')
+    
+
+end
+
+% Plotting time correlated points
+A = pij(:,1:2,20:20:n);
+for k = 1:length(A)
+   pause(2)
+   plot(A(:,1,k),A(:,2,k),'ko-')
+end
+
+
+hold off
+axis equal
+grid on
+
