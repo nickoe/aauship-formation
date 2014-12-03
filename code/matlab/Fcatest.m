@@ -11,14 +11,14 @@ Y=Y';
 lenx=length(X(:,1));
 leny=length(Y(1,:));
 % Safe avoidance radius
-rsav = 5;
+rsav = 3;
 % Placering af virtuel leader, pt underordnet
 vl = [10,10];
 % Pos af hvor baad i skal ende (Midten af plot)
 pi0 = [70,3];
 % Gains til funktionerne
 Kvl = 1.3;
-Kij = 1.1;
+Kij = 0.1;
 Kca = 240;
 Koa = 120;
 % Init af felterne
@@ -99,9 +99,9 @@ toc
 % clf;
 % surf(X,Y,Ftotmagn);
 % title('Ftotmagn')
-figure(7)
-clf;
-hold on
+% figure(7)
+% clf;
+% hold on
 % density = 4;
 % [totxvel,totyvel] = gradient(-Ftotmagn(1:density:m,1:density:n),step,step);
 % contour(X, Y, Ftotmagn);
@@ -121,22 +121,22 @@ clear m, clear n
 % end
 % plot3(xny,yny,Ftotmagnny,'r-*')
 % plot3(X(m(1),n(1)),Y(m(1),n(1)),Ftotmagn(m(1),n(1)),'bo')
-surf(X,Y,Ftotmagn,'EdgeColor','none');
-axis equal
-xlabel('x')
-ylabel('y')
-zlabel('z')
+% surf(X,Y,Ftotmagn,'EdgeColor','none');
+% axis equal
+% xlabel('x')
+% ylabel('y')
+% zlabel('z')
 % hold off
 
 %% Moar boats
-n = 650;
+n = 6500;
 no_boats = 4;
-vl = [0,0];
-Kvl = 50;
-Kij = 40.3;
+vl = [-10,10];
+Kvl = 1;
+Kij = Kvl/2;
 % Desired pos, spans the formation
 pi0 = zeros(no_boats,2);
-pi0(1,1:2) = [0,20];
+pi0(1,1:2) = [0,10];
 pi0(2,1:2) = [10,0];
 pi0(3,1:2) = [0,-10];
 pi0(4,1:2) = [-10,0];
@@ -146,16 +146,16 @@ pij = zeros(no_boats,2,n);
 pij(1,1:2,1) = [-70,-10];
 pij(2,1:2,1) = [-20,-90];
 pij(3,1:2,1) = [-90,-30];
-pij(4,1:2,1) = [20,-30];
+pij(4,1:2,1) = [-60,-20];
 
-pvl = zeros(n,2);
-pvl(1,:) = vl;
+% pvl = zeros(n,2);
+% pvl(1,:) = vl;
 
 Ftotmagn3 = zeros(n+1,no_boats);
 for k = 1:n
     for i = 1:no_boats
         j = 1:no_boats; j(i) = []; % Construct j from i
-        [pij(i,:,k+1), minval] = pathgen(60, 1, pij(i,:,k), pi0(i,1:2)+0.6*[k,k], pij(j,:,k), pi0(j,1:2)+0.6*[k,k;k,k;k,k], po, vl+0.6*[k,k], Fmax, Kvl, Kij, Kca, Koa, rsav);
+        [pij(i,:,k+1), minval] = pathgen(60, 0.1, pij(i,:,k), pi0(i,1:2)+0.6*[k,k], pij(j,:,k), pi0(j,1:2)+0.6*[k,k;k,k;k,k], po, vl, Fmax, Kvl, Kij, Kca, Koa, rsav);
         Ftotmagn3(k+1,i) = minval;
     end
 end
@@ -183,9 +183,12 @@ for i = 1:no_boats
 %     out = reshape(pij(:,1:2,n),[2 4 ])';
 %     plot(out(:,2),out(:,1),'r*-')
 end
+axis equal
+
 
 % Plotting time correlated points
-A = pij(:,1:2,20:20:n);
+ll = 500;
+A = pij(:,1:2,ll:ll:n);
 for k = 1:length(A)
    pause(0.2)
    plot(A(:,1,k),A(:,2,k),'ko-')

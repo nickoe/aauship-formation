@@ -17,7 +17,8 @@ function [ Fvlmagn, Fijmagn, Fcamagn, Foamagn ] = potfield( pi, pi0, pj, pj0, po
     Foamagn = 0;
     Fijmagn = 0;
     % Force virtuel leader
-    Fvl = Kvl*(vl-pi-(vl-pi0));
+%     Fvl = Kvl*(vl-pi - (vl-pi0));
+    Fvl = Kvl*(vl-pi - (vl-pi0)+vl);
     Fvlmagn = norm(Fvl);
 
     % Force inter vehicle, emllem i og j (Trækker dem lidt sammen)
