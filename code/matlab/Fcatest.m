@@ -3,7 +3,7 @@ clear all;
 %% 3D plot with force magnitude
 MPI = pi;
 % Laver grid med meshgrid, step bestemmer 'opløsning'
-step = 2;
+step = 0.5;
 [X,Y] = meshgrid(-100:step:100,-100:step:100);
 % Vi transponerer her da det ellers ikke passer, af en eller anden årsag
 X=X';
@@ -11,16 +11,16 @@ Y=Y';
 lenx=length(X(:,1));
 leny=length(Y(1,:));
 % Safe avoidance radius
-rsav = 3;
+rsav = 20;
 % Placering af virtuel leader, pt underordnet
 vl = [10,10];
-% Pos af hvor baad i skal ende (Midten af plot)
-pi0 = [70,3];
+% Pos af hvor baad i skal ende
+pi0 = [10,3];
 % Gains til funktionerne
-Kvl = 1.3;
+Kvl = 0.9;
 Kij = 0.1;
 Kca = 240;
-Koa = 120;
+Koa = 240;
 % Init af felterne
 Ftot = zeros(lenx, leny,2);
 Ftotmagn = zeros(lenx,leny);
@@ -30,7 +30,7 @@ Fcamagn = zeros(lenx,leny);
 Foamagn = zeros(lenx,leny);
 
 % Placering (start og slut) af andre både udover båd i
-pj(1,1:2) = [90 , 50];
+pj(1,1:2) = [25 , 35];
 pj(2,1:2) = [90 , -90];
 pj(3,1:2) = [-80,80];
 pj0(1,1:2) = [-35 , -1];
@@ -38,11 +38,11 @@ pj0(2,1:2) = [100 , -100];
 pj0(3,1:2) = [-10,-10];
 
 % Placering af forhindinger
-po(1,1:2) = [-400,-400];
-po(2,1:2) = [-600,-600];
-po(3,1:2) = [-300,100];
+po(1,1:2) = [-55,-40];
+po(2,1:2) = [-60,-60];
+po(3,1:2) = [-35,2];
 
-Fmax = 80;
+Fmax = 200;
 
 tic
 for m = 1:lenx;
@@ -87,10 +87,16 @@ toc
 % axis equal
 % title('Fijmagn')
 % hold off
-% figure(4)
-% clf;
-% surf(X,Y,Fcamagn)
-% title('Fcamagn')
+figure(4)
+clf;
+view([20,20,2000]);
+% set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
+% set(gcf,'paperunits','centimeters')
+% set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
+% set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
+surf(X,Y,Fcamagn)
+title('Fcamagn')
+% saveas(fcamagnfig,'fcamagnfig.pdf')
 % figure(5)
 % clf;
 % surf(X,Y,Foamagn)
@@ -106,9 +112,9 @@ toc
 % [totxvel,totyvel] = gradient(-Ftotmagn(1:density:m,1:density:n),step,step);
 % contour(X, Y, Ftotmagn);
 % quiver(X(1:density:m,1:density:n), Y(1:density:m,1:density:n),totxvel,totyvel);
-clear m, clear n
-% m(1) = 40;
-% n(1) = 40;
+% clear m, clear n
+% m(1) = 10;
+% n(1) = 14;
 % for k = 1:1000;
 %     A = Ftotmagn(m(k)-1:m(k)+1,n(k)-1:n(k)+1);
 %     [minval,index] = min(A(:));
@@ -129,7 +135,7 @@ clear m, clear n
 % hold off
 
 %% Moar boats
-n = 6500;
+n = 650;
 no_boats = 4;
 vl = [-10,10];
 Kvl = 1;
@@ -155,7 +161,7 @@ Ftotmagn3 = zeros(n+1,no_boats);
 for k = 1:n
     for i = 1:no_boats
         j = 1:no_boats; j(i) = []; % Construct j from i
-        [pij(i,:,k+1), minval] = pathgen(60, 0.1, pij(i,:,k), pi0(i,1:2)+0.6*[k,k], pij(j,:,k), pi0(j,1:2)+0.6*[k,k;k,k;k,k], po, vl, Fmax, Kvl, Kij, Kca, Koa, rsav);
+        [pij(i,:,k+1), minval] = pathgen(60, 1, pij(i,:,k), pi0(i,1:2)+0.6*[k,k], pij(j,:,k), pi0(j,1:2)+0.6*[k,k;k,k;k,k], po, vl, Fmax, Kvl, Kij, Kca, Koa, rsav);
         Ftotmagn3(k+1,i) = minval;
     end
 end

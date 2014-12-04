@@ -127,8 +127,8 @@ for k = 1:N
     tau2(k,:)=[speeddiff2(k) 0 0 0 thrustdiff2(k)];
         
     % Simulation
-    x(k+1,:) = aaushipsimmodel(x(k,:)', tau(k,:)','wip',wp);
-    x2(k+1,:) = aaushipsimmodel(x2(k,:)', tau2(k,:)','wip',wp);
+    x(k+1,:) = aaushipsimmodel(x(k,:)', tau(k,:)','tau','wip',wp);
+    x2(k+1,:) = aaushipsimmodel(x2(k,:)', tau2(k,:)','tau','wip',wp);
 % % 	For test of acceleration - Right now seems weird
 % %     if x(k,8) >= 2.75
 % %         tau(k+1,1) = 0;
