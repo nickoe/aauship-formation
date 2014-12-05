@@ -20,10 +20,12 @@
 %\end{center}
 %\thispagestyle{empty}
 
-\paragraph{Background}
+%\paragraph{Background}
 The background for the formation control subject of this project
-originate in a collaboration with Port of Aalborg, who has a vision to
-make their harbour an intelligent harbour. This will, among other
+originate in a collaboration with 
+
+The Port of Aalborg is one of the major ports in Denmark. It has a vision to become one of the most
+intelligent harbours, meaning that the entire process, from ships approaching the harbour, through landing and loading of goods to the departure again should be optimized as well as possible. This will, among other
 things, include autonomous piloting of cargo ships bringing cargo to
 and from Aalborg. As part of the harbour protection it is important
 for the Port of Aalborg to ensure that the incoming ships are able to
@@ -41,8 +43,8 @@ depending on how active the seabed is. If the level is too shallow,
 such that the cargo ships cannot enter, it is the Port of Aalborg that
 needs to clear the area and ensure safe travel for their customers.
 
-The work within this project is carried out to assist the Port of
-Aalborg with their survey task. The development and implementation of
+The work within this project is carried out i collaboration with the Port of
+Aalborgs surveying group. The development and implementation of
 the AAUSHIP project will fit very well into this environment and be of
 good aid for the Port of Aalborg.
 
@@ -52,9 +54,9 @@ the first AAUSHIP. The ship needs to follow a trajectory and thereby
 sail within a predetermined location of interest. The second focus
 point is to implement formation control of a fleet of AAUSHIP's and
 test this at the location of interest. An area of the harbour has been
-given as a use case to test the results against.
+designated as a use case to test the results against.
 
-\paragraph{Method}
+%\paragraph{Method}
 The AAUSHIP is modelled by a 5 degree of freedom (DOF) model, which
 differs from a 3 DOF model by including the pitch and roll also.
 These are taken into account due to the fact that the AAUSHIP runs
@@ -89,7 +91,7 @@ operating as one unit to make the navigation decisions easier for the
 other traffic.
 
 To solve the task of collecting the ships in a smaller neighbourhood
-not to confuse other maritime traffic, a solution we propose is to
+not to confuse other maritime traffic, a solution is proposed to
 control the ships by the means of formation control. This will mean
 that the AAUSHIPs will operate in a defined way that are easier to predict
 for observers.
@@ -105,10 +107,10 @@ address this problem the AAUSHIPs will be controlled by a potential
 field approach that by its nature includes a dynamic way of including
 object avoidance.
 
-The result of the project is expected to be a complete survey of a
+The results of the project is a complete survey of a
 bounded area from the use case given by the Port of Aalborg. This is
 used in a comparison with data measured from the Port of Aalborg to
-verify the AAUSHIP survey system, as this will end up being. This map
+verify the AAUSHIP survey system. This map
 needs to be measured by two or three autonomous vessels that sails in
 a predetermined formation that is currently being investigated with
 respect to the area of interest.
@@ -123,21 +125,7 @@ strategy.
 %tested to verify the most promising result of the task resulting in a
 %formation that optimises the scanning process for the Port of Aalborg.
 
-\paragraph{Conclusion}
-%The model and simulation has proved to work when implemented on the
-%AAUSHIP which results in a vessel that tracks a predetermined
-%trajectory. This makes the basis for the further work of expanding the
-%fleet of AAUSHIPS and implement the investigated control strategies
-%and ending up with a successful digital mapping of the seabed in the
-%Limfjord.
 
-The test platform named AAUSHIP has been developed and improved
-such that an implementation of a simulation environment exists.
-This simulation environment allows users to test with the model
-of the AAUSHIP regarding control algorithms. The algorithm that is
-being tested of the time being is the potential field approach and needs
-to be implemented on the real AAUSHIP fleet in the forthcoming time for
-verification.
  
 
 
