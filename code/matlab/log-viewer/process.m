@@ -17,6 +17,7 @@ logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 % testname = 'gosejladsnaesten';
 % testname = 'nightseatuning';
 testname = 'jesperdag2';
+% testname = 'mb100-static';
 % testname = 'mb100walkingklingen';
 % testname = 'nysoetur';
 % testname = 'statictest-lab';
@@ -27,8 +28,8 @@ mb100file = fopen([logpath,testname,'/mb100.log']);
 imudata = load([logpath,testname,'/imu.log']);
 echofile = fopen([logpath,testname,'/echo.log']);
 starttime = imudata(1,13); % Earliest timestamp
-annotatefile = fopen([logpath,testname,'/annotate1416836228.84.log'],'r');
-annotate = textscan(annotatefile, '%f%f%s', 'Delimiter', ';');
+% annotatefile = fopen([logpath,testname,'/annotate1416836228.84.log'],'r');
+% annotate = textscan(annotatefile, '%f%f%s', 'Delimiter', ';');
 % ctlfile = fopen([logpath,testname,'/ctl.log'],'r');
 % ctl = textscan(ctlfile, '%f%f%f', 'Delimiter', ',');
 lliinput = load([logpath,testname,'/lli_input.csv']);
@@ -110,47 +111,70 @@ plot(lon,lat,'.-r')
 plot_google_map('maptype','satellite')
 range = [48000:49000, 58000:58700, 22000:22700];
 plot(lon(range), lat(range),'b.')
-range = [48000:49000, 53000:54200];
+range = [48000:49100, 53000:54300];
 plot(lon(range), lat(range),'g.')
 title('WGS84')
 
 %%
-llirange = [min(find(walltime(48000) < lliinput(:,1))) :...
+clc
+llirange = [min(find(walltime(48000) < lliinput(:,1))) :2:...
             max(find(walltime(48000) < lliinput(:,1)))];
+clear left
+clear right
+clear timel
+clear timer
 left = zeros(length(llirange),1);
 right = zeros(length(llirange),1);
+data = NaN(length(llirange),1);
+
 mll = min(llirange)-1;
-i = 0; j = 0; 
+i = 0; j = 0; % Other input counter
+m = 0; % Bad pair counter/jumper, used to remove loose samples
 for k = llirange
-    if lliinput(k,3) == 3
-                j = j+1;
-
-        left(k-mll-i) = lliinput(k,4);
-    elseif lliinput(k,3) == 5
-                i = i+1;
-
+    if (lliinput(k,3) == 3 && lliinput(k+1,3) == 5) % control-node
+        disp('ctlnode')
+        left(k-mll-i) = lliinput(k+1,4);
+        timel(k-mll-i) = lliinput(k+1,1)/10e8;
         right(k-mll-j) = lliinput(k,4);
+        timer(k-mll-j) = lliinput(k,1)/10e8;
+
+        j = j+1;
+        i = i+1;
+        data(k-mll) = 1;
+    elseif (lliinput(k,3) == 5 && lliinput(k+1,3) == 3) % joy-node
+        disp('joynode')
+        left(k-mll-i) = lliinput(k,4);     
+        timel(k-mll-i) = lliinput(k,1)/10e8;
+        right(k-mll-j) = lliinput(k+1,4);
+        timer(k-mll-j) = lliinput(k+1,1)/10e8;
+
+        j = j+1;
+        i = i+1;
     end
 end
 % TODO, remove loose samples
 
-%%
 left(k-mll-i:length(left)) = [];
+timel(k-mll-i:length(timel)) = [];
+
 right(k-mll-j:length(right)) = [];
+timer(k-mll-j:length(timer)) = [];
+
+data(k-mll-i:length(data)) = [];
+
 figure(2)
 clf
 hold on
-plot(left,'b-')
-plot(right,'r-')
+plot(timel,left,'b-')
+plot(timer,right,'r-')
+% plot(data,'g.')
+
+legend('left','right')
 hold off
 
+length(right), length(left)
 
-%% This is supposed to plot the track on the google map also, but the
-%  ned2geodetic function deos not seem to work
-% track = load('../triangletrack.mat');
-% [tracklat,tracklon,trackh] = ned2geodetic(track.track(:,1), track.track(:,2),...
-%              zeros(length(track.track),1),...
-%              meanlat*180/pi, meanlon*180/pi, 0, 'wgs84')
+
 
 %% Tangent plance coordinates xyz (not verified)
 fprintf('Calculating NED coordinates...\n')
@@ -163,8 +187,8 @@ x=zeros(N,1);
 y=zeros(N,1);
 z=zeros(N,1);
 for kk = 1:N
-    %[x(kk) y(kk) z(kk)] = wgs842ecef(latrad(kk),lonrad(kk),0);
-    [x(kk) y(kk) z(kk)] = geodetic2ecef(latrad(kk),lonrad(kk),hei(kk),referenceEllipsoid('wgs84'));
+    %[x(kk), y(kk), z(kk)] = wgs842ecef(latrad(kk),lonrad(kk),0);
+    [x(kk), y(kk), z(kk)] = geodetic2ecef(latrad(kk),lonrad(kk),hei(kk),referenceEllipsoid('wgs84'));
 end
 
 %% Transform 
@@ -179,7 +203,7 @@ meanlon = klingen.rotlon;
 clear klingen
 meanhei = 0;%hei(1);
 % [a b c]=wgs842ecef(meanlat,meanlon,meanhei);
-[a b c]=geodetic2ecef(meanlat,meanlon,meanhei,referenceEllipsoid('wgs84'));
+[a, b, c]=geodetic2ecef(meanlat,meanlon,meanhei,referenceEllipsoid('wgs84'));
 % plot3(a,b,c,'r*')
 R_e2t = [-sin(meanlat)*cos(meanlon) -sin(meanlat)*sin(meanlon) cos(meanlat);...
     -sin(meanlon) cos(meanlon) 0;...
@@ -194,6 +218,15 @@ figure(1)
 % T(300:360,:) = 0
 plot(T(:,2),T(:,1))
 title('Raw GPS log (localframe)')
+
+
+%% This is supposed to plot the track on the google map also
+figure(1)
+track = load('../triangletrack.mat');
+[tracklat,tracklon,trackh] = ned2geodetic(track.track(:,1), track.track(:,2),...
+             zeros(length(track.track),1),...
+             meanlat*180/pi, meanlon*180/pi, 0, referenceEllipsoid('wgs84'));
+plot(tracklon, tracklat,'wo-')
 
 %% ADIS16405 Inertial Measurement Unit
 supply = imudata(:,1)*0.002418; % Scale 2.418 mV
