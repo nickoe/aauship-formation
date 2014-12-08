@@ -5,9 +5,8 @@ MPI = pi;
 % Laver grid med meshgrid, step bestemmer 'opløsning'
 step = 0.5;
 [X,Y] = meshgrid(-100:step:100,-100:step:100);
-% Vi transponerer her da det ellers ikke passer, af en eller anden årsag
-X=X';
-Y=Y';
+% Vi transponerer her da det ellers ikke passer, af en eller anden årsag (surf mm)
+X = X'; Y = Y';
 lenx=length(X(:,1));
 leny=length(Y(1,:));
 % Safe avoidance radius
@@ -63,16 +62,19 @@ for m = 1:lenx;
 end
 toc
 %%
-% figure(1)
-% clf;
-% hold on
-% axis equal
-% density = 10;
-% [xvel,yvel] = gradient(-Fvlmagn(1:density:m,1:density:n),step,step);
-% % contour(X, Y, Fvlmagn);
-% % quiver(X(1:density:m,1:density:n), Y(1:density:m,1:density:n),xvel,yvel);
-% title('Contour and quiver plot of Fvl')
-% hold off
+figure(1)
+clf;
+hold on
+axis equal
+surf(X,Y,Fvlmagn);
+density = 25;
+contour(X, Y, Fvlmagn);
+[xvel,yvel] = gradient(-Fvlmagn(1:density:m,1:density:n),step,step);
+X = X'; Y = Y'; % Her skal det 'originale meshgrid bruges, til quiver
+quiver(X(1:density:m,1),Y(1,1:density:n),xvel,yvel);
+X = X'; Y = Y'; % Her ændres de tilbage igen
+title('Contour and quiver plot of Fvl')
+hold off
 % figure(2)
 % clf;
 % hold on
@@ -87,15 +89,15 @@ toc
 % axis equal
 % title('Fijmagn')
 % hold off
-figure(4)
-clf;
-view([20,20,2000]);
+% figure(4)
+% clf;
+% view([20,20,2000]);
 % set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
 % set(gcf,'paperunits','centimeters')
 % set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
 % set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
-surf(X,Y,Fcamagn)
-title('Fcamagn')
+% surf(X,Y,Fcamagn)
+% title('Fcamagn')
 % saveas(fcamagnfig,'fcamagnfig.pdf')
 % figure(5)
 % clf;
