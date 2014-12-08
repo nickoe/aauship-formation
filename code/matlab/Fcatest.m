@@ -62,24 +62,24 @@ for m = 1:lenx;
 end
 toc
 %%
-figure(1)
-clf;
-hold on
-axis equal
-surf(X,Y,Fvlmagn);
-density = 25;
-contour(X, Y, Fvlmagn);
-[xvel,yvel] = gradient(-Fvlmagn(1:density:m,1:density:n),step,step);
-X = X'; Y = Y'; % Her skal det 'originale meshgrid bruges, til quiver
-quiver(X(1:density:m,1),Y(1,1:density:n),xvel,yvel);
-X = X'; Y = Y'; % Her ændres de tilbage igen
-title('Contour and quiver plot of Fvl')
-hold off
+% figure(1)
+% clf;
+% hold on
+% axis equal
+% % surf(X,Y,Fvlmagn);
+% density = 25;
+% contour(X, Y, Fvlmagn);
+% [xvel,yvel] = gradient(-Fvlmagn(1:density:m,1:density:n),step,step);
+% X = X'; Y = Y'; % Her skal det 'originale meshgrid bruges, til quiver
+% quiver(X(1:density:m,1),Y(1,1:density:n),xvel,yvel);
+% X = X'; Y = Y'; % Her ændres de tilbage igen
+% title('Contour and quiver plot of Fvl')
+% hold off
 % figure(2)
 % clf;
 % hold on
 % surf(X, Y, Fvlmagn);
-% % contour(X, Y, Fvlmagn);
+% contour(X, Y, Fvlmagn);
 % title('Fvlmagn')
 % hold off
 % figure(3)
@@ -91,22 +91,40 @@ hold off
 % hold off
 % figure(4)
 % clf;
-% view([20,20,2000]);
-% set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
-% set(gcf,'paperunits','centimeters')
-% set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
-% set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
-% surf(X,Y,Fcamagn)
+% hold on
+% axis equal
+% density = 15;
+% contour(X, Y, Fcamagn);
+% [xvel,yvel] = gradient(-Fcamagn(1:density:m,1:density:n),step,step);
+% X = X'; Y = Y'; % Her skal det 'originale meshgrid bruges, til quiver
+% quiver(X(1:density:m,1),Y(1,1:density:n),xvel,yvel);
+% X = X'; Y = Y'; % Her ændres de tilbage igen
 % title('Fcamagn')
-% saveas(fcamagnfig,'fcamagnfig.pdf')
+% hold off
 % figure(5)
 % clf;
-% surf(X,Y,Foamagn)
-% title('Foamagn')
-% figure(6)
-% clf;
-% surf(X,Y,Ftotmagn);
-% title('Ftotmagn')
+% hold on
+% axis equal
+% density = 15;
+% contour(X, Y, Foamagn);
+% [xvel,yvel] = gradient(-Foamagn(1:density:m,1:density:n),step,step);
+% X = X'; Y = Y'; % Her skal det 'originale meshgrid bruges, til quiver
+% quiver(X(1:density:m,1),Y(1,1:density:n),xvel,yvel);
+% X = X'; Y = Y'; % Her ændres de tilbage igen
+% title('Fcamagn')
+% hold off
+figure(6)
+clf;
+hold on
+axis equal
+density = 15;
+contour(X, Y, Ftotmagn);
+[xvel,yvel] = gradient(-Ftotmagn(1:density:m,1:density:n),step,step);
+X = X'; Y = Y'; % Her skal det 'originale meshgrid bruges, til quiver
+quiver(X(1:density:m,1),Y(1,1:density:n),xvel,yvel);
+X = X'; Y = Y'; % Her ændres de tilbage igen
+title('Fcamagn')
+hold off
 % figure(7)
 % clf;
 % hold on
