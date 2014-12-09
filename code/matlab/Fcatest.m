@@ -1,19 +1,18 @@
 clear all;
-
-%% 3D plot with force magnitude
+% 3D plot with force magnitude
 MPI = pi;
 % Laver grid med meshgrid, step bestemmer 'opløsning'
-step = 0.5;
-[X,Y] = meshgrid(-100:step:100,-100:step:100);
+step = 2;
+[X,Y] = meshgrid(-100:step:100,-100:step:200);
 % Vi transponerer her da det ellers ikke passer, af en eller anden årsag
-X=X';
-Y=Y';
+% X=X';
+% Y=Y';
 lenx=length(X(:,1));
 leny=length(Y(1,:));
 % Safe avoidance radius
 rsav = 20;
 % Placering af virtuel leader, pt underordnet
-vl = [10,10];
+vl = [0,0];
 % Pos af hvor baad i skal ende
 pi0 = [10,3];
 % Gains til funktionerne
@@ -47,7 +46,7 @@ Fmax = 200;
 tic
 for m = 1:lenx;
     for n = 1:leny;
-        pi = [X(m,1),Y(1,n)];
+        pi = [X(1,n),Y(m,1)];
         
         [Fvlmagn(m,n), Fijmagn(m,n), Fcamagn(m,n), Foamagn(m,n)] = potfield(pi, pi0, pj, pj0, po, vl, Fmax, Kvl, Kij, Kca, Koa, rsav);
 
@@ -62,17 +61,22 @@ for m = 1:lenx;
     end
 end
 toc
-%%
-% figure(1)
-% clf;
-% hold on
-% axis equal
-% density = 10;
-% [xvel,yvel] = gradient(-Fvlmagn(1:density:m,1:density:n),step,step);
-% % contour(X, Y, Fvlmagn);
-% % quiver(X(1:density:m,1:density:n), Y(1:density:m,1:density:n),xvel,yvel);
-% title('Contour and quiver plot of Fvl')
-% hold off
+%
+
+figure(1)
+clf;
+hold on
+axis equal
+contour(X, Y, Fvlmagn);
+surf(X, Y, Fvlmagn);
+density = 10;
+[xvel,yvel] = gradient(-Fvlmagn(1:density:m,1:density:n),step,step);
+quiver(X(1:density:m,1:density:n), Y(1:density:m,1:density:n),xvel,yvel);
+title('Contour and quiver plot of Fvl')
+xlabel('x')
+ylabel('y')
+zlabel('z')
+hold off
 % figure(2)
 % clf;
 % hold on
@@ -87,15 +91,15 @@ toc
 % axis equal
 % title('Fijmagn')
 % hold off
-figure(4)
-clf;
-view([20,20,2000]);
-% set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
-% set(gcf,'paperunits','centimeters')
-% set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
-% set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
-surf(X,Y,Fcamagn)
-title('Fcamagn')
+% figure(4)
+% clf;
+% view([20,20,2000]);
+% % set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
+% % set(gcf,'paperunits','centimeters')
+% % set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
+% % set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
+% surf(X,Y,Fcamagn)
+% title('Fcamagn')
 % saveas(fcamagnfig,'fcamagnfig.pdf')
 % figure(5)
 % clf;
@@ -135,11 +139,16 @@ title('Fcamagn')
 % hold off
 
 %% Moar boats
-n = 650;
+n = 6500;
 no_boats = 4;
 vl = [-10,10];
 Kvl = 1;
-Kij = Kvl/2;
+% Kij = Kvl/no_boats/2;
+Kij = 1;
+rsav = 2;
+% Used for max force, eq. (47)
+Kv = 1;
+Fmin = 10;
 % Desired pos, spans the formation
 pi0 = zeros(no_boats,2);
 pi0(1,1:2) = [0,10];
@@ -148,21 +157,30 @@ pi0(3,1:2) = [0,-10];
 pi0(4,1:2) = [-10,0];
 
 % Initial positions
-pij = zeros(no_boats,2,n);
+pij = zeros(no_boats,2,n+1);
 pij(1,1:2,1) = [-70,-10];
 pij(2,1:2,1) = [-20,-90];
 pij(3,1:2,1) = [-90,-30];
 pij(4,1:2,1) = [-60,-20];
 
-% pvl = zeros(n,2);
-% pvl(1,:) = vl;
+pvl = zeros(n,2);
+pvl(1,:) = vl;
+pvl(1:n/2,:) = repmat([0,1000],n/2,1);
+pvl(n/2+1:n,:) = repmat([500,1000],n/2,1);
 
 Ftotmagn3 = zeros(n+1,no_boats);
+pir = zeros(no_boats,2,n+1);
+x=zeros(no_boats,17,n+1);
+x(:,1:2,1) = pij(:,1:2,1);
 for k = 1:n
     for i = 1:no_boats
         j = 1:no_boats; j(i) = []; % Construct j from i
-        [pij(i,:,k+1), minval] = pathgen(60, 1, pij(i,:,k), pi0(i,1:2)+0.6*[k,k], pij(j,:,k), pi0(j,1:2)+0.6*[k,k;k,k;k,k], po, vl, Fmax, Kvl, Kij, Kca, Koa, rsav);
+        [pij(i,:,k+1), minval] = pathgen(18, 1, pij(i,:,k), pi0(i,1:2)+pvl(k,:), pij(j,:,k), pi0(j,1:2)+[pvl(k,:);pvl(k,:);pvl(k,:)], po, vl, Fmax, Kvl, Kij, Kca, Koa, rsav);
         Ftotmagn3(k+1,i) = minval;
+%         pir(i,:,k+1) = pij(i,:,k+1) + Ftotmagn3(k+1,i);
+%         x(i,:,k+1) = aaushipsimmodel( [pij(i,:,k+1) x(i,3:17,k+1)], [Ftotmagn3(k+1,i), 0, 0, 0], 'tau', 'nonoise', 0 )
+        pir(i,:,k+1) = Ftotmagn3(k+1,i);
+
     end
 end
 
@@ -183,7 +201,7 @@ for i = 1:no_boats
     
     % Start
     plot(pij(i,1,1), pij(i,2,1),'ro')
-    text(pij(i,1,1), pij(i,2,1),num2str(i))
+    text(pij(i,1,1), pij(i,2,1),[' ', num2str(i)])
 
     % Connections
 %     out = reshape(pij(:,1:2,n),[2 4 ])';
@@ -193,10 +211,10 @@ axis equal
 
 
 % Plotting time correlated points
-ll = 500;
+ll = 50;
 A = pij(:,1:2,ll:ll:n);
 for k = 1:length(A)
-   pause(0.2)
+%    pause(0.1)
    plot(A(:,1,k),A(:,2,k),'ko-')
 end
 % figure(11)
@@ -204,5 +222,17 @@ end
 % plot(out)
 
 hold off
+
+
+
+figure(11)
+clf
+for i = 1:no_boats
+subplot(no_boats,1, i)
+out = reshape(pir(1,1:2,:),[2 size(pir,3)]);
+plot(out','.-');grid on;
+title(['Boat #', num2str(i)])
+end
+xlabel('Time [samples]')
 
 
