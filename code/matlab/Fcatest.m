@@ -1,12 +1,9 @@
+%% 3D plot with force magnitude
 clear all;
-% 3D plot with force magnitude
 MPI = pi;
 % Laver grid med meshgrid, step bestemmer 'opløsning'
-step = 2;
-[X,Y] = meshgrid(-100:step:100,-100:step:200);
-% Vi transponerer her da det ellers ikke passer, af en eller anden årsag
-% X=X';
-% Y=Y';
+step = 1;
+[X,Y] = meshgrid(-100:step:100,-100:step:100);
 lenx=length(X(:,1));
 leny=length(Y(1,:));
 % Safe avoidance radius
@@ -14,7 +11,7 @@ rsav = 20;
 % Placering af virtuel leader, pt underordnet
 vl = [0,0];
 % Pos af hvor baad i skal ende
-pi0 = [10,3];
+pi0 = [60,11];
 % Gains til funktionerne
 Kvl = 0.9;
 Kij = 0.1;
@@ -31,10 +28,10 @@ Foamagn = zeros(lenx,leny);
 % Placering (start og slut) af andre både udover båd i
 pj(1,1:2) = [25 , 35];
 pj(2,1:2) = [90 , -90];
-pj(3,1:2) = [-80,80];
-pj0(1,1:2) = [-35 , -1];
-pj0(2,1:2) = [100 , -100];
-pj0(3,1:2) = [-10,-10];
+pj(3,1:2) = [-70,70];
+pj0(1,1:2) = [25 , 35];
+pj0(2,1:2) = [90 , -90];
+pj0(3,1:2) = [-70,70];
 
 % Placering af forhindinger
 po(1,1:2) = [-55,-40];
@@ -51,7 +48,7 @@ for m = 1:lenx;
         [Fvlmagn(m,n), Fijmagn(m,n), Fcamagn(m,n), Foamagn(m,n)] = potfield(pi, pi0, pj, pj0, po, vl, Fmax, Kvl, Kij, Kca, Koa, rsav);
 
         Ftotmagn(m,n) = Fvlmagn(m,n)+Fijmagn(m,n)+Fcamagn(m,n)+Foamagn(m,n);
-        Ftotmagn(m,n) = min([norm(Ftotmagn(m,n)),Fmax])*Ftotmagn(m,n)/norm(Ftotmagn(m,n));
+        Ftotmagn(m,n) = min([norm(Ftotmagn(m,n)),Fmax]);%*Ftotmagn(m,n)/norm(Ftotmagn(m,n));
         
         % For at danne et 'låg' på plots hvor de ellers ville være NaN da
         % de er meget større end Fmax
@@ -61,54 +58,60 @@ for m = 1:lenx;
     end
 end
 toc
-%
-
+%%
+density = 4;
 figure(1)
 clf;
 hold on
 axis equal
+% surf(X,Y,Fvlmagn);
 contour(X, Y, Fvlmagn);
-surf(X, Y, Fvlmagn);
-density = 10;
 [xvel,yvel] = gradient(-Fvlmagn(1:density:m,1:density:n),step,step);
-quiver(X(1:density:m,1:density:n), Y(1:density:m,1:density:n),xvel,yvel);
+quiver(X(1,1:density:m),Y(1:density:n,1),xvel,yvel);
 title('Contour and quiver plot of Fvl')
-xlabel('x')
-ylabel('y')
-zlabel('z')
 hold off
-% figure(2)
-% clf;
-% hold on
-% surf(X, Y, Fvlmagn);
-% % contour(X, Y, Fvlmagn);
-% title('Fvlmagn')
-% hold off
-% figure(3)
-% clf;
-% hold on
+
+figure(3)
+clf;
+hold on
 % surf(X,Y, Fijmagn);
-% axis equal
-% title('Fijmagn')
-% hold off
-% figure(4)
-% clf;
-% view([20,20,2000]);
-% % set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
-% % set(gcf,'paperunits','centimeters')
-% % set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
-% % set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
-% surf(X,Y,Fcamagn)
-% title('Fcamagn')
-% saveas(fcamagnfig,'fcamagnfig.pdf')
-% figure(5)
-% clf;
-% surf(X,Y,Foamagn)
-% title('Foamagn')
-% figure(6)
-% clf;
+axis equal
+contour(X, Y, Fijmagn);
+[xvel,yvel] = gradient(-Fijmagn(1:density:m,1:density:n),step,step);
+quiver(X(1,1:density:m),Y(1:density:n,1),xvel,yvel);
+title('Fijmagn')
+hold off
+
+figure(4)
+clf;
+hold on
+axis equal
+contour(X, Y, Fcamagn);
+[xvel,yvel] = gradient(-Fcamagn(1:density:m,1:density:n),step,step);
+quiver(X(1,1:density:m),Y(1:density:n,1),xvel,yvel);
+title('Fcamagn')
+hold off
+
+figure(5)
+clf;
+hold on
+axis equal
+contour(X, Y, Foamagn);
+[xvel,yvel] = gradient(-Foamagn(1:density:m,1:density:n),step,step);
+quiver(X(1,1:density:m),Y(1:density:n,1),xvel,yvel);
+title('Foamagn')
+hold off
+
+figure(6)
+clf;
+hold on
+axis equal
 % surf(X,Y,Ftotmagn);
-% title('Ftotmagn')
+contour(X, Y, Ftotmagn);
+[xvel,yvel] = gradient(-Ftotmagn(1:density:m,1:density:n),step,step);
+quiver(X(1,1:density:m),Y(1:density:n,1),xvel,yvel);
+title('Ftotmagn')
+hold off
 % figure(7)
 % clf;
 % hold on
@@ -143,8 +146,8 @@ n = 6500;
 no_boats = 4;
 vl = [-10,10];
 Kvl = 1;
-% Kij = Kvl/no_boats/2;
-Kij = 1;
+Kij = Kvl/no_boats/2;
+%Kij = 1;
 rsav = 2;
 % Used for max force, eq. (47)
 Kv = 1;
