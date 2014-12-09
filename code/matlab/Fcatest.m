@@ -60,12 +60,12 @@ end
 toc
 
 %%
+density = 4;
 figure(1)
 clf;
 hold on
 axis equal
-surf(X,Y,Fvlmagn);
-density = 4;
+% surf(X,Y,Fvlmagn);
 contour(X, Y, Fvlmagn);
 [xvel,yvel] = gradient(-Fvlmagn(1:density:m,1:density:n),step,step);
 quiver(X(1,1:density:m),Y(1:density:n,1),xvel,yvel);
@@ -74,15 +74,17 @@ hold off
 figure(3)
 clf;
 hold on
-surf(X,Y, Fijmagn);
+% surf(X,Y, Fijmagn);
 axis equal
+contour(X, Y, Fijmagn);
+[xvel,yvel] = gradient(-Fijmagn(1:density:m,1:density:n),step,step);
+quiver(X(1,1:density:m),Y(1:density:n,1),xvel,yvel);
 title('Fijmagn')
 hold off
 figure(4)
 clf;
 hold on
 axis equal
-density = 4;
 contour(X, Y, Fcamagn);
 [xvel,yvel] = gradient(-Fcamagn(1:density:m,1:density:n),step,step);
 quiver(X(1,1:density:m),Y(1:density:n,1),xvel,yvel);
@@ -92,7 +94,6 @@ figure(5)
 clf;
 hold on
 axis equal
-density = 4;
 contour(X, Y, Foamagn);
 [xvel,yvel] = gradient(-Foamagn(1:density:m,1:density:n),step,step);
 quiver(X(1,1:density:m),Y(1:density:n,1),xvel,yvel);
@@ -102,8 +103,7 @@ figure(6)
 clf;
 hold on
 axis equal
-surf(X,Y,Ftotmagn);
-density = 4;
+% surf(X,Y,Ftotmagn);
 contour(X, Y, Ftotmagn);
 [xvel,yvel] = gradient(-Ftotmagn(1:density:m,1:density:n),step,step);
 quiver(X(1,1:density:m),Y(1:density:n,1),xvel,yvel);
