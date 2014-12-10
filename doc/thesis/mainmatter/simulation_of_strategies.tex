@@ -20,3 +20,79 @@ The method of applying the grid with magnitude of the potential field arises the
 Another problem that can become crucial arises when two objects are within the radius of each other. This will result in a local minima in the potential field between those objects. If an agent converges toward this minima they cannot get out again. The problem can be seen on figure \todo{Lav fig til at vise dette}. Solutions to this problem can be formulated in different ways. One solution could cluster the two objects together and instead of making their potential field individually, then combine those together and make an ellipsoid or even a circle formed obstacle of those objects. This will ensure that the local minima disappears thus not making an agent get stuck between those objects.
 
 In the end this results in that the every agent needs a magnitude and a direction of which they should move. This will be given depending on the total environment where the agents are manoeuvring. When applying this formation strategy a collision free movement are guaranteed which is one of the more critical criteria to be fulfilled. \todo{Det her skal der nok skrives lidt matematik om som viser det, eller en god forklaring. Men dog er det jo en naturlig del af pot field.}
+
+\subsection{Adding the Dynamics for Simulation}
+\todo{Should this be moved to the potentialfield.tex?}
+Describe the block diagram connecting the potential field calculations,
+an analogy to the wp\_gen script for the path follower.
+
+Describe how the dynamics will affect the trajectory.
+
+Describe the behaviour when a boat gets stuck in a local minima. hhjj
+
+\begin{figure}[htbp]
+\centering
+\includesvg{potentialfield_block}
+\caption{Block diagram showing the iteration process of using the
+potential fields for computation of the input vector}
+\label{fig:potentialfield_block}
+\end{figure}
+
+The potential field control system consists of multiple elements
+as seen with the e flow is illustrated on the block diagram on
+figure~\vref{fig:potentialfield_block}.
+
+Part og this flow can be computed by the $i$'th ship themselves.
+
+
+The implementation of this is tested in matlab, using the m-files;
+
+potfield.m, pathgen.m, shipcontroller.m, simaauship.m
+
+The simulation algorithm for the multiship potential field should keep
+in mind that shall save the timeseries for the ship states, the
+control inputs and the local reference trajectory for the $i$'th ship.
+
+Ignoring the initialization of all the variables, the outer loop
+guidance navigation and control algorithm using potential fields are
+as follows.
+
+The \ac{GNC} works by an array of mission specific way points given,
+usually computed from a desired area used to create a lawnmower
+pattern described in chapter~\vref{ch:pathgen} describing the path
+generation.
+
+\paragraph{Global Trajectory Generation}
+Then different methods can be used to steer ships after this
+trajectory. The simplest is the usual heading autopilot, which will
+just steer the reading of the ship to the course angle to the
+way point. Or more elaborate, ways is the use of the way points as
+linesegments that the ship should follow. This is implemented with a
+\ac{LOS} algorithm. This algorithm, can work, but it is too simple to
+include obstacle or inter vehicle collisions. A way proposed to solve
+this issue is to use the concept of potential fields.
+
+\paragraph{Potential Field}
+The potential field itself is merely some functions describing the
+repulsive and repelling forces between points of interest in the map.
+These points of interest are all objects that matters for the
+navigation, that is all ships, the anchor point (virtual leader) of
+the formation, and other point obstables. This using the methodology
+described in the paper \citep{UAVff3dpf}.
+
+The potential field is used in an iterative algorithm which can
+calculate the direction (from the $i$'th boat to the desired position
+spaned by a potential field defining the formation.
+
+\paragraph{Local Trajectory Generation}
+In the end, a reference path is calculated by the means of the
+previous previous position and the result from the potential field
+solver. It is calculated as the paper presents, \citep[eq.
+48]{UAVff3dpf}.
+
+\begin{align}
+	\mathbf{p}_{i,r}^n = \mathbf{p}_i^n + \mathbf{F}_i ^\text{tot}
+\end{align}
+
+This is passed to the ships inner control loop.
+
