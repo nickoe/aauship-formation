@@ -72,7 +72,7 @@ K(2,2) = 0.26565;
 % start = [100, 1000];
 % stop = [-1000,1000];
 track = load('lawnmoversmall.mat');
-track = [x(1,1:2);track.track];
+track = [x(1,1:2);track.track]*4;
 error = zeros(no_boats,N);
 integral = zeros(no_boats,N);
 derivative = zeros(no_boats,N);
@@ -97,7 +97,7 @@ limit = 3.07;
 heading(1) = x(1,7);
 
 m = 1; % Track counter
-pvl = zeros(N,2);
+pvl = zeros(N+1,2);
 pvl(1,:) = [track(m,2), track(m,1)];  % Set virtual leader
 wp_r = 1; % waypoint acceptance raidus
 
@@ -176,24 +176,26 @@ for k = 1:N
     for i = 1:no_boats % for all boats, could possibly me moved to to end of the LTG loop, after the simulation update
         % Check if the formation is OK, such that we can move the virtual
         % leader        
-        if ( norm(pir(i,:,k) - (pi0(i,1:2)+pvl(k,:))) ) < 2
+%         if ( norm(pir(i,:,k) - (pi0(i,1:2)+pvl(k,:))) ) < 2
+        if ( sqrt( (pir(i,1,k) - (pi0(i,1)+pvl(k,1)))^2 + (pir(i,2,k) - (pi0(i,2)+pvl(k,2)))^2 ) ) < 2
             fprintf('Boat #%d reached pi0\n',i)
             % Calculate if waypoint is reached
-            dist = sqrt((pvl(k,2)-track(m,1))^2+(pvl(k,1)-track(m,2))^2);
-            if dist < wp_r*3
+            dist = sqrt((pvl(k,2)-track(m,1))^2+(pvl(k,1)-track(m,2))^2)
+            if dist < wp_r
                 wp_reached = 1;
                 fprintf('Waypoint #%d was reached\n', m)
                 m = m + 1;
-                if m >= length(track)
-                    es = k-1;
-                    fprintf('End of track, the iteration was #%d\n', k)
-                    break
-                end
+
             end
         end
     end
+    if m >= length(track)
+        es = k-1;
+        fprintf('End of track, the iteration was #%d\n', k)
+        break
+    end
 
-    pvl(k,:) = [track(m,2), track(m,1)];
+    pvl(k+1,:) = [track(m,2), track(m,1)];
 %     pvl(k,:) = [20,10];
 
     %% Local Trajectory Generation via Potential Fields
