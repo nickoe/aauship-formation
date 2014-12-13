@@ -11,7 +11,7 @@ AHRS = MahonyAHRS('SamplePeriod', 1/10, 'Kp', 18 , 'Ki', 8);
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 200;
+N = 400;
 no_boats = 4;
 es = N;
 ts = ss.ts;
@@ -20,7 +20,7 @@ x = zeros(17,no_boats,N+1);
 x(:,1,1) = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]';
 x(:,2,1) = [0 10 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]';
 x(:,3,1) = [0 20 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]';
-x(:,4,1) = [0 30 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]';
+x(:,4,1) = [0 31 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]';
 z = zeros(N,7);
 x_hat = x;
 P_plus = zeros(17,17);
@@ -97,7 +97,8 @@ limit = 3.07;
 heading(1) = x(1,7);
 
 m = 1; % Track counter
-pvl = track(m,:); % Set virtual leader
+pvl = zeros(N,2);
+pvl(1,:) = [track(m,2), track(m,1)];  % Set virtual leader
 wp_r = 1; % waypoint acceptance raidus
 
 %% POTFIELD VARS START
@@ -109,10 +110,8 @@ lenx=length(X(:,1));
 leny=length(Y(1,:));
 % Safe avoidance radius
 rsav = 20;
-% Placering af virtuel leader, pt underordnet
-vl = [0,0];
 % Pos af hvor baad i skal ende
-pi0 = [60,11];
+% pi0 = [60,11];
 % Gains til funktionerne
 Kvl = 0.9;
 Kij = 0.1;
@@ -162,17 +161,16 @@ pir = pij;
 % pij(4,1:2,1) = [-60,-20];
 
 % Placering af forhindinger
-po(1,1:2) = [-55,-40];
-po(2,1:2) = [-60,-60];
-po(3,1:2) = [-35,2];
+po(1,1:2) = [-55,-40]*100;
+po(2,1:2) = [-60,-60]*100;
+po(3,1:2) = [-35,2]*100;
 
-pvl = zeros(N,2);
 
 Fmax = 200;
 %% POTFIELD VARS END
 
 for k = 1:N
-    fprintf('Timestep #%d\n', k)
+%     fprintf('Timestep #%d\n', k)
     %% Global Trajectory Generation from Waypoints
     % Calculate if formation is ok
     for i = 1:no_boats % for all boats, could possibly me moved to to end of the LTG loop, after the simulation update
@@ -182,7 +180,7 @@ for k = 1:N
             fprintf('Boat #%d reached pi0\n',i)
             % Calculate if waypoint is reached
             dist = sqrt((pvl(k,2)-track(m,1))^2+(pvl(k,1)-track(m,2))^2);
-            if dist < wp_r
+            if dist < wp_r*3
                 wp_reached = 1;
                 fprintf('Waypoint #%d was reached\n', m)
                 m = m + 1;
@@ -194,14 +192,16 @@ for k = 1:N
             end
         end
     end
+
     pvl(k,:) = [track(m,2), track(m,1)];
+%     pvl(k,:) = [20,10];
 
     %% Local Trajectory Generation via Potential Fields
 %     x(:,1:2,1) = pij(:,1:2,1);
     for i = 1:no_boats % for all boat
 %         fprintf('Boat #%d\n', i)
         j = 1:no_boats; j(i) = []; % Construct j from i
-        [pij(i,:,k+1), minval] = pathgen(32, 1, pij(i,:,k), pi0(i,1:2)+pvl(k,:), pij(j,:,k), pi0(j,1:2)+[pvl(k,:);pvl(k,:);pvl(k,:)], po, vl, Fmax, Kvl, Kij, Kca, Koa, rsav);
+        [pij(i,:,k+1), minval] = pathgen(32, 1, pij(i,:,k), pi0(i,1:2), pij(j,:,k), pi0(j,1:2), po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
         Ftotmagn3(k+1,i) = minval;
 %         pir(i,:,k+1) = pij(i,:,k+1) + Ftotmagn3(k+1,i);
         pir(i,:,k+1) = pij(i,:,k+1);
@@ -241,9 +241,11 @@ for k = 1:N
     %     tau(i,k+1,:) = (T*K*u)'; % inverse calculation 
     
         %% Simulation
-        x(:,i,k+1) = aaushipsimmodel(x(:,i,k), u,'input','wip',wp);
+%         x(:,i,k+1) = aaushipsimmodel(x(:,i,k), u,'input','wip',wp);
+        x(:,i,k+1) = [pir(i,:,k+1)'; zeros(15,1)];
         % Rewrite the i'th boats position to the simulated one.
         pij(i,:,k+1) = x(1:2,i,k+1);
+%         pij(i,:,k+1) = [x(2,i,k+1) x(1,i,k+1)];
     end % end of i'th ship
 end
 
@@ -268,7 +270,7 @@ hold on
 h1 = plot(track(:,2),track(:,1),'b-o');%, x_hat(gpsc,2),x_hat(gpsc,1), '*');
 for i = 1:no_boats
     out = reshape(x(:,i,1:es),length(x(:,i,1)),[]);
-    plot(out(2,1:es),out(1,1:es),'-r')
+    plot(out(1,1:es),out(2,1:es),'-r')
 end
 plot(pvl(:,1),pvl(:,2),'r+')
 % h2 = plot(x_hat(1:es,2),x_hat(1:es,1),'-k');
