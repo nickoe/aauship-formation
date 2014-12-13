@@ -15,7 +15,9 @@ function [ pip, minval  ] = pathgen( n, r, pip, pi0, pj, pj0, po, vl, Fmax, Kvl,
 % Koa, gain på obkect avoidance
 % rsav, safety radius
     clear pi
-    for m = 1:n
+    % This point iteration takes 18.129 µs for n = 24
+    % or                         20.090 ms for n = 360
+    for m = 1:n 
         x0(m) = sin(2*pi/n*m)*r;
         y0(m) = cos(2*pi/n*m)*r;
     end
