@@ -43,8 +43,6 @@ strategies after implementation.
 	could be of benefit to the hardware.
 \end{description}
 
-
-
 %% Oversigt af control stats
 
 \section{Methods}
@@ -81,16 +79,6 @@ When the communication is said to be limited it means that not all agents can co
 \subsubsection{No communication}
 In the case where no communication are to find in the system the agents will act like no potential field exists from the other agents, and try to follow the potential field trajectory. This will make every agent, independent of the others, try to follow the trajectory and thereby be in the same point. This will over time make the agents collide, if not on the way to the mission goal then at the mission goal. This means that in this case they need a individual potential field trajectory. When making individual potential field trajectories will the scenario be as in the case of individual paths, where the agents will be controlled individually but with respect of a potential field trajectory. This may also lead to colliding agents but it is not necessary as it will be if they followed the same trajectory. If they follow the same reference trajectory a failed agent will result in all the others following behind that will collide resulting in a complete mission failure. Though if the agents instead have their own respective reference trajectory one failing will not fail the mission. If the formation are unlucky, they can collide, but not necessarily.
 
-%\item \textbf{One minima potential field formation}\\
-%Within the use of potential fields there can be applied on various ways. One way is to determine the formation based on one minima potential field and maxima at the agents. By different designs of these potential fields one can determine how the specific formation should be. One example could be with three agents where their potential maxima are equal both in magnitude and radius. If these three agents are placed near a single potential minima, they would go in direction of the steepest descent, which would be to the centre of the minima. Meanwhile would the agent's local maxima repulse each other which would result in a equally distributed formation around the potential minima, making a triangle formation around the minima.
-%This design can vary dependent on how the minima are chosen and also how the magnitude of the agent's potential fields are chosen. If multiple agents are added to the setup, and under the same assumptions as before, they would still distribute evenly around the potential minima, but do the more agents they would make a circle formation. \todo{This method cannot contorl the heading of the formation}
-%\item \textbf{Multiple minima potential field formation}\\
-%If an more uneven distribution is needed it could be of benefit to implement more local minima. These are not the minima that the formation should follow, but a higher level potential field, only to define the formation. This could be made of several local minima i.e. one for each agent if the triangle formation is performed. If a more complex formation is needed it would be impossible to make from potential fields if only one local minima could be used, as described in the item above. If a line formation is preferable it would need more local minima to make the distribution even.
-%\item \textbf{Non strict potential field with rain gutter principle}\\
-%The underlying potential field can be used when designing the path for the formation. This is done from the same principle of potential fields, but instead of the traditional fields that attract and repel evenly around a point, it can be designed as a rain gutter, which runs from the high magnitude to the lowest magnitude. This will make the formation run in the direction of the steepest descent, and therefore the path can be designed using this. If the formation is allowed to diverge from the path, and the requirement is not so strict, one can design the rain gutter more flat, like a 'u' instead of a 'v', where the 'v' would make the formation stay more precise on the determined path.
-
-
-
 \begin{sidewaystable}
 \begin{tabular}{l|lll|l}
 \toprule
@@ -125,9 +113,11 @@ Limited communication  & 1 & 1 & 2 & 9\\
 No communication  & -1 & 3 & -1 &7\\
 \bottomrule
 \end{tabular}
-\caption{Decision matrix for the formation strategies. The stategy row from the upper half of the table continues on the lower half, whit the points summed in the last coloumn in the lower half.}
+\caption{Decision matrix for the formation strategies. The strategy row from the upper half of the table continues on the lower half, with the points summed in the last column in the lower half.}
 \label{tab:decision-matrix}
 \end{sidewaystable}
+
+The sum is based on the above mentioned categories and is a weighting from $-3$ to $3$ including $0$. The focus will be placed on the three strategies that scores the highest rating. These can be seen in table \ref{tab:decision-matrix} to be \bf{Duckling formation}, \bf{Echelon formation} and \bf{Potential field formation}. The duckling- and echelon formations have achieved the high rating due to their simplicity and their relatively easy implementation possibilities, while the potential field formation is of higher complexity but still fulfils the criteria from the analysis. 
 
 %% Approaches
 \input{mainmatter/potentialfield}
