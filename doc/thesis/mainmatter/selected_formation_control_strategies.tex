@@ -92,39 +92,40 @@ In the case where no communication are to find in the system the agents will act
 
 
 \begin{sidewaystable}
-\begin{tabular}{l|lll}
+\begin{tabular}{l|lll|l}
 \toprule
-\textbf{Approach} & \textbf{Communication} & \textbf{Control architecture} & \textbf{Obstacle avoidance} \\
+\textbf{Approach} & \textbf{Communication} & \textbf{Control architecture} & \textbf{Obstacle avoidance} & ---\\
 \hline
-\textbf{Leader follower:}&&&\\
-Duckling & Simple, 3 & Simple LOS, 3 & None, 0 \\
-Echelon & Simple, 3 & Simple LOS, 3 & None, 0 \\
-\ac{FRP} with path& Low communication, 0 & Simple, 2 & None, 0 \\
-\textbf{Precomputed individual paths:}&&&\\
-Full communication& High bw, 0 & Multi agent info, 0 & None, 0 \\
-Limited communication& Middle bw, 1 & Local agent info, 1 & None, 0 \\
-No communication& Low bw, 2 & Single agent info, 2 & None, 0 \\
-\textbf{Potential field:}&&&\\
-Full communication& High bw, 0 & Multi agent info, 0 & Natural, 3 \\
-Limited communication& Middle bw, 1 & Local agent info, 1 & Natural, 3 \\
-No communication& Low bw, 2 & Single agent info, 2 & Natural, 2\\
+\textbf{Leader follower:}&&&& \\
+Duckling & Simple, 3 & Simple LOS, 3 & None, 0 & \\
+Echelon & Simple, 3 & Simple LOS, 3 & None, 0 & \\
+\ac{FRP} with path& Low communication, 0 & Simple, 2 & None, 0 & \\
+\textbf{Precomputed individual paths:}&&&& \\
+Full communication& High bw, 0 & Multi agent info, 0 & None, 0 & \\
+Limited communication& Middle bw, 1 & Local agent info, 1 & None, 0 & \\
+No communication& Low bw, 2 & Single agent info, 2 & None, 0 & \\
+\textbf{Potential field:}&&&& \\
+Full communication& High bw, 0 & Multi agent info, 0 & Natural, 3 & \\
+Limited communication& Middle bw, 1 & Local agent info, 1 & Natural, 3 & \\
+No communication& Low bw, 2 & Single agent info, 2 & Natural, 2& \\
 \bottomrule
- & \textbf{Transients} & \textbf{Scalability} & \textbf{Failure}\\
+ & \textbf{Transients} & \textbf{Scalability} & \textbf{Failure}& \textbf{Sum}\\
 \hline
-\textbf{Leader follower:}&&&\\
-Duckling  & improper path, -1 & Easy duplicate, 3 & 2 \\
-Echelon  & Improper path, 0 & Easy duplicate, 3 & 2 \\
-\ac{FRP} with path   & Improper path, 0 & 2 & -2 \\
-\textbf{Precomputed individual paths:}&&&\\
-Full communication   & 3 & -1 & 2 \\
-Limited communication  & 2 & 1 & 0 \\
-No communication   & 1 & 3 & -2 \\
-\textbf{Potential field:}&&&\\
-Full communication  & 3 & 0 & 2 \\
-Limited communication  & 1 & 1 & 2 \\
-No communication  & -1 & 3 & -1 \\
+\textbf{Leader follower:}&&&& \\
+Duckling  & improper path, -1 & Easy duplicate, 3 & 2 & 10\\
+Echelon  & Improper path, 0 & Easy duplicate, 3 & 2 & 11\\
+\ac{FRP} with path   & Improper path, 0 & 2 & -2 & 2\\
+\textbf{Precomputed individual paths:}&&&& \\
+Full communication   & 3 & -1 & 2 & 4\\
+Limited communication  & 2 & 1 & 0 & 5\\
+No communication   & 1 & 3 & -2 & 6\\
+\textbf{Potential field:}&&&& \\
+Full communication  & 3 & 0 & 2 & 8\\
+Limited communication  & 1 & 1 & 2 & 9\\
+No communication  & -1 & 3 & -1 &7\\
+\bottomrule
 \end{tabular}
-\caption{Decision matrix for the formation strategies}
+\caption{Decision matrix for the formation strategies. The stategy row from the upper half of the table continues on the lower half, whit the points summed in the last coloumn in the lower half.}
 \label{tab:decision-matrix}
 \end{sidewaystable}
 
