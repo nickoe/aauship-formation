@@ -51,6 +51,8 @@ Another problem that can become crucial arises when two agents or two objects ar
 \end{figure}
 The scenario on figure \ref{fig:roevproblem} has the following steps. The agent $i$ moves in the direction of the steepest decent. Then it gets to the border of another agent where it cannot go through thus starts to go around this agent. The problem arises when agent $i$ reaches another agent on the way where it now has reached a local minima. Now the steepest gradient will point at the position where the agent already is thus making it think it has reached the end point. Solutions to this problem can be formulated in different ways. One solution could be to cluster the two objects together and instead of making their potential field individually, then combine those together and make an ellipsoid or even a circle formed obstacle of those objects. This will ensure that the local minima disappears thus not making an agent get stuck between those objects. Another solution is to make an exception handler that can tell if agent $i$ has reached the desired position. If it has not reached its end point, and the position is placed in a constant spot, it perturbs the desired position of the agent until the direction of the steepest decent changes. This will mean that the agent is out of the local minima and can continue on the trajectory.
 
+The plots shows which trajectory the agent will calculate. This is simulated without taking in the dynamics of the system. In the plots it is possible for the agent to make a directly 180\textdegree\ turn, which is not possible when taking in the dynamics of the AAUSHIP to the simulation. The behaviour of the system changes because the dynamics of the SSUSHIP does not allow such sharp turns. This implies that either the agent needs to turn before reaching another agent or an object to avoid entering their safety radius, or the safety radius should be designed such that the limited manoeuvring of the AAUSHIP is taken into account. If the AAUSHIP was a fully actuated ship it could be possible to make the turns required but since it only has the two main thrusters in the aft it will be impossible for the ship to stop and turn instantly on the spot.
+
 In the end this results in that the every agent needs a magnitude and a direction of which they should move. This will be given depending on the total environment where the agents are manoeuvring. When applying this formation strategy a collision free movement are guaranteed which is one of the more critical criteria to be fulfilled. \todo{Det her skal der nok skrives lidt matematik om som viser det, eller en god forklaring. Men dog er det jo en naturlig del af pot field.}
 
 \subsection{Adding the Dynamics for Simulation}
@@ -59,8 +61,6 @@ Describe the block diagram connecting the potential field calculations,
 an analogy to the wp\_gen script for the path follower.
 
 Describe how the dynamics will affect the trajectory.
-
-Describe the behaviour when a boat gets stuck in a local minima. hhjj
 
 \begin{figure}[htbp]
 \centering
@@ -71,11 +71,10 @@ potential fields for computation of the input vector}
 \end{figure}
 
 The potential field control system consists of multiple elements
-as seen with the e flow is illustrated on the block diagram on
+as seen with the flow illustrated on the block diagram on
 figure~\vref{fig:potentialfield_block}.
 
-Part og this flow can be computed by the $i$'th ship themselves.
-
+Part of this flow can be computed by the $i$'th ship themselves.
 
 The implementation of this is tested in matlab, using the m-files;
 
