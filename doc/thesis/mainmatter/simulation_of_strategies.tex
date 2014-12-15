@@ -127,3 +127,27 @@ solver. It is calculated as the paper presents, \citep[eq.
 
 This is passed to the ships inner control loop.
 
+
+When the trajectory is generated from a series of way points, which is
+not ordered as a series of equidistant way points, it means that some
+handling of when or how to update the position of the virtual leader
+is needed.
+
+For example; in the case, where the way points are far from each
+other, it is still desired to make the virtual leader trajectory
+converge the line between these two way points, kind of like the
+\ac{LOS} guidance. Earlier a path following algorithm using a \ac{LOS}
+principle was used, to calculate a course angle to a point projected
+into the line between two way points with a specified lookahead
+distance. The projection with the lookahead ensures convergence to the
+line. But in the case of controlling the virtual leader, it is not
+necessary to calculate the course angle from the virtual leader to the
+projected point, because this is only a virtual anchor of the
+formation, hence this only specifies where the geometry of the
+formation is calculated from. 
+
+For the inner loop, a heading based \ac{LOS} method can still be used,
+but this should be calculated for every ship, with each their
+reference position $\mathbf{p}_{i,r}$.
+
+
