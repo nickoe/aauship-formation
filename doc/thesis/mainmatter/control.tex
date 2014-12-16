@@ -8,7 +8,7 @@ algorithm.}
 
 
 % This is a summary of how they use Potential Fields in "UAV Formation Flight using 3D Potential Field"
-\section{One approach for Potential Fields}
+\section{One Approach for Potential Fields}
 In the following approach is generated a potential field for each agent depending on obstacles, formation, desired and actual position. It will be a combination of virtual leader and potential field. The principle generates a potential field to keep the formation and that field is moved around as a virtual leader. When the virtual leader is moved around results in a deflection of the desired position and causes the affected agents to get back into position. The positions of the agents in the field is given individually to the specific agents relative to the virtual leader. The approach generates a single resulting vector for each agent which is used to guide the agent. The potential field for each agent is generated from four components:
 \begin{align}
 \tilde{F}_i^{tot} = F_{vl}+F_{ij}^{tot}+F_{ca}^{tot}+F_{oa}^{tot}
@@ -86,7 +86,7 @@ F_i^{tot} = min\{\,\,\,||\tilde(F)_i^{tot}||\,\,\,,\,\,F_{max}\,\,\,\}\frac{\til
 
 
 
-\section{The potential field strategy}
+\section{The Potential Field Strategy}
 The theory of potential fields are implemented with the strategy proposed in section \ref{sc:potential-fields}. The potential field is generated for each individual agent at every update step to make the formation move and converge to a specified formation and position. The field is generated based on forces acting in a overlying potential field structure where one force converges the agent to a desired position, a force attracting the agent to obtain the desired formation along the trajectory, a force repelling the agent from other agents is their distance is too small and finally a force repelling the agents from static objects. The latter two can seem the same, but the repelling force will be larger for the agent-agent force due to the fact that two agents could have course directly toward each other and a more aggressive avoidance can be needed.
 
 To be able to generate and simulate the potential field then implementation needs to be generic. First it was developed with one agent that needs to converge to a desired position and afterwards were other agents added as obstacles and some static objects were added in extend. From these obstacles it can be seen that a single agent are able to converge to a position which makes it possible to expand such that more agents can converge into formation with reference from either a virtual leader or from each other. This will solve the formation coordination task, where the following task will be the group coordination task. The group coordination task has the goal to move the formation around, which here will be done by making the virtual leader, or an actual leader of the formation, follow a trajectory specified. This will make the other agents follow this leader and withhold their formation on the trajectory.
@@ -139,13 +139,10 @@ The scenario on figure \ref{fig:roevproblem} has the following steps. The agent 
 In the end this results in that the every agent needs a magnitude and a direction of which they should move. This will be given depending on the total environment where the agents are manoeuvring. When applying this formation strategy a collision free movement are guaranteed which is one of the more critical criteria to be fulfilled. \todo{Det her skal der nok skrives lidt matematik om som viser det, eller en god forklaring. Men dog er det jo en naturlig del af pot field.}
 
 \subsection{Adding the Dynamics for Simulation}
-\todo{Should this be moved to the potentialfield.tex?}
-Describe the block diagram connecting the potential field calculations,
-an analogy to the wp\_gen script for the path follower.
+\todo{Describe the block diagram connecting the potential field calculations,
+an analogy to the wp\_gen script for the path follower.}
 
-Describe how the dynamics will affect the trajectory.
-
-Describe the behaviour when a boat gets stuck in a local minima. hhjj
+Describe the behaviour when a boat gets stuck in a local minima.
 
 \begin{figure}[htbp]
 \centering
@@ -160,7 +157,6 @@ as seen with the e flow is illustrated on the block diagram on
 figure~\vref{fig:potentialfield_block}.
 
 Part og this flow can be computed by the $i$'th ship themselves.
-
 
 The implementation of this is tested in matlab, using the m-files;
 
@@ -213,7 +209,6 @@ solver. It is calculated as the paper presents, \citep[eq.
 
 This is passed to the ships inner control loop.
 
-
 When the trajectory is generated from a series of way points, which is
 not ordered as a series of equidistant way points, it means that some
 handling of when or how to update the position of the virtual leader
@@ -236,3 +231,48 @@ For the inner loop, a heading based \ac{LOS} method can still be used,
 but this should be calculated for every ship, with each their
 reference position $\mathbf{p}_{i,r}$.
 
+\begin{algorithm}[H]
+	\KwData{track as global mission trajectory as way points}
+	initialization\;
+	\While{$m <=$ length of track}{
+		\For{every $i$-th boat}{
+			\If{formation is ok}{
+				\If{$p_{vl}$ is inside the way point acceptance radius of the
+				track}{
+					$m \gets m + 1$\; 
+					$p_{vl} \gets$ \textsl{LOS}$(\ p_{vl}\ ,\ $track($m$)\ )\;
+				}
+			}
+			$(\ p_{d,i}\ ,\ F_{\text{tot},i}\ ) \gets $  \textsl{pathgen}(\ $p_i$\ ,\ $p0_i$\ )\;
+			$p_{r,i} \gets p_i + F_{\text{tot},i}$\;
+			$\psi_{d,i} \gets $ heading from $p_i$ to $p_d$\;
+			$u_i \gets $ \textsl{controller}(\ $\psi_d$\ )\;
+			\textsl{send input $u$ to ship}\;
+			$x_i \gets $ \textsl{sense ship states}\;
+			$p_i \gets $ position of $x_i$\; 
+		}
+	}
+	\caption{This pseudo code describes how the potential field is used
+	for each boat to calculate the reference for the inner controller
+	for every boat at every time step. Every iteration in the while loop
+	is a time step.\vspace{6pt}}
+	\label{al:potfield}
+\end{algorithm}
+
+The algorithm~\vref{al:potfield} describes how the potential field
+strategy can be simulated, were each iteration of the while loop is a
+time step, which means that the control will continue until the
+formation has reached the way point acceptance radius of the track.
+This is to ensure that the formation anchor do not move forward if the
+ships are not properly in formation. This is analogous with the group
+coordination task as defined by \citep{thorvaldsen}, and described in
+section~\vref{sc:initialisation}.
+
+For the real implementation in \ac{ROS}'s node structure, only loop
+inside the for every boat should be a node, such that there could be
+$i$ instances of this node, each representing one boat. 
+
+
+
+
+\todo{Describe how the dynamics will affect the trajectory.}

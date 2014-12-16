@@ -16,7 +16,7 @@ All the robots in the terminology of \cite{muv-survey} are called \textit{agents
 	\label{fig:form_avoid_right}
 \end{figure}
 
-\section{State of the art}
+\section{State of the Art}
 When looking into formation control many different types of control can be taken into account. The main types of formation control are separated into six different types, all under the main topic \textit{multiple vehicles coordination strategies}. The overview for this can be found in the survey paper \citep{muv-survey} who explains the six main types and a few alternations of these.
 
 The theoretical views on control of \ac{MUV}'s behaviour are by \citep{muv-survey} divided into two classes; centralized and decentralized systems. If the system is centralized this means that all control of the formation is done on one agent, and the others receive information from the core agent. This form of system has the advantage that the core agent can optimize vehicle coordination, accommodate individual agent faults and monitor the accomplishment of the mission. The main disadvantage of this system is that if a fault should occur in the core agent this will affect and facilitate a failure of the whole system.
@@ -37,7 +37,7 @@ The different types of coordination and control algorithms within centralized an
 	When applying the graph theory method one assign every agent as a node and assign connections between the nodes. In graph theory this is denoted vertices and edges. The study with graph theory is mainly concentrated of the formation itself and related to changes within the structure. This can be related to the structure within a tree-structure which is used when assigning the formations in graph theory manor. This can be applied as communication analysis for the agents and consensus analysis can be of benefit. The edges between the nodes symbolizes the possible connections thus communication between them. The nodes that are connected are denoted as neighbours and are capable of communicating.
 \end{description}
 
-\subsection{Approaches on formation control}
+\subsection{Approaches on Formation Control}
 
 
 This does not have any relevant impact of how the mappings of the seabed would be due to the subsequent processing of the collected data from the maps.
@@ -64,7 +64,8 @@ want to achieve, and depending on the strategy and the formation type
 some things are to be considered as requirements regarding how the
 formation should work. In this discussion lawnmower patterns are considered. In this work thee ships are considered for simplicity, but it should be extensible to n-number of ships. The lawnmower patterns will suit well for the mapping of a seabed where one or more ships are to sail from shore to shore in a fjord.
 
-\subsubsection{Initialisation}
+\subsection{Initialisation}
+\label{sc:initialisation}
 When looking at the specific task several things needs to be taken into account. When starting the mission, the ships may start at positions that is not in the desired formation. It might be of importance that the ships are in
 formation when they start tracking the desired track. Therefore some
 attention must be given on how to make the ships initialize this
