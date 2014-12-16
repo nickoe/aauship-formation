@@ -139,13 +139,10 @@ The scenario on figure \ref{fig:roevproblem} has the following steps. The agent 
 In the end this results in that the every agent needs a magnitude and a direction of which they should move. This will be given depending on the total environment where the agents are manoeuvring. When applying this formation strategy a collision free movement are guaranteed which is one of the more critical criteria to be fulfilled. \todo{Det her skal der nok skrives lidt matematik om som viser det, eller en god forklaring. Men dog er det jo en naturlig del af pot field.}
 
 \subsection{Adding the Dynamics for Simulation}
-\todo{Should this be moved to the potentialfield.tex?}
-Describe the block diagram connecting the potential field calculations,
-an analogy to the wp\_gen script for the path follower.
+\todo{Describe the block diagram connecting the potential field calculations,
+an analogy to the wp\_gen script for the path follower.}
 
-Describe how the dynamics will affect the trajectory.
-
-Describe the behaviour when a boat gets stuck in a local minima. hhjj
+Describe the behaviour when a boat gets stuck in a local minima.
 
 \begin{figure}[htbp]
 \centering
@@ -160,7 +157,6 @@ as seen with the e flow is illustrated on the block diagram on
 figure~\vref{fig:potentialfield_block}.
 
 Part og this flow can be computed by the $i$'th ship themselves.
-
 
 The implementation of this is tested in matlab, using the m-files;
 
@@ -213,7 +209,6 @@ solver. It is calculated as the paper presents, \citep[eq.
 
 This is passed to the ships inner control loop.
 
-
 When the trajectory is generated from a series of way points, which is
 not ordered as a series of equidistant way points, it means that some
 handling of when or how to update the position of the virtual leader
@@ -235,4 +230,12 @@ formation is calculated from.
 For the inner loop, a heading based \ac{LOS} method can still be used,
 but this should be calculated for every ship, with each their
 reference position $\mathbf{p}_{i,r}$.
+
+
+%\begin{lstlist­ing}
+algorithm formulated on note in group room
+%\end{lstlist­ing}
+\todo{Fix this, pseudo code}
+
+\todo{Describe how the dynamics will affect the trajectory.}
 
