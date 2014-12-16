@@ -1,4 +1,4 @@
-\chapter{Identification of hydrodynamic coefficients}
+\chapter{Identification of Hydrodynamic Coefficients}
 \label{app:damping}
 
 \section{Objective}
@@ -12,7 +12,7 @@ test, performed in a lake, and two tests to determine pitch and roll, performed 
 \section{Theory}
 The surge, sway and yaw tests are performed with theory of one method of testing, and theory of another method is used when determining pitch and roll. The damping in surge, sway and yaw is estimated by fitting data to a first order differential equation where the pitch and roll dampings are determined from fitting onto a second order differential equation. These two ways of determining the damping coefficients will be denoted \textit{method one} for the first order fitting and \textit{method two} for the second order fitting.
 
-\subsection{Which parameters to determine}
+\subsection{Which Parameters to Determine}
 The parameters that needs to be determined is the damping coefficients
 from the damping matrix. The 5 \ac{DOF} damping matrix is reduced from the 6 \ac{DOF} damping matrix from \ref{eq:6dofd}:
 \begin{align}
@@ -150,7 +150,7 @@ I_z\dot r - N_rr &= \tau_{r}
 \end{align}
 These equations can be utilized to calculate the coefficients from the damping matrix $D$ and the restoring force matrix $G$. The coefficients regarding surge, sway and yaw, $u$, $v$ and $r$, will be determined by \textit{method one} and coefficients regarding pitch and roll, $q$ and $p$, and the restoring force coefficients $K_\varphi$ amd $M_\theta$ will be determined by \textit{method two}.
 
-\subsection{Method one}
+\subsection{Method One}
 \label{subsec:methodone}
 This method is used to fit a first order differential equation to be able to estimate the damping coefficient. This is done by performing a test of the vessel. The vessel is accelerated from zero velocity to a constant velocity from where the input is taken away. This will make a velocity curve as seen on figure \ref{fig:phase3}.
 \begin{figure}[htbp]
@@ -329,13 +329,13 @@ I_x\ddot \varphi + (2\sigma I_x)\dot \varphi + (\omega_d^2I_x+\sigma^2I_x)\varph
 %\end{align}
 
 
-\subsubsection{Surge test}
+\subsubsection{Surge Test}
 \begin{align}
 m\dot u + X_uu = \tau_{u}
 \end{align}
 where only \textit{method one} is used.
 
-\subsubsection{Sway test}
+\subsubsection{Sway Test}
 \begin{align}
 m\dot v + Y_vv &= \tau_{v}\\
 -mz_g\dot v + K_vv &= \tau_{v}\\
@@ -343,7 +343,7 @@ mx_g\dot v + N_vv &= \tau_{v}
 \end{align}
 where only \textit{method one} is used.
 
-\subsubsection{Yaw test}
+\subsubsection{Yaw Test}
 \begin{align}
 mx_g\dot r + Y_rr &= \tau_{r}\\
 -I_{xz}\dot r + K_rr &= \tau_{r}\\
@@ -351,13 +351,13 @@ I_z\dot r + N_rr &= \tau_{r}
 \end{align}
 where only \textit{method one} is used.
 
-\subsubsection{Pitch test}
+\subsubsection{Pitch Test}
 \begin{align}
 I_y\dot q + M_qq + M_\theta \theta&= 0\\
 \end{align}
 where only \textit{method two} is used.
 
-\subsubsection{Roll test}
+\subsubsection{Roll Test}
 \begin{align}
 -mz_g\dot p + Y_pp &= 0\\
 I_x\dot p + K_pp + K_\varphi\varphi &= 0\\
@@ -479,7 +479,7 @@ The tests performed are as follows:
 The parameters in pitch and roll is determined by fitting data to \textit{method two} as described in \ref{subsec:methodtwo}. Previous work done by \citep{13gr931} has provided the data to be fitted. These data can be found on the cd, \todo{ref til cd}. The data is dependent of the position on the angle of the vessel and the equations is therefore formulated to fit these measurements. The fitting of the data is done as procedure \textit{method two} and no further tests needs to be performed. The tests shows pitch and roll, measured in a vicon motion tracking lab. The vessel is put to a maximum angle without level it into the water. Afterwards it is released and the vessel will damp to zero angle, being horizontal in steady water. To verify the data from \citep{13gr931} accelerometer will be collected both in pitch and roll from two simpler tests without the vicon motion tracking lab.
 
 \section{Results}
-\subsubsection{Surge test}
+\subsubsection{Surge Test}
 \begin{figure}[H]
 	\centering
 	\includegraphics{plot/surgecoeffs}
@@ -487,7 +487,7 @@ The parameters in pitch and roll is determined by fitting data to \textit{method
 	\label{fig:pbtest}
 \end{figure}
 
-\subsubsection{Sway test}
+\subsubsection{Sway Test}
 While performing tests with sway it was rather difficult to get any reliable data from measurements. Weather conditions was almost perfect but there was a slight wind. This seemed from measurements to be enough to counteract the forces added by the bow thrusters. The vessel was not moving much over time, thus the measurements seems unreliable. Therefore is the parameters from sway approximated from observations of how fast the vessel was moving over time. The constants which needs to be approximated manually is $Y_\nu$, $K_\nu$ and $N_\nu$.
 
 it is assumed, from observations, that the vessel moves in sway with a constant velocity being $0.1\frac{m}{s}$. From this velocity it is estimated that the vessel was on hold after a few seconds. This gives the following damping:
@@ -498,7 +498,7 @@ it is assumed, from observations, that the vessel moves in sway with a constant 
 	\label{fig:swaycoeffs}
 \end{figure}
 
-\subsubsection{Yaw test}
+\subsubsection{Yaw Test}
 \begin{figure}[H]
 	\centering
 	\includegraphics{plot/yawcoeffsbow}
@@ -513,7 +513,7 @@ it is assumed, from observations, that the vessel moves in sway with a constant 
 \end{figure}
 
 \newpage
-\subsubsection{Pitch test}
+\subsubsection{Pitch Test}
 \begin{figure}[H]
 	\centering
 	\includegraphics{plot/pbtest}
@@ -540,7 +540,7 @@ it is assumed, from observations, that the vessel moves in sway with a constant 
 \end{figure}
 
 \newpage
-\subsubsection{Roll test}
+\subsubsection{Roll Test}
 \begin{figure}[H]
 	\centering
 	\includegraphics{plot/rltest}
@@ -670,7 +670,7 @@ M_{RB} =
 0 & -0.39 & -0.05359 & -0.00108 & 1.10675
 \end{bmatrix}
 \end{align}
-\section{Discussion and conclusion}
+\section{Discussion and Conclusion}
 The tests regarding surge, sway and yaw have been performed in a lake, where wind could have had an influence on the measurement data. The disturbance from the wind would dominate most in the sway tests due to the lack of power from the bow thrusters. The wind was not of greater speed at the day of testing, but yet could make the vessel stand still during sway tests. Thus have the sway parameters been estimated from observations and not from trustworthy measurement data. The wind did not have any significant impact of measurements during surge and yaw tests.
 
 The pitch and roll tests have been made in a pool in a lab with Vicon system. These tests is not as precise as they could be, due to reflecting waves from the side of the pool. Though is the dampings determined from these data, but only from the first part of the data. Therefore is the regressions made to fit the first part of the data more than the later part of the data. Thus are these taken as approved regressions and a fair approximation of the angular positions.

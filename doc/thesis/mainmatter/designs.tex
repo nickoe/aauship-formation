@@ -1,10 +1,10 @@
-\chapter{Different control strategies}
+\chapter{Different Control Strategies}
 
 \head{"A control system, that forces the system output $y(t)$ to track a desired output $y_d(t)$ solves a trajectory tracking problem" \citep{fossen}}.
 
 \todo{Should this be included under the selecteed formation control strageties?}
 
-\section{Trajectory Tracking control}
+\section{Trajectory Tracking Control}
 When applying control to a vessel that needs to track a specified trajectory, then the type control will be classified according to the number of available actuators.This is usually split between surge, sway and yaw, which corresponds to forward motion, sideslip and turning.
 
 A time varying reference trajectory for a vessel to track will be given as:
@@ -36,7 +36,7 @@ When designing a motion control system with this type of objective it is importa
 	When applying trajectory-tracking control, position and and velocity of vessels should track the position and velocity of some time varying path reference signal. The feedback is a trajectory tracking controller to make the vessel converge to the trajectory. This is used when having course changing manoeuvres and speed changing along the trajectory. This could for instance be a change of speed in a turn of the vessel.
 \end{description}
 
-\subsection{Manoeuvring the vessel using the LOS method}
+\subsection{Manoeuvring the Vessel Using the LOS Method}
 Path-following problems for vessels are often solved by implementing \ac{LOS} algorithms. Opposite to other position control algorithms, where the vessel may be driven both in longitudinal and transversal directions to converge to a path, the \ac{LOS} algorithm gives a more natural motion towards the desired path. This is done by giving a more natural reference to the heading of the vessel. One of the advantages of this is that it can be applied both to fully actuated and underactuated vessels.
 
 Since it is only the leader, and not any of the followers, who need to follow a path, this is only applied on one vessel. This can also be extended to a leader in a virtual structure. To apply the \ac{LOS} algorithm a setup is needed. To get an overview of the functionality of the \ac{LOS} algorithm see figure~\vref{fig:allinallframes}.
@@ -48,7 +48,7 @@ Since it is only the leader, and not any of the followers, who need to follow a 
 \end{figure}
 On the figure is a green vessel that needs to get onto the blue path. The red point at the path is desired position $\theta$ at time $t$, $\textbf{p}_d(\theta)$. From this point a tangent to the path is made, which crosses the vessels heading. The angle from north to the tangents slope is the \textit{desired heading}, $\psi_d$, for the vessel. This will make it converge to the reference path over time. $s$ along the tangent is the \textit{along track error} and $e$ from the vessel to the path is the \textit{cross track error}, which are  the two that needs to be minimized to make the vessel converge to the path. $\epsilon$ is the position of the vessel relative to the reference point on the path.
 
-\subsubsection{The \ac{LOS} algorithm}
+\subsubsection{The \ac{LOS} Algorithm}
 The vessel has a generalized position in the ${n}$-frame given as
 \begin{align}
 \eta = (\textbf{p},\psi)^\top\quad , \quad \textbf{p} = (x,y)^\top
