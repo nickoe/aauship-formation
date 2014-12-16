@@ -3,7 +3,7 @@
 
 \subsection{The \acl{KF}}
 
-\nomenclature{$\boldsymbol\Phi$}{State transistion matrix of a discrete linear dynamic system}
+\nomenclature{$\boldsymbol\Phi$}{State transition matrix of a discrete linear dynamic system}
 \nomenclature{$\mathbf G$}{Input matrix}
 \nomenclature{$\mathbf H$}{Measurement sensitivity matrix defining the linear relationship between the state of the dynamic system and the measurements that can be made}
 \nomenclature{$\mathbf K$}{Kalman gain matrix}
@@ -74,13 +74,13 @@ K_k &= P_k^-H_k^\top S_k^{-1}\\
 P_k^+ &= (I - K_k H_k) P_k^-
 \end{align}
 \end{itemize}
-where the state transition and observation matrices are defined by their respective jacobians:
+where the state transition and observation matrices are defined by their respective Jacobians:
 \begin{align}
 F_{k-1} &= \left.\frac{\partial f}{\partial x}\right|_{\hat x_{k-1}^-,u_{k-1}} \label{eq:EKFF}\\
 H_k &= \left.\frac{\partial h}{\partial x}\right|_{\hat x_{k}^-}
 \end{align}
 
-\subsection{\acl{KF} in the case of AAUSHIP}
+\subsection{\acl{KF} in the Case of AAUSHIP}
 \label{sec:kfonaauship}
 The input is given by the forces applied to the vessel. On AAUSHIP with the two twin propellers and two side thrusters as illustrated in section~\vref{sec:thrust_allocation}, this will result in forces in the surge and sway direction as well as a torque around yaw, the roll and pitch torques are neglected, such that the input vector $u_k$ becomes.
 \begin{align}
@@ -223,7 +223,18 @@ The precision of the normal \ac{GPS} reciever is som times bigger than the desir
 
 Some experiments with this setup has been performed by the authors using RTKLIB and LEA-4T recievers, but this has proven to be problematic as soon as the rover is moving. This is kind of a do it yourself way of getting a \ac{RTK} system. Comercial systems do exist that work better, but these are fairly expensive to aquire. Therefore it has been decided to make the system such that is will work with a standard \ac{GPS} module, and optionally use \ac{RTK} with logging, where it is possible to post process the data to get the exact positions of where the ships has actually sailed.
 
-This can be done, because the lawnmover patters that the ships shall follow is not a requirement from the mapping point of view. \todo{reference to path plainning chapter} The ship is also pitching an roling, which cannot be contoller, and hence it makes no sense to make the ship positioning overly accurate. This is seen from the perspective that the ships main task is to cover the seabed with measurements, thus it is only important to know the actual position and attitude of the ship. This can be logged from the \ac{RTK} \ac{GPS} and then used to determine the actual position and therefore the actual measurement point of the seabed can be calculated.
+This can be done, because the lawnmower reference trajectory the ships
+shall follow is not a hard requirement from the mapping point of view,
+they are only intended to distribute the scanning area such that it is
+scanned fairly even. The reference trajectory generation is described
+in chapter~\vref{ch:pathgen}. The ship is also pitching an rolling,
+which cannot be controller, and hence it makes no sense to make the
+ship positioning overly accurate. This is seen from the perspective
+that the ships main task is to cover the seabed with measurements,
+thus it is only important to know the actual position and attitude of
+the ship. This can be logged from the \ac{RTK} \ac{GPS} and then used
+to determine the actual position and therefore the actual measurement
+point of the seabed can be calculated.
 
 \subsection{When absence of \ac{GPS} signal}
 When there is no \ac{GPS} signal it is not possible to make any new estimates based from the measurements. This results in a model based phase of the controlling of the AAUSHIP. Therefore the AAUSHIP needs to converge to the predetermined trajectory based on how the model of the ship would do it. When a new \ac{GPS} signal is present this needs to be taken into account and thereby used as a correction to the model prediction. When the signal is absent there are different ways to handle this in the model. One of the ways is to set the variance of the sensor noise from the \ac{GPS} high. This value could be around $10 \cdot 10^9$ to ensure that the model does not take the measurement from the \ac{GPS} into account.
