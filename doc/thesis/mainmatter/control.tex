@@ -1,6 +1,6 @@
 \chapter{Control}
 \label{ch:control}
-\head{This chapter describes the selected strategies from
+\head{This chapter describes the selected strategy from
 	chapter~\vref{ch:selformctrl} in more detail, describing the exact
 algorithm.}
 
@@ -9,27 +9,38 @@ algorithm.}
 
 % This is a summary of how they use Potential Fields in "UAV Formation Flight using 3D Potential Field"
 \section{One Approach for Potential Fields}
-In the following approach is generated a potential field for each agent depending on obstacles, formation, desired and actual position. It will be a combination of virtual leader and potential field. The principle generates a potential field to keep the formation and that field is moved around as a virtual leader. When the virtual leader is moved around results in a deflection of the desired position and causes the affected agents to get back into position. The positions of the agents in the field is given individually to the specific agents relative to the virtual leader. The approach generates a single resulting vector for each agent which is used to guide the agent. The potential field for each agent is generated from four components:
+In the following approach a potential field is generated for each
+agent depending on obstacles, formation, desired and actual position.
+It will be a combination of virtual leader and potential field. The
+principle generates a potential field to keep the formation and that
+field is moved around as a virtual leader. When the virtual leader is
+moved around it results in a deflection of the desired position and
+causes the affected agents to get back into position. The positions of
+the agents in the field is given individually to the specific agents
+relative to the virtual leader. The approach generates a single
+resulting vector for each agent which is used to guide the agent. The
+potential field for each agent is generated from four components:
 \begin{align}
 \tilde{F}_i^{tot} = F_{vl}+F_{ij}^{tot}+F_{ca}^{tot}+F_{oa}^{tot}
 \end{align}
 where:
 \begin{ffk}
-$F_{vl}$ are forces to the virtual leader\\
-$F_{ij}^{tot}$ are forces contributed from other agents to the field\\
-$F_{ca}^{tot}$ are a field component pointing away from the agent is collision is close\\
-$F_{oa}^{tot}$ are forces used for obstacles in the field and introducing the obstacle avoidance
+\firmlist%
+\item[$F_{vl}$] virtual leader force
+\item[$F_{ij}^{tot}$] inter-agent forces
+\item[$F_{ca}^{tot}$] agent-agent collision avoidance forces
+\item[$F_{oa}^{tot}$] agent-obstacle collision avoidance forces
 \end{ffk}
-\begin{itemize}
-\item $F_{vl}$ virtual leader\\
-The virtual leader is an anchor of each formation and controls the movement of this. This movement can either be given as a full trajectory of as a set of waypoints. The local virtual leader's part to the potential field is:
+
+\subsubsection{Virtual Leader, $F_{vl}$}
+The virtual leader is an anchor of each formation and controls the movement of this. This movement can either be given as a full trajectory of as a set of way points. The local virtual leader's part to the potential field is:
 \begin{align}
 F_{vl} &= K_{vl}(p_{vl}^n-p_i^n-[p_{vl}^n-p_{i0}^n])\\
 &= K_{vl}(d_i-d_{i0})
 \end{align}
 $K_{vl}$ is a tuning parameter. $p_{vl}$ is position of the virtual leader, $p_i$ is position of agent $i$, $p_{i0}$ is desired position of agent $i$ and the $d$ is a shorter notation for the distances in between. The virtual leader component guides the agents directly to their desired positions relative to the virtual leader.
 
-\item $F_{ij}$ inter vehicle influence\\
+\subsubsection{Inter Vehicle Influence, $F_{ij}$}
 This is the contribution of other vehicles to the potential field, which is expressed as:
 \begin{align}
 F_{ij} &= K_{ij}(p_{j}^n-p_i^n-[p_{j0}^n-p_{i0}^n])\\
@@ -40,7 +51,7 @@ Similar to the previously the $p$s are positions, $K_{ij}$ is a tuning parameter
 F_{ij}^{tot} = \sum\limits_{j=1}^NF_{ij}(i,j) \text{ for } j\neq i
 \end{align}
 
-\item $F_{ca}$ collision avoidance\\
+\subsubsection{Collision Avoidance, $F_{ca}$}
 The collision avoidance takes effect when the agents get closer than a pre defined distance of each other. It generates an additional field component for the vehicle $i$ which points away from the entering agent causing the agents to move away from each other. To ensure the avoidance the component converges towards infinity in the centre of the $i$'th agent. The $F_{ca}$ is expressed as:
 \[
     F_{ca}^{ij}= 
@@ -55,7 +66,7 @@ The collision avoidance can be expressed in a total term of the collision avoida
 F_{ca}^{tot} = \sum\limits_{j=1}^NF_{ca}^{ij} \text{ for } i\neq j
 \end{align}
 
-\item $F_{oa}$ obstacle avoidance\\
+\subsubsection{Obstacle Avoidance, $F_{oa}$}
 The same principle as for collision avoidance can be applied to obstacle avoidance. Now each obstacle needs to be handled as an agent, which will make the same result, but the reference is a little different:
 \[
     F_{oa}^{ik}= 
@@ -74,13 +85,12 @@ The distance $r$ can be determined dynamically depending on the velocity of the 
 r = r^{min} + K_r||\dot{p^n}||
 \end{align}
 
-\item Potential field\\
+\subsubsection{Potential field}
 Now these forces needs to be summed together to get $\tilde{F}_i^{tot}$ which gives the magnitude and direction of the potential field for vehicle $i$ at its current position. As the potential field does not need to expand to infinity it is reasonable to define a maximum amplitude for the vector, while still keeping its direction:
 \begin{align}
 F_i^{tot} = min\{\,\,\,||\tilde(F)_i^{tot}||\,\,\,,\,\,F_{max}\,\,\,\}\frac{\tilde{F}_i^{tot}}{||\tilde{F}_i^{tot}||}
 \end{align}
 
-\end{itemize}
 \todo{Dette er en hurtigere gennemgang af denne metode, som ikke giver SÅ meget mening uden et billede. Men der anvendes et potentiale felt pr agent, som skal placeres ud fra et FRP, som igen flyttes rundt i det givne miljø.}
 
 
@@ -137,6 +147,9 @@ Another problem that can become crucial arises when two agents or two objects ar
 The scenario on figure \ref{fig:roevproblem} has the following steps. The agent $i$ moves in the direction of the steepest decent. Then it gets to the border of another agent where it cannot go through thus starts to go around this agent. The problem arises when agent $i$ reaches another agent on the way where it now has reached a local minima. Now the steepest gradient will point at the position where the agent already is thus making it think it has reached the end point. Solutions to this problem can be formulated in different ways. One solution could be to cluster the two objects together and instead of making their potential field individually, then combine those together and make an ellipsoid or even a circle formed obstacle of those objects. This will ensure that the local minima disappears thus not making an agent get stuck between those objects. Another solution is to make an exception handler that can tell if agent $i$ has reached the desired position. If it has not reached its end point, and the position is placed in a constant spot, it perturbs the desired position of the agent until the direction of the steepest decent changes. This will mean that the agent is out of the local minima and can continue on the trajectory.
 
 In the end this results in that the every agent needs a magnitude and a direction of which they should move. This will be given depending on the total environment where the agents are manoeuvring. When applying this formation strategy a collision free movement are guaranteed which is one of the more critical criteria to be fulfilled. \todo{Det her skal der nok skrives lidt matematik om som viser det, eller en god forklaring. Men dog er det jo en naturlig del af pot field.}
+
+
+\todo{Plot på en eksempelløsning på local minima samt beskrivelse}
 
 \subsection{Adding the Dynamics for Simulation}
 \todo{Describe the block diagram connecting the potential field calculations,
@@ -266,7 +279,7 @@ formation has reached the way point acceptance radius of the track.
 This is to ensure that the formation anchor do not move forward if the
 ships are not properly in formation. This is analogous with the group
 coordination task as defined by \citep{thorvaldsen}, and described in
-section~\vref{sc:initialisation}.
+section~\ref{sc:initialisation}.
 
 For the real implementation in \ac{ROS}'s node structure, only loop
 inside the for every boat should be a node, such that there could be
