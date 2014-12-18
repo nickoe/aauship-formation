@@ -10,16 +10,17 @@ algorithm.}
 % This is a summary of how they use Potential Fields in "UAV Formation Flight using 3D Potential Field"
 \section{One Approach for Potential Fields}
 In the following approach a potential field is generated for each
-agent depending on obstacles, formation, desired and actual position.
-It will be a combination of virtual leader and potential field. The
-principle generates a potential field to keep the formation and that
-field is moved around as a virtual leader. When the virtual leader is
-moved around it results in a deflection of the desired position and
-causes the affected agents to get back into position. The positions of
-the agents in the field is given individually to the specific agents
-relative to the virtual leader. The approach generates a single
-resulting vector for each agent which is used to guide the agent. The
-potential field for each agent is generated from four components:
+agent including obstacles, formation span, desired, and actual
+position.  It will be a combination of virtual leader and potential
+field. The principle generates a potential field to keep the formation
+and that field is moved around as a virtual leader. When the virtual
+leader is moved around it results in a deflection of the desired
+position and causes the affected agents to get back into position. The
+positions of the agents in the field is given individually to the
+specific agents relative to the virtual leader. The approach generates
+a single resulting vector for each agent which is used to guide the
+agent. The potential field for each agent is generated from four
+components:
 \begin{align}
 \tilde{F}_i^{tot} = F_{vl}+F_{ij}^{tot}+F_{ca}^{tot}+F_{oa}^{tot}
 \end{align}
@@ -33,96 +34,158 @@ where:
 \end{ffk}
 
 \subsubsection{Virtual Leader, $F_{vl}$}
-The virtual leader is an anchor of each formation and controls the movement of this. This movement can either be given as a full trajectory of as a set of way points. The local virtual leader's part to the potential field is:
+The virtual leader is an anchor of each formation, the \ac{FRP}, and
+controls the movement of this. This movement can either be given as a
+full trajectory of as a set of way points. The local virtual leader's
+contribution to the field is defined as:
 \begin{align}
 F_{vl} &= K_{vl}(p_{vl}^n-p_i^n-[p_{vl}^n-p_{i0}^n])\\
 &= K_{vl}(d_i-d_{i0})
 \end{align}
-$K_{vl}$ is a tuning parameter. $p_{vl}$ is position of the virtual leader, $p_i$ is position of agent $i$, $p_{i0}$ is desired position of agent $i$ and the $d$ is a shorter notation for the distances in between. The virtual leader component guides the agents directly to their desired positions relative to the virtual leader.
+$K_{vl}$ is a tuning parameter. $p_{vl}$ is position of the virtual
+leader, $p_i$ is position of agent $i$, $p_{i0}$ is desired position
+of agent $i$ and the $d$ is a shorter notation for the distances in
+between. The virtual leader component guides the agents directly to
+their desired positions relative to the virtual leader.
 
 \subsubsection{Inter Vehicle Influence, $F_{ij}$}
-This is the contribution of other vehicles to the potential field, which is expressed as:
+This is the contribution of other vehicles to the potential field,
+which is expressed as:
 \begin{align}
 F_{ij} &= K_{ij}(p_{j}^n-p_i^n-[p_{j0}^n-p_{i0}^n])\\
 &= K_{ij}(d_{ij}-d_{ij0})
 \end{align}
-Similar to the previously the $p$s are positions, $K_{ij}$ is a tuning parameter and $d$ is a shorter notation for the distances in between. This component preserves the formation by affecting the agents to keep their respective desired distances among themselves. Therefore is ratio between $K_{vl}$ and $K_{ij}$ a weighting that causes the agents to follow the virtual leader or to preserve their desired formation. In a swarm of $N$ agents the total component for agent $i$ given by:
+Similar to previously the $p$s are positions, $K_{ij}$ is a tuning
+parameter and $d$ is a shorter notation for the distances in between.
+This component preserves the formation by affecting the agents to keep
+their respective desired distances among themselves. Hence the
+weighting on each goal can be adjusted by $K_{vl}$ and $K_{ij}$ a
+weighting that causes the agents to follow the virtual leader or to
+preserve their desired formation.  In a swarm of $N$ agents the total
+field for agent $i$ given by:
 \begin{align}
 F_{ij}^{tot} = \sum\limits_{j=1}^NF_{ij}(i,j) \text{ for } j\neq i
 \end{align}
 
 \subsubsection{Collision Avoidance, $F_{ca}$}
-The collision avoidance takes effect when the agents get closer than a pre defined distance of each other. It generates an additional field component for the vehicle $i$ which points away from the entering agent causing the agents to move away from each other. To ensure the avoidance the component converges towards infinity in the centre of the $i$'th agent. The $F_{ca}$ is expressed as:
-\[
+The collision avoidance takes effect when the agents get closer than a
+pre defined distance of each other. It generates an additional field
+component for the vehicle $i$ which points away from the entering
+agent causing the agents to move away from each other. To ensure the
+avoidance the component converges towards infinity in the centre of
+the $i$'th agent. The $F_{ca}$ is expressed as:
+\begin{align}
     F_{ca}^{ij}= 
 \begin{cases}
     \frac{K_{ca}r}{||d_{ij}||}-K_{ca},& \text{for } ||d_{ij}||<r\\
     0,              & \text{otherwise}
 \end{cases}
-\]
-where $K_{ca}$ is a tuning parameter. $r$ is the safety radius for collision and $d_{ij}$ is the distance between the individual agents.
-The collision avoidance can be expressed in a total term of the collision avoidance:
+\end{align}
+where $K_{ca}$ is a tuning parameter. $r$ is the safety radius for
+collision and $d_{ij}$ is the distance between the individual agents.
+The collision avoidance can be expressed in a total term of the
+collision avoidance:
 \begin{align}
 F_{ca}^{tot} = \sum\limits_{j=1}^NF_{ca}^{ij} \text{ for } i\neq j
 \end{align}
 
 \subsubsection{Obstacle Avoidance, $F_{oa}$}
-The same principle as for collision avoidance can be applied to obstacle avoidance. Now each obstacle needs to be handled as an agent, which will make the same result, but the reference is a little different:
-\[
+The same principle as for collision avoidance can be applied to
+obstacle avoidance. Now each obstacle needs to be handled as an agent,
+which will make the same result, but the reference is a little
+different:
+\todo{describe why the oa is different from the ca}
+\begin{align}
     F_{oa}^{ik}= 
 \begin{cases}
     \frac{K_{oa}}{||d_{ki}||}-\frac{K_{oa}}{r},& \text{for } ||d_{ki}||<r\\
     0,              & \text{otherwise}
 \end{cases}
-\]
-where $k$ denotes the counter for obstacles instead of other agents. $K_{oa}$ is also a tuning parameter for the obstacle avoidance. $d_{ki}$ is the distance between an agent and the obstacle, which in a total term is summed up as:
+\end{align}
+where $k$ denotes the counter for obstacles instead of other agents.
+$K_{oa}$ is also a tuning parameter for the obstacle avoidance.
+$d_{ki}$ is the vector between an agent and the obstacle, which in a
+total term is summed up as:
 \begin{align}
 F_{oa}^{tot} = \sum\limits_{k=1}^MF_{oa}^{ik} \text{ for } i\neq k
 \end{align}
-Here $d_{ki}$ represents one of the $M$ place vectors which has the effect as a detected obstacle.
-The distance $r$ can be determined dynamically depending on the velocity of the agent:
+Here $d_{ki}$ represents one of the $M$ place vectors which has the
+effect of a detected obstacle.  The distance $r$ can be determined
+dynamically depending on the velocity of the agent:
 \begin{align}
 r = r^{min} + K_r||\dot{p^n}||
 \end{align}
 
 \subsubsection{Potential field}
-Now these forces needs to be summed together to get $\tilde{F}_i^{tot}$ which gives the magnitude and direction of the potential field for vehicle $i$ at its current position. As the potential field does not need to expand to infinity it is reasonable to define a maximum amplitude for the vector, while still keeping its direction:
+Now these forces was summed together to get
+$\tilde{F}_i^{tot}$, that was just an intermediate vector, which needs
+to be limited in a way, because this describes the speed the agents
+can move with.
+
+which gives the magnitude and direction of the
+potential field for vehicle $i$ at its current position. As the
+potential field does not need to expand to infinity it is reasonable
+to define a maximum amplitude for the vector, while still keeping its
+direction:
+\todo{Denne afsluttende subsubsection er underligt formuleret, husk
+det med tilden, og sikkert også hvordan vi jegner p\_r}
 \begin{align}
-F_i^{tot} = min\{\,\,\,||\tilde(F)_i^{tot}||\,\,\,,\,\,F_{max}\,\,\,\}\frac{\tilde{F}_i^{tot}}{||\tilde{F}_i^{tot}||}
+	F_i^{tot} = \min\{\,\,\,||\tilde{F}_i^{tot}||\,\,\,,\,\,F_{max}\,\,\,\}\frac{\tilde{F}_i^{tot}}{||\tilde{F}_i^{tot}||}
 \end{align}
-
-\todo{Dette er en hurtigere gennemgang af denne metode, som ikke giver SÅ meget mening uden et billede. Men der anvendes et potentiale felt pr agent, som skal placeres ud fra et FRP, som igen flyttes rundt i det givne miljø.}
-
-
 
 
 \section{The Potential Field Strategy}
-The theory of potential fields are implemented with the strategy proposed in section \ref{sc:potential-fields}. The potential field is generated for each individual agent at every update step to make the formation move and converge to a specified formation and position. The field is generated based on forces acting in a overlying potential field structure where one force converges the agent to a desired position, a force attracting the agent to obtain the desired formation along the trajectory, a force repelling the agent from other agents is their distance is too small and finally a force repelling the agents from static objects. The latter two can seem the same, but the repelling force will be larger for the agent-agent force due to the fact that two agents could have course directly toward each other and a more aggressive avoidance can be needed.
+The theory of potential fields are implemented with the strategy
+proposed in section \ref{sc:potential-fields}. The potential field is
+generated for each individual agent at every update step to make the
+formation move and converge to a specified formation and position. The
+field is generated based on forces acting in a overlying potential
+field structure where one force converges the agent to a desired
+position, a force attracting the agent to obtain the desired formation
+along the trajectory, a force repelling the agent from other agents if
+their distance is too small and finally a force repelling the agents
+from static objects. The latter two can seem the same, but the
+repelling force will be larger for the agent-agent force due to the
+fact that two agents could have course directly toward each other and
+a more aggressive avoidance can be needed.
 
-To be able to generate and simulate the potential field then implementation needs to be generic. First it was developed with one agent that needs to converge to a desired position and afterwards were other agents added as obstacles and some static objects were added in extend. From these obstacles it can be seen that a single agent are able to converge to a position which makes it possible to expand such that more agents can converge into formation with reference from either a virtual leader or from each other. This will solve the formation coordination task, where the following task will be the group coordination task. The group coordination task has the goal to move the formation around, which here will be done by making the virtual leader, or an actual leader of the formation, follow a trajectory specified. This will make the other agents follow this leader and withhold their formation on the trajectory.
+To be able to generate and simulate the potential field then
+implementation needs to be generic. First it was developed with one
+agent that needs to converge to a desired position and afterwards were
+other agents added as obstacles and some static objects were added in
+extend. From these obstacles it can be seen that a single agent is
+able to converge to a position which makes it possible to expand such
+that more agents can converge into formation with reference from
+either a virtual leader or from each other. This will solve the
+formation coordination task, where the following task will be the
+group coordination task. The group coordination task has the goal to
+move the formation around, which here will be done by making the
+virtual leader, or an actual leader of the formation, follow a
+trajectory specified. This will make the other agents follow this
+leader and withhold their formation on the trajectory.
 \begin{figure}[htbp]
   \includegraphics[width=0.9\textwidth]{fig/ftotmagnfigpdf1}
   \caption{Plot of one agent's trajectory with a desired position with obstacles to avoid}
   \label{fig:potfieldagenti}
 \end{figure}
-A plot for a total potential reference field for a single agent can be seen on figure \ref{fig:potfieldagenti}. The red line made of crosses are the trajectory that one single agent will follow, if the obstacles to avoid in the plot are static. In the plot every object, either an other agent or an object, are kept static. So it shows how the trajectory will be in one single time step. This will change in the next time step if the other agents also move in the potential field. The agent avoids obstacles on the way, where it can be seen that it does not get into the safety radius of the obstacles. In this specific plot is a safety radius ($r$) of $20$m chosen, such that the distance from agent $p_i$ (The red trajectory) to any obstacle always will be larger than $20$m.
-This radius applies both to other agents seen in the following equation
-\[
-    F_{ca}^{ij}= 
-\begin{cases}
-    \frac{K_{ca}r}{||d_{ij}||}-K_{ca},& \text{for } ||d_{ij}||<r\\
-    0,              & \text{otherwise}
-\end{cases}
-\]
-and to obstacles seen in the following equation
-\[
-    F_{oa}^{ik}= 
-\begin{cases}
-    \frac{K_{oa}}{||d_{ki}||}-\frac{K_{oa}}{r},& \text{for } ||d_{ki}||<r\\
-    0,              & \text{otherwise}
-\end{cases}
-\]
-where the gains $K_{ca}$ and $K_{oa}$ are chosen equally to a constant as 240. If this gain is chosen smaller it will result in that the agents are more allowed to approach the obstacles and get a little within the radius, but then afterwards getting repelled from the object. It corresponds to the gradient at the radius and how steep this is.
+A plot for a total potential reference field for a single agent can be
+seen on figure \ref{fig:potfieldagenti}. The red line made of crosses
+is the trajectory that one single agent will follow, if the obstacles
+to avoid in the plot are static. In the plot every object, either
+another agent or an object, are kept static. So it shows how the
+trajectory will be in one single time step. This will change in the
+next time step if the other agents also move in the potential field.
+The agent avoids obstacles on the way, where it can be seen that it
+does not get into the safety radius of the obstacles. In this specific
+plot is a safety radius ($r$) of $20$m chosen, such that the distance
+from agent $p_i$ (The red trajectory) to any obstacle always will be
+larger than $20$m.
+
+The gains $K_{ca}$ and $K_{oa}$ are chosen equally to a constant as
+240. If this gain is chosen smaller it will result in that the agents
+are more allowed to approach the obstacles and get a little within the
+radius, but then afterwards getting repelled from the object. It
+corresponds to the gradient at the radius and how steep this is.
 
 The same algorithm is applied where agent $i$ avoids other agents, agent $j$, $j+1$. This can be seen on figure \ref{fig:avoidagent}.
 \begin{figure}[htbp]
@@ -130,23 +193,96 @@ The same algorithm is applied where agent $i$ avoids other agents, agent $j$, $j
   \caption{Agent $i$ avoids agent $j$ and converges to the minima at the virtual leader}
   \label{fig:avoidagent}
 \end{figure}
-Agent $i$ takes a direct course toward the virtual leader but meets another agent as an obstacle. Agent $i$ moves on the boarder of agent $j$ with the defined safety radius and afterwards diverges from agent $j$ towards the virtual leader. This is all done by following the lowest gradient at all times.
+Agent $i$ takes a direct course toward the virtual leader but meets
+another agent as an obstacle. Agent $i$ moves on the boarder of agent
+$j$ with the defined safety radius and afterwards diverges from agent
+$j$ towards the virtual leader. This is all done by following the
+lowest gradient at all times.
 
-The gain of $K_{ij}$ is not to be interpret from figure \ref{fig:potfieldagenti}. $K_{ij}$ is the gain to the force that attracts the agents together by minimizing the distance in between them. By doing this the agents will get faster into the desired formation. The gain $K_{vl}$ does at some point the opposite. This gain adjusts the weighting of how fixated the agents should be to converge to the desired position. If this gain is relatively larger than $K_{ij}$ then the agents will converge directly to their position around the virtual leader and not converge to the desired formation on the way. This implies that the scaling between $K_{vl}$ and $K_{ij}$ controls if the formation should converge to the desired formation on the way to desired position, or if agent $i$ should only have the desired position in focus.
+The gain of $K_{ij}$ is not to be interpret from figure
+\ref{fig:potfieldagenti}. $K_{ij}$ is the gain to the force that
+attracts the agents together by minimizing the distance in between
+them. By doing this the agents will get faster into the desired
+formation. The gain $K_{vl}$ does at some point the opposite. This
+gain adjusts the weighting of how fixated the agents should be to
+converge to the desired position. If this gain is relatively larger
+than $K_{ij}$ then the agents will converge directly to their position
+around the virtual leader and not converge to the desired formation on
+the way. This implies that the scaling between $K_{vl}$ and $K_{ij}$
+controls if the formation should converge to the desired formation on
+the way to the desired position, or if agent $i$ should only have the
+desired position in focus.
 
-The grid in which the potential field is generated are limited with a certain resolution while simulating the agents movement. This reduces the directions of where the agents can move, which will not arise a problem on the same level when implemented in reality. In the simulation environment it reduces the resolution such that a single field in the grid contains one value of magnitude of the potential field, which makes the basis of a certain gradient to the field. The agents are following the implementation of the steepest decent. This generates a gradient towards the steepest decent, which the agent tracks. The analogy can be seen as a bowl, or sphere in this case, where a ball will converge towards the lowest point in the direction of the minimum gradient.
+The grid in which the potential field is generated are limited with a
+certain resolution while simulating the agents movement. This reduces
+the directions of where the agents can move, which will not arise a
+problem on the same level when implemented in reality. In the
+simulation environment it reduces the resolution such that a single
+field in the grid contains one value of magnitude of the potential
+field, which makes the basis of a certain gradient to the field. The
+agents are following the implementation of the steepest decent. This
+generates a gradient towards the steepest decent, which the agent
+tracks. The analogy can be seen as a bowl, or sphere in this case,
+where a ball will converge towards the lowest point in the direction
+of the minimum gradient.
 
-The method of applying the grid with magnitude of the potential field arises the problem with resolution, but also a problem that makes the 'corners' of the grid around the agent to be more likely to have the steepest decent. This is seen as if the agent is placed in the middle of a 3-by-3 matrix, and have eight placements around it. This problem has been expanded with a solution such that a certain radius in the potential field around an agent will be checked. The value at the radius around the agent can be checked, and due to the equal distance to every point, these will be weighted equally with respect to their value. This makes in principle the possibility to make the agent go in all directions which will be closer to the reality. When testing the two methods against each other it is clear that the first proposed with the grid structure did not have the same mobility thus not preferable in simulations though it is simpler.
+The method of applying the grid with magnitude of the potential field
+arises the problem with resolution, but also a problem that makes the
+'corners' of the grid around the agent to be more likely to have the
+steepest decent. This is seen as if the agent is placed in the middle
+of a 3-by-3 matrix, and have eight placements around it. This problem
+has been expanded with a solution such that a certain radius in the
+potential field around an agent will be checked. The value at the
+radius around the agent can be checked, and due to the equal distance
+to every point, these will be weighted equally with respect to their
+value. This makes in principle the possibility to make the agent go in
+all directions which will be closer to the reality. When testing the
+two methods against each other it is clear that the first proposed
+with the grid structure did not have the same mobility thus not
+preferable in simulations though it is simpler.
+\todo{This section is not really clear}
 
-Another problem that can become crucial arises when two agents or two objects are within the radius of each other. This will result in a local minima in the potential field between those objects. This will create a small local minima in between these agents or objects. If an agent converges toward this minima they cannot get out again. The problem can be seen on figure \ref{fig:roevproblem}. The gains here are chosen exactly the same as in figure \ref{fig:potfieldagenti}.
+Another problem that can become crucial arises when two agents or two
+objects are within the radius of each other. This will result in a
+local minima in the potential field between those objects. This will
+create a small local minima in between these agents or objects. If an
+agent converges toward this minima they cannot get out again. The
+problem can be seen on figure \ref{fig:roevproblem}. The gains here
+are chosen exactly the same as in figure \ref{fig:potfieldagenti}.
 \begin{figure}[htbp]
   \includegraphics[width=0.9\textwidth]{fig/ftotmagnfigpdf3}
-  \caption{An agent gets stuck due to a local minima between two other agents. The agent cannot get out of this minima unless the other two agents makes the space for the agent to pass through}
+	\caption{An agent gets stuck due to a local minima between two other
+	agents. The agent cannot get out of this minima unless the other two
+	agents makes the space for the agent to pass through}
   \label{fig:roevproblem}
 \end{figure}
-The scenario on figure \ref{fig:roevproblem} has the following steps. The agent $i$ moves in the direction of the steepest decent. Then it gets to the border of another agent where it cannot go through thus starts to go around this agent. The problem arises when agent $i$ reaches another agent on the way where it now has reached a local minima. Now the steepest gradient will point at the position where the agent already is thus making it think it has reached the end point. Solutions to this problem can be formulated in different ways. One solution could be to cluster the two objects together and instead of making their potential field individually, then combine those together and make an ellipsoid or even a circle formed obstacle of those objects. This will ensure that the local minima disappears thus not making an agent get stuck between those objects. Another solution is to make an exception handler that can tell if agent $i$ has reached the desired position. If it has not reached its end point, and the position is placed in a constant spot, it perturbs the desired position of the agent until the direction of the steepest decent changes. This will mean that the agent is out of the local minima and can continue on the trajectory.
+The scenario on figure \ref{fig:roevproblem} has the following steps.
+The agent $i$ moves in the direction of the steepest decent. Then it
+gets to the border of another agent where it cannot go through thus
+starts to go around this agent. The problem arises when agent $i$
+reaches another agent on the way where it now has reached a local
+minima. Now the steepest gradient will point at the position where the
+agent already is thus making it think it has reached the end point.
+Solutions to this problem can be formulated in different ways. One
+solution could be to cluster the two objects together and instead of
+making their potential field individually, then combine those together
+and make an ellipsoid or even a circle formed obstacle of those
+objects. This will ensure that the local minima disappears thus not
+making an agent get stuck between those objects. Another solution is
+to make an exception handler that can tell if agent $i$ has reached
+the desired position. If it has not reached its end point, and the
+position is placed in a constant spot, it perturbs the desired
+position of the agent until the direction of the steepest decent
+changes. This will mean that the agent is out of the local minima and
+can continue on the trajectory.
 
-In the end this results in that the every agent needs a magnitude and a direction of which they should move. This will be given depending on the total environment where the agents are manoeuvring. When applying this formation strategy a collision free movement are guaranteed which is one of the more critical criteria to be fulfilled. \todo{Det her skal der nok skrives lidt matematik om som viser det, eller en god forklaring. Men dog er det jo en naturlig del af pot field.}
+In the end this results in that the every agent needs a magnitude and
+a direction of which they should move. This will be given depending on
+the total environment where the agents are manoeuvring. When applying
+this formation strategy a collision free movement is guaranteed which
+is one of the more critical criteria to be fulfilled. \todo{Det her
+skal der nok skrives lidt matematik om som viser det, eller en god
+forklaring. Men dog er det jo en naturlig del af pot field.}
 
 
 \todo{Plot på en eksempelløsning på local minima samt beskrivelse}
@@ -212,7 +348,7 @@ spaned by a potential field defining the formation.
 
 \paragraph{Local Trajectory Generation}
 In the end, a reference path is calculated by the means of the
-previous previous position and the result from the potential field
+previous position and the result from the potential field
 solver. It is calculated as the paper presents, \citep[eq.
 48]{UAVff3dpf}.
 
