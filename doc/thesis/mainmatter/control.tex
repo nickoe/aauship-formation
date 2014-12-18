@@ -77,7 +77,11 @@ the $i$'th agent. The $F_{ca}$ is expressed as:
 \begin{align}
     F_{ca}^{ij}= 
 \begin{cases}
-    \frac{K_{ca}r}{||d_{ij}||}-K_{ca},& \text{for } ||d_{ij}||<r\\
+		\left(
+    \frac{K_{ca}r}{||d_{ij}||}-K_{ca}
+		\right)
+		\frac{\mathbf{d}_{ji}}{||\mathbf{d}_{ji}||}
+		,& \text{for } ||d_{ij}||<r\\
     0,              & \text{otherwise}
 \end{cases}
 \end{align}
@@ -98,7 +102,8 @@ different:
 \begin{align}
     F_{oa}^{ik}= 
 \begin{cases}
-    \frac{K_{oa}}{||d_{ki}||}-\frac{K_{oa}}{r},& \text{for } ||d_{ki}||<r\\
+    \left( \frac{K_{oa}}{||d_{ki}||}-\frac{K_{oa}}{r}\right)
+		\frac{\mathbf{d}_{{ki}}}{||\mathbf{d}_{ki}||},& \text{for } ||\mathbf{d}_{ki}||<r\\
     0,              & \text{otherwise}
 \end{cases}
 \end{align}
