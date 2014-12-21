@@ -98,7 +98,6 @@ The same principle as for collision avoidance can be applied to
 obstacle avoidance. Now each obstacle needs to be handled as an agent,
 which will make the same result, but the reference is a little
 different:
-\todo{describe why the oa is different from the ca}
 \begin{align}
     \mathbf{F}_{oa}^{ik}= 
 \begin{cases}
@@ -115,7 +114,11 @@ total term is summed up as:
 \mathbf{F}_{oa}^{tot} = \sum\limits_{k=1}^M\mathbf{F}_{oa}^{ik} \text{ for } i\neq k
 \end{align}
 Here $d_{ki}$ represents one of the $M$ place vectors which has the
-effect of a detected obstacle.  The distance $r$ can be determined
+effect of a detected obstacle.
+
+It can be noticed that there is a difference between $\mathbf{F}_{ca}$ and $\mathbf{F}_{oa}$. The two forces applies the same directions of forces, making the agents repulse from another agent or an obstacle. Though there is made a difference between them. It can be seen that the safety radius is moved from a multiplication to a division from the $\mathbf{F}_{ca}$ to the $\mathbf{F}_{oa}$. This will, dependent on the choices of $K_{ca}$ and $K_{oa}$, allow agents to move further into the safety radius of an obstacle than into the radius of another agent. This is due to the fact that the repulsing forces from agents needs to be larger in the case that two agents moves toward each other. In this case the agents need to react with higher aggression to ensure that they will repulse enough to not collide. This will not be the case for obstacles since these are defined with a constant position. \todo{Skriv mere her, evt vis plot fra 'fcafoatest'}
+
+The distance $r$ can be determined
 dynamically depending on the velocity of the agent:
 \begin{align}
 r = r^{min} + K_r||\dot{\mathbf{p}^n}||
@@ -326,6 +329,27 @@ is one of the more critical criteria to be fulfilled.
 
 \subsection{Algebraic Solution}
 \todo{Dette skal beskrives med formler}
+
+\begin{align}
+    \mathbf{F}_{ca}^{ij}= 
+\begin{cases}
+    \left(
+    \frac{K_{ca}r}{||\mathbf{d}_{ij}||}-K_{ca}
+    \right)
+    \frac{\mathbf{d}_{ji}}{||\mathbf{d}_{ji}||}
+    ,& \text{for } ||\mathbf{d}_{ij}||<r\\
+    0,              & \text{otherwise}
+\end{cases}
+\end{align}
+
+\begin{align}
+    \mathbf{F}_{oa}^{ik}= 
+\begin{cases}
+    \left( \frac{K_{oa}}{||\mathbf{d}_{ki}||}-\frac{K_{oa}}{r}\right)
+    \frac{\mathbf{d}_{{ki}}}{||\mathbf{d}_{ki}||},& \text{for } ||\mathbf{d}_{ki}||<r\\
+    0,              & \text{otherwise}
+\end{cases}
+\end{align}
 
 \subsection{Adding the Dynamics for Simulation}
 \todo{Describe the block diagram connecting the potential field calculations,
