@@ -13,7 +13,7 @@
    height="251.80107"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="rnew.svg">
   <defs
      id="defs4" />
@@ -26,7 +26,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="3.959798"
      inkscape:cx="162.85109"
-     inkscape:cy="102.45546"
+     inkscape:cy="142.86156"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -39,8 +39,8 @@
      fit-margin-bottom="2"
      inkscape:window-width="1276"
      inkscape:window-height="761"
-     inkscape:window-x="1280"
-     inkscape:window-y="394"
+     inkscape:window-x="1383"
+     inkscape:window-y="272"
      inkscape:window-maximized="0">
     <inkscape:grid
        type="xygrid"
@@ -218,19 +218,19 @@
          id="tspan4086"
          x="345"
          y="472.36215"
-         style="text-align:center;text-anchor:middle;fill:#076705;fill-opacity:1">Clustered object</tspan></text>
+         style="text-align:center;text-anchor:middle;fill:#076705;fill-opacity:1">Clustered agent</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:15px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="305"
-       y="592.36218"
+       x="310"
+       y="587.36218"
        id="text4088"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4090"
-         x="305"
-         y="592.36218"
-         style="text-align:center;text-anchor:middle">Object i</tspan></text>
+         x="310"
+         y="587.36218"
+         style="text-align:center;text-anchor:middle">Agent i</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:15px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
@@ -242,9 +242,9 @@
          id="tspan4094"
          x="400"
          y="522.36218"
-         style="text-align:center;text-anchor:middle">Object j</tspan></text>
+         style="text-align:center;text-anchor:middle">Agent j</tspan></text>
     <path
-       d="m 70,524.86218 a 2.5,2.5 0 1 1 -5,0 2.5,2.5 0 1 1 5,0 z"
+       d="m 70,524.86218 c 0,1.38071 -1.119288,2.5 -2.5,2.5 -1.380712,0 -2.5,-1.11929 -2.5,-2.5 0,-1.38071 1.119288,-2.5 2.5,-2.5 1.380712,0 2.5,1.11929 2.5,2.5 z"
        sodipodi:ry="2.5"
        sodipodi:rx="2.5"
        sodipodi:cy="524.86218"
