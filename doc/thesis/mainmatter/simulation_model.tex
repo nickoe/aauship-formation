@@ -48,7 +48,8 @@ The positon trajectory \vref{eq:NEDtrajectory} in \ac{NED} is calculated with nu
 \begin{align}
 \dot{\mathbf{p}}^n _{b/n} &= \mathbf{R}^n _b (\boldsymbol{\Theta}_{nb}) \boldsymbol{\nu}^b _{b/n} \label{eq:NEDvel}\\
 \mathbf{p}^n _{b/n}(k+1) &= \mathbf{p}^n _{b/n}(k) + h \dot{\mathbf{p}}^n _{b/n} \label{eq:NEDtrajectory} \\
-&= \mathbf{p}^n _{b/n}(k) + h \mathbf{R}^n _b (\boldsymbol{\Theta}_{nb}(k)) \boldsymbol{\nu}^b _{b/n}(k) 
+&= \mathbf{p}^n _{b/n}(k) + h \mathbf{R}^n _b
+(\boldsymbol{\Theta}_{nb}(k+1)) \boldsymbol{\nu}^b _{b/n}(k+1) 
 \end{align}
 \end{subequations}
 The generalised position, velocity, acceleration and force vectors, in that order, is:
