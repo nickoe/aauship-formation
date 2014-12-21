@@ -22,25 +22,25 @@ a single resulting vector for each agent which is used to guide the
 agent. The potential field for each agent is generated from four
 components:
 \begin{align}
-\tilde{F}_i^{tot} = F_{vl}+F_{ij}^{tot}+F_{ca}^{tot}+F_{oa}^{tot}
+\tilde{\mathbf{F}}_i^{tot} = \mathbf{F}_{vl}+\mathbf{F}_{ij}^{tot}+\mathbf{F}_{ca}^{tot}+\mathbf{F}_{oa}^{tot}
 \end{align}
 where:
 \begin{ffk}
 \firmlist%
-\item[$F_{vl}$] virtual leader force
-\item[$F_{ij}^{tot}$] inter-agent forces
-\item[$F_{ca}^{tot}$] agent-agent collision avoidance forces
-\item[$F_{oa}^{tot}$] agent-obstacle collision avoidance forces
+\item[$\mathbf{F}_{vl}$] virtual leader force
+\item[$\mathbf{F}_{ij}^{tot}$] inter-agent forces
+\item[$\mathbf{F}_{ca}^{tot}$] agent-agent collision avoidance forces
+\item[$\mathbf{F}_{oa}^{tot}$] agent-obstacle collision avoidance forces
 \end{ffk}
 
-\subsubsection{Virtual Leader, $F_{vl}$}
+\subsubsection{Virtual Leader, $\mathbf{F}_{vl}$}
 The virtual leader is an anchor of each formation, the \ac{FRP}, and
 controls the movement of this. This movement can either be given as a
 full trajectory of as a set of way points. The local virtual leader's
 contribution to the field is defined as:
 \begin{align}
-F_{vl} &= K_{vl}(p_{vl}^n-p_i^n-[p_{vl}^n-p_{i0}^n])\\
-&= K_{vl}(d_i-d_{i0})
+\mathbf{F}_{vl} &= K_{vl}(p_{vl}^n-p_i^n-[p_{vl}^n-p_{i0}^n])\\
+&= K_{vl}(\mathbf{d}_i-\mathbf{d}_{i0})
 \end{align}
 $K_{vl}$ is a tuning parameter. $p_{vl}$ is position of the virtual
 leader, $p_i$ is position of agent $i$, $p_{i0}$ is desired position
@@ -48,12 +48,12 @@ of agent $i$ and the $d$ is a shorter notation for the distances in
 between. The virtual leader component guides the agents directly to
 their desired positions relative to the virtual leader.
 
-\subsubsection{Inter Vehicle Influence, $F_{ij}$}
+\subsubsection{Inter Vehicle Influence, $\mathbf{F}_{ij}$}
 This is the contribution of other vehicles to the potential field,
 which is expressed as:
 \begin{align}
-F_{ij} &= K_{ij}(p_{j}^n-p_i^n-[p_{j0}^n-p_{i0}^n])\\
-&= K_{ij}(d_{ij}-d_{ij0})
+\mathbf{F}_{ij} &= K_{ij}(p_{j}^n-p_i^n-[p_{j0}^n-p_{i0}^n])\\
+&= K_{ij}(\mathbf{d}_{ij}-\mathbf{d}_{ij0})
 \end{align}
 Similar to previously the $p$s are positions, $K_{ij}$ is a tuning
 parameter and $d$ is a shorter notation for the distances in between.
@@ -64,66 +64,66 @@ weighting that causes the agents to follow the virtual leader or to
 preserve their desired formation.  In a swarm of $N$ agents the total
 field for agent $i$ given by:
 \begin{align}
-F_{ij}^{tot} = \sum\limits_{j=1}^NF_{ij}(i,j) \text{ for } j\neq i
+\mathbf{F}_{ij}^{tot} = \sum\limits_{j=1}^N\mathbf{F}_{ij}(i,j) \text{ for } j\neq i
 \end{align}
 
-\subsubsection{Collision Avoidance, $F_{ca}$}
+\subsubsection{Collision Avoidance, $\mathbf{F}_{ca}$}
 The collision avoidance takes effect when the agents get closer than a
 pre defined distance of each other. It generates an additional field
 component for the vehicle $i$ which points away from the entering
 agent causing the agents to move away from each other. To ensure the
 avoidance the component converges towards infinity in the centre of
-the $i$'th agent. The $F_{ca}$ is expressed as:
+the $i$'th agent. The $\mathbf{F}_{ca}$ is expressed as:
 \begin{align}
-    F_{ca}^{ij}= 
+    \mathbf{F}_{ca}^{ij}= 
 \begin{cases}
 		\left(
-    \frac{K_{ca}r}{||d_{ij}||}-K_{ca}
+    \frac{K_{ca}r}{||\mathbf{d}_{ij}||}-K_{ca}
 		\right)
 		\frac{\mathbf{d}_{ji}}{||\mathbf{d}_{ji}||}
-		,& \text{for } ||d_{ij}||<r\\
+		,& \text{for } ||\mathbf{d}_{ij}||<r\\
     0,              & \text{otherwise}
 \end{cases}
 \end{align}
 where $K_{ca}$ is a tuning parameter. $r$ is the safety radius for
-collision and $d_{ij}$ is the distance between the individual agents.
+collision and $\mathbf{d}_{ij}$ is the distance between the individual agents.
 The collision avoidance can be expressed in a total term of the
 collision avoidance:
 \begin{align}
-F_{ca}^{tot} = \sum\limits_{j=1}^NF_{ca}^{ij} \text{ for } i\neq j
+\mathbf{F}_{ca}^{tot} = \sum\limits_{j=1}^N\mathbf{F}_{ca}^{ij} \text{ for } i\neq j
 \end{align}
 
-\subsubsection{Obstacle Avoidance, $F_{oa}$}
+\subsubsection{Obstacle Avoidance, $\mathbf{F}_{oa}$}
 The same principle as for collision avoidance can be applied to
 obstacle avoidance. Now each obstacle needs to be handled as an agent,
 which will make the same result, but the reference is a little
 different:
 \todo{describe why the oa is different from the ca}
 \begin{align}
-    F_{oa}^{ik}= 
+    \mathbf{F}_{oa}^{ik}= 
 \begin{cases}
-    \left( \frac{K_{oa}}{||d_{ki}||}-\frac{K_{oa}}{r}\right)
+    \left( \frac{K_{oa}}{||\mathbf{d}_{ki}||}-\frac{K_{oa}}{r}\right)
 		\frac{\mathbf{d}_{{ki}}}{||\mathbf{d}_{ki}||},& \text{for } ||\mathbf{d}_{ki}||<r\\
     0,              & \text{otherwise}
 \end{cases}
 \end{align}
 where $k$ denotes the counter for obstacles instead of other agents.
 $K_{oa}$ is also a tuning parameter for the obstacle avoidance.
-$d_{ki}$ is the vector between an agent and the obstacle, which in a
+$\mathbf{d}_{ki}$ is the vector between an agent and the obstacle, which in a
 total term is summed up as:
 \begin{align}
-F_{oa}^{tot} = \sum\limits_{k=1}^MF_{oa}^{ik} \text{ for } i\neq k
+\mathbf{F}_{oa}^{tot} = \sum\limits_{k=1}^M\mathbf{F}_{oa}^{ik} \text{ for } i\neq k
 \end{align}
 Here $d_{ki}$ represents one of the $M$ place vectors which has the
 effect of a detected obstacle.  The distance $r$ can be determined
 dynamically depending on the velocity of the agent:
 \begin{align}
-r = r^{min} + K_r||\dot{p^n}||
+r = r^{min} + K_r||\dot{\mathbf{p}^n}||
 \end{align}
 
 \subsubsection{Potential field}
 Now these forces was summed together to get
-$\tilde{F}_i^{tot}$, that was just an intermediate vector, which needs
+$\tilde{\mathbf{F}}_i^{tot}$, that was just an intermediate vector, which needs
 to be limited in a way, because this describes the speed the agents
 can move with.
 
@@ -135,7 +135,7 @@ direction:
 \todo{Denne afsluttende subsubsection er underligt formuleret, husk
 det med tilden, og sikkert også hvordan vi jegner p\_r}
 \begin{align}
-	F_i^{tot} = \min\{\,\,\,||\tilde{F}_i^{tot}||\,\,\,,\,\,F_{max}\,\,\,\}\frac{\tilde{F}_i^{tot}}{||\tilde{F}_i^{tot}||}
+	\mathbf{F}_i^{tot} = \min\{\,\,\,||\tilde{\mathbf{F}}_i^{tot}||\,\,\,,\,\,F_{max}\,\,\,\}\frac{\tilde{\mathbf{F}}_i^{tot}}{||\tilde{\mathbf{F}}_i^{tot}||}
 \end{align}
 
 
@@ -426,19 +426,19 @@ reference position $\mathbf{p}_{i,r}$.
 	\While{$m <=$ length of track}{
 		\For{every $i$-th boat}{
 			\If{formation is ok}{
-				\If{$p_{vl}$ is inside the way point acceptance radius of the
+				\If{$\mathbf{p}_{vl}$ is inside the way point acceptance radius of the
 				track}{
 					$m \gets m + 1$\; 
-					$p_{vl} \gets$ \textsl{LOS}$(\ p_{vl}\ ,\ $track($m$)\ )\;
+					$\mathbf{p}_{vl} \gets$ \textsl{LOS}$(\ p_{vl}\ ,\ $track($m$)\ )\;
 				}
 			}
-			$(\ p_{d,i}\ ,\ F_{\text{tot},i}\ ) \gets $  \textsl{pathgen}(\ $p_i$\ ,\ $p0_i$\ )\;
-			$p_{r,i} \gets p_i + F_{\text{tot},i}$\;
-			$\psi_{d,i} \gets $ heading from $p_i$ to $p_d$\;
+			$(\ \mathbf{p}_{d,i}\ ,\ \mathbf{F}_{\text{tot},i}\ ) \gets $  \textsl{pathgen}(\ $p_i$\ ,\ $p0_i$\ )\;
+			$\mathbf{p}_{r,i} \gets \mathbf{p}_i + \mathbf{F}_{\text{tot},i}$\;
+			$\psi_{d,i} \gets $ heading from $\mathbf{p}_i$ to $\mathbf{p}_d$\;
 			$u_i \gets $ \textsl{controller}(\ $\psi_d$\ )\;
 			\textsl{send input $u$ to ship}\;
-			$x_i \gets $ \textsl{sense ship states}\;
-			$p_i \gets $ position of $x_i$\; 
+			$\mathbf{x}_i \gets $ \textsl{sense ship states}\;
+			$\mathbf{p}_i \gets $ position of $\mathbf{x}_i$\; 
 		}
 	}
 	\caption{This pseudo code describes how the potential field is used
