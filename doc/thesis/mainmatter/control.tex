@@ -218,6 +218,7 @@ controls if the formation should converge to the desired formation on
 the way to the desired position, or if agent $i$ should only have the
 desired position in focus.
 
+\subsection{Numerical Solution}
 The grid in which the potential field is generated are limited with a
 certain resolution while simulating the agents movement. This reduces
 the directions of where the agents can move, which will not arise a
@@ -247,10 +248,11 @@ with the grid structure did not have the same mobility thus not
 preferable in simulations though it is simpler.
 \todo{This section is not really clear}
 
-Another problem that can become crucial arises when two agents or two
+\subsection{Local minima problem}
+A problem that can become crucial arises when two agents or two
 objects are within the radius of each other. This will result in a
 local minima in the potential field between those objects. This will
-create a small local minima in between these agents or objects. If an
+create a local minima in between these agents or objects. If an
 agent converges toward this minima they cannot get out again. The
 problem can be seen on figure \ref{fig:roevproblem}. The gains here
 are chosen exactly the same as in figure \ref{fig:potfieldagenti}.
@@ -315,14 +317,15 @@ The $r_{new}$ is visualized on figure \ref{fig:rnew}
 \end{figure}
 This shows the relation between the normal safety radius and the new radius defined for the new clustered agent.
 
+\subsection{Summary}
 In the end this results in that the every agent needs a magnitude and
 a direction of which they should move. This will be given depending on
 the total environment where the agents are manoeuvring, and will be assigned by the gradient vector. When applying
 this formation strategy a collision free movement is guaranteed which
-is one of the more critical criteria to be fulfilled. \todo{Det her
-skal der nok skrives lidt matematik om som viser det, eller en god
-forklaring. Men dog er det jo en naturlig del af pot field.}
+is one of the more critical criteria to be fulfilled. 
 
+\subsection{Algebraic Solution}
+\todo{Dette skal beskrives med formler}
 
 \subsection{Adding the Dynamics for Simulation}
 \todo{Describe the block diagram connecting the potential field calculations,
@@ -359,7 +362,7 @@ as follows.
 The \ac{GNC} works by an array of mission specific way points given,
 usually computed from a desired area used to create a lawnmower
 pattern described in chapter~\vref{ch:pathgen} describing the path
-generation.
+generation. \todo{Kludret skrevet - rettes til}
 
 \paragraph{Global Trajectory Generation}
 Then different methods can be used to steer ships after this
@@ -402,7 +405,7 @@ is needed.
 
 For example; in the case, where the way points are far from each
 other, it is still desired to make the virtual leader trajectory
-converge the line between these two way points, kind of like the
+converge to the line between these two way points, kind of like the
 \ac{LOS} guidance. Earlier a path following algorithm using a \ac{LOS}
 principle was used, to calculate a course angle to a point projected
 into the line between two way points with a specified lookahead
