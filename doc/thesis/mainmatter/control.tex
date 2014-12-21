@@ -183,14 +183,14 @@ next time step if the other agents also move in the potential field.
 The agent avoids obstacles on the way, where it can be seen that it
 does not get into the safety radius of the obstacles. In this specific
 plot is a safety radius ($r$) of $20$m chosen, such that the distance
-from agent $p_i$ (The red trajectory) to any obstacle always will be
+from agent $p_i$ (red trajectory) to any obstacle always will be
 larger than $20$m.
 
-The gains $K_{ca}$ and $K_{oa}$ are chosen equally to a constant as
-240. If this gain is chosen smaller it will result in that the agents
-are more allowed to approach the obstacles and get a little within the
-radius, but then afterwards getting repelled from the object. It
-corresponds to the gradient at the radius and how steep this is.
+%The gains $K_{ca}$ and $K_{oa}$ are chosen equally to a constant as
+%240. If this gain is chosen smaller it will result in that the agents
+%are more allowed to approach the obstacles and get a little within the
+%radius, but then afterwards getting repelled from the object. It
+%corresponds to the gradient at the radius and how steep this is.
 
 The same algorithm is applied where agent $i$ avoids other agents, agent $j$, $j+1$. This can be seen on figure \ref{fig:avoidagent}.
 \begin{figure}[htbp]
