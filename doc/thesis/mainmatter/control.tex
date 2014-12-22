@@ -372,7 +372,28 @@ In equation \ref{eq:dFca} the $\frac{d}{||d||}$ enters again by applying equatio
 
 \subsubsection{The Sign-Function}
 \label{subsubsec:sign}
-\todo{Her skal stå en udledning af sign og sign'}
+The sign-function, also known as the signum-function, is an odd function that returns the sign of a real number. The sign-function can be split up into three parts, depending on the argument to the function:
+\begin{align}
+\text{sign}(x) =
+\begin{cases}
+-1, &\text{if } x<0\\
+0, &\text{if } x=0\\
+1, &\text{if } x>0
+\end{cases}
+\end{align}
+Thus it is given in the scalar case that for every $x \neq 0$:
+\begin{align}
+\text{sign}(x) = \frac{x}{|x|} = \frac{|x|}{x}
+\end{align}
+The derivative of the sign-function can be split up in the individual regions and be given as:
+\begin{align}
+\frac{\delta \text{sign}(x)}{\delta x} = \frac{\delta}{\delta x}\left(\frac{x}{|x|}\right) =
+\begin{cases}
+\left(\frac{\delta \frac{x}{|x|}}{\delta x}\right), &\text{if } x<0\qquad \to -1\\
+\text{Undefined}, &\text{if } x=0\qquad \to 0\\
+\left(\frac{\delta \frac{x}{|x|}}{\delta x}\right), &\text{if } x>0\qquad \to 1
+\end{cases}
+\end{align}
 
 \subsubsection{Obstacle Avoidance}
 \begin{align}
