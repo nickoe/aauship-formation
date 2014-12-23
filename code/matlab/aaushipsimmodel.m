@@ -53,8 +53,6 @@ else
     disp('youareretard')
 end
 
-% xn=ss.Ad*ones(10,1)+ss.Bd*ones(5,1)
-xn = ss.Ad*x(3:12) + ss.Bd*tau;
 
 
 eta   = zeros(5,1);
@@ -62,30 +60,48 @@ nu    = zeros(5,1);
 nudot = zeros(5,1);
 xs    = zeros(17,1);
 
-% Calculate positions with euler integration
-xn(5)      = xn(10)*ss.ts + x(7);  % Yaw
-% xn(5)      = xn(10)*ss.ts + xn(5);  % Yaw
-Rz         = [cos(xn(5)) -sin(xn(5)); sin(xn(5)) cos(xn(5))];
-% R          = diag(ones(5,1));
-% R(1:2,1:2) = Rz(1:2,1:2);
-eta(1:2)   = x(1:2) + Rz*xn(6:7)*ss.ts; % Positions in N and E
-% xn(1:5)    = eta(1:5);
 
-% Compute fossen vectors
-eta(3:5)   = xn(8:10)*ss.ts+x(5:7);     % Positions in pitch, roll and yaw
-nu         = xn(6:10);                  % Velocities
-nudot      = diff([x(8:12) xn(6:10)]'); % Accelerations
-% nudot     = ss.Ad(6:7,:)*x + ss.Bd(6:7,:)*tau - x(6:7); % Algebraic way of calculating accelerations in one step
+% % xn = ss.Ad*x(3:12) + ss.Bd*tau;
+% % 
+% % % Calculate positions with euler integration
+% % xn(5)      = xn(10)*ss.ts + x(7);  % Yaw
+% % % xn(5)      = xn(10)*ss.ts + xn(5);  % Yaw
+% % Rz         = [cos(xn(5)) -sin(xn(5)); sin(xn(5)) cos(xn(5))];
+% % % R          = diag(ones(5,1));
+% % % R(1:2,1:2) = Rz(1:2,1:2);
+% % eta(1:2)   = x(1:2) + Rz*xn(6:7)*ss.ts; % Positions in N and E
+% % % xn(1:5)    = eta(1:5);
+% % 
+% % % Compute fossen vectors
+% % eta(3:5)   = xn(8:10)*ss.ts+x(5:7);     % Positions in pitch, roll and yaw
+% % nu         = xn(6:10);                  % Velocities
+% % nudot      = diff([x(8:12) xn(6:10)]'); % Accelerations
+% % % nudot     = ss.Ad(6:7,:)*x + ss.Bd(6:7,:)*tau - x(6:7); % Algebraic way of calculating accelerations in one step
+% % 
+% % % Full state simulation vector
+% % xs(1:2) = eta(1:2); % N, E
+% % xs(3:4) = xn(1:2);  % x, y
+% % xs(5:7) = eta(3:5); % phi, theta, psi
+% % xs(8:12) = nu;      % u, v, p, q, r
+% % xs(13:17) = nudot;  % u_dot, v_dot, p_dot, q_dot, r_dot
+% % if strcmp(pn,'wip')
+% %     xs = xs + wp.*randn(17,1);
+% % %     disp('foo')
+% % else
+% % %     disp('kat')
+% % end
 
-% Full state simulation vector
-xs(1:2) = eta(1:2); % N, E
-xs(3:4) = xn(1:2);  % x, y
-xs(5:7) = eta(3:5); % phi, theta, psi
-xs(8:12) = nu;      % u, v, p, q, r
-xs(13:17) = nudot;  % u_dot, v_dot, p_dot, q_dot, r_dot
-if strcmp(pn,'wip')
-    xs = xs + wp.*randn(17,1);
-%     disp('foo')
-else
-%     disp('kat')
-end
+
+
+x = x(3:12);
+xold = x;
+
+% Rotation matrix for linear and angular transformation
+J = eulerang(x(3), x(4), x(5));
+J = [J(1:2,1:2),J(1:2,4:6); J(4:6,1:2),J(4:6,4:6)];  % remove dimension
+x(6:10) = ss.Ad(6:10,6:10)*xold(6:10) + ss.Bd(6:10,:)*tau;
+x(1:5) = xold(1:5) + J*x(6:10)*ss.ts;
+
+xs(1:2)  = x(1:2);  % N,E aka x,y
+xs(3:7)  = x(1:5);  % x,y,phi,theta,psi
+xs(8:12) = x(6:10); % u,v,p,q,r
