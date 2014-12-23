@@ -96,10 +96,11 @@ xs    = zeros(17,1);
 x = x(3:12);
 xold = x;
 
+x = ss.Ad*xold+ ss.Bd*tau;
 % Rotation matrix for linear and angular transformation
 J = eulerang(x(3), x(4), x(5));
 J = [J(1:2,1:2),J(1:2,4:6); J(4:6,1:2),J(4:6,4:6)];  % remove dimension
-x(6:10) = ss.Ad(6:10,6:10)*xold(6:10) + ss.Bd(6:10,:)*tau;
+
 x(1:5) = xold(1:5) + J*x(6:10)*ss.ts;
 
 xs(1:2)  = x(1:2);  % N,E aka x,y
