@@ -62,6 +62,7 @@ class KF(object):
         self.Rn2e = geo.RNED2ECEF(self.klingen['rotlon'], self.klingen['rotlat'])
         self.Re2n = self.Rn2e.T
         self.pos_of_ned_in_ecef = geo.wgs842ecef(self.klingen['rotlat'], self.klingen['rotlon'])
+        self.fjorden = sio.loadmat('fjorden.mat')
 
         # Define the path poses for the map to display in rviz
         self.refmsg = Path()
@@ -76,6 +77,9 @@ class KF(object):
             p = Point(i[0]-offset,i[1],0)
             self.refmsg.poses.append(PoseStamped(h, Pose(p, q)))
         for i in self.klingen['inner']:
+            p = Point(i[0]-offset,i[1],0)
+            self.keepoutmsg.poses.append(PoseStamped(h, Pose(p, q)))
+        for i in self.fjorden['all']:
             p = Point(i[0]-offset,i[1],0)
             self.keepoutmsg.poses.append(PoseStamped(h, Pose(p, q)))
 
