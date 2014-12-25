@@ -3,20 +3,21 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Updated smaller track
-clear all
+clear all; clf; close all;
 % Box options
-boxheigth = 45;
-boxwidth = 30;
+boxheigth = 100;
+boxwidth = 50;
 
 % ll = [0,0];
 lr = [boxwidth,0];
 ur = [boxwidth,boxheigth];
 % ul = [0,boxheigth];
 
-load('/afs/ies.auc.dk/group/14gr1034/Private/matlab/gpx2local/klingenberg.mat')
+% load('/afs/ies.auc.dk/group/14gr1034/Private/matlab/gpx2local/klingenberg.mat')
+load('../hli/ros/src/aauship/scripts/fjorden.mat')
 
 % Turning restrictions
-tr = 4; % turning radius
+tr = 25; % turning radius
 s = 2*tr;
 n = 1;
 figure(1)
@@ -81,80 +82,89 @@ end
 end
 % save('track.mat','track')
 
-figure(1)
-plot(allwps(:,1),allwps(:,2),'.-')
-axis equal
+% figure(1)
+% plot(allwps(:,1),allwps(:,2),'.-')
+% axis equal
 
 % allwps(:,2) = allwps(:,2)+(-57);
 % allwps(:,1) = allwps(:,1)+(-46.5);
-allwps(:,2) = allwps(:,2)+(-57);
-allwps(:,1) = allwps(:,1)+(-34);
+allwps(:,2) = allwps(:,2)+(-2300);
+allwps(:,1) = allwps(:,1)+(3800);
 
-allwps(1,2) = -49;
-allwps(1,1) = -20;
+allwps(1,2) = -2300;
+allwps(1,1) = 3800;
 
 figure(2)
-plot(inner(:,2),inner(:,1),'b', outer(:,2),outer(:,1),'g', allwps(:,2),allwps(:,1),'.-r')
+% plot(inner(:,2),inner(:,1),'b', outer(:,2),outer(:,1),'g', allwps(:,2),allwps(:,1),'.-r')
+plot(all(:,2),all(:,1),'b', allwps(:,2),allwps(:,1),'.-r')
 axis equal
 track = [allwps(:,1) allwps(:,2)];
-save('lawnmoversmall.mat','track')
+save('fjordenlawnmower.mat','track')
 
-
+% 
 %% Just a simple triangle wp
 clear all;
-load('/afs/ies.auc.dk/group/14gr1034/Private/matlab/gpx2local/klingenberg.mat')
+load('../hli/ros/src/aauship/scripts/fjorden.mat')
 
-allwps(:,1) = [-30 -13 -15];
-allwps(:,2) = [-35 -30 -50];
+clear allwps
+
+allwps(:,1) = [3850 4150 3950 4400 4200 4500];
+allwps(:,2) = [-2500 -2300 -2100 -1900 -1700 -1500];
 
 figure(3)
-plot(inner(:,2),inner(:,1),'b', outer(:,2),outer(:,1),'g',allwps(:,2),allwps(:,1),'.-r')
+plot(all(:,2),all(:,1),'b',allwps(:,2),allwps(:,1),'.-r')
 axis equal
 
 track = [allwps(:,1) allwps(:,2)];
-save('triangletrack.mat','track')
+save('fjordtriangle.mat','track')
 
 %% Only a small line segment
 clear all;
-load('/afs/ies.auc.dk/group/14gr1034/Private/matlab/gpx2local/klingenberg.mat')
+load('../hli/ros/src/aauship/scripts/fjorden.mat')
 
-allwps(:,1) = [-24 -18];
-allwps(:,2) = [-40 -30];
+clear allwps
+
+allwps(:,1) = [3900 4400];
+allwps(:,2) = [-2500 -1500];
 
 figure(4)
-plot(inner(:,2),inner(:,1),'b', outer(:,2),outer(:,1),'g',allwps(:,2),allwps(:,1),'.-r')
+plot(all(:,2),all(:,1),'b',allwps(:,2),allwps(:,1),'.-r')
 axis equal
 
 track = [allwps(:,1) allwps(:,2)];
-save('linesegment.mat','track')
+save('fjordlinesegment.mat','track')
 
 %% Very small line segment
 clear all;
-load('/afs/ies.auc.dk/group/14gr1034/Private/matlab/gpx2local/klingenberg.mat')
+load('../hli/ros/src/aauship/scripts/fjorden.mat')
 
-allwps(:,1) = [-12 -11];
-allwps(:,2) = [-20 -19];
+clear allwps
+
+allwps(:,1) = [3900 4150];
+allwps(:,2) = [-2500 -1900];
 
 figure(5)
-plot(inner(:,2),inner(:,1),'b', outer(:,2),outer(:,1),'g',allwps(:,2),allwps(:,1),'.-r')
+plot(all(:,2),all(:,1),'b',allwps(:,2),allwps(:,1),'.-r')
 axis equal
 
 track = [allwps(:,1) allwps(:,2)];
-save('verysmalllinesegment.mat','track')
+save('fjordsmalllinesegment.mat','track')
 
 %% Larger line segment
 clear all;
-load('/afs/ies.auc.dk/group/14gr1034/Private/matlab/gpx2local/klingenberg.mat')
+load('../hli/ros/src/aauship/scripts/fjorden.mat')
 
-allwps(:,1) = [-30 -11];
-allwps(:,2) = [-50 -19];
+clear allwps
+
+allwps(:,1) = [3900 3920 3940 3970 4000 4030 4080 4140 4220 4290 4350 4430 4500 4610 4700 4830 4980 5130 5290 5500 5700 5900 6070 6180 6250 6300 6400 6510 6630 6740 6840 6920 7020 7100];
+allwps(:,2) = [-2500 -2400 -2300 -2200 -2100 -2000 -1900 -1800 -1700 -1600 -1500 -1400 -1300 -1200 -1100 -1000 -900 -800 -700 -600 -500 -400 -300 -200 -100 0 100 200 300 400 500 600 700 800];
 
 figure(5)
-plot(inner(:,2),inner(:,1),'b', outer(:,2),outer(:,1),'g',allwps(:,2),allwps(:,1),'.-r')
+plot(all(:,2),all(:,1),'b',allwps(:,2),allwps(:,1),'.-r')
 axis equal
 
 track = [allwps(:,1) allwps(:,2)];
-save('largelinesegment.mat','track')
+save('fjordlargepath.mat','track')
 
 
 
