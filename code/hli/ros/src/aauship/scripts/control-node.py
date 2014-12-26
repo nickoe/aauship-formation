@@ -22,8 +22,8 @@ class Control(object):
         self.n = 1 # used for wp gen logic
 
         rospy.init_node('control_node')
-        #self.sub = rospy.Subscriber('kf_statesnew', Float64MultiArray, self.callback, queue_size=1)
-        self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=1)
+        self.sub = rospy.Subscriber('kf_statesnew', Float64MultiArray, self.callback, queue_size=1)
+        #self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=1)
         self.pub = rospy.Publisher('lli_input', LLIinput, queue_size=4, latch=True)
 
         # Initilaze parameters for the simple PID heading contorller
@@ -37,10 +37,11 @@ class Control(object):
         
         # PID tuning parameters for the simple heading controller
         
+        '''
         self.Kp = 0.1
         self.Ki = 0.0
         self.Kd = 0.0
-        
+        '''
         '''
         self.Kp = 3.0
         self.Ki = 0.0
@@ -51,6 +52,9 @@ class Control(object):
         self.Ki = 0.0
         self.Kd = 60.0
         '''
+        self.Kp = 5
+        self.Ki = 0.0
+        self.Kd = 70.0
         # Create path object in rviz
         self.pubpath = rospy.Publisher('path', Path, queue_size=3, latch=True)
 
@@ -148,7 +152,7 @@ class Control(object):
         self.thrustdiff.append(self.Kp*self.error[self.k] + self.Ki*self.integral[self.k] + self.Kd*self.derivative[self.k])
 
         # Desired control forces
-        self.tau = np.array([8,0,0,0,self.thrustdiff[self.k]])
+        self.tau = np.array([80,0,0,0,self.thrustdiff[self.k]])
 
         # Calculation of input vector from desired control forces    
         pinvT = np.asmatrix( linalg.pinv(self.T) )
@@ -177,7 +181,7 @@ class Control(object):
         if self.u[1] < 0:
             self.u[1] = self.u[1] - threshold
         
-        maksimal = 250
+        maksimal = 260
         if self.u[0] > maksimal:
             self.u[0] = maksimal
         elif self.u[0] < -maksimal:

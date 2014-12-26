@@ -3,7 +3,7 @@ clear all;
 MPI = pi;
 % Laver grid med meshgrid, step bestemmer 'opløsning'
 step = 1;
-[X,Y] = meshgrid(-100:step:100,-100:step:100);
+[X,Y] = meshgrid(-100:step:100,-50:step:50);
 lenx=length(X(:,1));
 leny=length(Y(1,:));
 % Safe avoidance radius
@@ -59,7 +59,7 @@ for m = 1:lenx;
 end
 toc
 %%
-density = 4;
+density = 10;
 figure(1)
 clf;
 hold on
@@ -67,7 +67,7 @@ axis equal
 % surf(X,Y,Fvlmagn);
 contour(X, Y, Fvlmagn);
 [xvel,yvel] = gradient(-Fvlmagn(1:density:m,1:density:n),step,step);
-quiver(X(1,1:density:m),Y(1:density:n,1),xvel,yvel);
+quiver(X(1,1:density:n),Y(1:density:m,1),xvel,yvel);
 title('Contour and quiver plot of Fvl')
 hold off
 
@@ -78,7 +78,7 @@ hold on
 axis equal
 contour(X, Y, Fijmagn);
 [xvel,yvel] = gradient(-Fijmagn(1:density:m,1:density:n),step,step);
-quiver(X(1,1:density:m),Y(1:density:n,1),xvel,yvel);
+quiver(X(1,1:density:n),Y(1:density:m,1),xvel,yvel);
 title('Fijmagn')
 hold off
 
@@ -88,7 +88,7 @@ hold on
 axis equal
 contour(X, Y, Fcamagn);
 [xvel,yvel] = gradient(-Fcamagn(1:density:m,1:density:n),step,step);
-quiver(X(1,1:density:m),Y(1:density:n,1),xvel,yvel);
+quiver(X(1,1:density:n),Y(1:density:m,1),xvel,yvel);
 title('Fcamagn')
 hold off
 
@@ -98,20 +98,43 @@ hold on
 axis equal
 contour(X, Y, Foamagn);
 [xvel,yvel] = gradient(-Foamagn(1:density:m,1:density:n),step,step);
-quiver(X(1,1:density:m),Y(1:density:n,1),xvel,yvel);
+quiver(X(1,1:density:n),Y(1:density:m,1),xvel,yvel);
 title('Foamagn')
 hold off
 
-figure(6)
+h = figure(6)
+
 clf;
+set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
+set(gcf,'paperunits','centimeters')
+set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
+set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
 hold on
 axis equal
 % surf(X,Y,Ftotmagn);
 contour(X, Y, Ftotmagn);
 [xvel,yvel] = gradient(-Ftotmagn(1:density:m,1:density:n),step,step);
-quiver(X(1,1:density:m),Y(1:density:n,1),xvel,yvel);
+quiver(X(1,1:density:n),Y(1:density:m,1),xvel,yvel,2);
 title('Ftotmagn')
 hold off
+saveas(h, '/tmp/foo.pdf')
+
+h = figure(7)
+density=1;
+clf;
+set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
+set(gcf,'paperunits','centimeters')
+set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
+set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
+hold on
+axis equal
+% surf(X,Y,Ftotmagn);
+contour(X, Y, Ftotmagn);
+[xvel,yvel] = gradient(-Ftotmagn(1:density:m,1:density:n),step,step);
+quiver(X(1,1:density:n),Y(1:density:m,1),xvel,yvel,2);
+title('Ftotmagn')
+hold off
+saveas(h, '/tmp/foo2.pdf')
 % figure(7)
 % clf;
 % hold on
@@ -146,8 +169,8 @@ n = 6500;
 no_boats = 4;
 vl = [-10,10];
 Kvl = 1;
-Kij = Kvl/no_boats/2;
-%Kij = 1;
+% Kij = Kvl/no_boats/2;
+Kij = 0.5;
 rsav = 2;
 % Used for max force, eq. (47)
 Kv = 1;
