@@ -50,7 +50,7 @@ N = 500;
 states = 17;
 x_hat_plus = zeros(states,N);
 P_minus = zeros(states,states,N);
-u = [7 0 0 0 -0.08]';
+u = [7 0 0 0 0]';
 x = zeros(states,N);
 x_hat_minus = zeros(states,N);
 z = zeros(7,N);
@@ -85,7 +85,7 @@ PHI(13:17,8:12) = Ad(6:10,6:10);
 
 for k = 2:N
 % Model state vector
-x(:,k) = aaushipsimmodel(x(:,k-1), u);
+x(:,k) = aaushipsimmodel(x(:,k-1), u, 'tau','nop');
 noise(:,k) = randn(17,1).*w;
 x_noisy(:,k) = x(:,k) + noise(:,k);
 
@@ -132,8 +132,8 @@ PHI(1:2,8:9) = [ts*cos(x(7,k)) -ts*sin(x(7,k)); ts*sin(x(7,k)) ts*cos(x(7,k))]; 
 % x_hat_minus(:,k) = PHI*x_hat_plus(:,k-1) + G*u;
 % P_minus(:,:,k) = PHI*P_minus(:,:,k-1)*PHI + Q;
 % x_hat_minus(:,k+1) = PHI*x_hat_plus(:,k) + G*u;
-x_hat_minus(:,k+1) = aaushipsimmodel(x_hat_plus(:,k),u);
-P_minus(:,:,k+1) = PHI*P_plus(:,:,k)*PHI + Q;
+x_hat_minus(:,k+1) = aaushipsimmodel(x_hat_plus(:,k),u,'tau','nop');
+P_minus(:,:,k+1) = PHI*P_plus(:,:,k)*PHI' + Q; %TODO, PHI er ikke transponeret, skal den det?
 
 %x(:,k+1) = x(:,k) + 0.1*x_hat(:,k);
 

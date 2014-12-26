@@ -22,8 +22,8 @@ class Control(object):
         self.n = 1 # used for wp gen logic
 
         rospy.init_node('control_node')
-        #self.sub = rospy.Subscriber('kf_statesnew', Float64MultiArray, self.callback, queue_size=1)
-        self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=1)
+        self.sub = rospy.Subscriber('kf_statesnew', Float64MultiArray, self.callback, queue_size=1)
+        #self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=1)
         self.pub = rospy.Publisher('lli_input', LLIinput, queue_size=4, latch=True)
 
         # Initilaze parameters for the simple PID heading contorller
@@ -46,13 +46,16 @@ class Control(object):
         self.Ki = 0.0
         self.Kd = 35.0
         '''
-        
+	''' 
         self.Kp = 3.0
         self.Ki = 0.0
         self.Kd = 60.0
-        
-        
-	# Create path object in rviz
+        '''
+        self.Kp = 2.0
+        self.Ki = 0.0
+        self.Kd = 70.0
+
+        # Create path object in rviz
         self.pubpath = rospy.Publisher('path', Path, queue_size=3, latch=True)
 
         # Create the struct to be printed
@@ -178,7 +181,7 @@ class Control(object):
         if self.u[1] < 0:
             self.u[1] = self.u[1] - threshold
         
-        maksimal = 250
+        maksimal = 260
         if self.u[0] > maksimal:
             self.u[0] = maksimal
         elif self.u[0] < -maksimal:
