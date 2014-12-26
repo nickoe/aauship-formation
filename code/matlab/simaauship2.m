@@ -11,16 +11,16 @@ AHRS = MahonyAHRS('SamplePeriod', 1/10, 'Kp', 18 , 'Ki', 8);
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 1000;
+N = 6000;
 no_boats = 4;
 es = N;
 ts = ss.ts;
 clear ss;
 x = zeros(17,no_boats,N+1);
-x(:,1,1) = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]';
-x(:,2,1) = [0 10 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]';
-x(:,3,1) = [0 20 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]';
-x(:,4,1) = [0 31 0 0 0 0 pi 0 0 0 0 0 0 0 0 0 0]';
+x(:,1,1) = [0 10 0 10 0 0 -0.2 0 0 0 0 0 0 0 0 0 0]';
+x(:,2,1) = [10 0 10 0 0 0 -0.2 0 0 0 0 0 0 0 0 0 0]';
+x(:,3,1) = [0 -10 0 -10 0 0 -0.2 0 0 0 0 0 0 0 0 0 0]';
+x(:,4,1) = [-10 0 -10 0 0 0 -0.2 0 0 0 0 0 0 0 0 0 0]';
 z = zeros(N,7);
 x_hat = x;
 P_plus = zeros(17,17);
@@ -84,8 +84,8 @@ Ki = 0.0;
 Kd = 40;
 thrustdiff = zeros(no_boats,N);
 speeddiff = zeros(no_boats,N);
-heading = zeros(N,no_boats);
-headingdesired = zeros(N,no_boats);
+heading = zeros(no_boats,N);
+headingdesired = zeros(no_boats,N);
 speeddesired = 1;
 
 %% Simulation
@@ -94,12 +94,12 @@ clf;
 hold on
 rev = 0;
 limit = 3.07;
-heading(1) = x(1,7);
+%heading(1) = x(7,1,1);
 
 m = 1; % Track counter
 pvl = zeros(N+1,2);
 pvl(1,:) = [track(m,2), track(m,1)];  % Set virtual leader
-wp_r = 1; % waypoint acceptance raidus
+wp_r = 4; % waypoint acceptance raidus
 
 %% POTFIELD VARS START
 MPI = pi;
@@ -109,7 +109,7 @@ step = 1;
 lenx=length(X(:,1));
 leny=length(Y(1,:));
 % Safe avoidance radius
-rsav = 20;
+rsav = 2;
 % Pos af hvor baad i skal ende
 % pi0 = [60,11];
 % Gains til funktionerne
@@ -161,9 +161,9 @@ pir = pij;
 % pij(4,1:2,1) = [-60,-20];
 
 % Placering af forhindinger
-po(1,1:2) = [-55,-40]*100;
-po(2,1:2) = [-60,-60]*100;
-po(3,1:2) = [-35,2]*100;
+po(1,1:2) = [-55,-40]*1000;
+po(2,1:2) = [-60,-60]*1000;
+po(3,1:2) = [-35,2]*1000;
 
 
 Fmax = 200;
@@ -172,8 +172,9 @@ Fmax = 200;
 for k = 1:N
 %     fprintf('Timestep #%d\n', k)
     [psivl(k), wp_reached, ctevl(k)] = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]); % WP Gen
-    Rz = [cos(psivl(k)) -sin(psivl(k));
-          sin(psivl(k))  cos(psivl(k))];
+%     Rz = [cos(psivl(k)) -sin(psivl(k));
+%           sin(psivl(k))  cos(psivl(k))];
+    Rz = eye(2,2);
     %% Global Trajectory Generation from Waypoints
     % Calculate if formation is ok
     for i = 1:no_boats % for all boats, could possibly me moved to to end of the LTG loop, after the simulation update
@@ -196,8 +197,9 @@ for k = 1:N
         fprintf('End of track, the iteration was #%d\n', k)
         break
     end
-
+    pvl(1,:) = [0, 0];
     pvl(k+1,:) = [track(m,2), track(m,1)];
+%     pvl(k+1,:) = [0,0];
 %     pvl(k,:) = [20,10];
 
     %% Local Trajectory Generation via Potential Fields
@@ -211,18 +213,22 @@ for k = 1:N
         
         
         
-        [pij(i,:,k+1), minval] = pathgen(32, 1, pij(i,:,k), pi0(i,1:2)*Rz', pij(j,:,k), pi0(j,1:2)*Rz', po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
+%         [pir(i,:,k+1), minval] = pathgen(32, 0.5, pij(i,:,k), pi0(i,1:2)*Rz', pij(j,:,k), pi0(j,1:2)*Rz', po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
+        [pir(i,:,k+1), minval] = pathgen(32, 0.5, pij(i,:,k), pi0(i,1:2), pij(j,:,k), pi0(j,1:2), po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
         Ftotmagn3(k+1,i) = minval;
 %         pir(i,:,k+1) = pij(i,:,k+1) + Ftotmagn3(k+1,i);
-        pir(i,:,k+1) = pij(i,:,k+1);
-        [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pir(i,:,k),pir(i,:,k+1),x(1:2,i,k)'); % WP Gen
-        
+%         pir(i,:,k+1) = pij(i,:,k+1);
+%         [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pir(i,:,k),pir(i,:,k+1),x(1:2,i,k)'); % WP Gen
+        [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pir(i,:,k),pir(i,:,k+1),x(3:4,i,k)'); % WP Gen
+%         headingdesired(i,k) = headingdesired(i,k) - pi/2;
+%         headingdesired(i,k) = -pi/4;
 
 
         %% Controller
-        if k ~= 1
-            heading(i,k) = x(7,i,k+1);
-        end
+        % følgende 3 linier skal højest sandsynligt ikke bruges
+%         if k ~= 1
+%             heading(i,k) = x(7,i,k);
+%         end
 
         % PID for speed
         speeddesried = minval;
@@ -254,11 +260,18 @@ for k = 1:N
     %     tau(i,k+1,:) = (T*K*u)'; % inverse calculation 
     
         %% Simulation
+%         x(1:2,i,k) = [x(2,i,k),x(1,i,k)];
+%         x(3:4,i,k) = [x(4,i,k),x(3,i,k)];
         x(:,i,k+1) = aaushipsimmodel(x(:,i,k), u,'input','wip',wp);
+%         x(:,i,k+1) = aaushipsimmodel([x(2,i,k);x(1,i,k);x(3:17,i,k)], u,'input','wip',wp);
+%         x(1:2,i,k+1) = [x(2,i,k+1),x(1,i,k+1)];
+%         x(3:4,i,k+1) = [x(4,i,k+1),x(3,i,k+1)];
+        heading(i,k+1) = x(7,i,k+1);
 %         x(:,i,k+1) = [pir(i,:,k+1)'; zeros(15,1)];
         % Rewrite the i'th boats position to the simulated one.
 %         pij(i,:,k+1) = x(1:2,i,k+1);
-        pij(i,:,k+1) = [x(2,i,k+1) x(1,i,k+1)];
+%         pij(i,:,k+1) = [x(1,i,k+1) x(2,i,k+1)];
+        pij(i,:,k+1) = [x(3,i,k+1) x(4,i,k+1)];
     end % end of i'th ship
 end
 
@@ -289,9 +302,13 @@ for i = 1:no_boats
         ship(out(1,k+1),out(2,k+1),out(7,k+1),'y')
     end
     hold on
+    out = reshape(pij(i,:,1:es), 2, []);
+    plot(out(1,1:es),out(2,1:es),'-g')
+    out = reshape(pir(i,:,1:es), 2, []);
+    plot(out(1,1:es),out(2,1:es),'-b')
 end
 hold on
-plot(pvl(:,1),pvl(:,2),'r+')
+plot(pvl(:,1),pvl(:,2),'k+')
 % h2 = plot(x_hat(1:es,2),x_hat(1:es,1),'-k');
 % h3 = plot(z(gpsc,2),z(gpsc,1),'g.-');
 % plot(track(n,2),track(n,1),'ro')
@@ -440,8 +457,8 @@ hold off
 % plot(t,euler(1:es,1),'g',t,euler(1:es,2),'b',t,euler(1:es,3),'r')
 
 % Plot af thrustdiff til error detection
-figure(8)
-plot(tt,thrustdiff(1:length(tt))')
-title('Thrustdiff')
-xlabel('time')
-ylabel('Thrustdiff')
+% figure(8)
+% plot(tt,thrustdiff(1:length(tt))')
+% title('Thrustdiff')
+% xlabel('time')
+% ylabel('Thrustdiff')
