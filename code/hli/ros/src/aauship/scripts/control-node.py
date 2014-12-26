@@ -22,8 +22,8 @@ class Control(object):
         self.n = 1 # used for wp gen logic
 
         rospy.init_node('control_node')
-        #self.sub = rospy.Subscriber('kf_statesnew', Float64MultiArray, self.callback, queue_size=1)
-        self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=1)
+        self.sub = rospy.Subscriber('kf_statesnew', Float64MultiArray, self.callback, queue_size=1)
+        #self.sub = rospy.Subscriber('kf_states', Float64MultiArray, self.callback, queue_size=1)
         self.pub = rospy.Publisher('lli_input', LLIinput, queue_size=4, latch=True)
 
         # Initilaze parameters for the simple PID heading contorller
@@ -36,21 +36,25 @@ class Control(object):
         self.thrustdiff.append(0)
         
         # PID tuning parameters for the simple heading controller
-        
+        '''
         self.Kp = 0.1
         self.Ki = 0.0
         self.Kd = 0.0
-        
+        '''
         '''
         self.Kp = 3.0
         self.Ki = 0.0
         self.Kd = 35.0
         '''
-        '''
+	''' 
         self.Kp = 3.0
         self.Ki = 0.0
         self.Kd = 60.0
         '''
+        self.Kp = 2.0
+        self.Ki = 0.0
+        self.Kd = 70.0
+
         # Create path object in rviz
         self.pubpath = rospy.Publisher('path', Path, queue_size=3, latch=True)
 
@@ -79,13 +83,21 @@ class Control(object):
         # Original track
         #self.path = sio.loadmat('../../../../../matlab/2mmargintrack.mat')
         # Original track, just smaller
-        self.path = sio.loadmat('../../../../../matlab/lawnmoversmall.mat')
+        #self.path = sio.loadmat('../../../../../matlab/lawnmoversmall.mat')
         # Only a line segment in the middle
         #self.path = sio.loadmat('../../../../../matlab/linesegment.mat')
         # Just a simple triangle wp
-        self.path = sio.loadmat('../../../../../matlab/triangletrack.mat')
+        #self.path = sio.loadmat('../../../../../matlab/triangletrack.mat')
         # Just a small line segment in the cornor
         #self.path = sio.loadmat('../../../../../matlab/verysmalllinesegment.mat')
+        # FJORDEN zig-zag
+        #self.path = sio.loadmat('../../../../../matlab/fjordtriangle.mat')
+        # FJORDEN one long line segment
+        self.path = sio.loadmat('../../../../../matlab/fjordlinesegment.mat')
+        # FJORDEN one half long line segment
+        #self.path = sio.loadmat('../../../../../matlab/fjordsmalllinesegment.mat')
+        # FJORDEN long track with many waypoints
+        #self.path = sio.loadmat('../../../../../matlab/fjordlargepath.mat')
         self.path['track'] = self.path['track'] - np.array([+3,0])  # offset of the map
         
         # Fill in the path on the rviz path
@@ -140,7 +152,7 @@ class Control(object):
         self.thrustdiff.append(self.Kp*self.error[self.k] + self.Ki*self.integral[self.k] + self.Kd*self.derivative[self.k])
 
         # Desired control forces
-        self.tau = np.array([8,0,0,0,self.thrustdiff[self.k]])
+        self.tau = np.array([80,0,0,0,self.thrustdiff[self.k]])
 
         # Calculation of input vector from desired control forces    
         pinvT = np.asmatrix( linalg.pinv(self.T) )
@@ -169,7 +181,7 @@ class Control(object):
         if self.u[1] < 0:
             self.u[1] = self.u[1] - threshold
         
-        maksimal = 250
+        maksimal = 260
         if self.u[0] > maksimal:
             self.u[0] = maksimal
         elif self.u[0] < -maksimal:
@@ -185,14 +197,15 @@ class Control(object):
         # right thruster, devid 10, msgid 3
         # left thruster, devid 10, msgid 5
         self.pubmsg = LLIinput()
-        self.pubmsg.DevID = 10
-        self.pubmsg.MsgID = 3
-        self.pubmsg.Data  = self.u[0] # Reducing our thrust allocation to only ues the main propellers
-        self.pub.publish(self.pubmsg)
 
         self.pubmsg.DevID = 10
         self.pubmsg.MsgID = 5
         self.pubmsg.Data  = self.u[1] # Reducing our thrust allocation to only ues the main propellers
+        self.pub.publish(self.pubmsg)
+        
+        self.pubmsg.DevID = 10
+        self.pubmsg.MsgID = 3
+        self.pubmsg.Data  = self.u[0] # Reducing our thrust allocation to only ues the main propellers
         self.pub.publish(self.pubmsg)
 
         # Increment loop counter

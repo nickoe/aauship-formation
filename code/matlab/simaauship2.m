@@ -2,8 +2,6 @@
 % TODO nonlinear stuff for simulation model
 
 clear all; clf;
-addpath(genpath('x-io'))
-AHRS = MahonyAHRS('SamplePeriod', 1/10, 'Kp', 18 , 'Ki', 8);
 % set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
 % set(gcf,'paperunits','centimeters')
 % set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
@@ -11,7 +9,7 @@ AHRS = MahonyAHRS('SamplePeriod', 1/10, 'Kp', 18 , 'Ki', 8);
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 6000;
+N = 600;
 no_boats = 4;
 es = N;
 ts = ss.ts;
@@ -101,6 +99,7 @@ pvl = zeros(N+1,2);
 pvl(1,:) = [track(m,2), track(m,1)];  % Set virtual leader
 wp_r = 4; % waypoint acceptance raidus
 
+
 %% POTFIELD VARS START
 MPI = pi;
 % Laver grid med meshgrid, step bestemmer 'opløsning'
@@ -175,6 +174,7 @@ for k = 1:N
 %     Rz = [cos(psivl(k)) -sin(psivl(k));
 %           sin(psivl(k))  cos(psivl(k))];
     Rz = eye(2,2);
+
     %% Global Trajectory Generation from Waypoints
     % Calculate if formation is ok
     for i = 1:no_boats % for all boats, could possibly me moved to to end of the LTG loop, after the simulation update
@@ -199,19 +199,13 @@ for k = 1:N
     end
     pvl(1,:) = [0, 0];
     pvl(k+1,:) = [track(m,2), track(m,1)];
-%     pvl(k+1,:) = [0,0];
-%     pvl(k,:) = [20,10];
 
     %% Local Trajectory Generation via Potential Fields
-%     x(:,1:2,1) = pij(:,1:2,1);
-
-
 
     for i = 1:no_boats % for all boat
 %         fprintf('Boat #%d\n', i)
         j = 1:no_boats; j(i) = []; % Construct j from i
-        
-        
+
         
 %         [pir(i,:,k+1), minval] = pathgen(32, 0.5, pij(i,:,k), pi0(i,1:2)*Rz', pij(j,:,k), pi0(j,1:2)*Rz', po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
         [pir(i,:,k+1), minval] = pathgen(32, 0.5, pij(i,:,k), pi0(i,1:2), pij(j,:,k), pi0(j,1:2), po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
@@ -225,10 +219,6 @@ for k = 1:N
 
 
         %% Controller
-        % følgende 3 linier skal højest sandsynligt ikke bruges
-%         if k ~= 1
-%             heading(i,k) = x(7,i,k);
-%         end
 
         % PID for speed
         speeddesried = minval;
@@ -238,8 +228,8 @@ for k = 1:N
             sderivative(i,k) = serror(i,k) - serror(i,k-1);
         end
 %         speeddiff(i,k+1) = 20*serror(i,k) + 50*sintegral(i,k) + 10*sderivative(i,k); % old tuning parameters
-        speeddiff(i,k+1) = 100*serror(i,k) + 50*sintegral(i,k) + 0*sderivative(i,k); % old tuning parameters
-%         speeddiff(i,k+1) = 8;
+%         speeddiff(i,k+1) = 100*serror(i,k) + 50*sintegral(i,k) + 0*sderivative(i,k); % old tuning parameters
+        speeddiff(i,k+1) = 8;
 
         % PID for heading
         error(i,k) = rad2pipi(headingdesired(i,k)  - heading(i,k));
@@ -253,11 +243,6 @@ for k = 1:N
         tau(:,i,k+1)=[speeddiff(i,k+1) 0 0 0 thrustdiff(i,k+1)];
         u = inv(K)*pinv(T)*tau(:,i,k+1);
         u = round(u);
-
-    %     tau(i,k,:)=[speeddiff(i,k) 0 0 0 thrustdiff(i,k)];
-    %     u(i,k+1) = inv(K)*pinv(T)*tau(i,k,:)';
-    %     u(i,k+1) = round(u(i,k+1));
-    %     tau(i,k+1,:) = (T*K*u)'; % inverse calculation 
     
         %% Simulation
 %         x(1:2,i,k) = [x(2,i,k),x(1,i,k)];
@@ -272,6 +257,7 @@ for k = 1:N
 %         pij(i,:,k+1) = x(1:2,i,k+1);
 %         pij(i,:,k+1) = [x(1,i,k+1) x(2,i,k+1)];
         pij(i,:,k+1) = [x(3,i,k+1) x(4,i,k+1)];
+
     end % end of i'th ship
 end
 
@@ -279,28 +265,30 @@ end
 t = 0:ts:es*ts-ts;
 tt = ts:ts:es*ts;
 
-sailsim = figure(1);
+figure(1);
 clf
-% set(gcf,'Visible','on'); % Hides the matlab plot because it is ugly
-% set(gcf,'paperunits','centimeters')
-% set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
-% set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
-% subplot(3,1,1)
 
-% for k = 1:100:N
-%     ship(NED(k,2),NED(k,1),pi/2-headingdesired(k),'y')
-% end
 hold on
-h1 = plot(track(:,2),track(:,1),'b-o');%, x_hat(gpsc,2),x_hat(gpsc,1), '*');
+h1 = plot(track(:,2),track(:,1),'b-o');
 for i = 1:no_boats
     hold on
-
+    out = reshape(pij(i,:,1:es), 2, []);
+    plot(out(1,1:es),out(2,1:es),'-k')
     out = reshape(x(:,i,1:es),length(x(:,i,1)),[]);
-    plot(out(1,1:es),out(2,1:es),'-r')
+%     plot(out(1,1:es),out(2,1:es),'-r')
+        
+%     for k = 1:79:es
+%         ship(out(1,k+1),out(2,k+1),out(7,k+1),'y')
+%     end
+    hold on
+
+
+
+%     out = reshape(pir(i,:,1:es), 2, []);
+%     plot3(out(1,1:es),out(2,1:es),'-g')
+%     plot3(out(1,1:es),out(2,1:es),Ftotmagn3(1:es,i),'-g')
     
-    for k = 1:79:es
-        ship(out(1,k+1),out(2,k+1),out(7,k+1),'y')
-    end
+
     hold on
     out = reshape(pij(i,:,1:es), 2, []);
     plot(out(1,1:es),out(2,1:es),'-g')
@@ -308,14 +296,15 @@ for i = 1:no_boats
     plot(out(1,1:es),out(2,1:es),'-b')
 end
 hold on
-plot(pvl(:,1),pvl(:,2),'k+')
-% h2 = plot(x_hat(1:es,2),x_hat(1:es,1),'-k');
+h1 = plot(pvl(:,1),pvl(:,2),'r+');
 % h3 = plot(z(gpsc,2),z(gpsc,1),'g.-');
 % plot(track(n,2),track(n,1),'ro')
 % legend([h1;h2;h3],'Trajectory','State','Marker for recieved GPS','Estimate','GPS meas','Location','eastoutside')
 xlabel('Easting [m]');
 ylabel('Northing [m]');
+title('Plot of the NED frame');
 grid on
+xlim([-40 40])
 axis equal
 hold off
 
@@ -462,3 +451,4 @@ hold off
 % title('Thrustdiff')
 % xlabel('time')
 % ylabel('Thrustdiff')
+
