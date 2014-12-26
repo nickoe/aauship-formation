@@ -36,22 +36,23 @@ class Control(object):
         self.thrustdiff.append(0)
         
         # PID tuning parameters for the simple heading controller
-        
+        '''
         self.Kp = 0.1
         self.Ki = 0.0
         self.Kd = 0.0
-        
+        '''
         '''
         self.Kp = 3.0
         self.Ki = 0.0
         self.Kd = 35.0
         '''
-        '''
+        
         self.Kp = 3.0
         self.Ki = 0.0
         self.Kd = 60.0
-        '''
-        # Create path object in rviz
+        
+        
+	# Create path object in rviz
         self.pubpath = rospy.Publisher('path', Path, queue_size=3, latch=True)
 
         # Create the struct to be printed
@@ -148,7 +149,7 @@ class Control(object):
         self.thrustdiff.append(self.Kp*self.error[self.k] + self.Ki*self.integral[self.k] + self.Kd*self.derivative[self.k])
 
         # Desired control forces
-        self.tau = np.array([8,0,0,0,self.thrustdiff[self.k]])
+        self.tau = np.array([80,0,0,0,self.thrustdiff[self.k]])
 
         # Calculation of input vector from desired control forces    
         pinvT = np.asmatrix( linalg.pinv(self.T) )
