@@ -1,7 +1,6 @@
 \chapter{Selected Formation Control Strategies}
 \label{ch:selformctrl}
-\head{This chapter investigates the previously mentioned formation control \todo{ref to seciton here} aspects with focus in three different types of formation control. These three types are analysed with focus on the specific task applied at the Port of Aalborg, afterwards simulated to be able to conclude which of these are the most beneficial to implement at the AAUSHIP fleet.}
-
+\head{This chapter investigates the previously mentioned formation control aspects from section \ref{ch:formcontrol} with focus in three different types of formation control. These three types are analysed with focus on the specific task applied at the Port of Aalborg, afterwards simulated to be able to conclude which of these are the most beneficial to implement at the AAUSHIP fleet.}
 
 \section{Relevant Characteristics}
 To have a tool to determine what strategy is the best suited for the
@@ -48,7 +47,7 @@ strategies after implementation.
 \section{Methods}
 
 \subsection{Direct LOS guidance}
-The \ac{LOS} guidance makes the basis for a formation where one leader has a single follower connected and this follower has another single follower. \todo{Her skal nok stå en overordnet beskrivelse..}
+The \ac{LOS} guidance makes the basis for a formation where one leader has a follower connected and this follower has another follower connected and so on. By having this form of guidance the leader will always control the formation and how the development of the formation should be. The leader does not need to be a specific agent but can be a virtual leader, a point which is seen as leader to all the respective followers. The reference is to the leader can be a guidance reference where the leader needs to track a determined path. The reference to the followers can then either be given as a position offset, a distance and angle offset or only a distance to maintain and then make a direct pursuit of the leader.
 \subsubsection{Duckling formation}
 \label{sc:duckling}
 This strategy takes the rise in a duckling or snake formation. In principle is this a leader that has a follower that has a follower and so on. Thereby will the formation take shape as a snake, when the leader takes off and the followers keep the line of sight to their respective leaders. The communication needed in the case of followers only follow one leader, and the communication only works in one direction, then the bandwidth usage is minimal. This implies that the communication it low and simple which is preferable. Similar to the communication will the control architecture become of the simple type where each agent only need to have a \ac{LOS} controller, such that they track their respective leaders. As such is obstacle avoidance not a native implementation of the formation, but can be implemented for the main leader of the formation. By doing this arises a problem of transients where the followers will 'cut corners'. They will directly pursuit their respective leaders, such that the formation will take sharper corners than the main leader. Adding to that if one agent fails during mission every agent after this in the chain fails. Although the formation does not perform well it has the advantage that the scalability is simple. When linking the formation in the duckling formation a new follower can be attached at the last agent and a new follower to this agent and so on. This implies that, in theory, an infinite tail of followers can be attached.
@@ -100,17 +99,17 @@ No communication& Low bw, 2 & Single agent info, 2 & Natural, 2& \\
  & \textbf{Transients} & \textbf{Scalability} & \textbf{Failure}& \textbf{Sum}\\
 \hline
 \textbf{Leader follower:}&&&& \\
-Duckling  & improper path, -1 & Easy duplicate, 3 & 2 & 10\\
-Echelon  & Improper path, 0 & Easy duplicate, 3 & 2 & 11\\
-\ac{FRP} with path   & Improper path, 0 & 2 & -2 & 2\\
+Duckling  & improper path, -1 & Easy duplicate, 3 & Formation continue, 2 & 10\\
+Echelon  & Improper path, 0 & Easy duplicate, 3 & Formation continue, 2 & 11\\
+\ac{FRP} with path   & Improper path, 0 & Duplicable, 2 & Collapse, -2 & 2\\
 \textbf{Precomputed individual paths:}&&&& \\
-Full communication   & 3 & -1 & 2 & 4\\
-Limited communication  & 2 & 1 & 0 & 5\\
-No communication   & 1 & 3 & -2 & 6\\
+Full communication   & No risk, 3 & More bandwidth, -1 & Low failure, 2 & 4\\
+Limited communication  & Risk, 2 & Possible, 1 & Can occur, 0 & 5\\
+No communication   & Risk, 1 & Individual paths, 3 & High risk, -2 & 6\\
 \textbf{Potential field:}&&&& \\
-Full communication  & 3 & 0 & 2 & 8\\
-Limited communication  & 1 & 1 & 2 & 9\\
-No communication  & -1 & 3 & -1 &7\\
+Full communication  & No risk, 3 & More bandwidth, 0 & Low failure, 2 & 8\\
+Limited communication  & Risk, 1 & Possible, 1 & Low failure, 2 & 9\\
+No communication  & High risk, -2 & Single fields, 3 & Risk, -1 & 6\\
 \bottomrule
 \end{tabular}
 \caption{Decision matrix for the formation strategies. The strategy row from the upper half of the table continues on the lower half, with the points summed in the last column in the lower half.}

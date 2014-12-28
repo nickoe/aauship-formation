@@ -1,10 +1,10 @@
 \chapter{Formation Control Overview}
 \label{ch:formcontrol}
-\head{This section will give a short introduction to formation control in general, by discussing existing formation control paradigms and relating them to the motivation of the AAUSHIP as a survey platform concept. Some of these concpets will be analysed further in chapter~\vref{ch:selformctrl}.}
+\head{This section will give a short introduction to formation control in general, by discussing existing formation control paradigms and relating them to the motivation of the AAUSHIP as a survey platform concept. Some of these concepts will be analysed further in chapter~\vref{ch:selformctrl}.}
 
 %\head{Formation control in general is concerned with simultaneous control of dynamic systems. These systems is often referred to as agents where the objective of these is to maintain a static reference to a specified object. This object could be another agent witch then would be referred to as the leader. The other agents objective will then be to stay in the relative position to the leader within a static formation.}
 
-The theory of formation control in general is widely applied. \todo{Do we need some references to this?} It is usually applied in assignments regarding control of robots which needs to be placed relative to each other. Depending on the given task of the robots, and which type of robots are in focus, the formation can be utilized in different ways \citep{muv-survey1}.
+The theory of formation control in general is widely applied. It is usually applied in assignments regarding control of robots which needs to be placed relative to each other. Depending on the given task of the robots, and which type of robots are in focus, the formation can be utilized in different ways \citep{muv-survey1}.
 
 The robots can also be of various types: Driving vehicles, helicopters, aeroplanes, ships etc. which can be both manned or unmanned. The tasks that these robots needs to fulfil can vary greatly. Robots in groups in general have many purposes such as vacuum cleaning robots, who needs to clean a rather large area or flying swarm robots like quadcoptors who can make different kinds of assignments. When quadcoptors work as a combined group they could lift a certain amount of payload to achieve their goal as a group, or they could work individually in a network to do several smaller tasks. An example of how quadcoptors are working together can be examined at \citep{ethswarm}.
 
@@ -135,18 +135,18 @@ As seen on figure~\vref{fig:form_rigid_90} the ships could have benefit of turni
 \subsubsection{Degree of Actuation}
 The degree of actuation is a matter that sets some limitations on how
 the path following can be made, and thus the methods available to
-control the ships. Generally speaking when talking marine craft the movemnts
-that one is interrested in controlling is usually they planar position in
+control the ships. Generally speaking when talking marine craft the movements
+that one is interested in controlling is usually they planar position in
 the \ac{NED} frame.
 
 For control of ships there are some different configurations which is also described by \citep{fossen} as the following.
 \begin{description}[style=nextline]
 	\item [Three or more controls]
-	When having three or more control parameters it is said that the vessel is fully actuated. This way of controlling is usually used in low-speed manoeuvring and stationkeeping mostly by offshore \ac{DP} vessels.
+	When having three or more control parameters it is said that the vessel is fully actuated. This way of controlling is usually used in low-speed manoeuvring and station keeping mostly by offshore \ac{DP} vessels.
 	\item [Two controls and Trajectory-Tracking control]
-	Trajectory-Tracking is done in a three \ac{DOF} system, $e(t)\in\mathds{R}^2\text{X}\mathds{S}$\todo{this looks strange, 2?}. It is done with two control inputs, $u(t)\in\mathds{R}^2$. This means that the control problem is underactuated which cannot be solved by linear control theory. A vessel under these terms is able to manoeuvre along a path with constant sideslip angle using only surge and yaw. This is the classic approach for path following.
+	Trajectory-Tracking is done in a three \ac{DOF} system, $e(t)\in\mathds{R}^2$ on the sphere. It is done with two control inputs, $u(t)\in\mathds{R}^2$. This means that the control problem is under actuated which cannot be solved by linear control theory. A vessel under these terms is able to manoeuvre along a path with constant sideslip angle using only surge and yaw. This is the classic approach for path following.
 	\item [Two controls and Weather-Optimal heading]
-	When the goal is station keeping with minimal fuel consumption and the heading is not important one could consider the weather conditions and in general the environmental disturbances to perform weathervaning. A method of doing this is described by \citep{i2001nonlinear} and \citep[sec. 13.3.10]{fossen}. It is done by making the heading depend of the change in the mean of the environmental disturbances.
+	When the goal is station keeping with minimal fuel consumption and the heading is not important one could consider the weather conditions and in general the environmental disturbances to perform stable control in disturbing weather. A method of doing this is described by \citep{i2001nonlinear} and \citep[sec. 13.3.10]{fossen}. It is done by making the heading depend of the change in the mean of the environmental disturbances.
 	\item [Two controls and Path-Following control]
 	The standard way by having two controls, being surge and yaw, and achieving path-following, is to define a 2D workspace. This workspace is placed along the trajectory with along-track and cross-track vectors that are to represent the error to minimize. This is usually done by applying the \ac{LOS} path following controller that makes use of surge and yaw to accomplish the path following. This implies that a six \ac{DOF} system model needs to be internally stable such that only the two control inputs are used.
 	\item [One control]
@@ -158,7 +158,7 @@ For AAUSHIP this means that it is not a fully actuated ship in the
 whole 3D space, but this is not needed since it is moving on a
 surface. To be fully actuated it must be able to have controls for
 surge, sway and yaw. AAUSHIP is only equipped with two main propellers and 
-one or two bow thrusters, which can only be used for slow speed maneuvering.
+one or two bow thrusters, which can only be used for slow speed manoeuvring.
 The bow thrusters can not really be used well in normal path following operations.
 
 

@@ -442,6 +442,14 @@ and the derivative is therefore also a constant, as seen in equation \ref{eq:dFi
 \label{eq:dFij}
 \end{align}
 
+\subsubsection{Summation of the derivatives}
+Since the respective derivatives now have been calculated, these can be summed into a combined derivative being the slope in one specific point on the track. By doing this the derivative can be expressed in pure algebra and thereby the ability to calculate the slope by this instead of a numerical solution. The respective derivatives can be seen in equation \ref{eq:dFvl}, \ref{eq:dFij}, \ref{eq:dFca} and \ref{eq:dFoa}. The summation to find the absolute slope can be seen in equation \ref{eq:dFtot}.
+\begin{align}
+\frac{\delta F^{tot}_{i}}{\delta d} = \frac{\delta F_{vl}}{\delta d} + \frac{\delta F_{ij}}{\delta d} + \frac{\delta F_{ca}}{\delta d} + \frac{\delta F_{oa}}{\delta d}
+\label{eq:dFtot}
+\end{align}
+This will be a more direct calculation method compared to the numerical method. Though the numerical method is chosen to be implemented due to a more interpreting idea of how the potential field algorithms should be carried out.
+
 \subsection{Adding the Dynamics for Simulation}
 \todo{Describe the block diagram connecting the potential field calculations,
 an analogy to the wp\_gen script for the path follower.}
