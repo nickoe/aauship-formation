@@ -372,7 +372,11 @@ In equation \ref{eq:dFca} the $\frac{d}{||d||}$ enters again by applying equatio
 
 \subsubsection{The Sign-Function}
 \label{subsubsec:sign}
-The sign-function, also known as the signum-function, is an odd function that returns the sign of a real number. The sign-function can be split up into three parts, depending on the argument to the function:
+The sign-function\todo{I suggest to write ``sign function'' rather
+than ``sign-function''. nick}, also known as the signum-function, is an odd
+function that returns the sign of a real number. The sign-function can
+be split up into three parts, depending on the argument to the
+function:
 \begin{align}
 \text{sign}(x) =
 \begin{cases}
@@ -394,7 +398,9 @@ The derivative of the sign-function can be split up in the individual regions an
 \left(\frac{\delta \frac{x}{|x|}}{\delta x}\right), &\text{if } x>0\qquad \to 1
 \end{cases}
 \end{align}
-
+\todo{The extra parentheses seems obsolete here. nick}
+\todo{Maybe write derivate equals the result, rather than the
+rightarrow. nick}
 \subsubsection{Obstacle Avoidance}
 By the applying the same principle as with the collision avoidance, the obstacle avoidance can be determined by taking the derivative of the forces applied by the $F_{oa}$. The $F_{oa}$ is summarized in equation \ref{eq:obsavoid}.
 \begin{align}
@@ -420,7 +426,7 @@ F_{oa} &= \left(\frac{K_{oa}}{||d||}-\frac{K_{oa}}{r}\right)\frac{d}{||d||}\\
 \end{align}
 The difference between $F_{ca}$ and $F_{oa}$, equation \ref{eq:dFca} and equation \ref{eq:dFoa}, lies in the factor of $r$. This is also the interpretation of the repulsing forces since the $F_{ca}$ should apply a larger force to ensure that no collision will happen between agents that are on collision course.
 
-\subsubsection{Virtual leader}
+\subsubsection{Virtual Leader}
 The virtual leader force is the contribution as a cone toward the point of virtual leader. The virtual leader force, $F_{vl}$, is given as:
 \begin{align}
 F_{vl} = K_{vl}(d_i-d_{i0})
@@ -431,7 +437,7 @@ and the derivative is then given in equation \ref{eq:dFvl}, where the slope is a
 \label{eq:dFvl}
 \end{align}
 
-\subsubsection{Inter vehicle}
+\subsubsection{Inter Vehicle}
 The inter vehicle forces are the ones that makes the agents converge toward the formation along the tracking phase. The forces are given as:
 \begin{align}
 F_{ij} = K_{ij}(d_{ij}-d_{ij0})
@@ -442,7 +448,7 @@ and the derivative is therefore also a constant, as seen in equation \ref{eq:dFi
 \label{eq:dFij}
 \end{align}
 
-\subsubsection{Summation of the derivatives}
+\subsubsection{Summation of the Derivatives}
 Since the respective derivatives now have been calculated, these can be summed into a combined derivative being the slope in one specific point on the track. By doing this the derivative can be expressed in pure algebra and thereby the ability to calculate the slope by this instead of a numerical solution. The respective derivatives can be seen in equation \ref{eq:dFvl}, \ref{eq:dFij}, \ref{eq:dFca} and \ref{eq:dFoa}. The summation to find the absolute slope can be seen in equation \ref{eq:dFtot}.
 \begin{align}
 \frac{\delta F^{tot}_{i}}{\delta d} = \frac{\delta F_{vl}}{\delta d} + \frac{\delta F_{ij}}{\delta d} + \frac{\delta F_{ca}}{\delta d} + \frac{\delta F_{oa}}{\delta d}
