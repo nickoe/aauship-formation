@@ -116,20 +116,28 @@ total term is summed up as:
 Here $d_{ki}$ represents one of the $M$ place vectors which has the
 effect of a detected obstacle.
 
-It can be noticed that there is a difference between $\mathbf{F}_{ca}$ and $\mathbf{F}_{oa}$. The two forces applies the same directions of forces, making the agents repulse from another agent or an obstacle. Though there is made a difference between them. It can be seen that the safety radius is moved from a multiplication to a division from the $\mathbf{F}_{ca}$ to the $\mathbf{F}_{oa}$. This will, dependent on the choices of $K_{ca}$ and $K_{oa}$, allow agents to move further into the safety radius of an obstacle than into the radius of another agent. This is due to the fact that the repulsing forces from agents needs to be larger in the case that two agents moves toward each other. In this case the agents need to react with higher aggression to ensure that they will repulse enough to not collide. This will not be the case for obstacles since these are defined with a constant position. \todo{Skriv mere her, evt vis plot fra 'fcafoatest'}
+It can be noticed that there is a difference between $\mathbf{F}_{ca}$ and $\mathbf{F}_{oa}$. The two forces applies the same directions of forces, making the agents repulse from another agent or an obstacle. Though there is made a difference between them. It can be seen that the safety radius is moved from a multiplication to a division from the $\mathbf{F}_{ca}$ to the $\mathbf{F}_{oa}$. This will, dependent on the choices of $K_{ca}$ and $K_{oa}$, allow agents to move further into the safety radius of an obstacle than into the radius of another agent. This is due to the fact that the repulsing forces from agents needs to be larger in the case that two agents moves toward each other. In this case the agents need to react with higher aggression to ensure that they will repulse enough to not collide. This will not be the case for obstacles since these are defined with a constant position. The 2-D representation of $Fca$ and $Foa$ in their safety radius can be seen on figure \ref{fig:fcafoa}.
+\begin{figure}[htbp]
+  \includegraphics[width=0.7\textwidth]{fig/fcafoa}
+  \caption{The magnitude of the forces $Fca$ and $Foa$. This force applies when an agent or an obstacle enters within the safety radius.}
+  \label{fig:fcafoa}
+\end{figure}
+It can be seen that the force of $Fca$ are greater than the force of $Foa$, although their gains $Kca$ and $Koa$ have been chosen equally. This is due to the difference of their structure and ensures that no agents collide even though they are on a collision course.
 
 The distance $r$ can be determined
 dynamically depending on the velocity of the agent:
 \begin{align}
 r = r^{min} + K_r||\dot{\mathbf{p}^n}||
 \end{align}
+Still will ensure that the agents have the possibility to decelerate from their absolute velocity in the safety radius such that they can turn away from each other.
+
 
 \subsubsection{Potential field}
-Now these forces was summed together to get
-$\tilde{\mathbf{F}}_i^{tot}$, that was just an intermediate vector, which needs
+Now these forces are summed together to get
+$\tilde{\mathbf{F}}_i^{tot}$, which is an intermediate vector, which needs
 to be limited in a way, because this describes the speed the agents
 can move with.
-
+\todo{Det virker ikke at du bare laver linieskift i et afsnit og så bare efterlader det hulter til bulter med en todo. Det er bedre at du laver todoen så, nu hvor du har ideen til det der skal stå. Jeppe}
 which gives the magnitude and direction of the
 potential field for vehicle $i$ at its current position. As the
 potential field does not need to expand to infinity it is reasonable
@@ -237,20 +245,19 @@ where a ball will converge towards the lowest point in the direction
 of the minimum gradient.
 
 The method of applying the grid with magnitude of the potential field
-arises the problem with resolution, but also a problem that makes the
-'corners' of the grid around the agent to be more likely to have the
+arises the problem with resolution, and therefore also a problem that makes the
+'corners' of the grid around the agent to have the
 steepest decent. This is seen as if the agent is placed in the middle
-of a 3-by-3 matrix, and have eight placements around it. This problem
+of a 3-by-3 matrix, and have eight placements around it. The placements around the agent will then be checked. The magnitude of the vector from the agent and outgoing will therefore be biggest in the corners since the distance to those are greater than the distances to the sides, up and down. This problem
 has been expanded with a solution such that a certain radius in the
 potential field around an agent will be checked. The value at the
-radius around the agent can be checked, and due to the equal distance
+radius around the agent can be checked, and due to the newly equal distance
 to every point, these will be weighted equally with respect to their
 value. This makes in principle the possibility to make the agent go in
 all directions which will be closer to the reality. When testing the
 two methods against each other it is clear that the first proposed
 with the grid structure did not have the same mobility thus not
-preferable in simulations though it is simpler.
-\todo{This section is not really clear}
+preferable in simulations though it is simpler. The first made the agents move only in the diagonals of their local placement, where the latter makes the agents able to move in a number of directions specified in the algorithm.
 
 \subsection{Local Minima Problem}
 A problem that can become crucial arises when two agents or two
@@ -291,8 +298,8 @@ The solution of clustering the objects, that are too close, can be seen on figur
   \caption{An agent that before was stuck now does not get into a local minima close to the agents, as it now sees the two other agents as one larger agent.}
   \label{fig:solroevproblem}
 \end{figure}
-Here the first solution is applied where the two agents, that were too close to each other, have been clustered into one, seen from the $i$'th agent. Now the local minima between the agents have been neglected and the $i$'th agent can generate its trajectory around the agents and continue to the endpoint of the potential field. The algorithm checks if the distances between the agents are lower that $2 \cdot r$. If this is the case it means that the $i$'th agent cannot generate a trajectory in between these agents, which can lead to a local minima. Therefore is the agents that are too close combined into one by generating the middle point between their positions and generating a new radius. This makes a larger circle where the two agents are in the subset. This cricle will be larger depending on the wanted safety radius thus rises the need to recheck the potential field again after have generated a new combined agent. If the radius of the new agent places it close to one of the single agents, these also might need to cluster. Thus the algorithm needs to run untill no distances between agents are $< 2 \cdot r$.
-The algorithm generating this combined agent can be seen in pseudo code in algortihm \ref{al:clusteragents}.
+Here the first solution is applied where the two agents, that were too close to each other, have been clustered into one, seen from the $i$'th agent. Now the local minima between the agents have been neglected and the $i$'th agent can generate its trajectory around the agents and continue to the endpoint of the potential field. The algorithm checks if the distances between the agents are lower that $2 \cdot r$. If this is the case it means that the $i$'th agent cannot generate a trajectory in between these agents, which can lead to a local minima. Therefore is the agents that are too close combined into one by generating the middle point between their positions and generating a new radius. This makes a larger circle where the two agents are in the subset. This circle will be larger depending on the wanted safety radius thus rises the need to recheck the potential field again after have generated a new combined agent. If the radius of the new agent places it close to one of the single agents, these also might need to cluster. Thus the algorithm needs to run until no distances between agents are $< 2 \cdot r$.
+The algorithm generating this combined agent can be seen in pseudo code in algorithm \ref{al:clusteragents}.
 \begin{algorithm}[H]
   \KwData{clustering of agents}
   initialization\;
@@ -301,7 +308,7 @@ The algorithm generating this combined agent can be seen in pseudo code in algor
   $r_{new} \gets \text{calc new r for}\ \mathbf{p}_{j,new}$\\
   delete $\mathbf{p}_i\ \text{and}\ \mathbf{p}_j \text{with}\ \mathbf{p}_{j,new}$
   }
-  \caption{This pseudo code describes how agents that are too close to eachother are getting clustered and seen as one. The algorithm can also be applied for obstacles in the potential field.}
+  \caption{This pseudo code describes how agents that are too close to each other are getting clustered and seen as one. The algorithm can also be applied for obstacles in the potential field.}
   \label{al:clusteragents}
 \end{algorithm}
 Firstly every distance between the agents are checked if it is lower than $2 \cdot r$. If the distance is lower, a new coordinate set needs to be calculated. The coordinates for the $\mathbf{p}_{j,new}$ is generated to the middle value of the two points
@@ -329,7 +336,6 @@ this formation strategy a collision free movement is guaranteed which
 is one of the more critical criteria to be fulfilled. 
 
 \subsection{Algebraic Solution}
-\todo{Dette skal beskrives med formler}
 In the previous section \ref{subsec:numsol} the problem is solved in a numerical manor, where the functions are evaluated in single steps in a grid, to see the individual potential field magnitudes. Afterwards they are added together to get the total potential field in that specific point. This is one way to implement the potential field algorithms and within this section another approach is analysed.
 
 The other solution could be to analyse the problem analytically, where the potential fields are calculated from the derivatives of the potential field functions. By doing this the direct gradient of the individual potential field function can be calculated, and added together to get the total gradient at a specific point. The potential field functions are summarized in the following where their derivatives are calculated.
@@ -372,9 +378,8 @@ In equation \ref{eq:dFca} the $\frac{d}{||d||}$ enters again by applying equatio
 
 \subsubsection{The Sign-Function}
 \label{subsubsec:sign}
-The sign-function\todo{I suggest to write ``sign function'' rather
-than ``sign-function''. nick}, also known as the signum-function, is an odd
-function that returns the sign of a real number. The sign-function can
+The sign-function, also known as the signum-function, is an odd
+function that returns the sign of a real number. The sign function can
 be split up into three parts, depending on the argument to the
 function:
 \begin{align}
@@ -389,18 +394,16 @@ Thus it is given in the scalar case that for every $x \neq 0$:
 \begin{align}
 \text{sign}(x) = \frac{x}{|x|} = \frac{|x|}{x}
 \end{align}
-The derivative of the sign-function can be split up in the individual regions and be given as:
+The derivative of the sign function can be split up in the individual regions and be given as:
 \begin{align}
-\frac{\delta \text{sign}(x)}{\delta x} = \frac{\delta}{\delta x}\left(\frac{x}{|x|}\right) =
+\frac{\delta \text{sign}(x)}{\delta x} =
 \begin{cases}
-\left(\frac{\delta \frac{x}{|x|}}{\delta x}\right), &\text{if } x<0\qquad \to -1\\
-\text{Undefined}, &\text{if } x=0\qquad \to 0\\
-\left(\frac{\delta \frac{x}{|x|}}{\delta x}\right), &\text{if } x>0\qquad \to 1
+\left(\frac{\delta \frac{x}{|x|}}{\delta x}\right) = -1, &\text{if } x<0\\
+\text{Undefined}, &\text{if } x=0\\
+\left(\frac{\delta \frac{x}{|x|}}{\delta x}\right) = 1, &\text{if } x>0\
 \end{cases}
 \end{align}
-\todo{The extra parentheses seems obsolete here. nick}
-\todo{Maybe write derivate equals the result, rather than the
-rightarrow. nick}
+
 \subsubsection{Obstacle Avoidance}
 By the applying the same principle as with the collision avoidance, the obstacle avoidance can be determined by taking the derivative of the forces applied by the $F_{oa}$. The $F_{oa}$ is summarized in equation \ref{eq:obsavoid}.
 \begin{align}
@@ -417,7 +420,7 @@ The total derivative can be seen in equation \ref{eq:dFoa}.
 \frac{\delta F_{oa}}{\delta d} = -\frac{K_{oa}\cdot \frac{d}{||d||}}{||d^2||}
 \label{eq:dFoa}
 \end{align}
-The derivation of $F_{oa}$ can be done as in equation \ref{eq:deriveFoa}, where the outer sign-function is neglected and put back into the derivative afterwards due to the property of the sign-function.
+The derivation of $F_{oa}$ can be done as in equation \ref{eq:deriveFoa}, where the outer sign function is neglected and put back into the derivative afterwards due to the property of the sign-function.
 \begin{align}
 F_{oa} &= \left(\frac{K_{oa}}{||d||}-\frac{K_{oa}}{r}\right)\frac{d}{||d||}\\
 &= K_{oa}\frac{1}{||d||}-K_{oa}\frac{1}{r}\\

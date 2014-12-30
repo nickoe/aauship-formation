@@ -98,11 +98,8 @@ is not straight forward to add the sensor noise to the model, because
 this noise is specified at the raw sensor measurements. So some way
 has to be used to calculate the noise $v$.
 
-A method is the simply set the inputs as the variance value and the
-output will be the variance in the state vector. \todo{Is this true?}
-
 A method is to set the sensor measurements to no movement values, and
-only add the noise on the measurements. I all sensors were zero in
+only add the noise on the measurements. If all sensors were zero in
 stagnation, then it would be enough to simulate this with only noise and
 get the corresponding variance out. This is not the case, as the
 magnetometer has a bias, just because it is situated in a constant
@@ -110,7 +107,7 @@ magnetic field and this is dependent on the attitude of the ship. So
 to compute the variances on the state vector it is needed to make
 multiple simulations where this bias is different also. A normalized
 normal distribution of this should suffice. \todo{Is this good enough
-or even correct? We have nonlinearities.}
+or even correct? We have nonlinearities. Jeg ved ikke om det er rigtigt, men måske skulle der bare skrives ud fra hvordan det er lavet, altså hvordan $v$ er fundet.}
 
 \section{\acs{SOG} to Body Frame Velocities}
 The \acl{SOG} block on the figure~\vref{fig:intermediate-calc} is used to calculate the body frame velocities in surge $u$ and sway $v$, which in turn is filtered by the Kalman filter described in section~\vref{sec:kfdesign}. The block on the diagram uses the \ac{SOG} from the \ac{GPS}, denoted as the magnitude $U$ and the course angle relative to true north, denoted the course angle $\chi$. Which is the sum of the heading $\psi$ and sideslip $\beta$ angles:
