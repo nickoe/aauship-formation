@@ -133,23 +133,14 @@ Still will ensure that the agents have the possibility to decelerate from their 
 
 
 \subsubsection{Potential field}
-Now these forces are summed together to get
-$\tilde{\mathbf{F}}_i^{tot}$, which is an intermediate vector, which needs
-to be limited in a way, because this describes the speed the agents
-can move with.
-\todo{Det virker ikke at du bare laver linieskift i et afsnit og så bare efterlader det hulter til bulter med en todo. Det er bedre at du laver todoen så, nu hvor du har ideen til det der skal stå. Jeppe}
-which gives the magnitude and direction of the
-potential field for vehicle $i$ at its current position. As the
-potential field does not need to expand to infinity it is reasonable
-to define a maximum amplitude for the vector, while still keeping its
-direction:
-\todo{Denne afsluttende subsubsection er underligt formuleret, husk
-det med tilden, og sikkert også hvordan vi regner p\_r}
+The forces are summed together to get
+$\tilde{\mathbf{F}}_i^{tot}$, which is an intermediate vector which gives the magnitude and direction of the
+potential field for vehicle $i$ at its current position.
 \begin{align}
   \mathbf{F}_i^{tot} = \min\{\,\,\,||\tilde{\mathbf{F}}_i^{tot}||\,\,\,,\,\,F_{max}\,\,\,\}\frac{\tilde{\mathbf{F}}_i^{tot}}{||\tilde{\mathbf{F}}_i^{tot}||}
 \end{align}
-The $\tilde{\mathbf{F}}_i^{tot}$ denotes that it is a middle variable and not the final value of the potential calculation, thus not the one given to the controller yet.
-As the potential field does not need to expand to infinity it is reasonable to define a maximum amplitude for the vector, while still keeping its direction, $F_{max}$. This will be a limitation of the agents' speed. As a start in the simulation is $F_{max}$ chosen as a constant, but with the fully implemented system it can be of benefit to adjust this maximum speed dynamically, for instance as in equation \ref{eq:dynfmax} as an example from \citep{UAVff3dpf}.
+The $\tilde{\mathbf{F}}_i^{tot}$ denotes that it is a middle variable and not the final value of the potential calculation, thus not the one used by the controller yet.
+As the potential field does not need to expand to infinity it is reasonable to define a maximum amplitude for the vector, while still keeping its direction, $F_{max}$. This will be a limitation of the agents' speed. As a start in the simulation phase is $F_{max}$ chosen as a constant, but in the fully implemented system it can be of benefit to adjust this maximum speed dynamically, for instance as in equation \ref{eq:dynfmax}, as an example from \citep{UAVff3dpf}.
 \begin{align}
 F_{max} = F_{min} + K_{vl}||\dot{p}^n||
 \label{eq:dynfmax}
@@ -384,7 +375,7 @@ This applies since the derivative of $\frac{1}{||d||}$ with respect to $d$ can b
 \end{align}
 In equation \ref{eq:dFca} the $\frac{d}{||d||}$ enters again by applying equation \ref{eq:1/||d||} which still is the form of the sign function.
 
-\subsubsection{The Sign-Function}
+\subsubsection{The Sign Function}
 \label{subsubsec:sign}
 The sign function, also known as the signum function, is an odd
 function that returns the sign of a real number. The sign function can
