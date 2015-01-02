@@ -146,8 +146,16 @@ direction:
 \todo{Denne afsluttende subsubsection er underligt formuleret, husk
 det med tilden, og sikkert også hvordan vi regner p\_r}
 \begin{align}
-	\mathbf{F}_i^{tot} = \min\{\,\,\,||\tilde{\mathbf{F}}_i^{tot}||\,\,\,,\,\,F_{max}\,\,\,\}\frac{\tilde{\mathbf{F}}_i^{tot}}{||\tilde{\mathbf{F}}_i^{tot}||}
+  \mathbf{F}_i^{tot} = \min\{\,\,\,||\tilde{\mathbf{F}}_i^{tot}||\,\,\,,\,\,F_{max}\,\,\,\}\frac{\tilde{\mathbf{F}}_i^{tot}}{||\tilde{\mathbf{F}}_i^{tot}||}
 \end{align}
+The $\tilde{\mathbf{F}}_i^{tot}$ denotes that it is a middle variable and not the final value of the potential calculation, thus not the one given to the controller yet.
+As the potential field does not need to expand to infinity it is reasonable to define a maximum amplitude for the vector, while still keeping its direction, $F_{max}$. This will be a limitation of the agents' speed. As a start in the simulation is $F_{max}$ chosen as a constant, but with the fully implemented system it can be of benefit to adjust this maximum speed dynamically, for instance as in equation \ref{eq:dynfmax} as an example from \citep{UAVff3dpf}.
+\begin{align}
+F_{max} = F_{min} + K_{vl}||\dot{p}^n||
+\label{eq:dynfmax}
+\end{align}
+where the $F_{min}$ is a minimum value for the upper limit and then with an applied gain of the speed.
+\todo{Denne afsluttende subsubsection er underligt formuleret, husk det med tilden, og sikkert også hvordan vi jegner p\_r - Det med p\_r er skrevet senere i afsnittet. Skal det også nævnes her? Jeppe}
 
 
 \section{The Potential Field Strategy}
@@ -341,7 +349,7 @@ In the previous section \ref{subsec:numsol} the problem is solved in a numerical
 The other solution could be to analyse the problem analytically, where the potential fields are calculated from the derivatives of the potential field functions. By doing this the direct gradient of the individual potential field function can be calculated, and added together to get the total gradient at a specific point. The potential field functions are summarized in the following where their derivatives are calculated.
 
 \subsubsection{Collision Avoidance}
-The repulsive forces from the collision avoidance is given from equation \ref{eq:colavoid}. It only applies when the distance from the $i$'th agents to agent $j$ is smaller than the safety radius. The last term multiplied at the parenthesis is a directional vector, which can be seen as a sign-function both in the scalar and the vector case.
+The repulsive forces from the collision avoidance is given from equation \ref{eq:colavoid}. It only applies when the distance from the $i$'th agents to agent $j$ is smaller than the safety radius. The last term multiplied at the parenthesis is a directional vector, which can be seen as a sign function both in the scalar and the vector case.
 \begin{align}
     \mathbf{F}_{ca}^{ij}= 
 \begin{cases}
@@ -354,12 +362,12 @@ The repulsive forces from the collision avoidance is given from equation \ref{eq
 \end{cases}
 \label{eq:colavoid}
 \end{align}
-The derivative of $F_{ca}$ can be seen in equation \ref{eq:dFca}, where the direction vector have been neglected due to the fact that it is a sign-function to be added later, and the derivative of a sign-function is still the sign-function. This can be seen in section \ref{subsubsec:sign}\todo{Hvordan laves refs til subsubsections}.
+The derivative of $F_{ca}$ can be seen in equation \ref{eq:dFca}, where the direction vector have been neglected due to the fact that it is a sign function to be added later, and the derivative of a sign function is still the sign function. This can be seen in section \ref{subsubsec:sign}\todo{Hvordan laves refs til subsubsections}.
 \begin{align}
 \frac{\delta F_{ca}}{\delta d} = -\frac{K_{ca}r\cdot \frac{d}{||d||}}{||d^2||}
 \label{eq:dFca}
 \end{align}
-where $\frac{d}{||d||}$ still is a sign-function.
+where $\frac{d}{||d||}$ still is a sign function.
 The derivation can be done by seen in equation \ref{eq:dFcaudled}, where equation \ref{eq:colavoid} have been split up to make the derivative.
 \begin{subequations}
 \begin{align}
@@ -374,11 +382,11 @@ This applies since the derivative of $\frac{1}{||d||}$ with respect to $d$ can b
 \frac{\delta}{\delta d}\left(\frac{1}{||d||}\right) = -\frac{\frac{d}{||d||}}{||d^2||}
 \label{eq:1/||d||}
 \end{align}
-In equation \ref{eq:dFca} the $\frac{d}{||d||}$ enters again by applying equation \ref{eq:1/||d||} which still is the form of the sign-function.
+In equation \ref{eq:dFca} the $\frac{d}{||d||}$ enters again by applying equation \ref{eq:1/||d||} which still is the form of the sign function.
 
 \subsubsection{The Sign-Function}
 \label{subsubsec:sign}
-The sign-function, also known as the signum-function, is an odd
+The sign function, also known as the signum function, is an odd
 function that returns the sign of a real number. The sign function can
 be split up into three parts, depending on the argument to the
 function:
@@ -420,7 +428,7 @@ The total derivative can be seen in equation \ref{eq:dFoa}.
 \frac{\delta F_{oa}}{\delta d} = -\frac{K_{oa}\cdot \frac{d}{||d||}}{||d^2||}
 \label{eq:dFoa}
 \end{align}
-The derivation of $F_{oa}$ can be done as in equation \ref{eq:deriveFoa}, where the outer sign function is neglected and put back into the derivative afterwards due to the property of the sign-function.
+The derivation of $F_{oa}$ can be done as in equation \ref{eq:deriveFoa}, where the outer sign function is neglected and put back into the derivative afterwards due to the property of the sign function.
 \begin{align}
 F_{oa} &= \left(\frac{K_{oa}}{||d||}-\frac{K_{oa}}{r}\right)\frac{d}{||d||}\\
 &= K_{oa}\frac{1}{||d||}-K_{oa}\frac{1}{r}\\
