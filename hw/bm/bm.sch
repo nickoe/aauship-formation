@@ -39,7 +39,7 @@ encoding utf-8
 Sheet 1 1
 Title "Battery Monitor (BM)"
 Date "10 jul 2013"
-Rev "1.0"
+Rev "v1.1"
 Comp "AAUSHIP"
 Comment1 "Aalborg University"
 Comment2 ""
