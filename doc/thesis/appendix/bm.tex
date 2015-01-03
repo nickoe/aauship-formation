@@ -23,12 +23,35 @@ resolution is of real use of such, because it is implemented with a
 resistor voltage divider from each cell in series, which basically
 means that only the top end of the value ranges are used. 
 
-It is designed to measure maximum 4.2 V per cell to minimum of about
-3.6 V. The four cells are in series, each with a resistor divider with
-reference to the negative lead. This means that the voltage on high
-cell is ranging from about 1.728 V to 2 V. In turn meaning that the
-reading will only use the top  13.28 \% of the capabilities of the 
-\ac{ADC}. This results in a resolution of 
+It is designed to measure maximum 4.2 V per cell to the minimum
+allowed voltage of about 3.6 V per cell. It can of course measure
+smaller. The four cells are in series, each with a resistor divider with
+reference to the negative lead. The division ratio is determined by
+the maximum voltage present at the cell (which is in series with the
+lower ones), such that the cell voltages are at the two volt that
+each \ac{ADC} can handle. This gives the following ratios for the
+cells are:
+\begin{align}
+	\#1 = 0.12, \quad \#2 = 0.16, \quad \#3 = 0.24, \quad \#4 = 0.48
+\end{align}
+
+This means that the voltage on high cell \ac{ADC} is ranging from
+about 1.728 V to 2.0 V. In turn meaning that the reading will only use
+the top  15 \% of the capabilities of the \ac{ADC}. This results in a
+range for the high side \ac{ADC} of about 288 when using the exact
+numbers, which equates to about 8 mV per division. The lower ranges
+are more accurate.
+
+High resistance dividers is used since these are always connected to
+the battery, and the resistance is adjusted such that the discharge
+current is very low, in comparison to the self discharge of the
+battery. The highest discharge rate for the cells are 138 µA, which
+corresponds to a fully charged pack to discharge over three years.
+Note if needed to store the batteries for a significant amount of
+time they should be disconnected completely.
+
+On the two following pages the printed circuit board and schematic are
+attached.
 
 \begin{figure}[H]
 	\centering
