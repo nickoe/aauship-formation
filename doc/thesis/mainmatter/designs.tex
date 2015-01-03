@@ -28,11 +28,11 @@ E(t)-E_d(t)\\
 
 When designing a motion control system with this type of objective it is important to distinguish between the following three important control objectives:
 \begin{description}[style=nextline]
-	\item [Setpoint regulation]
+	\item [Setpoint Regulation]
 	This is the most basic way of regulating. In this method it is usually a human operator that controls the setpoint or reference to the vessel. The controller will then be a regulator that usually brings the error of the control signal and the real value to zero.
-	\item [Path-following control]
+	\item [Path-Following Control]
 	The path-following control makes the vessel follow a path independent of time with no temporal constraints. The method is usually used on underwater vessels or vessels in transit between continents.
-	\item [Trajectory-tracking control]
+	\item [Trajectory-Tracking Control]
 	When applying trajectory-tracking control, position and velocity of vessels should track the position and velocity of some time varying path reference signal. The feedback is a trajectory tracking controller to make the vessel converge to the trajectory. This is used when having course changing manoeuvres and speed changing along the trajectory. This could for instance be a change of speed in a turn of the vessel.
 \end{description}
 
@@ -84,7 +84,7 @@ where
 \begin{align}
 \textbf{R}_{2D}(\psi_d(\theta)) = 
 \begin{bmatrix}
-cos(\psi_d(\theta) & -sin(\psi_d(\theta)\\
-sin(\psi_d(\theta) & cos(\psi_d(\theta)
+\cos(\psi_d(\theta) & -\sin(\psi_d(\theta)\\
+\sin(\psi_d(\theta) & \cos(\psi_d(\theta)
 \end{bmatrix}
 \end{align}
