@@ -2,6 +2,7 @@
 % TODO nonlinear stuff for simulation model
 
 clear all; clf;
+%%
 % set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
 % set(gcf,'paperunits','centimeters')
 % set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
@@ -9,16 +10,17 @@ clear all; clf;
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 600;
+N = 2800;
 no_boats = 4;
 es = N;
 ts = ss.ts;
 clear ss;
 x = zeros(17,no_boats,N+1);
-x(:,1,1) = [0 10 0 10 0 0 -0.2 0 0 0 0 0 0 0 0 0 0]';
-x(:,2,1) = [10 0 10 0 0 0 -0.2 0 0 0 0 0 0 0 0 0 0]';
-x(:,3,1) = [0 -10 0 -10 0 0 -0.2 0 0 0 0 0 0 0 0 0 0]';
-x(:,4,1) = [-10 0 -10 0 0 0 -0.2 0 0 0 0 0 0 0 0 0 0]';
+x(:,1,1) = [-234 -200 -234 -200 0 0 -0.2 2 0 0 0 0 0 0 0 0 0]';
+x(:,2,1) = [-242 -200 -242 -200 0 0 -0.2 2 0 0 0 0 0 0 0 0 0]';
+x(:,3,1) = [-250 -200 -250 -200 0 0 -0.2 2 0 0 0 0 0 0 0 0 0]';
+x(:,4,1) = [-258 -200 -258 -200 0 0 -0.2 2 0 0 0 0 0 0 0 0 0]';
+
 z = zeros(N,7);
 x_hat = x;
 P_plus = zeros(17,17);
@@ -70,7 +72,8 @@ K(2,2) = 0.26565;
 % start = [100, 1000];
 % stop = [-1000,1000];
 track = load('lawnmoversmall.mat');
-track = [x(1,1:2);track.track]*4;
+track = [track.track(1,:)-[10,3];track.track]*4;
+% track(:,1) = track(:,1)*4;
 error = zeros(no_boats,N);
 integral = zeros(no_boats,N);
 derivative = zeros(no_boats,N);
@@ -146,13 +149,16 @@ Kv = 1;
 Fmin = 10;
 % Desired pos, spans the formation
 pi0 = zeros(no_boats,2);
-pi0(1,1:2) = [0,10];
-pi0(2,1:2) = [10,0];
-pi0(3,1:2) = [0,-10];
-pi0(4,1:2) = [-10,0];
+pi0(1,1:2) = [8,0];
+pi0(2,1:2) = [0,0];
+pi0(3,1:2) = [-8,0];
+pi0(4,1:2) = [-16,0];
 
 % Initial positions
 pij = zeros(no_boats,2,N+1);
+for k = 1:no_boats
+    pij(k,1:2,1) = x(1:2,k,1);
+end
 pir = pij;
 % pij(1,1:2,1) = [-70,-10];
 % pij(2,1:2,1) = [-20,-90];
@@ -180,7 +186,7 @@ for k = 1:N
     for i = 1:no_boats % for all boats, could possibly me moved to to end of the LTG loop, after the simulation update
         % Check if the formation is OK, such that we can move the virtual
         % leader        
-        if ( norm(pir(i,:,k) - (pi0(i,1:2)*Rz'+pvl(k,:))) ) < 2
+        if ( norm(pir(i,:,k) - (pi0(i,1:2)*Rz'+pvl(k,:))) ) < 1
 %         if ( sqrt( (pir(i,1,k) - (pi0(i,1)+pvl(k,1)))^2 + (pir(i,2,k) - (pi0(i,2)+pvl(k,2)))^2 ) ) < 2
             fprintf('Boat #%d reached pi0\n',i)
             % Calculate if waypoint is reached
@@ -197,7 +203,6 @@ for k = 1:N
         fprintf('End of track, the iteration was #%d\n', k)
         break
     end
-    pvl(1,:) = [0, 0];
     pvl(k+1,:) = [track(m,2), track(m,1)];
 
     %% Local Trajectory Generation via Potential Fields
@@ -232,7 +237,7 @@ for k = 1:N
         speeddiff(i,k+1) = 8;
 
         % PID for heading
-        error(i,k) = rad2pipi(headingdesired(i,k)  - heading(i,k));
+        error(i,k) = (headingdesired(i,k)  - heading(i,k));
         integral(i,k) = integral(i,k) + error(i,k);
         if k~=1
             derivative(i,k) = error(i,k) - error(i,k-1);
@@ -251,7 +256,7 @@ for k = 1:N
 %         x(:,i,k+1) = aaushipsimmodel([x(2,i,k);x(1,i,k);x(3:17,i,k)], u,'input','wip',wp);
 %         x(1:2,i,k+1) = [x(2,i,k+1),x(1,i,k+1)];
 %         x(3:4,i,k+1) = [x(4,i,k+1),x(3,i,k+1)];
-        heading(i,k+1) = x(7,i,k+1);
+        heading(i,k+1) = rad2pipi(x(7,i,k+1));
 %         x(:,i,k+1) = [pir(i,:,k+1)'; zeros(15,1)];
         % Rewrite the i'th boats position to the simulated one.
 %         pij(i,:,k+1) = x(1:2,i,k+1);
@@ -265,7 +270,7 @@ end
 t = 0:ts:es*ts-ts;
 tt = ts:ts:es*ts;
 
-figure(1);
+h = figure(1);
 clf
 
 hold on
@@ -277,9 +282,21 @@ for i = 1:no_boats
     out = reshape(x(:,i,1:es),length(x(:,i,1)),[]);
 %     plot(out(1,1:es),out(2,1:es),'-r')
         
-%     for k = 1:79:es
-%         ship(out(1,k+1),out(2,k+1),out(7,k+1),'y')
-%     end
+    for k = 1:100:es
+        ship(out(1,k),out(2,k),out(7,k),'y')
+
+
+        out1 = reshape(x(:,1,1:es),length(x(:,1,1)),[]);
+        out2 = reshape(x(:,2,1:es),length(x(:,2,1)),[]);
+        out3 = reshape(x(:,3,1:es),length(x(:,3,1)),[]);
+        out4 = reshape(x(:,4,1:es),length(x(:,4,1)),[]);
+
+        l = 1:79:es;
+
+        hold on
+        plot([out1(1,k),out2(1,k),out3(1,k),out4(1,k),out1(1,k)],[out1(2,k),out2(2,k),out3(2,k),out4(2,k),out1(2,k)],'r')
+
+    end
     hold on
 
 
@@ -294,8 +311,14 @@ for i = 1:no_boats
     plot(out(1,1:es),out(2,1:es),'-g')
     out = reshape(pir(i,:,1:es), 2, []);
     plot(out(1,1:es),out(2,1:es),'-b')
+    
+    
+    
+
 end
-hold on
+
+
+
 h1 = plot(pvl(:,1),pvl(:,2),'r+');
 % h3 = plot(z(gpsc,2),z(gpsc,1),'g.-');
 % plot(track(n,2),track(n,1),'ro')
@@ -304,9 +327,54 @@ xlabel('Easting [m]');
 ylabel('Northing [m]');
 title('Plot of the NED frame');
 grid on
-xlim([-40 40])
+xlim([-250 -50])
+% ylim([-130 -20])
 axis equal
 hold off
+
+% set(gcf,'paperunits','centimeters')
+% set(gcf,'papersize',[20,15]) % Desired outer dimensions of figure
+% set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
+% saveas(h, '/tmp/hej.pdf')
+
+%%
+figure(2);
+clf
+
+hold on
+for i = 1:no_boats
+        hold on
+
+    subplot(2,1,1)
+    out = reshape(x(:,i,1:es),length(x(:,i,1)),[]);
+    plot(out(8,1:es),'-r')
+        hold on
+
+    subplot(2,1,2)
+%     out = reshape(x(:,i,1:es),length(x(:,i,1)),[]);
+%     plot(out(7,1:es),'-r')
+    h1 = plot(heading(i,:),'-b');
+    h2 = plot(headingdesired(i,:),'-r');
+
+end
+legend([h1;h2],'state','desired')
+
+hold on
+grid on
+hold off
+%%
+figure(3)
+clf
+hold on
+% for i = 1:no_boats
+%     hold on
+%     plot(error(i,:))
+% end
+plot(1:N,error(1,:),1:N,error(2,:),1:N,error(3,:),1:N,error(4,:))
+
+title('heading error')
+
+%%
 
 % Figure for error plotting
 % errorplot = figure(100);
