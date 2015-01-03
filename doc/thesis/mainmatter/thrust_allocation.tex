@@ -63,6 +63,15 @@ to the relevant actuator commands.
 arrows indicate positive thrust vector given positive input.} 
 	\label{fig:thrust_allocation}
 \end{figure}
+As seen on figure \ref{sec:thrust_allocation} there are forces applied in determined directions. These have been set to calculate how the forces acts on the vessel. The distances from the centre of the vessel to the actuators determine with what angle the actuators act on the AAUSHIP and thus how the resulting thrust allocation will be.
+
+The arms from the centre to the actuators is given by the respective lengths, such that these will be given as, in $[x, y, z]$ distances:
+\begin{align}
+\text{arm1} &= [0.41, 0, 0.05]\\
+\text{arm2} &= [-0.18, 0, 0.05]\\
+\text{arm3} &= [-0.48, 0.05, 0.05]\\
+\text{arm4} &= [-0.48, -0.05, 0.05]
+\end{align}
 
 
 \begin{figure}[htbp]
