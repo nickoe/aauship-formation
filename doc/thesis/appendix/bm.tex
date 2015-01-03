@@ -5,7 +5,7 @@
 	component, the battery monitor, for AAUSHIP which was also devised
 	under the project period. This is not directly a goal according to
 	the project thesis, hence this is included in the appendix for
-	referencing.}
+	reference.}
 
 Since the AAUSHIP is equipped with multiple LiPo cells, it is of high concern to have a means of checking the state of these battery cells.
 Therefore a battery monitor have been created, that can be hooked onto the
@@ -16,7 +16,7 @@ based environment it is possible to make plugins as easy as it is to
 create \ac{ROS} nodes. A screenshot of the plugin in action is seen
 on figure~\vref{fig:bm-rqt}.
 
-The battery monitor is made of two \ac{ADC} chips, both being the MCP3428,
+The battery monitor is made of two \ac{ADC} chips, namely the MCP3428,
 each with four channels and 16-bit resolution. But not all this
 resolution is of real use as such, because it is implemented with a
 resistor voltage divider from each cell in series, which basically
@@ -26,7 +26,7 @@ It is designed to measure maximum 4.2 V per cell to the minimum
 allowed voltage of about 3.6 V per cell. It can of course measure
 smaller values but the critical value is around 3.6 V. The four cells are connected in series, each with a resistor divider with
 reference to the negative lead. The division ratio is determined by
-the maximum voltage present at the cells (which is in series with the
+the maximum voltage present at the cells (which are in series with the
 lower ones), such that the cell voltages are at the two volt that
 each \ac{ADC} can handle. This gives the following ratios for the
 cells:
