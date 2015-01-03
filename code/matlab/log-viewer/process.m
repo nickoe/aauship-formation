@@ -16,7 +16,7 @@ logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 % testname = 'mb100walkingklingen';
 % testname = 'gosejladsnaesten';
 % testname = 'nightseatuning';
-testname = 'jesperdag2';
+testname = 'fjordtur';
 % testname = 'mb100-static';
 % testname = 'mb100walkingklingen';
 % testname = 'nysoetur';
@@ -32,8 +32,8 @@ starttime = imudata(1,13); % Earliest timestamp
 % annotate = textscan(annotatefile, '%f%f%s', 'Delimiter', ';');
 % ctlfile = fopen([logpath,testname,'/ctl.log'],'r');
 % ctl = textscan(ctlfile, '%f%f%f', 'Delimiter', ',');
-lliinput = load([logpath,testname,'/lli_input.csv']);
-lliinput(:,1) = lliinput(:,1)/10e8; % Rewrite time unit
+% lliinput = load([logpath,testname,'/lli_input.csv']);
+% lliinput(:,1) = lliinput(:,1)/10e8; % Rewrite time unit
 % lliinput(1,1), starttime
 
 %% Reading GPS data
@@ -116,63 +116,63 @@ plot(lon(range), lat(range),'g.')
 title('WGS84')
 
 %%
-clc
-llirange = [min(find(walltime(48000) < lliinput(:,1))) :2:...
-            max(find(walltime(48000) < lliinput(:,1)))];
-clear left
-clear right
-clear timel
-clear timer
-left = zeros(length(llirange),1);
-right = zeros(length(llirange),1);
-data = NaN(length(llirange),1);
-
-mll = min(llirange)-1;
-i = 0; j = 0; % Other input counter
-m = 0; % Bad pair counter/jumper, used to remove loose samples
-for k = llirange
-    if (lliinput(k,3) == 3 && lliinput(k+1,3) == 5) % control-node
-        disp('ctlnode')
-        left(k-mll-i) = lliinput(k+1,4);
-        timel(k-mll-i) = lliinput(k+1,1)/10e8;
-        right(k-mll-j) = lliinput(k,4);
-        timer(k-mll-j) = lliinput(k,1)/10e8;
-
-        j = j+1;
-        i = i+1;
-        data(k-mll) = 1;
-    elseif (lliinput(k,3) == 5 && lliinput(k+1,3) == 3) % joy-node
-        disp('joynode')
-        left(k-mll-i) = lliinput(k,4);     
-        timel(k-mll-i) = lliinput(k,1)/10e8;
-        right(k-mll-j) = lliinput(k+1,4);
-        timer(k-mll-j) = lliinput(k+1,1)/10e8;
-
-        j = j+1;
-        i = i+1;
-    end
-end
-% TODO, remove loose samples
-
-left(k-mll-i:length(left)) = [];
-timel(k-mll-i:length(timel)) = [];
-
-right(k-mll-j:length(right)) = [];
-timer(k-mll-j:length(timer)) = [];
-
-data(k-mll-i:length(data)) = [];
-
-figure(2)
-clf
-hold on
-plot(timel,left,'b-')
-plot(timer,right,'r-')
-% plot(data,'g.')
-
-legend('left','right')
-hold off
-
-length(right), length(left)
+% clc
+% llirange = [min(find(walltime(48000) < lliinput(:,1))) :2:...
+%             max(find(walltime(48000) < lliinput(:,1)))];
+% clear left
+% clear right
+% clear timel
+% clear timer
+% left = zeros(length(llirange),1);
+% right = zeros(length(llirange),1);
+% data = NaN(length(llirange),1);
+% 
+% mll = min(llirange)-1;
+% i = 0; j = 0; % Other input counter
+% m = 0; % Bad pair counter/jumper, used to remove loose samples
+% for k = llirange
+%     if (lliinput(k,3) == 3 && lliinput(k+1,3) == 5) % control-node
+%         disp('ctlnode')
+%         left(k-mll-i) = lliinput(k+1,4);
+%         timel(k-mll-i) = lliinput(k+1,1)/10e8;
+%         right(k-mll-j) = lliinput(k,4);
+%         timer(k-mll-j) = lliinput(k,1)/10e8;
+% 
+%         j = j+1;
+%         i = i+1;
+%         data(k-mll) = 1;
+%     elseif (lliinput(k,3) == 5 && lliinput(k+1,3) == 3) % joy-node
+%         disp('joynode')
+%         left(k-mll-i) = lliinput(k,4);     
+%         timel(k-mll-i) = lliinput(k,1)/10e8;
+%         right(k-mll-j) = lliinput(k+1,4);
+%         timer(k-mll-j) = lliinput(k+1,1)/10e8;
+% 
+%         j = j+1;
+%         i = i+1;
+%     end
+% end
+% % TODO, remove loose samples
+% 
+% left(k-mll-i:length(left)) = [];
+% timel(k-mll-i:length(timel)) = [];
+% 
+% right(k-mll-j:length(right)) = [];
+% timer(k-mll-j:length(timer)) = [];
+% 
+% data(k-mll-i:length(data)) = [];
+% 
+% figure(2)
+% clf
+% hold on
+% plot(timel,left,'b-')
+% plot(timer,right,'r-')
+% % plot(data,'g.')
+% 
+% legend('left','right')
+% hold off
+% 
+% length(right), length(left)
 
 
 
