@@ -17,22 +17,9 @@ f  = K u
 \end{align}
 \end{subequations}
 
-\begin{align}
-T =
-\begin{bmatrix}
-0 & 0 & 1 & 1\\
-1 & 1 & -\sin(\alpha_3) & \sin(\alpha_4)\\
--1 & -1 & 0 & 0\\
-0 & 0 & \sin(\theta_3) l_{z3} & \sin(\theta_4)l_{z4} \\
-l_{x1} & l_{x2} & -\sin(\alpha_3) l_{x3} & \sin(\alpha_4) l_{x4}
-\end{bmatrix}
-\end{align}
-\citep{mss}
-
-
 For thrusters where the thrust characteristics do not map
 proportionally to forces, the computed $u$ values must be mapped
-to the relevant actuator commands.
+to the relevant actuator commands. This is done through a thrust allocation matrix, which are to be determined.
 
 \begin{figure}[htbp]
 	\centering
@@ -72,7 +59,56 @@ The arms from the centre to the actuators is given by the respective lengths, su
 \text{arm3} &= [-0.48, 0.05, 0.05]\\
 \text{arm4} &= [-0.48, -0.05, 0.05]
 \end{align}
+After determine the arms to the actuators it can be specified how the angles will be to afterwards determine the individual components of the forces. This will, with the arms to the thrusters, give the rotational forces acting on the AAUSHIP.
 
+The only angles that are needed are the angles to the two main thrusters from the centre, since they are the only ones that gives a rotational force to the vessel. This angle is the same to both thrusters, and are given from the arms by:
+\begin{align}
+\alpha = \arctan\left(\frac{l_z}{l_x}\right) = \arctan\left(\frac{0.05}{0.48}\right)
+\end{align}
+The top of the thrust allocation matrix will be given by the $X$ and $Y$ forces, which are purely translational forces. These can be given by the forces from each of the thrusters in $x$, $y$ and $z$ directions, named by every thruster as $F_1, F_2, F_3 \text{and} F_4$:
+\begin{align}
+F_1 &= [0, 1, 0] \\
+F_2 &= [0, 1, 0] \\
+F_3 &= [\cos(\alpha), 0, -\sin(\alpha)] \\
+F_4 &= [\cos(\alpha), 0, -\sin(\alpha)] 
+\end{align}
+Though only the two top rows are the ones contributing in the $X$ and $Y$ forces, thus those being in the final thrust allocation matrix.
+
+The contribution of forces in roll, pitch and yaw will be determined by the cross product of the translational forces and the arms, which will give the rotational moments and their contributions. These will be calculated as:
+\begin{align}
+F_1r &= F_1\times arm_1\\
+F_2r &= F_2\times arm_2\\
+F_3r &= F_3\times arm_3\\
+F_4r &= F_4\times arm_4
+\end{align}
+By doing this will the thrust allocation matrix be given as the top two rows of the translational forces and the bottom three rows of the rotational moments:
+\begin{align}
+\text{T} =
+\begin{bmatrix}
+F_1(1:2) & F_2(1:2) & F_3(1:2) & F_4(1:2) \\
+F_1r & F_2r & F_3r & F_4r
+\end{bmatrix}\\
+=
+\begin{bmatrix}
+0 & 0 & 0.9946 & 0.9946 \\
+1 & 1 & 0 & 0 \\
+-0.05 & -0.05 & 0.0052 & -0.0052 \\
+0 & 0 & 0.0995 & 0.0995 \\
+0.41 & -0.1800 & -0.0497 & 0.0497
+\end{bmatrix}
+\end{align}
+The two bow thrusters are not at the moment used to control the AAUSHIP because their individual forces that they can apply at the vessel are relatively low. This means that the final thrust allocation matrix should neglect these two actuators, which is done by removing the two first columns of the thrust allocation from before. Thereby will the final thrust allocation matrix be defined as in equation \ref{eq:Tallocmatrix}.
+\begin{align}
+\text{T} =
+\begin{bmatrix}
+0.9946 & 0.9946 \\
+0 & 0 \\
+0.0052 & -0.0052 \\
+0.0995 & 0.0995 \\
+-0.0497 & 0.0497
+\end{bmatrix}
+\label{eq:Tallocmatrix}
+\end{align}
 
 \begin{figure}[htbp]
 \centering
