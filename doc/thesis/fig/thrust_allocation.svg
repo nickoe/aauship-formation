@@ -273,7 +273,7 @@
          sodipodi:role="line"
          x="290"
          y="1007.3609"
-         id="tspan3897">$\tau_1$</tspan></text>
+         id="tspan3897">$F_1$</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3901"
@@ -284,7 +284,7 @@
          id="tspan3903"
          y="1012.3609"
          x="115"
-         sodipodi:role="line">$\tau_2$</tspan></text>
+         sodipodi:role="line">$F_2$</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Serif;-inkscape-font-specification:Serif"
@@ -295,7 +295,7 @@
          sodipodi:role="line"
          x="5"
          y="1027.3608"
-         id="tspan3909">$\tau_3$</tspan></text>
+         id="tspan3909">$F_3$</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3913"
@@ -306,7 +306,7 @@
          id="tspan3915"
          y="972.3609"
          x="5"
-         sodipodi:role="line">$\tau_4$</tspan></text>
+         sodipodi:role="line">$F_4$</tspan></text>
     <g
        id="g4582"
        transform="translate(0,14.999974)">
