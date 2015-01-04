@@ -1,6 +1,5 @@
 \section{Thrust Allocation}
 \label{sec:thrust_allocation}
-\todo{Dette azfsnit er forkert, se kode og note papir på opslagstavle}
 Thrust allocation is a way to relate the desired actuation forces to multiple inputs. In the simplest case it is a scaling factor on the inputs. On real ship one also include the power management system in the thrust allocation system, such that the system knows if it can deliver the power needed or reconfigure the allocation such the need can be met.
 
 For AAUSHIP there is no power management, hence a simple case of the thrust allocation can be used.
@@ -45,8 +44,8 @@ to the relevant actuator commands. This is done through a thrust allocation matr
 		\includesvg[width=\textwidth]{thrust_allocation}
 	\end{minipage}
 %}
-	\caption{Thrust configuration for AAUSHIP. $F_1$ and $F_2$ are the
-	bow thrusters and $F_3$ and $F_4$ the main propellers. Grey fat
+	\caption{Thrust configuration for AAUSHIP. $\tau_1$ and $\tau_2$ are the
+	bow thrusters and $\tau_3$ and $\tau_4$ the main propellers. Grey fat
 arrows indicate positive thrust vector given positive input.} 
 	\label{fig:thrust_allocation}
 \end{figure}
@@ -54,10 +53,10 @@ As seen on figure \ref{sec:thrust_allocation} there are forces applied in determ
 
 The arms from the centre to the actuators is given by the respective lengths, such that these will be given as, in $[x, y, z]$ distances:
 \begin{align}
-\text{arm1} &= [0.41, 0, 0.05]\\
-\text{arm2} &= [-0.18, 0, 0.05]\\
-\text{arm3} &= [-0.48, 0.05, 0.05]\\
-\text{arm4} &= [-0.48, -0.05, 0.05]
+\text{l}_1 &= [0.41, 0, 0.05]\\
+\text{l}_2 &= [-0.18, 0, 0.05]\\
+\text{l}_3 &= [-0.48, 0.05, 0.05]\\
+\text{l}_4 &= [-0.48, -0.05, 0.05]
 \end{align}
 After determine the arms to the actuators it can be specified how the angles will be to afterwards determine the individual components of the forces. This will, with the arms to the thrusters, give the rotational forces acting on the AAUSHIP.
 
@@ -65,35 +64,35 @@ The only angles that are needed are the angles to the two main thrusters from th
 \begin{align}
 \alpha = \arctan\left(\frac{l_z}{l_x}\right) = \arctan\left(\frac{0.05}{0.48}\right)
 \end{align}
-The top of the thrust allocation matrix will be given by the $X$ and $Y$ forces, which are purely translational forces. These can be given by the forces from each of the thrusters in $x$, $y$ and $z$ directions, named by every thruster as $F_1, F_2, F_3 \text{and} F_4$:
+The top of the thrust allocation matrix will be given by the $X$ and $Y$ forces, which are purely translational forces. These can be given by the forces from each of the thrusters in $x$, $y$ and $z$ directions, named by every thruster as $\tau_1, \tau_2, \tau_3 \text{ and } \tau_4$:
 \begin{align}
-F_1 &= [0, 1, 0] \\
-F_2 &= [0, 1, 0] \\
-F_3 &= [\cos(\alpha), 0, -\sin(\alpha)] \\
-F_4 &= [\cos(\alpha), 0, -\sin(\alpha)] 
+\tau_1 &= [0, 1, 0] \\
+\tau_2 &= [0, 1, 0] \\
+\tau_3 &= [\cos(\alpha), 0, -\sin(\alpha)] \\
+\tau_4 &= [\cos(\alpha), 0, -\sin(\alpha)] 
 \end{align}
-The forces of $F_3$ and $F_4$ can be split as seen on figure \ref{fig:f3vector}, which shows why the $z$ part is of negative sign.
+The forces of $\tau_3$ and $\tau_4$ can be split as seen on figure \ref{fig:f3vector}, which shows why the $z$ part is of negative sign.
 \begin{figure}[htbp]
 	\centering
 	\includesvg{vectorkomposant}
-	\caption{Split up of the components of $F_3$ to see the translational forces.}
+	\caption{Split up of the components of $\tau_3$ to see the translational forces.}
 	\label{fig:f3vector}
 \end{figure}
 Though only the two top rows are the ones contributing in the $X$ and $Y$ forces, thus those being in the final thrust allocation matrix.
 
 The contribution of forces in roll, pitch and yaw, $K$, $M$ and $N$, will be determined by the cross product of the translational forces and the arms, which will give the rotational moments and their contributions. These will be calculated as:
 \begin{align}
-F_1r &= F_1\times arm_1\\
-F_2r &= F_2\times arm_2\\
-F_3r &= F_3\times arm_3\\
-F_4r &= F_4\times arm_4
+\tau_{1r} &= \tau_1\times \text{l}_1\\
+\tau_{2r} &= \tau_2\times \text{l}_2\\
+\tau_{3r} &= \tau_3\times \text{l}_3\\
+\tau_{4r} &= \tau_4\times \text{l}_4
 \end{align}
 By doing this will the thrust allocation matrix be given as the top two rows of the translational forces and the bottom three rows of the rotational moments:
 \begin{align}
-\text{T} =
+\mathbf{T} =
 \begin{bmatrix}
-F_1(1:2) & F_2(1:2) & F_3(1:2) & F_4(1:2) \\
-F_1r & F_2r & F_3r & F_4r
+\tau_1(1:2) & \tau_2(1:2) & \tau_3(1:2) & \tau_4(1:2) \\
+\tau_{1r} & \tau_{2r} & \tau_{3r} & \tau_{4r}
 \end{bmatrix}\\
 =
 \begin{bmatrix}
@@ -106,7 +105,7 @@ F_1r & F_2r & F_3r & F_4r
 \end{align}
 The two bow thrusters are not at the moment used to control the AAUSHIP because their individual forces that they can apply at the vessel are relatively low. This means that the final thrust allocation matrix should neglect these two actuators, which is done by removing the two first columns of the thrust allocation from before. Thereby will the final thrust allocation matrix be defined as in equation \ref{eq:Tallocmatrix}.
 \begin{align}
-\text{T} =
+\mathbf{T} =
 \begin{bmatrix}
 0.9946 & 0.9946 \\
 0 & 0 \\
