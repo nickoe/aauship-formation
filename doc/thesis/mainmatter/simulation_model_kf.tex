@@ -80,54 +80,55 @@ H_k &= \left.\frac{\partial h}{\partial x}\right|_{\hat x_{k}^-}
 
 \subsection{\acl{KF} in the Case of AAUSHIP}
 \label{sec:kfonaauship}
-The input is given by the forces applied to the vessel. On AAUSHIP with the two twin propellers and two side thrusters as illustrated in section~\vref{sec:thrust_allocation}, this will result in forces in the surge and sway direction as well as a torque around yaw, the roll and pitch torques are neglected, such that the input vector $u_k$ becomes.
+The input is given by the forces applied to the vessel. On AAUSHIP with the two twin propellers and two side thrusters as illustrated in section~\vref{sec:thrust_allocation}. This will result in forces in the surge and sway direction as well as a torque around $z$, the yaw axis. The roll and pitch torques are neglected, such that the input vector $u_k$ becomes as in equation \ref{eq:uk}.
 \begin{align}
 u_k = \tau_k =
 \begin{bmatrix}
 X & Y & 0 & 0 & N
 \end{bmatrix}^\top
+\label{eq:uk}
 \end{align}
-These are the forces that can be applied by the thrusters mounted at the vessel. It should be noted that the pitch and roll are not set as input, since no thrusters can control these, and should be treated as model variations.
+These are the forces that can be applied by the thrusters mounted at the vessel. It should be noted that the pitch and roll are not set as input, since no thrusters can control these directly, and should be treated as model variations. The roll will be affected by the bow thrusters but very little. The pitch is also affected by the two main thrusters, but this is only a product of applying the forces at the main thrusters.
 
-The discrete input matrix $\Gamma$ is a $17 \times 5$ matrix from the discretised $B$ matrix from equation~\vref{eq:ss}.
+The discrete input matrix $\Gamma$ is a $15 \times 5$ matrix from the discretised $B$ matrix from equation~\vref{eq:ss}.
 % \todo{Should we use $\Gamma$ for $G$ as in done in other sources (e.g. fossen), such that the input matrix is not confused with the restoring force matrix from fossen?}
 The $\Gamma$ matrix takes the forces in $X$, $Y$ and $N$ as input, and neglects inputs in $\phi$ and $\theta$. The forces in $\phi$ and $\theta$ are outputs from the system that makes the vessel change in pitch and roll but are not used as inputs. It is not possible to apply a direct force in pitch and roll. It is possible to apply a roll force by actuating the bow thrusters at the same time, but this will mainly result in a sway force. The same goes for the pitch force, where both main thrusters can be actuated and result in a pitch force, but this will mainly result in a surge force. Therefore are these seen as a result of using the surge and sway, and only a output of the system.
 
-The discrete system $\boldsymbol \Phi$ is a $17 \times 17$ from the discretised $A$ matrix from equation~\vref{eq:ss}, but expanded to contain the full state vector calculations.
+The discrete system $\boldsymbol \Phi$ is a $15 \times 15$ from the discretised $A$ matrix from equation~\vref{eq:ss}, and expanded to contain the full state vector calculations.
 
 The dimensions of the different matrices used are checked as a type of sanity check and verify that the matrices are in correct size.
 
 The covariance propagation matrix, the uncertainty of the estimated state, is given by:
 \begin{align}
 P_k^- &= F_k\ P_{k-1}^-F^\top + Q_k\\
-\text{dim}(P_k^-) &= [17 \times 17]\cdot [17 \times 17]\cdot [17 \times 17]^\top + [17 \times 17]
+\text{dim}(P_k^-) &= [15 \times 15]\cdot [15 \times 15]\cdot [15 \times 15]^\top + [15 \times 15]
 \end{align}
 The $Q$ is the variances of each of the states from the full state vector.
 
 The posteriori error covariance matrix, the update, is given by:
 \begin{align}
 P_k^+ &= (I - K_k\ H_k)P_k^-\\
-\text{dim}(P_k^+) &= ([17 \times 17] - [17 \times 7]\cdot [7 \times 17])\cdot [17 \times 17]
+\text{dim}(P_k^+) &= ([15 \times 15] - [15 \times 7]\cdot [7 \times 15])\cdot [15 \times 15]
 \end{align}
 which is a measure of the estimated accuracy of the state estimate. Adding a middle calculation as the residual covariance:
 \begin{align}
 S_k &= H\ P\ H^\top + R\\
-\text{dim}(S_k) &= [7 \times 17]\cdot [17 \times 17]\cdot [7 \times 17]^\top + [7 \times 7]
+\text{dim}(S_k) &= [7 \times 15]\cdot [15 \times 15]\cdot [7 \times 15]^\top + [7 \times 7]
 \end{align}
 The $R$ is variances from the sensors, which makes it sensor noise terms.
 
 The updated Kalman Gain:
 \begin{align}
 K_k &= P\ H^\top\ S^{-1}\\
-\text{dim}(K_k) &= [17 \times 17]\cdot [7 \times 17]^\top\cdot [7 \times 7]^{-1}
+\text{dim}(K_k) &= [15 \times 15]\cdot [7 \times 15]^\top\cdot [7 \times 7]^{-1}
 \end{align}
-witch is optimal in a \ac{MMSE} sense. %\todo{Hvorfor virkede denne ac ikke? Har fjernet den tidtil videre} - Hah, det var slet ikke den som var fejlen.
+which is optimal in a \ac{MMSE} sense. %\todo{Hvorfor virkede denne ac ikke? Har fjernet den tidtil videre} - Hah, det var slet ikke den som var fejlen.
 
 State vector
 \begin{align}
 \hat{\mathbf x}=
 \begin{bmatrix}
-N & E & x_b & y_b & \phi & \theta & \psi & u & v & p & q & r & \dot u & \dot v & \dot p & \dot q & \dot r
+x_b & y_b & \phi & \theta & \psi & u & v & p & q & r & \dot u & \dot v & \dot p & \dot q & \dot r
 \end{bmatrix}^\top
 \end{align}
 
@@ -135,7 +136,7 @@ Measurement vector
 \begin{align}
 \mathbf z=
 \begin{bmatrix}
-N & E & \psi & u & v & a_x & a_y
+x & y & \psi & u & v & a_x & a_y
 \end{bmatrix}^\top
 \end{align}
 
@@ -143,48 +144,44 @@ Measurement matrix defining the relationship between the state of the dynamic sy
 \begin{align}
 H_k =
 \begin{bmatrix}
-1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0
 \end{bmatrix}
 \end{align}
 
 The covariance matrix of observational (measurement) uncertainty $R_k$ is assumed to be uncorrelated with the other states, such that the matrix only becomes the variances, with no covariance elements as:
 \begin{align}
 &R_k = \diag{\mathbf{v}} =\\ \nonumber
-&\diag{^\text{GPS}\sigma_{N}^2,\ ^\text{GPS}\sigma_{E}^2,\ ^\text{GPS}\sigma_{\psi}^2,\ ^\text{GPS}\sigma_{u}^2,\ ^\text{GPS}\sigma_{v}^2,\ ^\text{IMU}\sigma_{a_x}^2,\ ^\text{IMU}\sigma_{a_y}^2}
+&\diag{^\text{GPS}\sigma_{x}^2,\ ^\text{GPS}\sigma_{y}^2,\ ^\text{GPS}\sigma_{\psi}^2,\ ^\text{GPS}\sigma_{u}^2,\ ^\text{GPS}\sigma_{v}^2,\ ^\text{IMU}\sigma_{a_x}^2,\ ^\text{IMU}\sigma_{a_y}^2}
 \end{align}
 These variances can be found by letting the AAUSHIP be in steady state. The sensor outputs are read while in steady state to check the variances from these. This will be the variances of the individual sensor measurements thus the variances of the particular measurements. The test finding these variances can be found in appendix \todo{lav appendix og ref til det her}.
 
 The covariance matrix of process noise in the system state dynamics is $Q_k$ and is assumed to be the variances of each individual state:
 \begin{align}
 &Q_k = \diag{\mathbf{w}} = \\ \nonumber
-&\diag{\sigma_{N}^2, \sigma_{E}^2, \sigma_{x_{b}}^2, \sigma_{y_{b}}^2, \sigma_{\phi}^2, \sigma_{\theta}^2, \sigma_{\psi}^2, \sigma_{u}^2, \sigma_{v}^2, \sigma_{p}^2, \sigma_{q}^2, \sigma_{r}^2, \sigma_{\dot u}^2, \sigma_{\dot v}^2, \sigma_{\dot p}^2, \sigma_{\dot q}^2, \sigma_{\dot r}^2}
+&\diag{\sigma_{x}^2, \sigma_{y}^2, \sigma_{\phi}^2, \sigma_{\theta}^2, \sigma_{\psi}^2, \sigma_{u}^2, \sigma_{v}^2, \sigma_{p}^2, \sigma_{q}^2, \sigma_{r}^2, \sigma_{\dot u}^2, \sigma_{\dot v}^2, \sigma_{\dot p}^2, \sigma_{\dot q}^2, \sigma_{\dot r}^2}
 \end{align}
 The variances of the process can be hard to validate since these can include noises as incoming waves and other disturbances from the environment. Therefore is the matrix $Q$ used as a tuning parameter to set the weighting between how much to trust the model and the measurements.
 % The variances can be found by making tests of the AAUSHIP. These should be carried out such that only one type of variance is tested at a time. By doing this, and testing around a known mean of the given state, makes it possible to test the variance of that particular state. The $Q$ matrix is a tuning parameter to set the weighting between how much to trust the model and the measurements.
 %\todo{What about $\mathbf w$ and $\mathbf v$? How to determine them correctly? Det er vel den måde som du lavede tests på da du fandt tallene til $v$?}
 
-The $\mathbf F$, equation\ref{eq:EKFF} from the previous calculations, are the $[17 \times 17]$ system matrix, referred to as $\Phi$ in discrete case. This system matrix changes over time due the changes in the heading. The change of heading is not a linear transition which makes the system non-linear and therefore needs to be linearised about the given states of the system. Therefore this matrix is used as the system matrix in the \ac{EKF}, which is implemented in the AAUSHIP. $\Phi$ is designed to be
+The $\mathbf F$, equation\ref{eq:EKFF}, from the previous calculations, are the $[15 \times 15]$ system matrix, referred to as $\Phi$ in discrete case. This system matrix changes over time due the changes in the heading. The change of heading is not a linear transition which makes the system non-linear and therefore needs to be linearised about the given states of the system. Therefore this matrix is used as the system matrix in the \ac{EKF}, which is implemented in the AAUSHIP. $\Phi$ is therefore the discrete system matrix in equation \ref{eq:Admatrix}. The same goes for the rest of the system, which is discretised at a certain sample time. This makes all the system matrices as discrete versions to be used in the calculation and linearisation.
 \begin{align}
-\Phi = 
-  \left[\begin{array}{c|ccc|c}
-    I_{2\times 2} & 0_{2\times 5} & R_z (\psi) & 0_{2\times 3} & 0_{2\times 5}\\ \hline
-    0_{10\times2}  & \multicolumn{3}{c}{\multirow{1}{*}{{$A_d$}}} \vline&  0_{10\times 5} \\ \hline
-    0_{5\times 7} & & A_{d[6:10]} & & I_{5\times 5}
-  \end{array}\right]
+\Phi = A_d
+\label{eq:Admatrix}
 \end{align}
 \todo{fix lower left corner alignment vline}
 
 \subsection{Determination of Observational Uncertainty}
-The matrix R represents covariance matrix of observational (measurement) uncertainty. This is the matrix which sets the individual variances of the specific measurements from the sensors, the measurements from the output vector $z$. This means that the coefficients of the R matrix can be determined within some interval. The disturbances of each sensor measurement highly depends on which sensor is implemented in the used system. When looking at the AAUSHIP the sensors are of higher accuracy, which means that the sensors are to some extend trustworthy. There are two types of sensors in the AAUSHIP, one \ac{GPS} and an \ac{IMU}. There are two types of \ac{GPS}s installed; a \ac{RTK} \ac{GPS} and a standard \ac{GPS}. At the moment is only the standard \ac{GPS} used, which estimates having a variance of 3 metres radius in the \ac{NED}-frame. This is estimated from steady state measurements of the \ac{GPS} where it will, as all \ac{GPS}s, drift around a little. The \ac{IMU} consists of a magnetometer, a gyro and an accelerometer. The magnetometer measurements is not used directly and the variance of this is not needed in the R matrix. The gyro neither used in the R matrix. These are not used as measurements directly and therefore not appears in the R matrix. The accelerometer measurements are used in the x and y directions. These have a measured accuracy of 0.00033 $m/s^2$. The \ac{GPS} have different accuracies dependent on which type is used. The \ac{RTK} \ac{GPS} has higher accuracy than the standard \ac{GPS}, but has not for the moment been implemented. The resulting R matrix, with the standard \ac{GPS}, is estimated from the measurements of $z$ and determined to be
+The matrix R represents covariance matrix of observational (measurement) uncertainty. This is the matrix which sets the individual variances of the specific measurements from the sensors, the measurements from the output vector $z$. This means that the coefficients of the R matrix can be determined within some interval. The disturbances of each sensor measurement highly depends on which sensor is implemented in the used system. When looking at the AAUSHIP the sensors are of higher accuracy, which means that the sensors are to some extend trustworthy. There are two types of sensors in the AAUSHIP, one \ac{GPS} and an \ac{IMU}. There are two types of \ac{GPS}s installed; a \ac{RTK} \ac{GPS} and a standard \ac{GPS}. At the moment is only the standard \ac{GPS} used, which estimates having a variance of 3 metres radius in the \ac{NED}-frame. This is estimated from steady state measurements of the \ac{GPS} where it will, as all \ac{GPS}s, drift around a little. The \ac{IMU} consists of a magnetometer, a gyro and an accelerometer. The magnetometer measurements is not used directly and the variance of this is not needed in the R matrix. The gyro neither used in the R matrix. These are not used as measurements directly and therefore not appears in the R matrix. The accelerometer measurements are used in the x and y directions. These have a measured accuracy of 0.00033 $\text{m}/\text{s}^2$. The \ac{GPS} have different accuracies dependent on which type is used. The \ac{RTK} \ac{GPS} has higher accuracy than the standard \ac{GPS}, but has not for the moment been implemented. The resulting R matrix, with the standard \ac{GPS}, is estimated from the measurements of $z$ and determined to be
 \begin{align}
 &R_k = \diag{\mathbf{v}} =\\ \nonumber
-&\diag{^\text{GPS}\sigma_{N}^2,\ ^\text{GPS}\sigma_{E}^2,\ ^\text{GPS}\sigma_{\psi}^2,\ ^\text{GPS}\sigma_{u}^2,\ ^\text{GPS}\sigma_{v}^2,\ ^\text{IMU}\sigma_{a_x}^2,\ ^\text{IMU}\sigma_{a_y}^2}\\ \nonumber
+&\diag{^\text{GPS}\sigma_{x}^2,\ ^\text{GPS}\sigma_{y}^2,\ ^\text{GPS}\sigma_{\psi}^2,\ ^\text{GPS}\sigma_{u}^2,\ ^\text{GPS}\sigma_{v}^2,\ ^\text{IMU}\sigma_{a_x}^2,\ ^\text{IMU}\sigma_{a_y}^2}\\ \nonumber
 &\diag{3\hspace{3mm} 3\hspace{3mm} 13.6\cdot 10^{-6}\hspace{3mm} 0.2\hspace{3mm} 0.2\hspace{3mm} 0.00033\hspace{3mm} 0.00033}
 \end{align}
 
@@ -214,8 +211,7 @@ At last is the position tuned, which is the one with largest relative noise from
 The one with the lowest value in Q gives the best position fit of these, which also follows the intuition of how the \ac{KF} should work. The resulting Q matrix is tuned to be
 \begin{alignat*}{5}
 &Q_k = \diag{\mathbf{w}} \text{, where} \\ \nonumber
-&\sigma_{N}^2 = 0.001,\quad& &\sigma_{E}^2 = 0.001,\quad& &\sigma_{x_{b}}^2 = 0.001,\quad& &\sigma_{y_{b}}^2 = 0.001,\\ \nonumber
-&\sigma_{\phi}^2 = 0.01,\quad& &\sigma_{\theta}^2 = 0.01,\quad& &\sigma_{\psi}^2 = 0.000001,\\ \nonumber
+&\sigma_{x_{b}}^2 = 0.001,\quad& &\sigma_{y_{b}}^2 = 0.001,\quad& &\sigma_{\phi}^2 = 0.01,\quad& &\sigma_{\theta}^2 = 0.01,\quad& &\sigma_{\psi}^2 = 0.000001,\\ \nonumber
 &\sigma_{u}^2 = 0.01,\quad& &\sigma_{v}^2 = 0.01,\quad& &\sigma_{p}^2 = 0.001,\quad& &\sigma_{q}^2 = 0.001,\quad& &\sigma_{r}^2 = 0.001,\\ \nonumber
 &\sigma_{\dot u}^2 = 0.01,\quad& &\sigma_{\dot v}^2 = 0.01,\quad& &\sigma_{\dot p}^2 = 0.01,\quad& &\sigma_{\dot q}^2 = 0.01,\quad& &\sigma_{\dot r}^2 = 0.01
 \end{alignat*}

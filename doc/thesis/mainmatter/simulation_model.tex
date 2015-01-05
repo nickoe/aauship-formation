@@ -43,7 +43,7 @@ computed from a \acs{GPS}}
 
 
 \section{Position Trajectory in \acs{NED}}
-The positon trajectory \vref{eq:NEDtrajectory} in \ac{NED} is calculated with numerical Euler integration of the velocities \vref{eq:NEDvel}.
+The position trajectory \vref{eq:NEDtrajectory} in \ac{NED} is calculated with numerical Euler integration of the velocities \vref{eq:NEDvel}.
 \begin{subequations}
 \begin{align}
 \dot{\mathbf{p}}^n _{b/n} &= \mathbf{R}^n _b (\boldsymbol{\Theta}_{nb}) \boldsymbol{\nu}^b _{b/n} \label{eq:NEDvel}\\
@@ -54,19 +54,19 @@ The positon trajectory \vref{eq:NEDtrajectory} in \ac{NED} is calculated with nu
 \end{subequations}
 The generalised position, velocity, acceleration and force vectors, in that order, is:
 \begin{align}
-\boldsymbol{\eta} =
+\boldsymbol{\eta}^n =
 \begin{bmatrix}
 \mathbf{p}^n _{b/n}\\\boldsymbol{\Theta}_{nb}
 \end{bmatrix},\qquad
-\boldsymbol{\nu} =
+\boldsymbol{\nu}^b =
 \begin{bmatrix}
 \boldsymbol{\nu}^b _{b/n}\\\boldsymbol{\omega}^b _{nb}
 \end{bmatrix},\qquad
-\dot{\boldsymbol{\nu}} =
+\dot{\boldsymbol{\nu}}^b =
 \begin{bmatrix}
 \dot{\boldsymbol{\nu}}^b _{b/n}\\\dot{\boldsymbol{\omega}}^b _{n/b}
 \end{bmatrix},\qquad
-\boldsymbol{\tau} =
+\boldsymbol{\tau}^b =
 \begin{bmatrix}
 \mathbf{f}^b _b\\\mathbf{m}^b _b
 \end{bmatrix}
@@ -213,4 +213,3 @@ Where $g$ is the gravitational acceleration, and the computation is \vref{eq:acc
 a_b = a_\text{IMU} - R_n^b (\Theta_{nb}) a_g
 \label{eq:accl_body_calc}
 \end{align}
-
