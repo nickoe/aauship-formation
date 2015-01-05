@@ -466,8 +466,6 @@ This will be a more direct calculation method compared to the numerical method. 
 \todo{Describe the block diagram connecting the potential field calculations,
 an analogy to the wp\_gen script for the path follower.}
 
-Describe the behaviour when a boat gets stuck in a local minima.
-
 \begin{figure}[htbp]
 \centering
 \includesvg{potentialfield_block}
@@ -477,33 +475,31 @@ potential fields for computation of the input vector}
 \end{figure}
 
 The potential field control system consists of multiple elements
-as seen with the e flow is illustrated on the block diagram on
+as seen with the flow which is illustrated on the block diagram on
 figure~\vref{fig:potentialfield_block}.
 
 Part of this flow can be computed by the $i$'th ship themselves.
 
 The implementation of this is tested in matlab, using the m-files;
 
-potfield.m, pathgen.m, shipcontroller.m, simaauship.m
+potfield.m, pathgen.m, shipcontroller.m, simaauship.m, simaauship2.m
 
 The simulation algorithm for the multiship potential field should keep
-in mind that shall save the timeseries for the ship states, the
-control inputs and the local reference trajectory for the $i$'th ship.
+in mind that it is necessary to save the time series for the ship's states, the control inputs and the local reference trajectory for the $i$'th ship. This needs to be done since the ships need to calculate individual trajectories dependent on the overlying trajectory, which only the virtual leader follows.
 
 Ignoring the initialization of all the variables, the outer loop
 guidance navigation and control algorithm using potential fields are
 as follows.
 
-The \ac{GNC} works by an array of mission specific way points given,
+The \ac{GNC} works by an array of mission specific waypoints given,
 usually computed from a desired area used to create a lawnmower
-pattern described in chapter~\vref{ch:pathgen} describing the path
-generation. \todo{Kludret skrevet - rettes til}
+pattern described in chapter~\vref{ch:pathgen}. This trajectory becomes the area of interest, and is the one overlying trajectory that the virtual leader has to follow. The other ships will need to maintain their individual positions at all time steps respective to the virtual leader. Dependent of how the position is formed, the ships needs to go into formation before or during the trajectory tracking phase. \todo{Kludret skrevet - rettes til}
 
 \paragraph{Global Trajectory Generation}
 Then different methods can be used to steer ships after this
 trajectory. The simplest is the usual heading autopilot, which will
 just steer the reading of the ship to the course angle to the
-way point. Or more elaborate, ways is the use of the way points as
+waypoint. Or more elaborate, ways is the use of the waypoints as
 linesegments that the ship should follow. This is implemented with a
 \ac{LOS} algorithm. This algorithm, can work, but it is too simple to
 include obstacle or inter vehicle collisions. A way proposed to solve
