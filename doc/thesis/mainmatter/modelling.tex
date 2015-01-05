@@ -171,7 +171,7 @@ Since the tests will be performed in still water some of the forces can be negle
 M_{RB} \dot \nu_r + D\nu_r + G\eta = \tau_{hyd} + \tau_{hs} + \tau
 \label{eq:testsystem}
 \end{align}
-The system is modelled as a 5 \ac{DOF} system and the necessary coefficients are found in appendix \ref{app:damping}.
+The system is modelled as a 5 \ac{DOF} system and the necessary coefficients are found in appendix \ref{app:damping}. In the appendix are some tests described and performed to be able to determine the coefficients for the model. This includes both the rigid body mass, the damping matrix and the restoring force matrix.
 
 % While testing, as seen in appendix \ref{app:damping}, the vessel will in one test surge straight forward, in the next only perform sway and in the last only perform a rotation. This will, in the second test, make the terms regarding rotation be zero. Therefore it becomes possible to determine the remaining coefficients. This is also done in the last test while rotating. By making the vessel be in the same position, then any movement in x and y can be neglected. This makes it possible to determine the damping while rotating. After these three tests it is possible to determine the last cross terms from the system. The equations to determine will look like:
 % \begin{align}
@@ -186,5 +186,43 @@ The system is modelled as a 5 \ac{DOF} system and the necessary coefficients are
 % \end{align}
 % $Y_r$ and $N_v$ are the only unknowns and the rest to be determined. The performed tests to measure these coefficients can be found in appendix \ref{app:damping}.
 
-The system ends up being:
-\todo{konkluder hvordan systemet ser ud med de fundne variable}
+The final system ends up being as follows.
+
+The rigid body mass matrix have been weighted and measured, and is estimated to be as in equation \ref{eq:Mrb}.
+\begin{align}
+M_{RB} =
+\begin{bmatrix}
+13 & 0 & 0 & -0.39 & 0\\
+0 & 13 & 0.39 & 0 & -0.39\\
+0 & 0.39 & 0.06541 & -0.01260 & -0.05359\\
+-0.39 & 0 & -0.01260 & 1.08921 & -0.00108\\
+0 & -0.39 & -0.05359 & -0.00108 & 1.10675
+\end{bmatrix}
+\label{eq:Mrb}
+\end{align}
+
+The linear damping matrix, which holds the translational damping and cross terms, have been estimated to be as in equation \ref{eq:Dlin}.
+\begin{align}
+D = 
+\begin{bmatrix}
+2.86 & 0 & 0 & 0 & 0\\
+0 & 32.5 & -0.00503 & 0 & 0.09263\\
+0 & -0.975 & 0.1094 & 0 & 0.01273\\
+0 & 0 & 0 & 7.2030 & 0\\
+0 & 0.975 & -0.00069 & 0 & 0.26285
+\end{bmatrix}
+\label{eq:Dlin}
+\end{align}
+
+Lastly is the restoring force matrix, which is the one bringing the vessel back to steady state in pitch and roll. This has been estimated to be as in equation \ref{eq:restore}.
+\begin{align}
+G = 
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & 6.9736 & 0 & 0\\
+0 & 0 & 0 & 131.8316 & 0\\
+0 & 0 & 0 & 0 & 0
+\end{bmatrix}
+\label{eq:restore}
+\end{align}
