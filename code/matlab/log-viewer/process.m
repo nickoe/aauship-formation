@@ -16,7 +16,8 @@ logpath = '/afs/ies.auc.dk/group/14gr1034/public_html/tests/';
 % testname = 'mb100walkingklingen';
 % testname = 'gosejladsnaesten';
 % testname = 'nightseatuning';
-testname = 'fjordtur';
+% testname = 'fjordtur';
+testname = 'jesperdag2';
 % testname = 'mb100-static';
 % testname = 'mb100walkingklingen';
 % testname = 'nysoetur';
@@ -107,7 +108,7 @@ lon = pos(2,:);
 figure(1)
 clf
 %plot(lon(1,161),lat(1,161),'*g')
-plot(lon,lat,'.-r')
+% plot(lon,lat,'.-r')
 plot_google_map('maptype','satellite')
 range = [48000:49000, 58000:58700, 22000:22700];
 plot(lon(range), lat(range),'b.')
@@ -427,11 +428,11 @@ while(filenotdone > 0)
     end
     
 end
-% figure(4)
-% plot(echo.depth.timestamp,echo.depth.value,echo.temperature.timestamp',echo.temperature.value)
-% xlabel('Timestamp [s]')
-% ylabel('Depth [m] / Temperature [degree C]')
-% legend('Depth','Temperature')
+figure(4)
+plot(echo.depth.timestamp,echo.depth.value,echo.temperature.timestamp',echo.temperature.value)
+xlabel('Timestamp [s]')
+ylabel('Depth [m] / Temperature [degree C]')
+legend('Depth','Temperature')
 
 %% Plot headings to compare with the GPS data
 addpath('../x-io')
