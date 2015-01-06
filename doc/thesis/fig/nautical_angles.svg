@@ -7,7 +7,6 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="57mm"
@@ -130,9 +129,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="76.701014"
-     inkscape:cy="99.079671"
+     inkscape:zoom="3.959798"
+     inkscape:cx="147.97446"
+     inkscape:cy="75.103764"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -158,15 +157,6 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-250.00001)">
-    <image
-       sodipodi:absref="/tmp/2015-01-04 12.18.18.jpg"
-       y="176.32971"
-       x="-297.89032"
-       id="image4222"
-       xlink:href="file:///tmp/2015-01-04%2012.18.18.jpg"
-       preserveAspectRatio="none"
-       height="167.31752"
-       width="295.88779" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.9104166px;line-height:125%;font-family:Serif;-inkscape-font-specification:Serif;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
@@ -384,5 +374,16 @@
          y="269.15991"
          x="30.205919"
          sodipodi:role="line">$\beta$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.9104166px;line-height:125%;font-family:Serif;-inkscape-font-specification:Serif;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+       x="41.174397"
+       y="268.26651"
+       id="text10549"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan10551"
+         x="41.174397"
+         y="268.26651">$U$</tspan></text>
   </g>
 </svg>
