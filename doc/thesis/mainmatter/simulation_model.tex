@@ -116,6 +116,7 @@ The \acl{SOG} block on the figure~\vref{fig:intermediate-calc} is used to calcul
 \nomenclature{$U$}{Course speed}
 \begin{align}
 \chi = \psi + \beta \quad \Rightarrow  \quad \beta = \chi - \psi
+\label{eq:angles}
 \end{align}
 
 To calculate the body frame velocities the rotation matrix around $z$ is used. It is enough to use this one basic rotation, because this is on the 2D system ($x,y$) in the \ac{NED} frame.
@@ -160,9 +161,17 @@ U \\ 0
 \sin(\beta)
 \end{bmatrix}
 U
-\end{align}o
+\end{align}
 
-\todo{Add figure about this}
+\begin{figure}[htbp]
+	\centering
+	\includesvg{nautical_angles}
+	\caption{Plot showing the different angles used. The in
+		equation~\vref{eq:angles}. $\chi$ is the course angle, $\psi$ is
+	the heading angle, and $\beta$ is the sideslip angle.}
+	\label{fig:natical_angles}
+\end{figure}
+
 
 \section{Magnetic and Acceleration Vectors from State Attitude}
 The simulation model state vector do not contain magnetic field
