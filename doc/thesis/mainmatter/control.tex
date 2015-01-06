@@ -145,9 +145,12 @@ As the potential field does not need to expand to infinity it is reasonable to d
 F_{max} = F_{min} + K_{vl}||\dot{p}^n||
 \label{eq:dynfmax}
 \end{align}
-where the $F_{min}$ is a minimum value for the upper limit and then with an applied gain of the speed.
-\todo{Denne afsluttende subsubsection er underligt formuleret, husk det med tilden, og sikkert også hvordan vi jegner p\_r - Det med p\_r er skrevet senere i afsnittet. Skal det også nævnes her? Jeppe}
-
+where the $F_{min}$ is a minimum value for the upper limit and then with an applied gain of the speed. 
+The reference trajectory is used by the controller to calculate the agent's control input which can be based on the desired movement in the NED frame as:
+\begin{align}
+  \mathbf{p}_{i,r}^n = \mathbf{p}_i^n + \mathbf{F}_i ^\text{tot}
+\end{align}
+where their positions are added together with the potential field, such that the position and the potential field becomes linked.
 
 \section{The Potential Field Strategy}
 The theory of potential fields are implemented with the strategy
