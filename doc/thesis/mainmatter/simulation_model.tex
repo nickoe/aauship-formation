@@ -74,11 +74,20 @@ The generalised position, velocity, acceleration and force vectors, in that orde
 
 From this it can be seen that the velocities, the derivative of $\eta$, can be given as:
 \begin{align}
-\dot \eta = J_{\boldsymbol{\Theta}}(\eta)\nu\\
-%\begin{bmatrix}
-%\mathbf{\dot p}^n _{b/n}\\\boldsymbol{\dot \Theta}_{nb}
-%\end{bmatrix}
+\dot \eta &= J_{\boldsymbol{\Theta}}(\eta)\nu\\
+\begin{bmatrix}
+\dot{\mathbf{p}}^n _{b/n}\\\dot{\boldsymbol{\Theta}}_{nb}
+\end{bmatrix}
+&=
+\begin{bmatrix}
+\boldsymbol{R}^n_b(\boldsymbol{\Theta}_{nb}) & 0_{3x3} \\
+0_{3x3} & \boldsymbol{T}_{\boldsymbol{\Theta}}(\boldsymbol{\Theta}_{nb})
+\end{bmatrix}
+\begin{bmatrix}
+\boldsymbol{\nu}^b_{b/n}\\\boldsymbol{\omega}^b_{b/n}
+\end{bmatrix}
 \end{align}
+These are the basis of the model that are to be developed and used within the AAUSHIP project.
 
 \section{Sensor Measurements to State Vector}
 For the control system it is needed to convert the sensor measurements
