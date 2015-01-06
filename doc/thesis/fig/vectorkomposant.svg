@@ -54,9 +54,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.9195959"
-     inkscape:cx="178.89903"
-     inkscape:cy="51.947903"
+     inkscape:zoom="2.8"
+     inkscape:cx="139.57253"
+     inkscape:cy="72.76611"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -87,7 +87,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -101,7 +101,7 @@
        y="570.6452"
        x="226.56599"
        id="image4465"
-       xlink:href="file:///home/nickoe/aauship-formation/doc/manual/fig/ortho-side-view.png"
+       xlink:href="../manual/fig/ortho-side-view.png"
        preserveAspectRatio="none"
        height="124.82331"
        width="416.07767" />
