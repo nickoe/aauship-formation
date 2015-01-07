@@ -481,9 +481,6 @@ Since the respective derivatives now have been calculated, these can be summed i
 This will be a more direct calculation method compared to the numerical method. Though the numerical method is chosen to be implemented due to a more interpreting idea of how the potential field algorithms should be carried out.
 
 \subsection{Adding the Dynamics for Simulation}
-\todo{Describe the block diagram connecting the potential field calculations,
-an analogy to the wp\_gen script for the path follower.}
-
 The potential field control system consists of multiple elements
 as seen with the flow which is illustrated on the block diagram on
 figure~\vref{fig:potentialfield_block}.
@@ -610,13 +607,14 @@ section~\ref{sc:initialisation}.
 
 A simulation of the algorithm with the dynamics of the AAUSHIP can be seen on figure \ref{fig:potform}.
 \begin{figure}[htbp]
-  \includegraphics[width=0.8\textwidth]{fig/potform}
+  \centering
+  \includegraphics[width=0.8\textwidth]{fig/lawn-bar-formation}
   \caption{Four agents are placed relative to the middle point of the formation, the virtual leader. This leader moves at the trajectory with the waypoints, but only changes to the next waypoint if the agents are in formation.}
   \label{fig:potform}
 \end{figure}
-The red crosses are waypoints that have been targeted as the next waypoint to reach. The straight line are the virtual leader movement, which changes position from waypoint to waypoint to generate the straight line segments for the formation to follow. Every of the four agents have a relative position placement to the virtual leader, the agents positions are $p_{ij}$ and given as $p^n_{vl} + offset$ and the position of the virtual leader is given as $p^n_{vl}$.
+The red crosses are waypoints that have been targeted as the next waypoint to reach. The line connecting those waypoints are the virtual leader movement, which changes position from waypoint to waypoint to generate the straight line segments for the formation to follow. Every of the four agents have a relative position placement to the virtual leader, the agents positions are $p_{ij}$ and given as $p^n_{vl} + offset$ and the position of the virtual leader is given as $p^n_{vl}$. The ships are shown as yellow ships and the ships in formation is connected with a red line.
 
-The formation have started at position $[0,0]$ and has the first waypoint in $[-196,-80]$. When the agents are close to reach the waypoint at $[-196,-80]$ three of them stops to wait for the last to catch up. Then all of they are in formation the virtual leader changes waypoint such that the agents needs to go straight north. Here it is clear to see the dynamics of the AAUSHIP where the convergence to a straight line starts. Their respective line segments are not shown on the figure, but the agents will follow a line segment from their position in the formation to the new position in the formation. This is due to the movement of the virtual leader where this only moves in straight lines, thus the following agents pursue to do the same.
+The formation have started at position $[-250,-150]$ and has the first waypoint in $[-208,-120]$. When the agents are close to reach the waypoint at $[-208,-120]$, they ensure that every agent are in formation by waiting for the last to catch up, if needed. Then all of them are in formation with respect to the virtual leader and this changes waypoint such that the agents needs to go toward the next waypoint. This waypoint shifting continues until no more waypoints are available. It can be seen that there are a little divergence of the ships to the line segments which is mainly due to the dynamics of the AAUSHIP. Their respective line segments are not shown on the figure, while this would make the figure confusing. Though the agents will follow a line segment from their position in the formation to the new position in the formation. This is due to the movement of the virtual leader where this only moves in straight lines, thus the following agents pursue to do the same. The trajectory the ships follow is plotted beneath the third vessel from the left from where it can be seen that this vessel is placed on top of the virtual leader, and almost makes this vessel serve as the leader of the formation. Due to the formation setup the following ships will follow the same trajectory as the leader but only in this case shifted in the easting position.
 \todo{Describe how the dynamics will affect the trajectory. Dette skal udvides ind i det her.}
 
 
