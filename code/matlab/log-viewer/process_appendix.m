@@ -152,6 +152,31 @@ imu2beh(gyro, accl/9.82, magnbias, length(gyro));
 % imu2beh([gyro(:,1) -gyro(:,2) -gyro(:,3)], [accl(:,1) -accl(:,2) -accl(:,3)], [magn(:,1) -magn(:,2) -magn(:,3)], length(gyro));
 beh = calc_beh_main('testfile.mat',false,true,true,false);
 
+%% Mahony check
+addpath(genpath('../x-io'))
+AHRS = MahonyAHRS('SamplePeriod', 1/20, 'Kp', 18 , 'Ki', 8);
+% accelbody = [x(k,13) x(k,14) 0]';
+%             accelimu(:,k) = accelbody + transpose(Rzyx(x(k,5),x(k,6),x(k,7)))*[0;0;9.82];
+% 
+%             declination = 2.1667*pi/180; % angle from north
+%             inclination = 70.883*pi/180; % angle from north-east plane
+%             magnbody = [x(k,13) x(k,14) 0]';
+%             magnimu(:,k) = magnbody + transpose(Rzyx(x(k,5),x(k,6),x(k,7)))*[0;inclination;declination];
+xgyro = gyro(:,1);
+ygyro = gyro(:,2);
+zgyro = gyro(:,3);
+xaccl = accl(:,1);
+yaccl = accl(:,2);
+zaccl = accl(:,3);
+xmagn = magn(:,1);
+ymagn = magn(:,2);
+zmagn = magn(:,3);
+for k = 1:length(gyro)
+    AHRS.Update([xgyro(k) ygyro(k) zgyro(k)] * (pi/180), [xaccl(k) yaccl(k) zaccl(k)], [xmagn(k) ymagn(k) zmagn(k)]);	% gyroscope units must be radians
+    quaternion(k, :) = AHRS.Quaternion;
+end
+
+
 %% Animate heading
 %     figure(42)
 % 
@@ -462,3 +487,46 @@ saveas(figure(154),'rollcoeffsvel.pdf')
 Y_p = 2 * -m * z_g * s2
 K_p = 2 * I(1,1) * s2
 N_p = 2 * I(1,3) * s2
+
+%% Op og ned flank til sammenligning
+figure(250)
+clf;
+% set(gcf,'Visible','off'); % Hides the matlab plot because it is ugly
+set(gcf,'paperunits','centimeters')
+set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
+set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
+surge1 = nmeaspeed(1871-828+14-10:1901-828+2)*0.5144;% knob til m/s, *0.5144
+surge2 = nmeaspeed(1916-828+2-10:1933-828+1)*0.5144;% knob til m/s, *0.5144
+surge3 = nmeaspeed(1961-828+1-10:1975-828)*0.5144;% knob til m/s, *0.5144
+surge4 = nmeaspeed(2022-828-2-10:2035-828-3)*0.5144;% knob til m/s, *0.5144
+hold on
+grid on
+plot(-3:(length(surge1)-4),surge1,'r');
+plot(-3:(length(surge2)-4),surge2,'g');
+plot(-3:(length(surge3)-4),surge3,'y');
+plot(-3:(length(surge4)-4),surge4,'b');
+xlabel('Time [s]')
+ylabel('Velocity [m/s]')
+legend('Test 1', 'Test 2', 'Test 3', 'Test 4')
+hold off
+saveas(figure(250),'surgeverify.pdf')
+
+%% Sammenligning af Mahony og BEH
+% close(figure(2))
+figure(2)
+% clf
+set(gcf,'paperunits','centimeters')
+set(gcf,'papersize',[13,8]) % Desired outer dimensions of figure
+set(gcf,'paperposition',[-0.5,0,14.5,8.4]) % Place plot on figure
+hold on
+euler = quatern2euler(quaternConj(quaternion)) * (180/pi);	% use conjugate for sensor frame relative to Earth and convert to degrees.
+% plot(1:length(beh.elevation),euler(:,1),'g',1:length(beh.elevation),euler(:,2),'b',1:length(beh.elevation),euler(:,3),'r')
+plot(imutime,euler(:,2),'b')
+plot(imutime,beh.elevation,'k') % Plot beh elevation
+xlabel('Time [s]')
+ylabel('Pitch angle [degree]')
+legend('Mahony estimate','Direct cosine estimate')
+saveas(figure(2),'pitchverify.pdf')
+
+
+
