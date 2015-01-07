@@ -4,7 +4,7 @@
 that is used for simulation of the system, as a replacement for
 testing on the real ship.}
 
-To make a model for simulation model, it is needed to emulate the real
+\noindent To make a model for simulation model, it is needed to emulate the real
 sensor outputs with noise imposed onto the signals. Using a \ac{LTI}
 state space model based on the unified model \vref{eq:totmodel} is
 constructed as \vref{eq:ss} as defined by \citep[p. 175]{fossen}.
@@ -230,7 +230,13 @@ a_\text{IMU} = [a_{bx}, a_{by}, 0]^T + R_n^b (\Theta_{nb}) [0,0,g]^\top
 where $g$ is the gravity, defined as 9.82 m/s$^2$
 
 \section{Reconstruction of Body Accelerations}
-The ship is equipped with an accelerometer, but this does not mean that the accelerations measured is in the body frame, $a_b$, because it also measure the the added gravity vector. This gravity vector has to be subtracted before the body acceleration is know. This is calculated by defining the gravity vector in the NED frame $a_g$, then rotate that to the body frame and subtract it from the IMU measurement $a_\text{IMU}$.
+The ship is equipped with an accelerometer, but this does not mean
+that the accelerations measured is in the body frame, $a_b$, because
+it also measure the the added gravity vector. This gravity vector has
+to be subtracted before the body acceleration is know. This is
+calculated by defining the gravity vector in the NED frame $a_g$, then
+rotate that to the body frame and subtract it from the {IMU}
+measurement $a_\text{IMU}$.
 \begin{align}
 a_g = [0, 0, g]^\top \quad, \quad 
 a_\text{IMU} = [a_x, a_y, a_z]^\top \quad, \quad 
@@ -241,3 +247,56 @@ Where $g$ is the gravitational acceleration, and the computation is \vref{eq:acc
 a_b = a_\text{IMU} - R_n^b (\Theta_{nb}) a_g
 \label{eq:accl_body_calc}
 \end{align}
+
+
+\section{\acl{AHRS}}
+On figure~\vref{fig:intermediate-calc} a block is representing an
+attitude observer. This part of the system is an observer that is used
+together with the on-board \ac{IMU}. Its input is raw linear
+acceleration, gyration rate and magnetic field strength to determine
+the attitude and heading of the ship.
+
+As described on figure~\vref{fig:blockkf} and attitude observer is
+needed, this is realised by implementing the \ac{AHRS} described
+here.
+
+\subsection{Mahony Filter}
+An \ac{AHRS} filter described in the \citep{mahony} is widely used on
+mini aerial vehicles worldwide according to the conclusion of the
+paper. Other papers of the same authors discuss different aspects of
+this filter in \citep{mahony2} and \citep{mahony3}.
+
+The paper demonstrates two filter approaches, termed the
+\textit{direct complementary filter} and the \textit{explicit
+complementary filter}, where the first needs all outputs typically
+found in \ac{IMU}'s (accelerometer, gryommeter and magnetometer)
+whilst the second does not need the magnetometer measurements.
+
+In its simplest form an complementary filter is a filter, which takes
+advantage of the difference between two types of measurements, in this
+case the gyrations and accelerations. In a stationary case the
+accelerations are enough to determine the attitude when exposed to the
+gravitational field, which should point ``down''. For the case of a
+actuated body, not only the gravitation is affecting the measured
+accelerations, but also the forces from the actuators (or disturbances
+for that matter) is imposed on the measurements.
+
+This means that it is not enough to use only the accelerometer to
+calculate the attitude, so an option is to use the gyrometer, which
+measures the angular rate, which again can integrated to give an
+angular position. This position from the gyro, will drift over time,
+but will be fairly accurate in a short lookahead time.
+
+The complementary filter uses these properties fuse the
+measurements to an estimate of the attitude. This can be done by
+interpreting the accelerations over longer time and add those to
+attitude from the gyro, hence the result is an estimate that is
+composed of the most recent gyrations and the average acceleration.
+
+
+
+
+%\section{Madgwick Filter}
+%The Madgwick filter is similar to the Mahony filter, but is a little
+%bit less computationally intensive. \todo{The mathematical differences
+%and characteristics is to be described}

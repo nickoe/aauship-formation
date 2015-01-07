@@ -6,13 +6,13 @@
 mission purpose. A description of these methods are described in this
 chapter with focus on pre-mission defined paths.}
 
-For these kinds of guidance systems, they are usually generated via some
+\noindent For these kinds of guidance systems, they are usually generated via some
 form of human interface -- some more intelligent than others. For the
 purpose of this thesis, the interest lies in the use of surveying
 purposes, such that a path should be generated from some waypoints
 that are generated from some polygonal areas of interest.
 
-The concept of this is to make run lines (lawn mover pattern) with
+The concept of this is to make run lines (lawn mover or plough fure pattern) with
 straight line segments, and the corners can be handled in a specific
 way such that the physical constraints of the ship manoeuvring ability
 is considered to generate feasible paths.
@@ -32,7 +32,23 @@ area of interest as show on figure~\vref{fig:lawn-straight-inside}. The other wa
 \end{figure}
 
 \section{Dubins Path}
-Dubins path is one way to define paths which can be used in the context of the AAUSHIP project. The Dubins paths are created by line segments and circle arcs. These arcs can be created in different ways, and the usage of this can be applied when generating lawn mover patterns. The circle arcs can be created from points (waypoints) with line segments between, like it is intended to do within the AAUSHIP lawn mover patterns. Different discrete ways to handle Dubin paths can be found in a summary and discussion with \citep{dubin}. The way the Dubins path are used in the AAUSHIP is based on the waypoint terminology, where the vessel needs to go from waypoint to waypoint connected with a line segment to track onto. This is also one of the ways that the Dubin paths can be utilized. In the AAUSHIP is the circle arc defined From a determined distance from between the longer line segments in the lawn mover patterns. This radius cannot be too small such that the dynamics of the AAUSHIT does not allow it to go all around the circle arc without diverge from the determined waypoints in the arc.
+Dubins path is one way to define paths which can be used in the
+context of the AAUSHIP project. The Dubins paths are created by line
+segments and circle arcs. These arcs can be created in different ways,
+and the usage of this can be applied when generating lawn mover
+patterns. The circle arcs can be created from points (waypoints) with
+line segments between, like it is intended to do within the AAUSHIP
+lawn mover patterns. Different discrete ways to handle Dubin paths can
+be found in a summary and discussion with \citep{dubin}. The way the
+Dubins path are used in the AAUSHIP is based on the waypoint
+terminology, where the vessel needs to go from waypoint to waypoint
+connected with a line segment to track onto. This is also one of the
+ways that the Dubin paths can be utilized. In the AAUSHIP is the
+circle arc defined From a determined distance from between the longer
+line segments in the lawn mover patterns. This radius cannot be too
+small such that the dynamics of the AAUSHIP does not allow it to go
+all around the circle arc without diverge from the determined
+waypoints in the arc.
 \begin{figure}[htbp]
 	\centering
 	\includesvg{lawnmoverturn}
@@ -41,8 +57,16 @@ Dubins path is one way to define paths which can be used in the context of the A
 \end{figure}
 
 
-\missingfigure{Figure of Dubins path generated with fixed and angle
-dependent circles} \todo{Vil du lave den, Nick? Jeppe}
+\begin{figure}[htbp]
+	\centering
+	\includesvg[width=0.8\textwidth]{normal_dubin_path}
+	\caption{An example of a Dubin path generated with straight lines and
+		inscribed circles, where the path corner arc radius is determined
+	with a minimum radius and dependent on the angle between the two
+segments connecting one waypoint to others.}
+\label{fig:normal_dubin_path}
+\end{figure}
+
 
 \section{Guidance System}
 The guidance system is a system that takes the wishes from the
@@ -54,7 +78,9 @@ This algorithm can have various purposes and in this project it will be a \ac{LO
 	\centering
 	\includesvg{guidance-overview}
 	\caption{Overview of guidance system where a mission static waypoint
-	database is used with a \ac{LOS} algorithm.}
+	database is used as the input to a \ac{LOS} algorithm, which sets
+the reference for the ships control system, which is usually
+implemented as some form of heading autopilot.}
 	\label{fig:losguide}
 \end{figure}
 
