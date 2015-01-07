@@ -250,6 +250,7 @@ If the different sensor measurements are not sampled with the same rate will the
 \subsection{Overall filter and conclusion}
 The filter is implemented with the final results simulated in the first figure on figure \ref{fig:postest0,00001}. It can be seen, as a difference to the second figure on figure \ref{fig:postest0,00001}, that the estimate takes in the measurement from the \ac{GPS} and is not totally model based. It is not wanted to have a fully model based \ac{KF} since the model may not be the perfect match to the real world environment and does not include disturbances as incoming waves etc. Therefore it is important that the filter takes in the measurements from the \ac{GPS} and \ac{IMU} to correct the model with respect to the real world measurements. It can be seen on figure \ref{fig:postest0,00001} that the filter corrects the estimate with the \ac{GPS} measurement. A received \ac{GPS} measurement is marked with a star on the estimate and it can be seen that the estimate corrects in the direction of the \ac{GPS} measurement. The \ac{KF} works as intended in the simulations and is the one to be implemented on the AAUSHIP. Sea trials with this filter will be performed to verify that the filter works as intended from the simulations.
 \begin{figure}
+  \centering
   \includegraphics[width=0.9\textwidth]{fig/klingenblaagroen}
   \caption{Tests with different control parameters for the heading controller. As for initial test the Klingenberg lake seems too small.}
   \label{fig:klingentest}
