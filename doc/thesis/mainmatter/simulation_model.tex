@@ -4,7 +4,7 @@
 that is used for simulation of the system, as a replacement for
 testing on the real ship.}
 
-\noindent To make a model for simulation model, it is needed to emulate the real
+\noindent To make a model as simulation model, it is needed to emulate the real
 sensor outputs with noise imposed onto the signals. Using a \ac{LTI}
 state space model based on the unified model \vref{eq:totmodel} is
 constructed as \vref{eq:ss} as defined by \citep[p. 175]{fossen}.
@@ -29,7 +29,7 @@ constructed as \vref{eq:ss} as defined by \citep[p. 175]{fossen}.
 \label{eq:ss}
 \end{subequations}
 
-The matrix $E$ describes the sea state and vector $w$ the process noise, and $v$ the sensor (measurement) noise. Both noise
+The matrix $E$ describes the sea state and vector $w$ the process noise, and vector $v$ the sensor (measurement) noise. Both noise
 vectors are assumed zero-mean Gaussian white noise processes.
 
 \nomenclature{$x_n, y_n$}{Position in the \acs{NED}-frame, usually
@@ -43,7 +43,7 @@ computed from a \acs{GPS}}
 
 
 \section{Position Trajectory in \acs{NED}}
-The position trajectory \vref{eq:NEDtrajectory} in \ac{NED} is calculated with numerical Euler integration of the velocities \vref{eq:NEDvel}.
+The position trajectory \vref{eq:NEDtrajectory} in \ac{NED} is calculated with numerical euler integration of the velocities \vref{eq:NEDvel}.
 \begin{subequations}
 \begin{align}
 \dot{\mathbf{p}}^n _{b/n} &= \mathbf{R}^n _b (\boldsymbol{\Theta}_{nb}) \boldsymbol{\nu}^b _{b/n} \label{eq:NEDvel}\\
@@ -94,10 +94,10 @@ For the control system it is needed to convert the sensor measurements
 to the system state vector, such that the control system can be
 designed. Figure~\vref{fig:intermediate-calc} shows the computation
 flow to determine this. It shall be noted that the \ac{GPS} and
-\ac{IMU} blocks has the sensor noise in them.
+\ac{IMU} blocks has the sensor noise integrated in them.
 
-Now that the state vector is present an state observer can be used
-in i.e. a Kalman filter to reduce the noise.
+Now that the state vector is present, a state observer can be used
+in i.e. a \ac{KF} to filter and reduce the noise.
 
 \begin{figure}
 	\centering
@@ -108,12 +108,12 @@ in i.e. a Kalman filter to reduce the noise.
 \end{figure}
 
 Since the simulation is performed by iterating over the state space
-model, it is needed to somehow get the variances from the sensors
+model, it is somehow needed to get the variances from the sensors
 modelled in the state space model. Because of the intermediate
 computations described in the figure~\vref{fig:intermediate-calc} it
 is not straight forward to add the sensor noise to the model, because
 this noise is specified at the raw sensor measurements. So some way
-has to be used to calculate the noise $v$.
+has to be made to calculate the noise $v$.
 
 A method is to set the sensor measurements to no movement values, and
 only add the noise on the measurements. If all sensors were zero in
@@ -127,7 +127,7 @@ normal distribution of this should suffice. \todo{Is this good enough
 or even correct? We have nonlinearities. Jeg ved ikke om det er rigtigt, men måske skulle der bare skrives ud fra hvordan det er lavet, altså hvordan $v$ er fundet.}
 
 \section{\acs{SOG} to Body Frame Velocities}
-The \acl{SOG} block on the figure~\vref{fig:intermediate-calc} is used to calculate the body frame velocities in surge $u$ and sway $v$, which in turn is filtered by the Kalman filter described in section~\vref{sec:kfdesign}. The block on the diagram uses the \ac{SOG} from the \ac{GPS}, denoted as the magnitude $U$ and the course angle relative to true north, denoted the course angle $\chi$. Which is the sum of the heading $\psi$ and sideslip $\beta$ angles:
+The \acl{SOG} block on the figure~\vref{fig:intermediate-calc} is used to calculate the body frame velocities in surge $u$ and sway $v$, which in turn is filtered by the Kalman filter described in section~\vref{sec:kfdesign}. The block on the diagram uses the \ac{SOG} from the \ac{GPS}, denoted as the magnitude $U$ and the course angle relative to true north, denoted the course angle $\chi$, which is the sum of the heading $\psi$ and sideslip $\beta$ angles:
 \nomenclature{$\chi$}{Course angle}
 \nomenclature{$\beta$}{Sideslip angle}
 \nomenclature{$U$}{Course speed}
@@ -194,8 +194,8 @@ respectively.}
 
 \section{Magnetic and Acceleration Vectors from State Attitude}
 The simulation model state vector do not contain magnetic field
-strength directly, therefore it has to be calculated from the
-attitude, that is the pitch, roll and yaw values.
+strength directly. Therefore it has to be calculated from the
+attitude, which is the pitch, roll and yaw values.
 
 First the magnetic field direction has to be known for the area where the system operates. There exists models of the magnetic field on the earth, accessible from \citep{geomag}. Using the ``WMM 2010'' model, the declination and inclination has been determined to be $2.167 \arcdeg$ (east), and $70.883 \arcdeg$ (down) respectively. Additionally the field strength is about $50432$ nT.
 
@@ -269,10 +269,10 @@ this filter in \citep{mahony2} and \citep{mahony3}.
 The paper demonstrates two filter approaches, termed the
 \textit{direct complementary filter} and the \textit{explicit
 complementary filter}, where the first needs all outputs typically
-found in \ac{IMU}'s (accelerometer, gryommeter and magnetometer)
+found in \ac{IMU}'s measurements (accelerometer, gyrometer and magnetometer)
 whilst the second does not need the magnetometer measurements.
 
-In its simplest form an complementary filter is a filter, which takes
+In its simplest form a complementary filter is a filter, which takes
 advantage of the difference between two types of measurements, in this
 case the gyrations and accelerations. In a stationary case the
 accelerations are enough to determine the attitude when exposed to the
@@ -283,14 +283,14 @@ for that matter) is imposed on the measurements.
 
 This means that it is not enough to use only the accelerometer to
 calculate the attitude, so an option is to use the gyrometer, which
-measures the angular rate, which again can integrated to give an
-angular position. This position from the gyro, will drift over time,
+measures the angular rate, which again can be integrated to give an
+angular position. This position from the gyrometer, will drift over time,
 but will be fairly accurate in a short lookahead time.
 
-The complementary filter uses these properties fuse the
+The complementary filter uses these properties and fuses the
 measurements to an estimate of the attitude. This can be done by
 interpreting the accelerations over longer time and add those to
-attitude from the gyro, hence the result is an estimate that is
+the attitude from the gyrometer, hence the result is an estimate that is
 composed of the most recent gyrations and the average acceleration.
 
 
