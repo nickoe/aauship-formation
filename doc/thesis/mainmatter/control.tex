@@ -2,10 +2,7 @@
 \label{ch:control}
 \head{This chapter describes the selected strategy from
 	chapter~\vref{ch:selformctrl} in more detail, describing the exact
-algorithm.}
-
-
-
+algorithm and the implemented simulation.}
 
 % This is a summary of how they use Potential Fields in "UAV Formation Flight using 3D Potential Field"
 \section{One Approach for Potential Fields}
@@ -35,7 +32,7 @@ where:
 
 \subsubsection{Virtual Leader, $\mathbf{F}_{vl}$}
 The virtual leader is an anchor of each formation, the \ac{FRP}, and
-controls the movement of this. This movement can either be given as a
+controls the movement of this. This movement can be given as a
 full trajectory of as a set of way points. The local virtual leader's
 contribution to the field is defined as:
 \begin{align}
@@ -58,9 +55,9 @@ which is expressed as:
 Similar to previously the $p$s are positions, $K_{ij}$ is a tuning
 parameter and $d$ is a shorter notation for the distances in between.
 This component preserves the formation by affecting the agents to keep
-their respective desired distances among themselves. Hence the
-weighting on each goal can be adjusted by $K_{vl}$ and $K_{ij}$ a
-weighting that causes the agents to follow the virtual leader or to
+their respective desired distances among themselves. The
+weighting on each goal can be adjusted by $K_{vl}$ and $K_{ij}$, hence this weighting is a
+weighting that causes the agents to either follow the virtual leader or to
 preserve their desired formation.  In a swarm of $N$ agents the total
 field for agent $i$ given by:
 \begin{align}
@@ -159,7 +156,7 @@ The theory of potential fields are implemented with the strategy
 proposed in section \ref{sc:potential-fields}. The potential field is
 generated for each individual agent at every update step to make the
 formation move and converge to a specified formation and position. The
-field is generated based on forces acting in a overlying potential
+field is generated based on forces acting in an overlying potential
 field structure where one force converges the agent to a desired
 position, a force attracting the agent to obtain the desired formation
 along the trajectory, a force repelling the agent from other agents if
@@ -169,7 +166,7 @@ repelling force will be larger for the agent-agent force due to the
 fact that two agents could have course directly toward each other and
 a more aggressive avoidance can be needed.
 
-To be able to generate and simulate the potential field then
+To be able to generate and simulate the potential field the
 implementation needs to be generic. First it was developed with one
 agent that needs to converge to a desired position and afterwards were
 other agents added as obstacles and some static objects were added in
@@ -253,7 +250,7 @@ where a ball will converge towards the lowest point in the direction
 of the minimum gradient.
 
 The method of applying the grid with magnitude of the potential field
-arises the problem with resolution, and therefore also a problem that makes the
+rises a problem with resolution, and therefore also a problem that makes the
 'corners' of the grid around the agent to have the
 steepest decent. This is seen as if the agent is placed in the middle
 of a 3-by-3 matrix, and have eight placements around it. The placements around the agent will then be checked. The magnitude of the vector from the agent and outgoing will therefore be biggest in the corners since the distance to those are greater than the distances to the sides, up and down. This problem
@@ -356,7 +353,7 @@ is one of the more critical criteria to be fulfilled.
 \subsection{Algebraic Solution}
 In the previous section \ref{subsec:numsol} the problem is solved in a numerical manor, where the functions are evaluated in single steps in a grid, to see the individual potential field magnitudes. Afterwards they are added together to get the total potential field in that specific point. This is one way to implement the potential field algorithms and within this section another approach is analysed.
 
-The other solution could be to analyse the problem analytically, where the potential fields are calculated from the derivatives of the potential field functions. By doing this the direct gradient of the individual potential field function can be calculated, and added together to get the total gradient at a specific point. The potential field functions are summarized in the following where their derivatives are calculated.
+The other solution could be to investigate the problem analytically, where the potential fields are calculated from the derivatives of the potential field functions. By doing this the direct gradient of the individual potential field function can be calculated, and added together to get the total gradient at a specific point. The potential field functions are summarized in the following where their derivatives are calculated.
 
 \subsubsection{Collision Avoidance}
 The repulsive forces from the collision avoidance is given from equation \ref{eq:colavoid}. It only applies when the distance from the $i$'th agents to agent $j$ is smaller than the safety radius. The last term multiplied at the parenthesis is a directional vector, which can be seen as a sign function both in the scalar and the vector case.
