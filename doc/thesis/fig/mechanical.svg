@@ -89,7 +89,7 @@
      id="layer1"
      transform="translate(-129.28572,-325.2193)">
     <image
-       sodipodi:absref="/home/nickoe/aauship-formation/doc/manual/fig/ortho-top-view.png"
+       sodipodi:absref="ortho-top-view.png"
        xlink:href="ortho-top-view.png"
        width="1000"
        height="300"
@@ -212,7 +212,7 @@
        d="m 755.07522,500.05171 c 30.04238,78.27113 107.07709,94.48618 173.24116,161.62441"
        style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend)" />
     <image
-       sodipodi:absref="/home/nickoe/aauship-formation/doc/manual/fig/ortho-side-view.png"
+       sodipodi:absref="ortho-side-view.png"
        xlink:href="ortho-side-view.png"
        width="1000"
        height="300"
