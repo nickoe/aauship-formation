@@ -22,17 +22,12 @@ sonars to obtain bathymetry data. When one ship need to do this alone, and due t
 the sonar, the time spend could be improved by using multiple ships. The sonar scanning would
 be done as seen on figure~\vref{fig:concept-art}.
 
-\todo{Tell WHY it is a good idea to do formation control.  Think of
-	smaller ships on shallow waters, boats can follow mother ship this
-	gives a more complere picture of the seabed. Smart to have ASV's to
-watch areas more often. etc}
-
 \begin{figure}[htbp]
 	\centering
 	\subfloat[One ship\label{fig:concept-art1}]{\includegraphics[width=0.48\textwidth]{fig/conseptart-single}}
 	\ % One forced space to seperate figures
 	\subfloat[Thee ships\label{fig:concept-art3}]{\includegraphics[width=0.48\textwidth]{fig/conseptart-formation}}
-	\caption{Comparison of two ways to cover an area with a lawn mower
+	\caption{Comparison of two ways to cover an area with a lawnmower
 	pattern.}
 	\label{fig:concept-art}
 \end{figure}
@@ -44,6 +39,14 @@ time spend could be improved to make this mapping more efficient. One
 way of optimizing the time used is to add more ships (figure~\vref{fig:concept-art3}) to help map the
 seabed. To make the process of this as optimal as possible it could be
 of benefit to implement formation control to the specific assignment.
+
+The implementation of the AAUSHIP as a fleet in formation can have various purposes.
+\begin{description}
+\item[Larger group] One advantage is that, instead of being spread out in the fjord at different areas of surveying, they are together and will be seen as a larger vessel that the smaller independent vessels.
+\item[Formation with other vessels] When the AAUSHIP project gets implemented with the Port of Aalborg could it be of benefit to have the AAUSHIP as an offset from their own surveying vessel, Alba, such that the AAUSHIP can get into more shallow water than the possibility of Alba.
+\item[Scouting] If i.e. a larger vessel needs to go into a smaller untracked fjord the AAUSHIP can be used in front of the larger vessel as a scout to measure the depth to the seabed in front.
+\item[Hardware dependent] For future work on the AAUSHIP project it might become available to implement multibeam sonars. If this option becomes available the area that the sonar scans will be dependent of the depth at the current position. This will mean that if more vessels are in a rigid formation, then overlapping of data will happen. This is not in the interest, since the mapping could be done faster. If the formation changes dependent of the overlapping areas from the sonars, this will be a minimization problem to be solved to optimize the survey.
+\end{description}
 
 In cooperation with the port of Aalborg, a use case is presented, where it is possible to perform tests of the platform, and use those to compare the performance of the AAUSHIP system with their system.
 \begin{figure}[htbp]
