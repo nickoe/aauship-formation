@@ -3,7 +3,7 @@
 which is done on a \acl{ROS} platform. This should provide all the
 information needed to complete the implementation.}
 
-It was decided to use \ac{ROS} in the implementation. It is used as an
+\noindent It was decided to use \ac{ROS} in the implementation. It is used as an
 other abstraction layer on top of the \ac{LLI}. In turn it makes AAUSHIP
 modular and make it easy for others to write parts of the control
 system without reimplementing basic components. This in turn makes it
@@ -111,9 +111,12 @@ real sensor nodes that use real sensor data is used.
 		This node is the running the \ac{KF} iteration with the attitude estimate and
 		the decoded \ac{IMU} samples.
 	\item[\texttt{/gnc\_node}]\hfill \\
-		This node runs the \ac{GNC} algorithm
+		This node runs the \ac{GNC} algorithm, basically the controller.
 	\item[\texttt{/rqt\_mission\_planner\_node}]\hfill \\
 		This node is an rqt plugin used to specify the mission.
+	\item[\texttt{/ahrs\_mahony}]\hfill \\
+		This node is the attitude observer described in
+		section~\vref{sc:ahrs}.
 \end{description}
 
 \begin{figure}[htbp]
@@ -128,7 +131,10 @@ real sensor nodes that use real sensor data is used.
 	\centering
 	{\footnotesize
 	\includesvg{ros_aauship_closed_loop_single}}
-	\caption{Closed loop ROS system on one ship.}
+	\caption{Closed loop ROS system on one ship. The blob representing
+		the \texttt{/simulation\_node} is what where the simulation fits
+		in, that is it replaces the \texttt{/lli\_node} and the
+		\texttt{/sensor\_decode\_node}.}
 	\label{fig:ros-aauship-closed-loop-single}
 \end{figure}
 

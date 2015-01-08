@@ -13,7 +13,7 @@
    height="51.132069"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
+   inkscape:version="0.91+devel r13824 custom"
    sodipodi:docname="potentialfield_block.svg">
   <defs
      id="defs4">
@@ -53,17 +53,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.8964851"
-     inkscape:cx="512.44788"
-     inkscape:cy="21.408791"
+     inkscape:zoom="2.7918291"
+     inkscape:cx="438.79046"
+     inkscape:cy="21.424523"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      units="cm"
-     inkscape:window-width="1274"
-     inkscape:window-height="759"
+     inkscape:window-width="1276"
+     inkscape:window-height="743"
      inkscape:window-x="1280"
-     inkscape:window-y="394"
+     inkscape:window-y="412"
      inkscape:window-maximized="0"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -98,15 +98,15 @@
      transform="translate(-58,-946.74295)">
     <text
        xml:space="preserve"
-       style="font-size:13px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:times new roman;-inkscape-font-specification:times new roman"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13px;line-height:125%;font-family:'times new roman';-inkscape-font-specification:'times new roman';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        x="250"
-       y="962.36084"
+       y="958.36084"
        id="text3180"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3182"
          x="250"
-         y="962.36084"
+         y="958.36084"
          style="font-style:normal;font-weight:normal">$\mathbf{F}_i^\text{tot}$</tspan></text>
     <g
        id="g3068"
@@ -259,13 +259,13 @@
          id="text3084"
          y="962.36084"
          x="120"
-         style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
+         style="font-style:normal;font-weight:normal;font-size:11px;line-height:125%;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
          xml:space="preserve"><tspan
            id="tspan3086"
            style="font-size:13px"
            y="962.36084"
            x="120"
-           sodipodi:role="line">Trajectory</tspan></text>
+           sodipodi:role="line">Waypoint</tspan></text>
       <rect
          y="947.36084"
          x="83"
@@ -275,7 +275,7 @@
          style="fill:none;stroke:#000000;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
       <text
          xml:space="preserve"
-         style="font-size:11px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
+         style="font-style:normal;font-weight:normal;font-size:11px;line-height:125%;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
          x="120"
          y="977.36084"
          id="text3090"
@@ -284,19 +284,19 @@
            x="120"
            y="977.36084"
            style="font-size:13px"
-           id="tspan3092">Generation</tspan></text>
+           id="tspan3092">Database</tspan></text>
     </g>
     <text
        xml:space="preserve"
-       style="font-size:13px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:times new roman;-inkscape-font-specification:times new roman"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13px;line-height:125%;font-family:'times new roman';-inkscape-font-specification:'times new roman';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        x="150"
-       y="962.36084"
+       y="958.36084"
        id="text3180-1"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3182-8"
          x="150"
-         y="962.36084"
+         y="958.36084"
          style="font-style:normal;font-weight:normal">$\mathbf{p}_{vl}$</tspan></text>
     <g
        id="g3157"
@@ -345,5 +345,41 @@
        id="path3171"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text4202"
+       y="958.36084"
+       x="350"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13px;line-height:125%;font-family:'times new roman';-inkscape-font-specification:'times new roman';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-weight:normal"
+         y="958.36084"
+         x="350"
+         id="tspan4204"
+         sodipodi:role="line">$\mathbf{p}_{d_i}$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13px;line-height:125%;font-family:'times new roman';-inkscape-font-specification:'times new roman';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+       x="450"
+       y="958.36084"
+       id="text4206"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4208"
+         x="450"
+         y="958.36084"
+         style="font-style:normal;font-weight:normal">$\boldsymbol{\tau}_i</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13px;line-height:125%;font-family:'times new roman';-inkscape-font-specification:'times new roman';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+       x="550"
+       y="958.36084"
+       id="text4210"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4212"
+         x="550"
+         y="958.36084"
+         style="font-style:normal;font-weight:normal">$\mathbf{p}_{i}$</tspan></text>
   </g>
 </svg>
