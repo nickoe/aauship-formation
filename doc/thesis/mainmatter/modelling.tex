@@ -5,7 +5,7 @@ necessary to be able to use model based control algorithms and
 estimators.}
 
 \section{Hydrodynamic Modelling}
-Hydrodynamic added mass is defined as the mass added to a system due to an accelerating or decelerating body that needs to move a volume of the surrounding fluid as it moves through it. To this is said that the object and fluid is not able to occupy the same physical space simultaneously.
+Hydrodynamic added mass is defined as the mass added to a system due to an accelerating or decelerating body that needs to move a volume of the surrounding fluid as it moves through it. To this is said that the object and fluid is not able to occupy the same physical space simultaneously. An overall model can be given as:
 \begin{align}
 M_A \dot \nu_r + C_A(\nu_r)\nu_r + D(\nu_r)\nu_r + g(\eta_r) = \tau
 \label{eq:hydmodel}
@@ -15,14 +15,14 @@ where
 \begin{align}
 &M_A \text{ is the added mass matrix from the system}\nonumber\\
 &C_A \text{ is the added mass matrix due to the Coriolis force}\nonumber\\
-&D(\nu) \text{ is both the potential and viscous damping matrices}\nonumber\\
+&D(\nu) \text{ is a combination of the potential and viscous damping matrices}\nonumber\\
 &g(\eta) \text{ is the restoring forces, which is dependent on the position of the vessel}\nonumber\\
 &\tau \text{ is control and propulsion forces}\nonumber\\
 &\nu \text{ is the velocities of the vessel in all directions and moments}
 \end{align}
 
 \section{Rigid Body Modelling}
-The rigid body is used to model the physics of the vessel. It is an idealisation of the solid body from where the physical motions of the vessel are to be derived. Translational motion and rotational motion be derived by analysis of this, and by ~\citep{sname1950} and ~\citep[sec. (3.3.1)]{fossen} written in component form as:
+The rigid body is used to model the physics of the vessel. It is an idealisation of the solid body from where the physical motions of the vessel are to be derived. Translational motion and rotational motion can be derived by analysis of this, and by ~\citep{sname1950} and ~\citep[sec. (3.3.1)]{fossen} written in component form as:
 \begin{align}
 f^b_b &= [X,Y,Z]^T & &- \text{force through } o_b \text{ expressed in } \{b\}\\
 m^b_b &= [K,M,N]^T & &- \text{moment about } o_b \text{ expressed in } \{b\}\\
