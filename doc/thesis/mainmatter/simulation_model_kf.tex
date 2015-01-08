@@ -159,7 +159,12 @@ The covariance matrix of observational (measurement) uncertainty $R_k$ is assume
 &R_k = \diag{\mathbf{v}} =\\ \nonumber
 &\diag{^\text{GPS}\sigma_{x}^2,\ ^\text{GPS}\sigma_{y}^2,\ ^\text{GPS}\sigma_{\psi}^2,\ ^\text{GPS}\sigma_{u}^2,\ ^\text{GPS}\sigma_{v}^2,\ ^\text{IMU}\sigma_{a_x}^2,\ ^\text{IMU}\sigma_{a_y}^2}
 \end{align}
-These variances can be found by letting the AAUSHIP be in steady state. The sensor outputs are read while in steady state to check the variances from these. This will be the variances of the individual sensor measurements thus the variances of the particular measurements. The test finding these variances can be found in appendix \todo{lav appendix og ref til det her}.
+These variances can be found by letting the AAUSHIP be in steady
+state. The sensor outputs are read while in steady state to check the
+variances from these. This will be the variances of the individual
+sensor measurements thus the variances of the particular measurements.
+The test finding these variances can be found in
+appendix~\vref{sc:variances}.
 
 The covariance matrix of process noise in the system state dynamics is $Q_k$ and is assumed to be the variances of each individual state:
 \begin{align}
