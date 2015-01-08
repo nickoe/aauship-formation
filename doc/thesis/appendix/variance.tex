@@ -7,7 +7,7 @@ that can be used for state estimation of the ship for control
 purposes. This is the \ac{IMU} and \ac{GPS} measurements.
 
 \section{Theory}
-The variance is a key constant that state estimators rely on to weigh
+The variance is a key constant that state estimators rely on to make a weighting of
 how much it should trust a measurement, hence the value must be known.
 
 The variance is the standard deviation squared, and can be determined
@@ -67,12 +67,12 @@ where it is only four samples and most on the middle two.
 Variances of the time series for all plots was determined and
 presented in the results section.
 
-The variances for the GPS might not be that good of a measure of the
-noise, since the histogram and ground track it looks like a random
+The variances for the GPS might not be a good measure of the
+noise, since the histogram and ground track looks like a random
 walk of some form. It should be noted that the GPS under test, was
-placed in a not so ideal position, it was approximately four meters
-from the wall of a building on its south facing side. This could be
-why the variance is so big in the northing axis.
+placed in a not so ideal position. It was approximately four meters
+from a wall of a building on its south facing side. This could be
+why the variance is bigger in the northing axis.
 
          
 \newpage
