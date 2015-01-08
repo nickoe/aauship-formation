@@ -325,9 +325,10 @@ The algorithm generating this combined agent can be seen in pseudo code in algor
   $r_{new} \gets \text{calc new r for}\ \mathbf{p}_{j,new}$\\
   delete $\mathbf{p}_i\ \text{and}\ \mathbf{p}_j \text{with}\ \mathbf{p}_{j,new}$
   }
-  \caption{This pseudo code describes how agents that are too close to each other are getting clustered and seen as one. The algorithm can also be applied for obstacles in the potential field.}
+  \caption{This pseudo code describes how agents that are too close to each other are getting clustered and seen as one. The algorithm can also be applied for obstacles in the potential field.\vspace{3mm}}
   \label{al:clusteragents}
 \end{algorithm}
+
 Firstly every distance between the agents are checked if it is lower than $2 \cdot r$. If the distance is lower, a new coordinate set needs to be calculated. The coordinates for the $\mathbf{p}_{j,new}$ is generated to the middle value of the two points
 \begin{align}
 \mathbf{p}_{j,new} = \frac{\mathbf{p}_i + \mathbf{p}_j}{2}
