@@ -155,7 +155,7 @@ These equations can be utilized to calculate the coefficients from the damping m
 This method is used to fit a first order differential equation to be able to estimate the damping coefficient. This is done by performing a test of the vessel. The vessel is accelerated from zero velocity to a constant velocity from where the input is taken away. This will make a velocity curve as seen on figure \ref{fig:phase3}.
 \begin{figure}[htbp]
 	\centering
-	\includesvg[width=0.5\textwidth]{phase3}
+	\includesvg[height=3cm]{phase3}
 	\caption{Constant velocity followed by zero input.}
 	\label{fig:phase3}
 \end{figure}
@@ -186,7 +186,7 @@ u_0 = k
 After the damping is determined is the input force the only unknown in the dynamic equation \eqref{eq:dynsurgeeq}. The input force, to reach the constant velocity $u_0$, can be determined by the same principle but should be applied to a curve rising from zero velocity to the constant velocity. This would look as seen in figure \ref{fig:phase1}.
 \begin{figure}[htbp]
 	\centering
-	\includesvg[width=0.5\textwidth]{phase1}
+	\includesvg[height=3cm]{phase1}
 	\caption{Zero velocity followed by constant velocity.}
 	\label{fig:phase1}
 \end{figure}
@@ -471,13 +471,28 @@ mx_g \ddot y + I_z\ddot \psi - N_v \dot y - N_r \dot \psi = \tau
 \end{subequations}
 
 The tests performed are as follows:
-\begin{enumerate}
-	\item The first test is a \textit{surge} test. This test is done to test the forward damping coefficient being $X_u$ from the damping matrix $D$. The vessel will accelerate to a certain velocity and keep this. Then all input is put to zero and the vessel will decelerate. This will, as described in section \ref{sec:hydrocoeff}, give a damping coefficient in the forward motion. This is expressed as $m \ddot x - X_u \dot x = 0$ and $X_u$ can be estimated. A step input is now set on the vessel to see the acceleration from zero velocity to the same constant velocity as before. This now gives the input force at the vessel, which is the last unknown in $m \ddot x - X_u \dot x = \tau$. Both $X_u$ and $\tau$ is estimated by fitting to a first order differential curve, as described in \ref{subsec:methodone}. To make this test and data fitting is only position data in the forward motion from the \ac{GPS} of importance. The position can be differentiated twice, to give both velocity and acceleration of the vessel and cab be used to fit the acceleration and deceleration of the vessel.
-	\item The second test is a purely \textit{sway} test. The vessel will make use of the sideways thrusters to move strictly sideways. This implies that there is no rotation or movement in $\psi$ and $x$. Thus makes the moving equation as $m \ddot y - Y_v \dot y = 0$. Here is the vessel again accelerated to a constant velocity and the input is then set to zero, and $Y_v$ can be determined. After this the sideways thrusters can be used to accelerate the vessel to the same constant velocity and the input can be estimated by $m \ddot y - Y_v \dot y = \tau$ where $\tau$ is the only unknown. $K_v$ and $N_v$ can be determined from the same test, though the fitting needs to be changed due to the new parameter from $M_{RB}$. The fitting should be done to the same type, namely like procedure \textit{method one} in \ref{subsec:methodone}. To make this test and data fitting is only position data in sideways motion from the \ac{GPS} of importance. This can be differentiated twice to give both velocity and acceleration in the sideways direction. This can be fitted to a acceleration and deceleration of the vessel when only moving in the sideways direction.
-	\item The last test to perform is the \textit{yaw} test. In this test it is of importance to control the sideways thrusters such that the vessel will keep the position at both $x$ and $y$, such that only rotation is used to move the surrounding water. The vessel is accelerated to a constant angular velocity and the input is then set to zero. The damping of this will determine $N_r$ from $I_z\ddot \psi - N_r \dot \psi = 0$. Now the vessel needs to reach the constant angular velocity again from zero, and the input can now be estimated from $I_z\ddot \psi - N_r \dot \psi = \tau$. $Y_r$ and and $K_r$ can be determined from the same test, but the fitting is a little different due to the new parameter from $M_{RB}$. These fittings should be done as procedure \textit{method one} in \ref{subsec:methodone}. To make these should the position from the \ac{GPS} be measured to ensure that the vessel does not move of greater importance in forward and sideways directions. Measurements from the magnetometer and accelerometer is used to determine the heading and thereby the change on heading and the acceleration. The accelerometer is used to compensate the pitch and roll in the magnetometer measurements.
-\end{enumerate}
-The parameters in pitch and roll is determined by fitting data to \textit{method two} as described in \ref{subsec:methodtwo}. Previous work done by \citep{13gr931} has provided the data to be fitted. These data can be found on the cd, \todo{ref til cd}. The data is dependent of the position on the angle of the vessel and the equations is therefore formulated to fit these measurements. The fitting of the data is done as procedure \textit{method two} and no further tests needs to be performed. The tests shows pitch and roll, measured in a vicon motion tracking lab. The vessel is put to a maximum angle without level it into the water. Afterwards it is released and the vessel will damp to zero angle, being horizontal in steady water. To verify the data from \citep{13gr931} accelerometer will be collected both in pitch and roll from two simpler tests without the vicon motion tracking lab.
+\subsection{Test 1}
+The first test is a \textit{surge} test. This test is done to test the forward damping coefficient being $X_u$ from the damping matrix $D$. The vessel will accelerate to a certain velocity and keep this. Then all input is put to zero and the vessel will decelerate. This will, as described in section \ref{sec:hydrocoeff}, give a damping coefficient in the forward motion. This is expressed as $m \ddot x - X_u \dot x = 0$ and $X_u$ can be estimated. A step input is now set on the vessel to see the acceleration from zero velocity to the same constant velocity as before. This now gives the input force at the vessel, which is the last unknown in $m \ddot x - X_u \dot x = \tau$. Both $X_u$ and $\tau$ is estimated by fitting to a first order differential curve, as described in \ref{subsec:methodone}. To make this test and data fitting is only position data in the forward motion from the \ac{GPS} of importance. The position can be differentiated twice, to give both velocity and acceleration of the vessel and cab be used to fit the acceleration and deceleration of the vessel.
+\subsection{Test 2}
+The second test is a purely \textit{sway} test. The vessel will make use of the sideways thrusters to move strictly sideways. This implies that there is no rotation or movement in $\psi$ and $x$. Thus makes the moving equation as $m \ddot y - Y_v \dot y = 0$. Here is the vessel again accelerated to a constant velocity and the input is then set to zero, and $Y_v$ can be determined. After this the sideways thrusters can be used to accelerate the vessel to the same constant velocity and the input can be estimated by $m \ddot y - Y_v \dot y = \tau$ where $\tau$ is the only unknown. $K_v$ and $N_v$ can be determined from the same test, though the fitting needs to be changed due to the new parameter from $M_{RB}$. The fitting should be done to the same type, namely like procedure \textit{method one} in \ref{subsec:methodone}. To make this test and data fitting is only position data in sideways motion from the \ac{GPS} of importance. This can be differentiated twice to give both velocity and acceleration in the sideways direction. This can be fitted to a acceleration and deceleration of the vessel when only moving in the sideways direction.
+\subsection{Test 3}
+The last test to perform is the \textit{yaw} test. In this test it is of importance to control the sideways thrusters such that the vessel will keep the position at both $x$ and $y$, such that only rotation is used to move the surrounding water. The vessel is accelerated to a constant angular velocity and the input is then set to zero. The damping of this will determine $N_r$ from $I_z\ddot \psi - N_r \dot \psi = 0$. Now the vessel needs to reach the constant angular velocity again from zero, and the input can now be estimated from $I_z\ddot \psi - N_r \dot \psi = \tau$. $Y_r$ and and $K_r$ can be determined from the same test, but the fitting is a little different due to the new parameter from $M_{RB}$. These fittings should be done as procedure \textit{method one} in \ref{subsec:methodone}. To make these should the position from the \ac{GPS} be measured to ensure that the vessel does not move of greater importance in forward and sideways directions. Measurements from the magnetometer and accelerometer is used to determine the heading and thereby the change on heading and the acceleration. The accelerometer is used to compensate the pitch and roll in the magnetometer measurements.
 
+The parameters in pitch and roll is determined by fitting data to
+\textit{method two} as described in \ref{subsec:methodtwo}. Previous
+work done by \citep{13gr931} has provided the data to be fitted. The
+data is dependent of the position on the angle of the vessel and the
+equations is therefore formulated to fit these measurements. The
+fitting of the data is done as procedure \textit{method two} and no
+further tests needs to be performed. The tests shows pitch and roll,
+measured in a vicon motion tracking lab.  The vessel is put to a
+maximum angle without level it into the water.  Afterwards it is
+released and the vessel will damp to zero angle, being horizontal in
+steady water. To verify the data from \citep{13gr931} accelerometer
+will be collected both in pitch and roll from two simpler tests
+without the vicon motion tracking lab.
+
+\newpage
 \section{Results}
 \subsubsection{Surge Test}
 \begin{figure}[H]
