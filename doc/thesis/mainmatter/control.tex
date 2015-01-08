@@ -26,6 +26,7 @@ algorithm and the implemented simulation.}
 
 % This is a summary of how they use Potential Fields in "UAV Formation Flight using 3D Potential Field"
 \section{One Approach for Potential Fields}
+\label{sc:one-approach}
 In the following approach a potential field is generated for each
 agent including obstacles, formation span, desired, and actual
 position.  It will be a combination of virtual leader and potential
@@ -504,7 +505,7 @@ as seen with the flow which is illustrated on the block diagram on
 figure~\vref{fig:potentialfield_block}.
 \begin{figure}[htbp]
 \centering
-\includesvg{potentialfield_block}
+\includesvg[width=\textwidth]{potentialfield_block}
 \caption{Block diagram showing the iteration process of using the
 potential fields for computation of the input vector}
 \label{fig:potentialfield_block}
@@ -530,9 +531,9 @@ The \ac{GNC} works by an array of mission specific waypoints given,
 usually computed from a desired area used to create a lawnmower
 pattern described in chapter~\vref{ch:pathgen}. This trajectory becomes the area of interest, and is the one overlying trajectory that the virtual leader has to follow. The other ships will need to maintain their individual positions at all time steps respective to the virtual leader. Dependent of how the position is formed, the ships needs to go into formation before or during the trajectory tracking phase.
 
-\paragraph{Global Trajectory Generation}
-Then different methods can be used to steer ships after this
-trajectory. The simplest is the usual heading autopilot, which will
+\paragraph{Waypoint Database}
+Different methods can be used to steer ships after this
+path. The simplest is the usual heading autopilot, which will
 just steer the reading of the ship to the course angle to the
 waypoint. Or more elaborate, ways is the use of the waypoints as
 line segments that the ship should follow. This is implemented with a
@@ -552,11 +553,11 @@ The potential field is used in an iterative algorithm which can
 calculate the direction (from the $i$'th boat to the desired position
 spanned by a potential field defining the formation.
 
-\paragraph{Local Trajectory Generation}
+\paragraph{Trajectory Generation}
 In the end, a reference path is calculated by the means of the
 previous position and the result from the potential field
 solver. It is calculated as the paper presents, \citep[eq.
-48]{UAVff3dpf}.
+48]{UAVff3dpf} and described in section~\vref{sc:one-approach}.
 
 \begin{align}
 	\mathbf{p}_{i,r}^n = \mathbf{p}_i^n + \mathbf{F}_i ^\text{tot}
