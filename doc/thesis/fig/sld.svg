@@ -13,7 +13,7 @@
    height="398"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91+devel r13824 custom"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="sld.svg">
   <defs
      id="defs4" />
@@ -745,7 +745,7 @@
        ry="0.62883425" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:46.07591248px;line-height:125%;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;"
+       style="font-size:46.07591248px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
        x="614.54236"
        y="729.10168"
        id="text3144-5"
@@ -753,8 +753,8 @@
          sodipodi:role="line"
          x="614.54236"
          y="729.10168"
-         style="font-size:30.71727562px;fill:#000000;fill-opacity:1;"
-         id="tspan3148-4">WiFi</tspan></text>
+         style="font-size:30.71727562px;fill:#000000;fill-opacity:1"
+         id="tspan3148-4">Wi-Fi</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:46.07591248px;line-height:125%;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;"
