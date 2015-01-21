@@ -10,7 +10,7 @@ clear all; clf;
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 1000;
+N = 4000;
 no_boats = 4;
 es = N;
 ts = ss.ts;
@@ -23,6 +23,7 @@ x = zeros(17,no_boats,N+1);
 % x(:,4,1) = [-258+32 -200 -258+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 
 % Random setup
+% x(:,1,1) = [-234+42 -210 -234+42 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 x(:,1,1) = [-234+42 -210 -234+42 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 x(:,2,1) = [-242+32 -190 -242+32 -190 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 x(:,3,1) = [-250+22 -200 -250+22 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
@@ -79,7 +80,8 @@ K(2,2) = 0.26565;
 % start = [100, 1000];
 % stop = [-1000,1000];
 % track = load('lawnmoversmall.mat');
-track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 10 -190; 30 -190];
+% track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 10 -190; 30 -190; 50 -190; 70 -190; 90 -190; 110 -190; 130 -190; 150 -190; 170 -190; 190 -190; 210 -190; 230 -190; 250 -190; 270 -190; 290 -190; 310 -190; 330 -190; 350 -190; 370 -190; 390 -190; 410 -190; 430 -190; 450 -190; 470 -190; 490 -190];
+track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 130 -190; 150 -190; 170 -190; 190 -190; 210 -190; 230 -190; 250 -190; 270 -190; 290 -190; 310 -190; 330 -190; 350 -190; 370 -190; 390 -190; 410 -190; 430 -190; 450 -190; 470 -190; 490 -190];
 % track = [track.track(1,:)-[10,3];track.track]*4;
 % track(:,1) = track(:,1)*4;
 error = zeros(no_boats,N);
@@ -154,9 +156,9 @@ Foamagn = zeros(lenx,leny);
 Fmin = 10;
 % Desired pos, spans the formation
 pi0 = zeros(no_boats,2);
-pi0(1,1:2) = [8,0];
-pi0(2,1:2) = [0,0];
-pi0(3,1:2) = [-8,0];
+pi0(1,1:2) = [8,3];
+pi0(2,1:2) = [0,2];
+pi0(3,1:2) = [-8,1];
 pi0(4,1:2) = [-16,0];
 
 % Initial positions
@@ -178,7 +180,7 @@ po(3,1:2) = [-35,2]*1000;
 % po(4,1:2) = [-164,-90]; % Test med dette objekt
 
 %% POTFIELD VARS END
-status = zeros(no_boats,1);
+status = zeros(no_boats,N);
 for k = 1:N
 %     fprintf('Timestep #%d\n', k)
     [psivl(k), wp_reached, ctevl(k)] = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]); % WP Gen
@@ -189,20 +191,21 @@ for k = 1:N
     % Calculate if formation is ok
     for i = 1:no_boats % for all boats, could possibly me moved to to end of the LTG loop, after the simulation update
         % Check if the formation is OK, such that we can move the virtual
-        % leader        
-        if ( norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:))) ) < 3
+        % leader
+        pi0dist(i,k) = norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:)));
+        if ( norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:))) ) < 2
 %         if ( sqrt( (pir(i,1,k) - (pi0(i,1)+pvl(k,1)))^2 + (pir(i,2,k) - (pi0(i,2)+pvl(k,2)))^2 ) ) < 2
             fprintf('Boat #%d reached pi0\n',i)
-            status(i) = 1;
+            status(i,k) = 1;
         end
-        if status == 1
+        if status(:,k) == 1
             % Calculate if waypoint is reached
             dist = sqrt((pvl(k,2)-track(m,1))^2+(pvl(k,1)-track(m,2))^2);
             if dist < wp_r
                 wp_reached = 1;
                 fprintf('Waypoint #%d was reached\n', m)
                 m = m + 1;
-                status = zeros(no_boats,1);
+                status(:,k+1) = zeros(no_boats,1);
             end
         end
     end
@@ -223,7 +226,7 @@ for k = 1:N
 %         fprintf('Boat #%d\n', i)
         j = 1:no_boats; j(i) = []; % Construct j from i
        % Skal bruges til desired hasts
-        Kv = 2;
+        Kv = 4;
         minf = 200;
         Fmax = minf + Kv*x(8,i,k);
         [pir(i,:,k+1), minval] = pathgen(32, 2, pij(i,:,k), pi0(i,1:2)*Rz', pij(j,:,k), pi0(j,1:2)*Rz', po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
@@ -234,17 +237,16 @@ for k = 1:N
 %         [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pir(i,:,k),pir(i,:,k+1),x(1:2,i,k)'); % WP Gen
         [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pir(i,:,k),pir(i,:,k+1),x(3:4,i,k)'); % WP Gen
 %         headingdesired(i,k) = headingdesired(i,k) - pi/2;
-        if status(i) == 1
+        if status(i,k) == 1
             headingdesired(i,k) = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]);
 %             headingdesired(i,k) = wp_gen(pvl(k,:),pvl(k+1,:),pvl(k,:));
-            nomialspeed = 0;
+            nomialspeed = 0.2;
         end
 
         %% Controller
 
         % PID for speed
         speeddesired = nomialspeed + minval/200;
-%         speeddesired = 2.2;
         serror(i,k) = speeddesired - x(8,i,k);
         sintegral(i,k) = sintegral(i,k) + serror(i,k);
         if k~=1
@@ -427,6 +429,18 @@ for i = 1:no_boats
     hold on
 end
 ylabel('Cross track error [m]')
+
+%%
+figure(6);
+clf
+for i = 1:no_boats
+    plot(pi0dist(i,:),'Color',shipcolor(i,:),'marker','.')
+    hold on
+    grid on
+end
+plot([1,es],[2,2],'k')
+ylabel('Dist from wp')
+
 
 %%
 % Figure for error plotting
