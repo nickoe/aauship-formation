@@ -10,7 +10,7 @@ clear all; clf;
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 1000;
+N = 2000;
 no_boats = 4;
 es = N;
 ts = ss.ts;
@@ -24,7 +24,9 @@ x = zeros(17,no_boats,N+1);
 
 % Random setup
 x(:,1,1) = [-234+42 -210 -234+42 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-x(:,2,1) = [-242+32 -190 -242+32 -190 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% x(:,2,1) = [-242+32 -190 -242+32 -190 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+x(:,2,1) = [-242+120 -190 -242+120 -190 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+
 x(:,3,1) = [-250+22 -200 -250+22 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 x(:,4,1) = [-258+12 -210 -258+12 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 
@@ -243,8 +245,9 @@ for k = 1:N
         %% Controller
 
         % PID for speed
-        speeddesired = nomialspeed + minval/200;
+%         speeddesired = nomialspeed + minval/200;  % uses combined potential field which is not really great
 %         speeddesired = 2.2;
+        speeddesired = 2  + 0.04*norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:)));
         serror(i,k) = speeddesired - x(8,i,k);
         sintegral(i,k) = sintegral(i,k) + serror(i,k);
         if k~=1
@@ -342,7 +345,7 @@ for i = 1:no_boats
     
 end
 
-% h1 = plot(pvl(:,1),pvl(:,2),'r+');
+plot(pvl(:,1),pvl(:,2),'r+');
 % h3 = plot(z(gpsc,2),z(gpsc,1),'g.-');
 % plot(track(n,2),track(n,1),'ro')
 legend([h1;h2;h3;h4],'track','formation','pij','pir')
@@ -372,11 +375,9 @@ for i = 1:no_boats
     plot(out(8,1:es),'Color',shipcolor(i,:))
     ylabel('Surge velocity [m/s]')
     hold on
-
-        
     subplot(2,1,2)
-    h1 = plot(heading(i,:),'Color',shipcolor(i,:),'LineStyle','-','Marker','.');
-    h2 = plot(headingdesired(i,:),'Color',shipcolor(i,:));
+    h1 = plot(1:es,heading(i,1:es),'Color',shipcolor(i,:),'LineStyle','-','Marker','.');
+    h2 = plot(1:es,headingdesired(i,1:es),'Color',shipcolor(i,:));
 end
 subplot(2,1,1)
 legend('1','2','3','4')
@@ -389,7 +390,7 @@ hold off
 figure(3)
 clf
 for i = 1:no_boats
-    plot(1:N,error(i,:),'Color',shipcolor(i,:))
+    plot(1:es,error(i,1:es),'Color',shipcolor(i,:))
     hold on
 end
 legend('1','2','3','4')
