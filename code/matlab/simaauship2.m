@@ -306,6 +306,7 @@ clf
 
 hold on
 h1 = plot(track(:,2),track(:,1),'b-o');
+shipcolor = [[1 0 0]; [0 1 0]; [0 0 1]; [1.0000    0.8431         0]];
 for i = 1:no_boats
     hold on
     out = reshape(pij(i,:,1:es), 2, []);
@@ -314,7 +315,9 @@ for i = 1:no_boats
 %     plot(out(1,1:es),out(2,1:es),'-r')
         
     for k = 1:30:es
-        ship(out(1,k),out(2,k),out(7,k),'y')
+%         ship(out(1,k),out(2,k),out(7,k),'y')
+        ship(out(1,k),out(2,k),out(7,k),shipcolor(i,:))
+
 
         out1 = reshape(x(:,1,1:es),length(x(:,1,1)),[]);
         out2 = reshape(x(:,2,1:es),length(x(:,2,1)),[]);
@@ -322,7 +325,7 @@ for i = 1:no_boats
         out4 = reshape(x(:,4,1:es),length(x(:,4,1)),[]);
 
         hold on
-        plot([out1(1,k),out2(1,k),out3(1,k),out4(1,k),out1(1,k)],[out1(2,k),out2(2,k),out3(2,k),out4(2,k),out1(2,k)],'r')
+        h2 = plot([out1(1,k),out2(1,k),out3(1,k),out4(1,k),out1(1,k)],[out1(2,k),out2(2,k),out3(2,k),out4(2,k),out1(2,k)],'r--');
 
     end
     hold on
@@ -333,16 +336,16 @@ for i = 1:no_boats
 
     hold on
     out = reshape(pij(i,:,1:es), 2, []);
-    plot(out(1,1:es),out(2,1:es),'-g')
+    h3 = plot(out(1,1:es),out(2,1:es),'-g');
     out = reshape(pir(i,:,1:es), 2, []);
-    plot(out(1,1:es),out(2,1:es),'-b')
+    h4 = plot(out(1,1:es),out(2,1:es),'-b');
     
 end
 
-h1 = plot(pvl(:,1),pvl(:,2),'r+');
+% h1 = plot(pvl(:,1),pvl(:,2),'r+');
 % h3 = plot(z(gpsc,2),z(gpsc,1),'g.-');
 % plot(track(n,2),track(n,1),'ro')
-% legend([h1;h2;h3],'Trajectory','State','Marker for recieved GPS','Estimate','GPS meas','Location','eastoutside')
+legend([h1;h2;h3;h4],'track','formation','pij','pir')
 xlabel('Easting [m]');
 ylabel('Northing [m]');
 title('Plot of the NED frame');
@@ -363,32 +366,35 @@ clf
 
 hold on
 for i = 1:no_boats
-        hold on
+    hold on
     subplot(2,1,1)
     out = reshape(x(:,i,1:es),length(x(:,i,1)),[]);
-    plot(out(8,1:es),'-r')
-    legend('surge vel')
-        hold on
-        grid on
+    plot(out(8,1:es),'Color',shipcolor(i,:))
+    ylabel('Surge velocity [m/s]')
+    hold on
+
         
     subplot(2,1,2)
-    h1 = plot(heading(i,:),'-b');
-    h2 = plot(headingdesired(i,:),'-r');
+    h1 = plot(heading(i,:),'Color',shipcolor(i,:),'LineStyle','-','Marker','.');
+    h2 = plot(headingdesired(i,:),'Color',shipcolor(i,:));
 end
+subplot(2,1,1)
+legend('1','2','3','4')
+grid on
+subplot(2,1,2)
 legend([h1;h2],'heading','headingdesired')
 grid on
 hold off
 %%
 figure(3)
 clf
-hold on
-% for i = 1:no_boats
-%     hold on
-%     plot(error(i,:))
-% end
-plot(1:N,error(1,:),1:N,error(2,:),1:N,error(3,:),1:N,error(4,:))
-
-title('heading error')
+for i = 1:no_boats
+    plot(1:N,error(i,:),'Color',shipcolor(i,:))
+    hold on
+end
+legend('1','2','3','4')
+grid on
+ylabel('Heading error [rad]')
 
 %%
 figure(4);
@@ -397,11 +403,17 @@ clf
 hold on
 for i = 1:no_boats
     out = reshape(tau(:,i,1:es),length(tau(:,i,1)),[]);
-    plot(out(1,1:es),'-r')
-    plot(out(5,1:es),'-b')
-    legend('tau_X','tau_N')
-        hold on
-        grid on
+    
+    subplot(2,1,1)
+    plot(out(1,1:es),'Color',shipcolor(i,:))
+    legend('tau_X')
+    hold on
+    grid on
+    subplot(2,1,2)
+    plot(out(5,1:es),'Color',shipcolor(i,:))
+    legend('tau_N')
+    hold on
+    grid on
 end
 hold off
 
@@ -410,8 +422,11 @@ figure(5);
 clf
 % plotting cross track error, which is the same for all boats since they
 % follow their paths perfectly
-plot(cte(1,:),'Color',[0.1 0.7 0])
-legend('Cross track error for one vessel')
+for i = 1:no_boats
+    plot(cte(i,:),'Color',shipcolor(i,:))
+    hold on
+end
+ylabel('Cross track error [m]')
 
 %%
 % Figure for error plotting
