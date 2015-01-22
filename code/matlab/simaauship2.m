@@ -10,7 +10,7 @@ clear all; clf;
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 4000;
+N = 1000;
 no_boats = 4;
 es = N;
 ts = ss.ts;
@@ -26,7 +26,7 @@ x = zeros(17,no_boats,N+1);
 % x(:,1,1) = [-234+42 -210 -234+42 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 x(:,1,1) = [-234+42 -210 -234+42 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 % x(:,2,1) = [-242+32 -190 -242+32 -190 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-x(:,2,1) = [-242+120 -190 -242+120 -190 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+x(:,2,1) = [-242+120 -190-30 -242+120 -190-30 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 
 x(:,3,1) = [-250+22 -200 -250+22 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 x(:,4,1) = [-258+12 -210 -258+12 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
@@ -195,7 +195,7 @@ for k = 1:N
         % Check if the formation is OK, such that we can move the virtual
         % leader
         pi0dist(i,k) = norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:)));
-        if ( norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:))) ) < 2
+        if ( norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:))) ) < 4  % WARNING this radius has to be bigger than the radius in the pathgen() call
 %         if ( sqrt( (pir(i,1,k) - (pi0(i,1)+pvl(k,1)))^2 + (pir(i,2,k) - (pi0(i,2)+pvl(k,2)))^2 ) ) < 2
             fprintf('Boat #%d reached pi0\n',i)
             status(i,k) = 1;
@@ -302,7 +302,7 @@ for k = 1:N
 
     end % end of i'th ship
 end
-
+save('simdata.mat')
 %% Plot the results
 t = 0:ts:es*ts-ts;
 tt = ts:ts:es*ts;
