@@ -64,9 +64,9 @@ for k = 1:1:k
 
         hold on
     end
+    hcirc = circle( pvl(k,1), pvl(k,2),formradius);
     toc
     
-
     xdim = max(pij(:,1,k)) - min(pij(:,1,k));
     ydim = max(pij(:,2,k)) - min(pij(:,2,k));
     mxdim = min(pij(:,1,k))+xdim/2;
@@ -74,15 +74,9 @@ for k = 1:1:k
     dim = max([xdim, ydim])/2+2;
     xlim([mxdim-dim, mxdim+dim])
     ylim([mydim-dim, mydim+dim])
-
-%     axis equal
-%     hold off
-    
+  
     drawnow('update')
     pause(0.001)
 end
 
 text(mxdim,mydim,'The end','HorizontalAlignment','center','FontSize',80,'Interpreter','latex')
-
-
-

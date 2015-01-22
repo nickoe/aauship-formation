@@ -10,7 +10,7 @@ clear all; clf;
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 1000;
+N = 4000;
 no_boats = 4;
 es = N;
 ts = ss.ts;
@@ -112,6 +112,7 @@ limit = 3.07;
 m = 1; % Track counter
 pvl = zeros(N+1,2);
 pvl(1,:) = [track(m,2), track(m,1)];  % Set virtual leader
+pvlny = pvl; % TODO WIP TEST
 wp_r = 1; % waypoint acceptance radius
 
 
@@ -123,7 +124,7 @@ step = 1;
 lenx=length(X(:,1));
 leny=length(Y(1,:));
 % Safe avoidance radius
-rsav = 3;
+rsav = 6;
 % Pos af hvor baad i skal ende
 % pi0 = [60,11];
 % Gains til funktionerne
@@ -158,10 +159,14 @@ Foamagn = zeros(lenx,leny);
 Fmin = 10;
 % Desired pos, spans the formation
 pi0 = zeros(no_boats,2);
-pi0(1,1:2) = [8,3];
-pi0(2,1:2) = [0,2];
-pi0(3,1:2) = [-8,1];
-pi0(4,1:2) = [-16,0];
+pi0(1,1:2) = [8,-10];
+pi0(2,1:2) = [0,-5];
+pi0(3,1:2) = [-8,0];
+pi0(4,1:2) = [-16,-5];
+% pi0(1,1:2) = [8,3];
+% pi0(2,1:2) = [0,2];
+% pi0(3,1:2) = [-8,1];
+% pi0(4,1:2) = [-16,0];
 
 % Initial positions
 pij = zeros(no_boats,2,N+1);
@@ -195,7 +200,8 @@ for k = 1:N
         % Check if the formation is OK, such that we can move the virtual
         % leader
         pi0dist(i,k) = norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:)));
-        if ( norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:))) ) < 4  % WARNING this radius has to be bigger than the radius in the pathgen() call
+        formradius = 4;
+        if ( norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:))) ) < formradius  % WARNING this radius has to be bigger than the radius in the pathgen() call
 %         if ( sqrt( (pir(i,1,k) - (pi0(i,1)+pvl(k,1)))^2 + (pir(i,2,k) - (pi0(i,2)+pvl(k,2)))^2 ) ) < 2
             fprintf('Boat #%d reached pi0\n',i)
             status(i,k) = 1;
@@ -216,7 +222,9 @@ for k = 1:N
         fprintf('End of track, the iteration was #%d\n', k)
         break
     end 
-    pvl(k+1,:) = [track(m,2), track(m,1)];
+%     pvl(k+1,:) = [track(m,2), track(m,1)];
+    pvl(k+1,:) = pvl(k,:)+[cos(psivl(k)), sin(psivl(k))]*2*ts;
+    pvlny(k+1,:) = pvlny(k,:)+[cos(psivl(k)), sin(psivl(k))]*2*ts;
 
     %% Local Trajectory Generation via Potential Fields
 % Ændringer, underlige hakker, fejl i nord-syd, er fordi der ikke er en
@@ -239,12 +247,13 @@ for k = 1:N
 %         [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pir(i,:,k),pir(i,:,k+1),x(1:2,i,k)'); % WP Gen
         [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pir(i,:,k),pir(i,:,k+1),x(3:4,i,k)'); % WP Gen
 %         headingdesired(i,k) = headingdesired(i,k) - pi/2;
+%         if m >= 2
         if status(i,k) == 1
             headingdesired(i,k) = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]);
 %             headingdesired(i,k) = wp_gen(pvl(k,:),pvl(k+1,:),pvl(k,:));
             nomialspeed = 0.2;
         end
-
+%         end
         %% Controller
 
         % PID for speed
@@ -345,6 +354,9 @@ for i = 1:no_boats
     h3 = plot(out(1,1:es),out(2,1:es),'-g');
     out = reshape(pir(i,:,1:es), 2, []);
     h4 = plot(out(1,1:es),out(2,1:es),'-b');
+    
+    
+    plot(pvlny(:,1),pvlny(:,2),'y*');
     
 end
 
