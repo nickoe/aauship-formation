@@ -10,7 +10,7 @@ clear all; clf;
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 4000;
+N = 2500;
 no_boats = 4;
 es = N;
 ts = ss.ts;
@@ -83,7 +83,7 @@ K(2,2) = 0.26565;
 % stop = [-1000,1000];
 % track = load('lawnmoversmall.mat');
 % track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 10 -190; 30 -190; 50 -190; 70 -190; 90 -190; 110 -190; 130 -190; 150 -190; 170 -190; 190 -190; 210 -190; 230 -190; 250 -190; 270 -190; 290 -190; 310 -190; 330 -190; 350 -190; 370 -190; 390 -190; 410 -190; 430 -190; 450 -190; 470 -190; 490 -190];
-track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 130 -190; 150 -190; 170 -190; 190 -190; 210 -190; 230 -190; 250 -190; 270 -190; 290 -190; 310 -190; 330 -190; 350 -190; 370 -190; 390 -190; 410 -190; 430 -190; 450 -190; 470 -190; 490 -190];
+track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 130 -190; 150 -190; 170 -190; 190 -190; 210 -190; 230 -190; 250 -190; 270 -190; 290 -190; 310 -190; 330 -190; 350 -190; 370 -190; 390 -190; 410 -190; 430 -190; 450 -190; 470 -190; 800 -190];
 % track = [track.track(1,:)-[10,3];track.track]*4;
 % track(:,1) = track(:,1)*4;
 error = zeros(no_boats,N);
@@ -203,7 +203,7 @@ for k = 1:N
         formradius = 4;
         if ( norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:))) ) < formradius  % WARNING this radius has to be bigger than the radius in the pathgen() call
 %         if ( sqrt( (pir(i,1,k) - (pi0(i,1)+pvl(k,1)))^2 + (pir(i,2,k) - (pi0(i,2)+pvl(k,2)))^2 ) ) < 2
-            fprintf('Boat #%d reached pi0\n',i)
+            fprintf('Boat #%d reached pvl+pi0\n',i)
             status(i,k) = 1;
         end
         if status(:,k) == 1
@@ -249,7 +249,9 @@ for k = 1:N
 %         headingdesired(i,k) = headingdesired(i,k) - pi/2;
 %         if m >= 2
         if status(i,k) == 1
-            headingdesired(i,k) = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]);
+% % % %             This is making it follow track heading when in
+% % % %             formation, this is undesireable. Needs to be fixed.
+% % % %             headingdesired(i,k) = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]);
 %             headingdesired(i,k) = wp_gen(pvl(k,:),pvl(k+1,:),pvl(k,:));
             nomialspeed = 0.2;
         end
@@ -257,7 +259,8 @@ for k = 1:N
         %% Controller
 
         % PID for speed
-        speeddesired = nomialspeed + minval/200;  % uses combined potential field which is not really great
+        speeddesired = nomialspeed + minval/20;  % uses combined potential field which is not really great
+        speeddesired = min(speeddesired,4);
 %         speeddesired = 2.2;
 %         speeddesired = 2  + 0.04*norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:)));
         serror(i,k) = speeddesired - x(8,i,k);
