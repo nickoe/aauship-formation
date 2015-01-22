@@ -25,6 +25,8 @@ for i = 1:no_boats
     h3 = plot(out(1,1:es),out(2,1:es),'-g');
 
     hir(i) = plot(pir(i,1,k),pir(i,2,k),'r*');
+    hcirc(i) = circle( pvl(k,1), pvl(k,2),formradius+2);
+
 end
 % out = reshape(pir(i,:,1:es), 2, []);
 % h4 = plot(out(1,1:es),out(2,1:es),'-b');
@@ -38,7 +40,7 @@ ylabel('Northing [m]');
 title('Plot of the NED frame');
 grid on
 axis equal
-for k = 1:1:k
+for k = 2:1:k
     tic
     
     h = findall(gca, 'type', 'patch');
@@ -47,16 +49,17 @@ for k = 1:1:k
     delete(h)
     delete(h2)
     h2 = plot([x(1,1,k),x(1,2,k),x(1,3,k),x(1,4,k)],[x(2,1,k),x(2,2,k),x(2,3,k),x(2,4,k)],'r--');
-            delete(hir)
-
+    delete(hir)
+    delete(hcirc)
     for i = 1:no_boats
         hold on
         hir(i) = plot([pij(i,1,k);pir(i,1,k+1)],[pij(i,2,k);pir(i,2,k+1)],'r.-');
         
         hold on
         ship(x(1,i,k),x(2,i,k),x(7,i,k),shipcolor(i,:));
-
-
+        
+        hold on
+        hcirc(i) = circle( pvl(k-1,1)+pi0(i,1), pvl(k-1,2)+pi0(i,2),formradius);
 
     %     out = reshape(pir(i,:,1:es), 2, []);
     %     plot3(out(1,1:es),out(2,1:es),'-g')
@@ -64,7 +67,7 @@ for k = 1:1:k
 
         hold on
     end
-    hcirc = circle( pvl(k,1), pvl(k,2),formradius);
+
     toc
     
     xdim = max(pij(:,1,k)) - min(pij(:,1,k));
