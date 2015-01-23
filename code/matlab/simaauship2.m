@@ -10,7 +10,7 @@ clear all; clf;
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 1000;
+N = 2000;
 no_boats = 4;
 es = N;
 ts = ss.ts;
@@ -205,7 +205,7 @@ for k = 1:N
         % leader
         pi0dist(i,k) = norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:)));
         formradius = 4;
-        if ( norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:))) ) < formradius  % WARNING this radius has to be bigger than the radius in the pathgen() call
+        if ( norm(pij(i,:,k) - (pi0(i,1:2) + pvl(k,:))) ) < formradius  % WARNING this radius has to be bigger than the radius in the pathgen() call
 %         if ( sqrt( (pir(i,1,k) - (pi0(i,1)+pvl(k,1)))^2 + (pir(i,2,k) - (pi0(i,2)+pvl(k,2)))^2 ) ) < 2
 %             fprintf('Boat #%d reached pvl+pi0\n',i)
             status(i,k) = 1;
@@ -241,7 +241,7 @@ for k = 1:N
 %     [psivl(k), wp_reached, ctevl(k)] = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]); % WP Gen
 
     if flag == 1 %% formation task is asumed ok
-        pvl(k+1,:) = pvl(k,:)+[cos(psivl(k)), sin(psivl(k))]*2*ts;
+        pvl(k+1,:) = pvl(k,:)+[cos(psivl(k)), sin(psivl(k))]*nomialspeed*ts;  % speed here must be bigger than the minimum speed in the speed controller
         % disp('move!')
     else
         pvl(k+1,:) = [track(m,2), track(m,1)];
@@ -271,7 +271,7 @@ for k = 1:N
         [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pir(i,:,k),pir(i,:,k+1),x(3:4,i,k)'); % WP Gen
 %         headingdesired(i,k) = headingdesired(i,k) - pi/2;
 %         if m >= 2
-        if status(i,k) == 1
+        if ( and(status(i,k) == 1, flag == 0) ) % TODO ondly do this when flag = 0
 % % % %             This is making it follow track heading when in
 % % % %             formation, this is undesireable. Needs to be fixed.
             headingdesired(i,k) = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]);
@@ -282,7 +282,8 @@ for k = 1:N
         %% Controller
 
         % PID for speed
-        speeddesired = nomialspeed + minval/20;  % uses combined potential field which is not really great
+%         speeddesired = nomialspeed-0.3 + minval/20;  % uses combined potential field which is not really great
+        speeddesired = minval/20;  % uses combined potential field which is not really great
         speeddesired = min(speeddesired,4);
 %         speeddesired = 2.2;
 %         speeddesired = 2  + 0.04*norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:)));
