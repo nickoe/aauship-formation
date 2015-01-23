@@ -10,7 +10,7 @@ clear all; clf;
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 6000;
+N = 1000;
 no_boats = 4;
 es = N;
 ts = ss.ts;
@@ -106,7 +106,7 @@ figure(1)
 clf;
 hold on
 rev = 0;
-limit = 3.07;
+% limit = 3.07;
 %heading(1) = x(7,1,1);
 
 m = 1; % Track counter
@@ -211,7 +211,7 @@ for k = 1:N
         % leader
         pi0dist(i,k) = norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:)));
         formradius = 2;
-        if ( norm(pij(i,:,k) - (pi0(i,1:2) + pvl(k,:))) ) < formradius  % WARNING this radius has to be bigger than the radius in the pathgen() call
+        if ( norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:))) ) < formradius  % WARNING this radius has to be bigger than the radius in the pathgen() call
 %         if ( sqrt( (pir(i,1,k) - (pi0(i,1)+pvl(k,1)))^2 + (pir(i,2,k) - (pi0(i,2)+pvl(k,2)))^2 ) ) < 2
 %             fprintf('Boat #%d reached pvl+pi0\n',i)
             status(i,k) = 1;
