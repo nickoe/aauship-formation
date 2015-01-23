@@ -26,13 +26,14 @@ for i = 1:no_boats
 
     hir(i) = plot(pir(i,1,k),pir(i,2,k),'r*');
     hcirc(i) = circle( pvl(k,1), pvl(k,2),formradius+2);
-
+    
 end
 % out = reshape(pir(i,:,1:es), 2, []);
 % h4 = plot(out(1,1:es),out(2,1:es),'-b');
 
 % initial
 h2 = plot([x(1,1,k),x(1,2,k),x(1,3,k),x(1,4,k),x(1,1,k)],[x(2,1,k),x(2,2,k),x(2,3,k),x(2,4,k),x(2,1,k)],'r--');
+hcircc = plot(pvl(1,1),pvl(1,2),'b*');
 % hir = zeros(no_boats,1); % figure handle for pir
 % legend([h1;h2;h3;h4],'track','formation','pij','pir')
 xlabel('Easting [m]');
@@ -43,6 +44,9 @@ axis equal
 for k = 2:1:k
     tic
     
+%     pi0(3,1) = cos(k*0.005)*24;
+%     pi0(3,2) = sin(k*0.005)*24;
+    
     h = findall(gca, 'type', 'patch');
     delete(h)
     h = findall(gca, 'type', 'line', 'color', 'k', 'marker', '+');
@@ -51,6 +55,7 @@ for k = 2:1:k
     h2 = plot([x(1,1,k),x(1,2,k),x(1,3,k),x(1,4,k)],[x(2,1,k),x(2,2,k),x(2,3,k),x(2,4,k)],'r--');
     delete(hir)
     delete(hcirc)
+    delete(hcircc)
     for i = 1:no_boats
         hold on
         hir(i) = plot([pij(i,1,k);pir(i,1,k+1)],[pij(i,2,k);pir(i,2,k+1)],'r.-');
@@ -60,6 +65,8 @@ for k = 2:1:k
         
         hold on
         hcirc(i) = circle( pvl(k-1,1)+pi0(i,1), pvl(k-1,2)+pi0(i,2),formradius);
+        
+
 
     %     out = reshape(pir(i,:,1:es), 2, []);
     %     plot3(out(1,1:es),out(2,1:es),'-g')
@@ -68,13 +75,15 @@ for k = 2:1:k
         hold on
     end
 
+    hold on
+    hcircc = plot(pvl(k,1),pvl(k,2),'b*');
     toc
     
     xdim = max(pij(:,1,k)) - min(pij(:,1,k));
     ydim = max(pij(:,2,k)) - min(pij(:,2,k));
     mxdim = min(pij(:,1,k))+xdim/2;
     mydim = min(pij(:,2,k))+ydim/2;
-    dim = max([xdim, ydim])/2+2;
+    dim = max([xdim, ydim])/2+10;
     xlim([mxdim-dim, mxdim+dim])
     ylim([mydim-dim, mydim+dim])
   

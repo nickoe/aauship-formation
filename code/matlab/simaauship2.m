@@ -10,7 +10,7 @@ clear all; clf;
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 2500;
+N = 1000;
 no_boats = 4;
 es = N;
 ts = ss.ts;
@@ -81,10 +81,10 @@ K(2,2) = 0.26565;
 %% Waypoints
 % start = [100, 1000];
 % stop = [-1000,1000];
-% track = load('lawnmoversmall.mat');
+track = load('lawnmoversmall.mat');
 % track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 10 -190; 30 -190; 50 -190; 70 -190; 90 -190; 110 -190; 130 -190; 150 -190; 170 -190; 190 -190; 210 -190; 230 -190; 250 -190; 270 -190; 290 -190; 310 -190; 330 -190; 350 -190; 370 -190; 390 -190; 410 -190; 430 -190; 450 -190; 470 -190; 490 -190];
-track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 130 -190; 150 -190; 170 -190; 190 -190; 210 -190; 230 -190; 250 -190; 270 -190; 290 -190; 310 -190; 330 -190; 350 -190; 370 -190; 390 -190; 410 -190; 430 -190; 450 -190; 470 -190; 800 -190];
-% track = [track.track(1,:)-[10,3];track.track]*4;
+% track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 130 -190; 150 -190; 170 -190; 190 -190; 210 -190; 230 -190; 250 -190; 270 -190; 290 -190; 310 -190; 330 -190; 350 -190; 370 -190; 390 -190; 410 -190; 430 -190; 450 -190; 470 -190; 800 -190];
+track = [track.track(1,:)-[10,3];track.track]*4;
 % track(:,1) = track(:,1)*4;
 error = zeros(no_boats,N);
 integral = zeros(no_boats,N);
@@ -111,9 +111,8 @@ limit = 3.07;
 
 m = 1; % Track counter
 pvl = zeros(N+1,2);
-pvl(1,:) = [track(m,2), track(m,1)];  % Set virtual leader
-pvlny = pvl; % TODO WIP TEST
-wp_r = 1; % waypoint acceptance radius
+% pvl(1,:) = [track(m,2), track(m,1)];  % Set virtual leader
+wp_r = 0.25; % waypoint acceptance radius
 
 
 %% POTFIELD VARS START
@@ -188,7 +187,12 @@ po(3,1:2) = [-35,2]*1000;
 
 %% POTFIELD VARS END
 status = zeros(no_boats,N);
+flag = 0;
 for k = 1:N
+
+%     pi0(3,1) = cos(k*0.005)*24;
+%     pi0(3,2) = sin(k*0.005)*24;
+
 %     fprintf('Timestep #%d\n', k)
     [psivl(k), wp_reached, ctevl(k)] = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]); % WP Gen
 %     Rz = [cos(psivl(k)) -sin(psivl(k));
@@ -203,28 +207,47 @@ for k = 1:N
         formradius = 4;
         if ( norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:))) ) < formradius  % WARNING this radius has to be bigger than the radius in the pathgen() call
 %         if ( sqrt( (pir(i,1,k) - (pi0(i,1)+pvl(k,1)))^2 + (pir(i,2,k) - (pi0(i,2)+pvl(k,2)))^2 ) ) < 2
-            fprintf('Boat #%d reached pvl+pi0\n',i)
+%             fprintf('Boat #%d reached pvl+pi0\n',i)
             status(i,k) = 1;
         end
-        if status(:,k) == 1
-            % Calculate if waypoint is reached
-            dist = sqrt((pvl(k,2)-track(m,1))^2+(pvl(k,1)-track(m,2))^2);
-            if dist < wp_r
-                wp_reached = 1;
-                fprintf('Waypoint #%d was reached\n', m)
-                m = m + 1;
-                status(:,k+1) = zeros(no_boats,1);
-            end
+    end
+
+	if status(:,k) == 1
+        flag = 1;
+    end
+
+    % Calculate if waypoint is reached
+    % fprintf('Formation OK\n')
+    dist = sqrt((pvl(k,2)-track(m+1,1))^2+(pvl(k,1)-track(m+1,2))^2);
+    if flag == 1
+        if dist < wp_r
+            wp_reached = 1;
+            fprintf('Waypoint #%d was reached\n', m)
+            m = m + 1;
+            status(:,k+1) = zeros(no_boats,1);
+            pvl(k,:) = [track(m,2), track(m,1)];
         end
     end
+
     if m >= length(track)
         es = k-1;
         fprintf('End of track, the iteration was #%d\n', k)
         break
-    end 
+    end
+    
 %     pvl(k+1,:) = [track(m,2), track(m,1)];
-    pvl(k+1,:) = pvl(k,:)+[cos(psivl(k)), sin(psivl(k))]*2*ts;
-    pvlny(k+1,:) = pvlny(k,:)+[cos(psivl(k)), sin(psivl(k))]*2*ts;
+%     pvl(k+1,:) = pvl(k,:)+[cos(psivl(k)), sin(psivl(k))]*2*ts;
+
+%     [psivl(k), wp_reached, ctevl(k)] = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]); % WP Gen
+
+    if flag == 1 %% formation task is asumed ok
+        pvl(k+1,:) = pvl(k,:)+[cos(psivl(k)), sin(psivl(k))]*2*ts;
+        % disp('move!')
+    else
+        pvl(k+1,:) = [track(m,2), track(m,1)];
+        % disp('formation = track')
+    end
+
 
     %% Local Trajectory Generation via Potential Fields
 % Ændringer, underlige hakker, fejl i nord-syd, er fordi der ikke er en
@@ -251,9 +274,9 @@ for k = 1:N
         if status(i,k) == 1
 % % % %             This is making it follow track heading when in
 % % % %             formation, this is undesireable. Needs to be fixed.
-% % % %             headingdesired(i,k) = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]);
+            headingdesired(i,k) = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]);
 %             headingdesired(i,k) = wp_gen(pvl(k,:),pvl(k+1,:),pvl(k,:));
-            nomialspeed = 0.2;
+            nomialspeed = 00.0;
         end
 %         end
         %% Controller
@@ -357,10 +380,7 @@ for i = 1:no_boats
     h3 = plot(out(1,1:es),out(2,1:es),'-g');
     out = reshape(pir(i,:,1:es), 2, []);
     h4 = plot(out(1,1:es),out(2,1:es),'-b');
-    
-    
-    plot(pvlny(:,1),pvlny(:,2),'y*');
-    
+
 end
 
 plot(pvl(:,1),pvl(:,2),'r+');
