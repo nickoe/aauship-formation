@@ -84,7 +84,7 @@ K(2,2) = 0.26565;
 track = load('lawnmoversmall.mat');
 % track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 10 -190; 30 -190; 50 -190; 70 -190; 90 -190; 110 -190; 130 -190; 150 -190; 170 -190; 190 -190; 210 -190; 230 -190; 250 -190; 270 -190; 290 -190; 310 -190; 330 -190; 350 -190; 370 -190; 390 -190; 410 -190; 430 -190; 450 -190; 470 -190; 490 -190];
 % track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 130 -190; 150 -190; 170 -190; 190 -190; 210 -190; 230 -190; 250 -190; 270 -190; 290 -190; 310 -190; 330 -190; 350 -190; 370 -190; 390 -190; 410 -190; 430 -190; 450 -190; 470 -190; 800 -190];
-track = [track.track(1,:)-[10,3];track.track]*4;
+track = [track.track(1,:)-[10,3];track.track]*8;
 track(1,1) = track(1,1)+10;
 error = zeros(no_boats,N);
 integral = zeros(no_boats,N);
@@ -123,12 +123,12 @@ step = 1;
 lenx=length(X(:,1));
 leny=length(Y(1,:));
 % Safe avoidance radius
-rsav = 6;
+rsav = 3;
 % Pos af hvor baad i skal ende
 % pi0 = [60,11];
 % Gains til funktionerne
-Kvl = 10;
-Kij = 0.5;
+Kvl = 4;
+Kij = 0.2;
 % Kij = Kvl/no_boats/2;
 Kca = 240;
 Koa = 240;
@@ -194,6 +194,7 @@ po(3,1:2) = [-35,2]*1000;
 %% POTFIELD VARS END
 status = zeros(no_boats,N);
 flag = 0;
+psif = zeros(1,N);
 for k = 1:N
 
 %     pi0(3,1) = cos(k*0.005)*24;
@@ -201,9 +202,14 @@ for k = 1:N
 
 %     fprintf('Timestep #%d\n', k)
     [psivl(k), wp_reached, ctevl(k)] = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]); % WP Gen
-%     Rz = [cos(psivl(k)) -sin(psivl(k));
-%           sin(psivl(k))  cos(psivl(k))];
-    Rz = eye(2,2);
+    if flag == 1
+        psif(k) = psivl(k)-pi/2;
+    else
+        psif(k) = 0;
+    end
+    Rz = [cos(psif(k)) -sin(psif(k));
+          sin(psif(k))  cos(psif(k))];
+%     Rz = eye(2,2);
     %% Global Trajectory Generation from Waypoints
     % Calculate if formation is ok
     for i = 1:no_boats % for all boats, could possibly me moved to to end of the LTG loop, after the simulation update
@@ -281,6 +287,8 @@ for k = 1:N
 % % % %             This is making it follow track heading when in
 % % % %             formation, this is undesireable. Needs to be fixed.
             headingdesired(i,k) = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]);
+%             headingdesired(i,k) = psivl(k);
+
 %             headingdesired(i,k) = wp_gen(pvl(k,:),pvl(k+1,:),pvl(k,:));
             nomialspeed = 00.0;
         end
@@ -292,7 +300,7 @@ for k = 1:N
         if ( and(status(i,k) == 1, flag == 0) )
             speeddesired = 0;
         else
-            speeddesired = minval/12;  % uses combined potential field which is not really great
+            speeddesired = minval/10;  % uses combined potential field which is not really great
             speeddesired = min(speeddesired,4);
         end
 %         speeddesired = 2.2;
@@ -307,7 +315,7 @@ for k = 1:N
 %         speeddiff(i,k+1) = 8;
 
         % PID for heading
-        error(i,k) = (headingdesired(i,k)  - heading(i,k));
+        error(i,k) = rad2pipi(headingdesired(i,k)  - heading(i,k));
         integral(i,k) = integral(i,k) + error(i,k);
         if k~=1
             derivative(i,k) = error(i,k) - error(i,k-1);
@@ -339,7 +347,9 @@ for k = 1:N
 %         x(:,i,k+1) = aaushipsimmodel([x(2,i,k);x(1,i,k);x(3:17,i,k)], u,'input','wip',wp);
 %         x(1:2,i,k+1) = [x(2,i,k+1),x(1,i,k+1)];
 %         x(3:4,i,k+1) = [x(4,i,k+1),x(3,i,k+1)];
-        heading(i,k+1) = rad2pipi(x(7,i,k+1));
+%         heading(i,k+1) = rad2pipi(x(7,i,k+1));
+        heading(i,k+1) =x(7,i,k+1);
+
 %         x(:,i,k+1) = [pir(i,:,k+1)'; zeros(15,1)];
         % Rewrite the i'th boats position to the simulated one.
 %         pij(i,:,k+1) = x(1:2,i,k+1);

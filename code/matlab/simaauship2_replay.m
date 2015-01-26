@@ -41,7 +41,7 @@ ylabel('Northing [m]');
 title('Plot of the NED frame');
 grid on
 axis equal
-for k = 2:1:k
+for k = 800:1:k
     tic
     
 %     pi0(3,1) = cos(k*0.005)*24;
@@ -64,7 +64,10 @@ for k = 2:1:k
         ship(x(1,i,k),x(2,i,k),x(7,i,k),shipcolor(i,:));
         
         hold on
-        hcirc(i) = circle( pvl(k-1,1)+pi0(i,1), pvl(k-1,2)+pi0(i,2),formradius);
+        Rz = [cos(psif(k)) -sin(psif(k));
+              sin(psif(k))  cos(psif(k))];
+        pi0rotated = pi0(i,:)*Rz';
+        hcirc(i) = circle( pvl(k-1,1)+pi0rotated(1), pvl(k-1,2)+pi0rotated(2), formradius);
         
 
 
@@ -86,9 +89,10 @@ for k = 2:1:k
     dim = max([xdim, ydim])/2+10;
     xlim([mxdim-dim, mxdim+dim])
     ylim([mydim-dim, mydim+dim])
-  
+
+    title(['Plot of the NED frame. k=',num2str(k)]);
     drawnow('update')
-    pause(0.001)
+    pause(0.1)
 end
 
 text(mxdim,mydim,'The end','HorizontalAlignment','center','FontSize',80,'Interpreter','latex')
