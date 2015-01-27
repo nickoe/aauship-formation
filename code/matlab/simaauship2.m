@@ -10,26 +10,26 @@ clear all; clf;
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 1000;
+N = 800;
 no_boats = 4;
 es = N;
 ts = ss.ts;
 clear ss;
 x = zeros(17,no_boats,N+1);
 % Line setup
-% x(:,1,1) = [-234+32 -200 -234+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-% x(:,2,1) = [-242+32 -200 -242+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-% x(:,3,1) = [-250+32 -200 -250+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-% x(:,4,1) = [-258+32 -200 -258+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+x(:,1,1) = [-2234+32 3800 -2234+32 3800 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+x(:,2,1) = [-2242+32 3800 -2242+32 3800 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+x(:,3,1) = [-2250+32 3800 -2250+32 3800 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+x(:,4,1) = [-2258+32 3800 -2258+32 3800 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 
 % Random setup
+% % x(:,1,1) = [-234+42 -210 -234+42 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 % x(:,1,1) = [-234+42 -210 -234+42 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-x(:,1,1) = [-234+42 -210 -234+42 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-% x(:,2,1) = [-242+32 -190 -242+32 -190 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-x(:,2,1) = [-242+120 -190-30 -242+120 -190-30 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-
-x(:,3,1) = [-250+22 -200 -250+22 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-x(:,4,1) = [-258+12 -210 -258+12 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% % x(:,2,1) = [-242+32 -190 -242+32 -190 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% x(:,2,1) = [-242+120 -190-30 -242+120 -190-30 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% 
+% x(:,3,1) = [-250+22 -200 -250+22 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% x(:,4,1) = [-258+12 -210 -258+12 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 
 z = zeros(N,7);
 x_hat = x;
@@ -81,11 +81,11 @@ K(2,2) = 0.26565;
 %% Waypoints
 % start = [100, 1000];
 % stop = [-1000,1000];
-track = load('lawnmoversmall.mat');
+track = load('fjordenlawnmower.mat');
 % track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 10 -190; 30 -190; 50 -190; 70 -190; 90 -190; 110 -190; 130 -190; 150 -190; 170 -190; 190 -190; 210 -190; 230 -190; 250 -190; 270 -190; 290 -190; 310 -190; 330 -190; 350 -190; 370 -190; 390 -190; 410 -190; 430 -190; 450 -190; 470 -190; 490 -190];
 % track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 130 -190; 150 -190; 170 -190; 190 -190; 210 -190; 230 -190; 250 -190; 270 -190; 290 -190; 310 -190; 330 -190; 350 -190; 370 -190; 390 -190; 410 -190; 430 -190; 450 -190; 470 -190; 800 -190];
-track = [track.track(1,:)-[10,3];track.track]*8;
-track(1,1) = track(1,1)+10;
+track = [track.track(1,:)-[10,3];track.track];
+% track(1,1) = track(1,1)+10;
 error = zeros(no_boats,N);
 integral = zeros(no_boats,N);
 derivative = zeros(no_boats,N);
@@ -123,7 +123,7 @@ step = 1;
 lenx=length(X(:,1));
 leny=length(Y(1,:));
 % Safe avoidance radius
-rsav = 3;
+rsav = 6;
 % Pos af hvor baad i skal ende
 % pi0 = [60,11];
 % Gains til funktionerne
@@ -274,7 +274,7 @@ for k = 1:N
         Kv = 4;
         minf = 200;
         Fmax = minf + Kv*x(8,i,k);
-        [pir(i,:,k+1), minval] = pathgen(16, 2, pij(i,:,k), pi0(i,1:2)*Rz', pij(j,:,k), pi0(j,1:2)*Rz', po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
+        [pir(i,:,k+1), minval] = pathgen(120, 2, pij(i,:,k), pi0(i,1:2)*Rz', pij(j,:,k), pi0(j,1:2)*Rz', po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
 %         [pir(i,:,k+1), minval] = pathgen(128, 0.5, pij(i,:,k), pi0(i,1:2), pij(j,:,k), pi0(j,1:2), po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
         Ftotmagn3(k+1,i) = minval;
 %         pir(i,:,k+1) = pij(i,:,k+1) + Ftotmagn3(k+1,i);
@@ -300,7 +300,7 @@ for k = 1:N
         if ( and(status(i,k) == 1, flag == 0) )
             speeddesired = 0;
         else
-            speeddesired = minval/10;  % uses combined potential field which is not really great
+            speeddesired = minval/3 - 1;  % uses combined potential field which is not really great
             speeddesired = min(speeddesired,4);
         end
 %         speeddesired = 2.2;
@@ -310,7 +310,7 @@ for k = 1:N
         if k~=1
             sderivative(i,k) = serror(i,k) - serror(i,k-1);
         end
-        speeddiff(i,k+1) = 20*serror(i,k) + 5*sintegral(i,k) + 0*sderivative(i,k); % old tuning parameters
+        speeddiff(i,k+1) = 10*serror(i,k) + 0.5*sintegral(i,k) + 0*sderivative(i,k); % old tuning parameters
 %         speeddiff(i,k+1) = 100*serror(i,k) + 50*sintegral(i,k) + 0*sderivative(i,k); % old tuning parameters
 %         speeddiff(i,k+1) = 8;
 
