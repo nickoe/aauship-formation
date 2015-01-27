@@ -428,8 +428,8 @@ clf
 
 hold on
 for i = 1:no_boats
-    hold on
     subplot(2,1,1)
+    hold on
     out = reshape(x(:,i,1:es),length(x(:,i,1)),[]);
     plot(out(8,1:es),'Color',shipcolor(i,:))
     ylabel('Surge velocity [m/s]')
