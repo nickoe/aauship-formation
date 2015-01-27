@@ -274,7 +274,7 @@ for k = 1:N
         Kv = 4;
         minf = 200;
         Fmax = minf + Kv*x(8,i,k);
-        [pir(i,:,k+1), minval] = pathgen(120, 2, pij(i,:,k), pi0(i,1:2)*Rz', pij(j,:,k), pi0(j,1:2)*Rz', po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
+        [pir(i,:,k+1), minval] = pathgen(16, 2, pij(i,:,k), pi0(i,1:2)*Rz', pij(j,:,k), pi0(j,1:2)*Rz', po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
 %         [pir(i,:,k+1), minval] = pathgen(128, 0.5, pij(i,:,k), pi0(i,1:2), pij(j,:,k), pi0(j,1:2), po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
         Ftotmagn3(k+1,i) = minval;
 %         pir(i,:,k+1) = pij(i,:,k+1) + Ftotmagn3(k+1,i);
@@ -347,8 +347,8 @@ for k = 1:N
 %         x(:,i,k+1) = aaushipsimmodel([x(2,i,k);x(1,i,k);x(3:17,i,k)], u,'input','wip',wp);
 %         x(1:2,i,k+1) = [x(2,i,k+1),x(1,i,k+1)];
 %         x(3:4,i,k+1) = [x(4,i,k+1),x(3,i,k+1)];
-%         heading(i,k+1) = rad2pipi(x(7,i,k+1));
-        heading(i,k+1) =x(7,i,k+1);
+        heading(i,k+1) = rad2pipi(x(7,i,k+1));
+%         heading(i,k+1) =x(7,i,k+1);
 
 %         x(:,i,k+1) = [pir(i,:,k+1)'; zeros(15,1)];
         % Rewrite the i'th boats position to the simulated one.
