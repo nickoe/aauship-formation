@@ -10,26 +10,36 @@ clear all; clf;
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 1000;
+N = 3000;
 no_boats = 4;
 es = N;
 ts = ss.ts;
 clear ss;
 x = zeros(17,no_boats,N+1);
 % Line setup
-% x(:,1,1) = [-234+32 -200 -234+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-% x(:,2,1) = [-242+32 -200 -242+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-% x(:,3,1) = [-250+32 -200 -250+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-% x(:,4,1) = [-258+32 -200 -258+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+x(:,1,1) = [-234+32 -200 -234+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+x(:,2,1) = [-242+32 -200 -242+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+x(:,3,1) = [-250+32 -200 -250+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+x(:,4,1) = [-258+32 -200 -258+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 
 % Random setup
+% % x(:,1,1) = [-234+42 -210 -234+42 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 % x(:,1,1) = [-234+42 -210 -234+42 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-x(:,1,1) = [-234+42 -210 -234+42 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-% x(:,2,1) = [-242+32 -190 -242+32 -190 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-x(:,2,1) = [-242+120 -190-30 -242+120 -190-30 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% % x(:,2,1) = [-242+32 -190 -242+32 -190 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% x(:,2,1) = [-242+120 -190-30 -242+120 -190-30 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% 
+% x(:,3,1) = [-250+22 -200 -250+22 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% x(:,4,1) = [-258+12 -210 -258+12 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 
-x(:,3,1) = [-250+22 -200 -250+22 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-x(:,4,1) = [-258+12 -210 -258+12 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% x(:,1,1) = [-2260+42 3800-20 -2260+42 3800-20 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% x(:,2,1) = [-2260+120 3800-30 -2260+120 3800-20 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% x(:,3,1) = [-2260+22 3800-10 -2260+22 3800-20 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% x(:,4,1) = [-2260+12 3800-50 -2260+12 3800-20 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+
+% x(:,1,1) = [-2234+82 3800 -2234+82 3800 0 0 1.1 0 0 0 0 0 0 0 0 0 0]';
+% x(:,2,1) = [-2242+82 3760 -2242+82 3760 0 0 1.1 0 0 0 0 0 0 0 0 0 0]';
+% x(:,3,1) = [-2250+82 3800 -2250+82 3800 0 0 1.1 0 0 0 0 0 0 0 0 0 0]';
+% x(:,4,1) = [-2258+82 3800 -2258+82 3800 0 0 1.1 0 0 0 0 0 0 0 0 0 0]';
 
 z = zeros(N,7);
 x_hat = x;
@@ -82,19 +92,20 @@ K(2,2) = 0.26565;
 % start = [100, 1000];
 % stop = [-1000,1000];
 track = load('lawnmoversmall.mat');
+% track = load('fjordenlawnmower.mat');
 % track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 10 -190; 30 -190; 50 -190; 70 -190; 90 -190; 110 -190; 130 -190; 150 -190; 170 -190; 190 -190; 210 -190; 230 -190; 250 -190; 270 -190; 290 -190; 310 -190; 330 -190; 350 -190; 370 -190; 390 -190; 410 -190; 430 -190; 450 -190; 470 -190; 490 -190];
 % track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 130 -190; 150 -190; 170 -190; 190 -190; 210 -190; 230 -190; 250 -190; 270 -190; 290 -190; 310 -190; 330 -190; 350 -190; 370 -190; 390 -190; 410 -190; 430 -190; 450 -190; 470 -190; 800 -190];
-track = [track.track(1,:)-[10,3];track.track]*8;
-track(1,1) = track(1,1)+10;
+track = [track.track(1,:)-[30,-10];track.track];
+% track(1,1) = track(1,1)+10;
 error = zeros(no_boats,N);
 integral = zeros(no_boats,N);
 derivative = zeros(no_boats,N);
 serror = zeros(no_boats,N);
 sintegral = zeros(no_boats,N);
 sderivative = zeros(no_boats,N);
-Kp = 1;
-Ki = 0.0;
-Kd = 50;
+Kp = 2;
+Ki = 0.2;
+Kd = 25;
 thrustdiff = zeros(no_boats,N);
 speeddiff = zeros(no_boats,N);
 heading = zeros(no_boats,N);
@@ -123,7 +134,7 @@ step = 1;
 lenx=length(X(:,1));
 leny=length(Y(1,:));
 % Safe avoidance radius
-rsav = 3;
+rsav = 6;
 % Pos af hvor baad i skal ende
 % pi0 = [60,11];
 % Gains til funktionerne
@@ -195,6 +206,7 @@ po(3,1:2) = [-35,2]*1000;
 status = zeros(no_boats,N);
 flag = 0;
 psif = zeros(1,N);
+cte = zeros(no_boats,N);
 for k = 1:N
 
 %     pi0(3,1) = cos(k*0.005)*24;
@@ -202,11 +214,7 @@ for k = 1:N
 
 %     fprintf('Timestep #%d\n', k)
     [psivl(k), wp_reached, ctevl(k)] = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]); % WP Gen
-    if flag == 1
-        psif(k) = psivl(k)-pi/2;
-    else
-        psif(k) = 0;
-    end
+    psif(k) = psivl(k)-pi/2;
     Rz = [cos(psif(k)) -sin(psif(k));
           sin(psif(k))  cos(psif(k))];
 %     Rz = eye(2,2);
@@ -215,9 +223,9 @@ for k = 1:N
     for i = 1:no_boats % for all boats, could possibly me moved to to end of the LTG loop, after the simulation update
         % Check if the formation is OK, such that we can move the virtual
         % leader
-        pi0dist(i,k) = norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:)));
+        pi0dist(i,k) = norm(pir(i,:,k) - (pi0(i,1:2)*Rz' + pvl(k,:)));
         formradius = 2;
-        if ( norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:))) ) < formradius  % WARNING this radius has to be bigger than the radius in the pathgen() call
+        if ( norm(pir(i,:,k) - (pi0(i,1:2)*Rz' + pvl(k,:))) ) < formradius  % WARNING this radius has to be bigger than the radius in the pathgen() call
 %         if ( sqrt( (pir(i,1,k) - (pi0(i,1)+pvl(k,1)))^2 + (pir(i,2,k) - (pi0(i,2)+pvl(k,2)))^2 ) ) < 2
 %             fprintf('Boat #%d reached pvl+pi0\n',i)
             status(i,k) = 1;
@@ -236,7 +244,7 @@ for k = 1:N
             wp_reached = 1;
             fprintf('Waypoint #%d was reached\n', m)
             m = m + 1;
-            status(:,k+1) = zeros(no_boats,1);
+%             status(:,k+1) = zeros(no_boats,1);
             pvl(k,:) = [track(m,2), track(m,1)];
         end
     end
@@ -256,7 +264,7 @@ for k = 1:N
         pvl(k+1,:) = pvl(k,:)+[cos(psivl(k)), sin(psivl(k))]*nomialspeed*ts;  % speed here must be bigger than the minimum speed in the speed controller
         % disp('move!')
     else
-        pvl(k+1,:) = [track(m,2), track(m,1)];
+        pvl(k+1,:) = [track(m,2), track(m,1)]; % TODO
         % disp('formation = track')
     end
 
@@ -280,7 +288,8 @@ for k = 1:N
 %         pir(i,:,k+1) = pij(i,:,k+1) + Ftotmagn3(k+1,i);
 %         pir(i,:,k+1) = pij(i,:,k+1);
 %         [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pir(i,:,k),pir(i,:,k+1),x(1:2,i,k)'); % WP Gen
-        [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pir(i,:,k),pir(i,:,k+1),x(3:4,i,k)'); % WP Gen
+%         [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pir(i,:,k),pir(i,:,k+1),x(3:4,i,k)'); % WP Gen
+        [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pij(i,:,k),pir(i,:,k+1),pij(i,:,k)); % WP Gen
 %         headingdesired(i,k) = headingdesired(i,k) - pi/2;
 
         if ( and(status(i,k) == 1, flag == 0) ) % TODO ondly do this when flag = 0
@@ -300,12 +309,14 @@ for k = 1:N
         if ( and(status(i,k) == 1, flag == 0) )
             speeddesired = 0;
         else
-            speeddesired = minval/10;  % uses combined potential field which is not really great
+            speeddesired = minval/10 ;  % uses combined potential field which is not really great
             speeddesired = min(speeddesired,4);
+            speeddesired = max(speeddesired,0.7);
         end
 %         speeddesired = 2.2;
 %         speeddesired = 2  + 0.04*norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:)));
         serror(i,k) = speeddesired - x(8,i,k);
+%         serror(i,k) = speeddesired;
         sintegral(i,k) = sintegral(i,k) + serror(i,k);
         if k~=1
             sderivative(i,k) = serror(i,k) - serror(i,k-1);
@@ -374,7 +385,7 @@ for i = 1:no_boats
     out = reshape(pij(i,:,1:es), 2, []);
     plot(out(1,1:es),out(2,1:es),'-k')
     out = reshape(x(:,i,1:es),length(x(:,i,1)),[]);
-%     plot(out(1,1:es),out(2,1:es),'-r')
+%     plot(out(1,1:es),out(2,1:es),'*r')
         
     for k = 1:30:es
 %         ship(out(1,k),out(2,k),out(7,k),'y')
@@ -483,10 +494,16 @@ clf
 % plotting cross track error, which is the same for all boats since they
 % follow their paths perfectly
 for i = 1:no_boats
-    plot(cte(i,:),'Color',shipcolor(i,:))
+    subplot(2,1,1)
     hold on
+    plot(cte(i,:),'Color',shipcolor(i,:))
+    ylabel('Cross track error [m]')
+    subplot(2,1,2)
+    hold on
+    plot(pi0dist(i,:),'Color',shipcolor(i,:))
+    ylabel('pir-pi0+pvl distance error [m]')
+    grid on
 end
-ylabel('Cross track error [m]')
 
 %%
 figure(6);
