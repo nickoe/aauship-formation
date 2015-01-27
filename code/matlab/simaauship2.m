@@ -433,8 +433,8 @@ for i = 1:no_boats
     out = reshape(x(:,i,1:es),length(x(:,i,1)),[]);
     plot(out(8,1:es),'Color',shipcolor(i,:))
     ylabel('Surge velocity [m/s]')
-    hold on
     subplot(2,1,2)
+    hold on
     h1 = plot(1:es,heading(i,1:es),'Color',shipcolor(i,:),'LineStyle','-','Marker','.');
     h2 = plot(1:es,headingdesired(i,1:es),'Color',shipcolor(i,:));
 end
