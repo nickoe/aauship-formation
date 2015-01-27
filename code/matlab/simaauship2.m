@@ -10,7 +10,7 @@ clear all; clf;
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 3000;
+N = 800;
 no_boats = 4;
 es = N;
 ts = ss.ts;
@@ -282,7 +282,7 @@ for k = 1:N
         Kv = 4;
         minf = 200;
         Fmax = minf + Kv*x(8,i,k);
-        [pir(i,:,k+1), minval] = pathgen(16, 2, pij(i,:,k), pi0(i,1:2)*Rz', pij(j,:,k), pi0(j,1:2)*Rz', po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
+        [pir(i,:,k+1), minval] = pathgen(120, 2, pij(i,:,k), pi0(i,1:2)*Rz', pij(j,:,k), pi0(j,1:2)*Rz', po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
 %         [pir(i,:,k+1), minval] = pathgen(128, 0.5, pij(i,:,k), pi0(i,1:2), pij(j,:,k), pi0(j,1:2), po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
         Ftotmagn3(k+1,i) = minval;
 %         pir(i,:,k+1) = pij(i,:,k+1) + Ftotmagn3(k+1,i);
@@ -311,7 +311,7 @@ for k = 1:N
         else
             speeddesired = minval/10 ;  % uses combined potential field which is not really great
             speeddesired = min(speeddesired,4);
-            speeddesired = max(speeddesired,0.7);
+%             speeddesired = max(speeddesired,0.7);
         end
 %         speeddesired = 2.2;
 %         speeddesired = 2  + 0.04*norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:)));
@@ -321,7 +321,7 @@ for k = 1:N
         if k~=1
             sderivative(i,k) = serror(i,k) - serror(i,k-1);
         end
-        speeddiff(i,k+1) = 20*serror(i,k) + 5*sintegral(i,k) + 0*sderivative(i,k); % old tuning parameters
+        speeddiff(i,k+1) = 10*serror(i,k) + 0.5*sintegral(i,k) + 0*sderivative(i,k); % old tuning parameters
 %         speeddiff(i,k+1) = 100*serror(i,k) + 50*sintegral(i,k) + 0*sderivative(i,k); % old tuning parameters
 %         speeddiff(i,k+1) = 8;
 
