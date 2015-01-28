@@ -204,7 +204,7 @@ po(3,1:2) = [-35,2]*1000;
 
 %% POTFIELD VARS END
 status = zeros(no_boats,N);
-flag = 0;
+flag = zeros(1,N);
 psif = zeros(1,N);
 cte = zeros(no_boats,N);
 for k = 1:N
@@ -233,7 +233,7 @@ for k = 1:N
     end
 
 	if status(:,k) == 1
-        flag = 1;
+        flag(k) = 1;
     end
 
     % Calculate if waypoint is reached
@@ -260,7 +260,7 @@ for k = 1:N
 
 %     [psivl(k), wp_reached, ctevl(k)] = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]); % WP Gen
 
-    if flag == 1 %% formation task is asumed ok
+    if flag(k) == 1 %% formation task is asumed ok
         pvl(k+1,:) = pvl(k,:)+[cos(psivl(k)), sin(psivl(k))]*nomialspeed*ts;  % speed here must be bigger than the minimum speed in the speed controller
         % disp('move!')
     else
@@ -292,7 +292,7 @@ for k = 1:N
         [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pij(i,:,k),pir(i,:,k+1),pij(i,:,k)); % WP Gen
 %         headingdesired(i,k) = headingdesired(i,k) - pi/2;
 
-        if ( and(status(i,k) == 1, flag == 0) ) % TODO ondly do this when flag = 0
+        if ( and(status(i,k) == 1, flag(k) == 0) ) % TODO ondly do this when flag(k) = 0
 % % % %             This is making it follow track heading when in
 % % % %             formation, this is undesireable. Needs to be fixed.
             headingdesired(i,k) = wp_gen([track(m,2), track(m,1)],[track(m+1,2), track(m+1,1)],[track(m,2), track(m,1)]);
@@ -306,7 +306,7 @@ for k = 1:N
         % PID for speed
 %         speeddesired = nomialspeed-0.3 + minval/20;  % uses combined potential field which is not really great
 
-        if ( and(status(i,k) == 1, flag == 0) )
+        if ( and(status(i,k) == 1, flag(k) == 0) )
             speeddesired = 0;
         else
             speeddesired = minval/10 ;  % uses combined potential field which is not really great
