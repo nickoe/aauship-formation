@@ -121,7 +121,12 @@
 \begin{itemize}
 \item Use Autonomous Surface Vessels (ASVs) for mapping with a single beam sonar
 \item Control the ASVs with some formation control
-\item Formation control is chosen because it is an advantage to only have one group
+\item Why is formation control beneficial in the context?
+\begin{itemize}
+\item Single beam / Multi beam
+\item Faster
+\item Easier detection
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -227,10 +232,17 @@ Implementation with ROS
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Modelling}{Estimation}
+\begin{frame}{Modelling}{Estimation with standard GPS}
   \begin{figure}
     {\tiny \includesvg[width=\textwidth]{intermediate-sensor-calculations-block}}
-	  \caption{\scriptsize Block diagram of the combined AHRS and KF estimator}
+	  \caption{\scriptsize Block diagram of the combined AHRS and KF estimator. Implemented with standard GPS.}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Modelling}{Estimation with RTK GPS}
+  \begin{figure}
+    {\tiny \includesvg[width=\textwidth]{intermediate-sensor-calculations-block}}
+    \caption{\scriptsize Block diagram of the combined AHRS and KF estimator. Implemented with RTK GPS.}
   \end{figure}
 \end{frame}
 
@@ -294,8 +306,12 @@ Implementation with ROS
 %  \end{figure}
 %\end{frame}
 
-\begin{frame}{Simulation and Verificaiton}{ROS Demo}
+\begin{frame}{Simulation and Verification}{ROS demo with single ship}
 <video>
+\end{frame}
+
+\begin{frame}{Simulation and Verification}{Data from sea trial}
+Plot af noget som kunne virke med flere tests
 \end{frame}
 
 %\begin{frame}{Simulation and Verificaiton}{Loose Ends}
@@ -325,35 +341,29 @@ Implementation with ROS
 %\end{frame}
 
 \begin{frame}{Formation strategies}{Which to choose}
-Several different strategies
+Several different strategies that have been into consideration
   \begin{itemize}
     \item Leader follower
     \begin{itemize}
       \item Duckling/Echelon/FRP
     \end{itemize}
-    \item Individual paths:
-      \begin{itemize}
-        \item No/Limited/Full communication
-      \end{itemize}
-    \item Potential fields:
-      \begin{itemize}
-        \item No/Limited/Full communication
-      \end{itemize}
-  \end{itemize}
+    \item Individual paths
+    \begin{itemize}
+      \item Potential fields
+    \end{itemize}
+   \end{itemize}
 \end{frame}
 
 \begin{frame}{Formation strategies}{The chosen}
-The chosen strategies are:
+The chosen strategy is:
 \begin{enumerate}
-  \item Echelon formation
   \item Potential field
-  \begin{itemize}
-    \item Limited
-  \end{itemize}
-  \begin{itemize}
-    \item Full communication
-  \end{itemize}
 \end{enumerate}
+Other strategies have been analysed, like:
+\begin{itemize}
+\item Duckling formation
+\item Echelon formation
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Formation strategies}{Why these}
@@ -368,7 +378,7 @@ Estimate of performance in categories
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Leader follower}{Echelon formation and others}
+\begin{frame}{Leader follower}{Echelon formation}
   \begin{figure}
     \includegraphics[width=0.65\textwidth]{img/echelon}
     \caption{The leader follow approach as echelon form}
@@ -376,25 +386,88 @@ Estimate of performance in categories
   \end{figure}
 \end{frame}
 
-%\begin{frame}{Potential field}{The formation}
-%
-%\end{frame}
+\begin{frame}{Potential field}{Single ship application}
+  \begin{figure}
+    \includegraphics[width=0.65\textwidth]{img/ftotmagnfigpdf}
+    \caption{Potential field for a single ship}
+    \label{fig:potsingleship}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Potential field}{The algorithm}
+\begin{align}
+\mathbf{F}_{vl} &= K_{vl}(p_{vl}^n-p_i^n-[p_{vl}^n-p_{i0}^n])\\
+&= K_{vl}(\mathbf{d}_i-\mathbf{d}_{i0})
+\end{align}
+
+\begin{align}
+\mathbf{F}_{ij} &= K_{ij}(p_{j}^n-p_i^n-[p_{j0}^n-p_{i0}^n])\\
+&= K_{ij}(\mathbf{d}_{ij}-\mathbf{d}_{ij0})
+\end{align}
+
+\begin{align}
+    \mathbf{F}_{ca}^{ij}= 
+\begin{cases}
+    \left(
+    \frac{K_{ca}r}{||\mathbf{d}_{ij}||}-K_{ca}
+    \right)
+    \frac{\mathbf{d}_{ij}}{||\mathbf{d}_{ij}||}
+    ,& \text{for } ||\mathbf{d}_{ij}||<r\\
+    0,              & \text{otherwise}
+\end{cases}
+\end{align}
+
+\begin{align}
+    \mathbf{F}_{oa}^{ik}= 
+\begin{cases}
+    \left( \frac{K_{oa}}{||\mathbf{d}_{ki}||}-\frac{K_{oa}}{r}\right)
+    \frac{\mathbf{d}_{{ki}}}{||\mathbf{d}_{ki}||},& \text{for } ||\mathbf{d}_{ki}||<r\\
+    0,              & \text{otherwise}
+\end{cases}
+\end{align}
+\end{frame}
+
+\begin{frame}{Potential field}{Formation with potential field}
+Indsaet fig eller simulering
+\end{frame}
+
+\begin{frame}{Potential field}{The implementation}
+Nogle af algoritmerne fra vores simuleringer. F.eks vores potentiale check eller vores hastighedscontroller
+\end{frame}
+
+\begin{frame}{Potential field}{Validation and error plots}
+Valideringsplots / error plots
+\end{frame}
+
+\begin{frame}{Potential field}{Performance dependencies}
+High res pot check vs low res
+\end{frame}
+
+\begin{frame}{Potential field}{Performance dependencies}
+High res track vs low res
+\end{frame}
 
 \begin{frame}{Conclusion}{Status}
-Now
 \begin{itemize}
-  \item Full model of vessel
+  \item Model of vessel
+  \item Test of vessel
   \item Analysed strategies and framework
-  \item Implementation started
-\end{itemize}
-Looking forward
-\begin{itemize}
-  \item Simulation of chosen strategies
-  \item Build more vessels
-  \item Implementation of chosen strategies
+  \item Simulation of chosen strategy
+  \begin{itemize}
+  \item Initialisation task
+  \item Tracking task
+  \item Avoidance
+  \end{itemize}
 \end{itemize}
 \end{frame} 
 
+\begin{frame}{Further work}{What can be done in other ways}
+\begin{itemize}
+\item Other controllers
+\item Include disturbances in model
+\item Fault detection and handling
+\end{itemize}
+\end{frame}
 
 {
 \setbeamertemplate{background canvas}{\centering\includegraphics[height=\paperheight,keepaspectratio]{{img/aauship}}}
