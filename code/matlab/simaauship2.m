@@ -10,17 +10,17 @@ clear all; clf;
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 800;
+N = 4000;
 no_boats = 4;
 es = N;
 ts = ss.ts;
 clear ss;
 x = zeros(17,no_boats,N+1);
 % Line setup
-x(:,1,1) = [-234+32 -200 -234+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-x(:,2,1) = [-242+32 -200 -242+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-x(:,3,1) = [-250+32 -200 -250+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
-x(:,4,1) = [-258+32 -200 -258+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% x(:,1,1) = [-234+32 -200 -234+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% x(:,2,1) = [-242+32 -200 -242+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% x(:,3,1) = [-250+32 -200 -250+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
+% x(:,4,1) = [-258+32 -200 -258+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 
 % Random setup
 % % x(:,1,1) = [-234+42 -210 -234+42 -210 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
@@ -36,10 +36,10 @@ x(:,4,1) = [-258+32 -200 -258+32 -200 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 % x(:,3,1) = [-2260+22 3800-10 -2260+22 3800-20 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 % x(:,4,1) = [-2260+12 3800-50 -2260+12 3800-20 0 0 -4.16 0 0 0 0 0 0 0 0 0 0]';
 
-% x(:,1,1) = [-2234+82 3800 -2234+82 3800 0 0 1.1 0 0 0 0 0 0 0 0 0 0]';
-% x(:,2,1) = [-2242+82 3760 -2242+82 3760 0 0 1.1 0 0 0 0 0 0 0 0 0 0]';
-% x(:,3,1) = [-2250+82 3800 -2250+82 3800 0 0 1.1 0 0 0 0 0 0 0 0 0 0]';
-% x(:,4,1) = [-2258+82 3800 -2258+82 3800 0 0 1.1 0 0 0 0 0 0 0 0 0 0]';
+x(:,1,1) = [-2234+82 3800 -2234+82 3800 0 0 1.1 0 0 0 0 0 0 0 0 0 0]';
+x(:,2,1) = [-2242+82 3760 -2242+82 3760 0 0 1.1 0 0 0 0 0 0 0 0 0 0]';
+x(:,3,1) = [-2250+82 3800 -2250+82 3800 0 0 1.1 0 0 0 0 0 0 0 0 0 0]';
+x(:,4,1) = [-2258+82 3800 -2258+82 3800 0 0 1.1 0 0 0 0 0 0 0 0 0 0]';
 
 z = zeros(N,7);
 x_hat = x;
@@ -91,8 +91,8 @@ K(2,2) = 0.26565;
 %% Waypoints
 % start = [100, 1000];
 % stop = [-1000,1000];
-track = load('lawnmoversmall.mat');
-% track = load('fjordenlawnmower.mat');
+% track = load('lawnmover.mat');
+track = load('fjordenlawnmower.mat');
 % track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 10 -190; 30 -190; 50 -190; 70 -190; 90 -190; 110 -190; 130 -190; 150 -190; 170 -190; 190 -190; 210 -190; 230 -190; 250 -190; 270 -190; 290 -190; 310 -190; 330 -190; 350 -190; 370 -190; 390 -190; 410 -190; 430 -190; 450 -190; 470 -190; 490 -190];
 % track = [-170 -190; -150 -190; -130 -190; -110 -190; -90 -190; -70 -190; -50 -190; -30 -190; -10 -190; 130 -190; 150 -190; 170 -190; 190 -190; 210 -190; 230 -190; 250 -190; 270 -190; 290 -190; 310 -190; 330 -190; 350 -190; 370 -190; 390 -190; 410 -190; 430 -190; 450 -190; 470 -190; 800 -190];
 track = [track.track(1,:)-[30,-10];track.track];
@@ -123,7 +123,7 @@ rev = 0;
 m = 1; % Track counter
 pvl = zeros(N+1,2);
 % pvl(1,:) = [track(m,2), track(m,1)];  % Set virtual leader
-wp_r = 0.25; % waypoint acceptance radius
+wp_r = 0.1; % waypoint acceptance radius
 
 
 %% POTFIELD VARS START
@@ -174,15 +174,15 @@ pi0 = zeros(no_boats,2);
 % pi0(3,1:2) = [-8,0];
 % pi0(4,1:2) = [-16,-5];
 
-pi0(1,1:2) = [8,0];
-pi0(2,1:2) = [0,5];
-pi0(3,1:2) = [-8,10];
-pi0(4,1:2) = [-16,5];
+% pi0(1,1:2) = [8,0];
+% pi0(2,1:2) = [0,5];
+% pi0(3,1:2) = [-8,10];
+% pi0(4,1:2) = [-16,5];
 
-% pi0(1,1:2) = [8,3];
-% pi0(2,1:2) = [0,2];
-% pi0(3,1:2) = [-8,1];
-% pi0(4,1:2) = [-16,0];
+pi0(1,1:2) = [8,0];
+pi0(2,1:2) = [0,0];
+pi0(3,1:2) = [-8,0];
+pi0(4,1:2) = [-16,0];
 
 % Initial positions
 pij = zeros(no_boats,2,N+1);
@@ -224,6 +224,7 @@ for k = 1:N
         % Check if the formation is OK, such that we can move the virtual
         % leader
         pi0dist(i,k) = norm(pir(i,:,k) - (pi0(i,1:2)*Rz' + pvl(k,:)));
+        pijdist(i,k) = norm(pij(i,:,k) - (pi0(i,1:2)*Rz' + pvl(k,:)));
         formradius = 2;
         if ( norm(pir(i,:,k) - (pi0(i,1:2)*Rz' + pvl(k,:))) ) < formradius  % WARNING this radius has to be bigger than the radius in the pathgen() call
 %         if ( sqrt( (pir(i,1,k) - (pi0(i,1)+pvl(k,1)))^2 + (pir(i,2,k) - (pi0(i,2)+pvl(k,2)))^2 ) ) < 2
@@ -241,7 +242,6 @@ for k = 1:N
     dist = sqrt((pvl(k,2)-track(m+1,1))^2+(pvl(k,1)-track(m+1,2))^2);
     if flag == 1
         if dist < wp_r
-            wp_reached = 1;
             fprintf('Waypoint #%d was reached\n', m)
             m = m + 1;
 %             status(:,k+1) = zeros(no_boats,1);
@@ -270,10 +270,10 @@ for k = 1:N
 
 
     %% Local Trajectory Generation via Potential Fields
-% Ændringer, underlige hakker, fejl i nord-syd, er fordi der ikke er en
-% controller til at opretholde crosstrackerror i den implementerede
-% algoritme. Dette er ikke i fokus lige nu, vi vil hellere se efter hvordan
-% den opfører dig når den drejer.
+    % Ændringer, underlige hakker, fejl i nord-syd, er fordi der ikke er en
+    % controller til at opretholde crosstrackerror i den implementerede
+    % algoritme. Dette er ikke i fokus lige nu, vi vil hellere se efter hvordan
+    % den opfører dig når den drejer.
     for i = 1:no_boats % for all boat
         nomialspeed = 2;
 %         fprintf('Boat #%d\n', i)
@@ -282,7 +282,7 @@ for k = 1:N
         Kv = 4;
         minf = 200;
         Fmax = minf + Kv*x(8,i,k);
-        [pir(i,:,k+1), minval] = pathgen(120, 2, pij(i,:,k), pi0(i,1:2)*Rz', pij(j,:,k), pi0(j,1:2)*Rz', po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
+        [pir(i,:,k+1), minval] = pathgen(32, 1, pij(i,:,k), pi0(i,1:2)*Rz', pij(j,:,k), pi0(j,1:2)*Rz', po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
 %         [pir(i,:,k+1), minval] = pathgen(128, 0.5, pij(i,:,k), pi0(i,1:2), pij(j,:,k), pi0(j,1:2), po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
         Ftotmagn3(k+1,i) = minval;
 %         pir(i,:,k+1) = pij(i,:,k+1) + Ftotmagn3(k+1,i);
@@ -309,7 +309,7 @@ for k = 1:N
         if ( and(status(i,k) == 1, flag == 0) )
             speeddesired = 0;
         else
-            speeddesired = minval/10 ;  % uses combined potential field which is not really great
+            speeddesired = minval/4;  % uses combined potential field which is not really great
             speeddesired = min(speeddesired,4);
 %             speeddesired = max(speeddesired,0.7);
         end
@@ -443,17 +443,24 @@ for i = 1:no_boats
     hold on
     out = reshape(x(:,i,1:es),length(x(:,i,1)),[]);
     plot(out(8,1:es),'Color',shipcolor(i,:))
-    ylabel('Surge velocity [m/s]')
+
     subplot(2,1,2)
     hold on
     h1 = plot(1:es,heading(i,1:es),'Color',shipcolor(i,:),'LineStyle','-','Marker','.');
     h2 = plot(1:es,headingdesired(i,1:es),'Color',shipcolor(i,:));
+
 end
 subplot(2,1,1)
-legend('1','2','3','4')
+title('Surge velocities of the vessels')
+xlabel('Samples')
+ylabel('Surge velocity [m/s]')
+legend('Vessel 1','Vessel 2','Vessel 3','Vessel 4')
 grid on
 subplot(2,1,2)
-legend([h1;h2],'heading','headingdesired')
+title('Individual headings and desired headings')
+xlabel('Samples')
+ylabel('Heading [rad]')
+legend([h1;h2],'Heading','Headingdesired')
 grid on
 hold off
 %%
@@ -463,8 +470,10 @@ for i = 1:no_boats
     plot(1:es,error(i,1:es),'Color',shipcolor(i,:))
     hold on
 end
-legend('1','2','3','4')
+legend('Vessel 1','Vessel 2','Vessel 3','Vessel 4')
 grid on
+title('Error between heading and desired heading')
+xlabel('Samples')
 ylabel('Heading error [rad]')
 
 %%
@@ -477,12 +486,18 @@ for i = 1:no_boats
     
     subplot(2,1,1)
     plot(out(1,1:es),'Color',shipcolor(i,:))
-    legend('tau_X')
+    legend('Vessel 1, tau_X', 'Vessel 2, tau_X', 'Vessel 3, tau_X', 'Vessel 4, tau_X')
+    title('Force input in surge')
+    xlabel('Samples')
+    ylabel('Force [N]')
     hold on
     grid on
     subplot(2,1,2)
     plot(out(5,1:es),'Color',shipcolor(i,:))
-    legend('tau_N')
+    legend('Vessel 1, tau_N', 'Vessel 2, tau_N', 'Vessel 3, tau_N', 'Vessel 4, tau_N')
+    title('Force input in yaw')
+    xlabel('Samples')
+    ylabel('Force [N]')
     hold on
     grid on
 end
@@ -494,27 +509,34 @@ clf
 % plotting cross track error, which is the same for all boats since they
 % follow their paths perfectly
 for i = 1:no_boats
-    subplot(2,1,1)
-    hold on
-    plot(cte(i,:),'Color',shipcolor(i,:))
-    ylabel('Cross track error [m]')
-    subplot(2,1,2)
+%     hold on
+%     subplot(2,1,1)
+%     hold on
+%     grid on
+%     plot(cte(i,:),'Color',shipcolor(i,:))
+%     ylabel('Cross track error [m]')
     hold on
     plot(pi0dist(i,:),'Color',shipcolor(i,:))
-    ylabel('pir-pi0+pvl distance error [m]')
     grid on
 end
+legend('Vessel 1','Vessel 2','Vessel 3','Vessel 4')
+title('Individual distance from reference')
+xlabel('Samples')
+ylabel('pir-pi0+pvl distance error [m]')
 
 %%
 figure(6);
 clf
 for i = 1:no_boats
-    plot(pi0dist(i,:),'Color',shipcolor(i,:),'marker','.')
     hold on
+    plot(pijdist(i,:),'Color',shipcolor(i,:))
     grid on
 end
-plot([1,es],[2,2],'k')
-ylabel('Dist from wp')
+legend('Vessel 1','Vessel 2','Vessel 3','Vessel 4')
+title('Individual vessel distances from reference')
+xlabel('Samples')
+ylabel('pij-pi0+pvl distance error [m]')
+
 
 
 %%
