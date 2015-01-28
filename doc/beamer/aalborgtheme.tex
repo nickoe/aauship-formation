@@ -339,6 +339,7 @@ Plot af noget som kunne virke med flere tests
 %  \item Agent-agent avoidance, and maybe other objects too
 %  \end{itemize}
 %\end{frame}
+\section{Formation strategies}
 
 \begin{frame}{Formation strategies}{Which to choose}
 Several different strategies that have been into consideration
@@ -386,6 +387,8 @@ Estimate of performance in categories
   \end{figure}
 \end{frame}
 
+\section{Potential field}
+
 \begin{frame}{Potential field}{Single ship application}
   \begin{figure}
     \includegraphics[width=0.65\textwidth]{img/ftotmagnfigpdf}
@@ -396,12 +399,12 @@ Estimate of performance in categories
 
 \begin{frame}{Potential field}{The algorithm}
 \begin{align}
-\mathbf{F}_{vl} &= K_{vl}(p_{vl}^n-p_i^n-[p_{vl}^n-p_{i0}^n])\\
+\mathbf{F}_{vl} &= K_{vl}(\mathbf{p}_{vl}^n-\mathbf{p}_i^n-[\mathbf{p}_{vl}^n-\mathbf{p}_{i0}^n])\\
 &= K_{vl}(\mathbf{d}_i-\mathbf{d}_{i0})
 \end{align}
 
 \begin{align}
-\mathbf{F}_{ij} &= K_{ij}(p_{j}^n-p_i^n-[p_{j0}^n-p_{i0}^n])\\
+\mathbf{F}_{ij} &= K_{ij}(\mathbf{p}_{j}^n-\mathbf{p}_i^n-[\mathbf{p}_{j0}^n-\mathbf{p}_{i0}^n])\\
 &= K_{ij}(\mathbf{d}_{ij}-\mathbf{d}_{ij0})
 \end{align}
 
@@ -432,20 +435,63 @@ Indsaet fig eller simulering
 \end{frame}
 
 \begin{frame}{Potential field}{The implementation}
-Nogle af algoritmerne fra vores simuleringer. F.eks vores potentiale check eller vores hastighedscontroller
+Central algorithms
+\begin{itemize}
+\item wp\_gen
+\item pathgen(potfield)
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Potential field}{Validation and error plots}
-Valideringsplots / error plots
+  \begin{figure}
+    \includegraphics[width=0.65\textwidth]{img/pdftotalligeplussving}
+    \caption{Plot of tracking phase around a turn}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Potential field}{Validation and error plots}
+  \begin{figure}
+    \includegraphics[width=0.65\textwidth]{img/pdfligestykke}
+    \caption{Plot of tracking phase on straight line segment}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Potential field}{Validation and error plots}
+  \begin{figure}
+    \includegraphics[width=0.65\textwidth]{img/pdfsvingstykke}
+    \caption{Plot of tracking phase in right turn}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Potential field}{Validation and error plots}
+  \begin{figure}
+    \includegraphics[width=0.65\textwidth]{img/pdfveloghead}
+    \caption{Plot of velocities and heading of individual vessels}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Potential field}{Validation and error plots}
+  \begin{figure}
+    \includegraphics[width=0.65\textwidth]{img/pdfdistfromref}
+    \caption{Plot of individual distances to the reference}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{Potential field}{Performance dependencies}
-High res pot check vs low res
+  \begin{figure}
+    \includegraphics[width=0.65\textwidth]{img/pdfwobble16}
+    \caption{Reference change with 16 potfield checks}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{Potential field}{Performance dependencies}
-High res track vs low res
+  \begin{figure}
+    \includegraphics[width=0.65\textwidth]{img/pdfwobble120}
+    \caption{Reference change with 120 potfield checks}
+  \end{figure}
 \end{frame}
+
+\section{Conclusion}
 
 \begin{frame}{Conclusion}{Status}
 \begin{itemize}
@@ -464,7 +510,7 @@ High res track vs low res
 \begin{frame}{Further work}{What can be done in other ways}
 \begin{itemize}
 \item Other controllers
-\item Include disturbances in model
+\item Extend model
 \item Fault detection and handling
 \end{itemize}
 \end{frame}
