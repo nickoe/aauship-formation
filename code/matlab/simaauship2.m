@@ -10,7 +10,7 @@ clear all; clf;
 
 %% Pre allocation of variables
 ss = load('ssaauship.mat');
-N = 4000;
+N = 400000;
 no_boats = 4;
 es = N;
 ts = ss.ts;
@@ -207,7 +207,8 @@ status = zeros(no_boats,N);
 flag = 0;
 psif = zeros(1,N);
 cte = zeros(no_boats,N);
-for k = 1:N
+tic
+for k = 1:N-1
 
 %     pi0(3,1) = cos(k*0.005)*24;
 %     pi0(3,2) = sin(k*0.005)*24;
@@ -226,7 +227,7 @@ for k = 1:N
         pi0dist(i,k) = norm(pir(i,:,k) - (pi0(i,1:2)*Rz' + pvl(k,:)));
         pijdist(i,k) = norm(pij(i,:,k) - (pi0(i,1:2)*Rz' + pvl(k,:)));
         formradius = 2;
-        if ( norm(pir(i,:,k) - (pi0(i,1:2)*Rz' + pvl(k,:))) ) < formradius  % WARNING this radius has to be bigger than the radius in the pathgen() call
+        if ( norm(pij(i,:,k) - (pi0(i,1:2)*Rz' + pvl(k,:))) ) < formradius  % WARNING this radius has to be bigger than the radius in the pathgen() call
 %         if ( sqrt( (pir(i,1,k) - (pi0(i,1)+pvl(k,1)))^2 + (pir(i,2,k) - (pi0(i,2)+pvl(k,2)))^2 ) ) < 2
 %             fprintf('Boat #%d reached pvl+pi0\n',i)
             status(i,k) = 1;
@@ -282,14 +283,19 @@ for k = 1:N
         Kv = 4;
         minf = 200;
         Fmax = minf + Kv*x(8,i,k);
-        [pir(i,:,k+1), minval] = pathgen(32, 1, pij(i,:,k), pi0(i,1:2)*Rz', pij(j,:,k), pi0(j,1:2)*Rz', po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
+% %         [pir(i,:,k+1), minval] = pathgen(32, 1, pij(i,:,k), pi0(i,1:2)*Rz', pij(j,:,k), pi0(j,1:2)*Rz', po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
+        [a,b,c,d] = potfieldvector( pij(i,:,k), pi0(i,1:2)*Rz', pij(j,:,k), pi0(j,1:2)*Rz', po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
+        minval = norm(a+b+c+d);
+        
 %         [pir(i,:,k+1), minval] = pathgen(128, 0.5, pij(i,:,k), pi0(i,1:2), pij(j,:,k), pi0(j,1:2), po, pvl(k,:), Fmax, Kvl, Kij, Kca, Koa, rsav);
         Ftotmagn3(k+1,i) = minval;
 %         pir(i,:,k+1) = pij(i,:,k+1) + Ftotmagn3(k+1,i);
 %         pir(i,:,k+1) = pij(i,:,k+1);
 %         [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pir(i,:,k),pir(i,:,k+1),x(1:2,i,k)'); % WP Gen
 %         [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pir(i,:,k),pir(i,:,k+1),x(3:4,i,k)'); % WP Gen
-        [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pij(i,:,k),pir(i,:,k+1),pij(i,:,k)); % WP Gen
+% %         [headingdesired(i,k), wp_reached, cte(i,k)] = wp_gen(pij(i,:,k),pir(i,:,k+1),pij(i,:,k)); % WP Gen
+        doo =  a+b+c+d;
+        headingdesired(i,k) = rad2pipi(atan2(doo(2),doo(1)));
 %         headingdesired(i,k) = headingdesired(i,k) - pi/2;
 
         if ( and(status(i,k) == 1, flag == 0) ) % TODO ondly do this when flag = 0
@@ -300,6 +306,7 @@ for k = 1:N
 
 %             headingdesired(i,k) = wp_gen(pvl(k,:),pvl(k+1,:),pvl(k,:));
             nomialspeed = 00.0;
+            sintegral(i,k) = 0;
         end
         %% Controller
 
@@ -316,12 +323,14 @@ for k = 1:N
 %         speeddesired = 2.2;
 %         speeddesired = 2  + 0.04*norm(pir(i,:,k) - (pi0(i,1:2) + pvl(k,:)));
         serror(i,k) = speeddesired - x(8,i,k);
+%         serror(i,k) = min(pi0dist(i,k),1);
 %         serror(i,k) = speeddesired;
-        sintegral(i,k) = sintegral(i,k) + serror(i,k);
+%         sintegral(i,k+1) = sintegral(i,k) + serror(i,k);
+        sintegral(i,k+1) = sign(sintegral(i,k+1))*min(abs(sintegral(i,k+1)),4);
         if k~=1
             sderivative(i,k) = serror(i,k) - serror(i,k-1);
         end
-        speeddiff(i,k+1) = 10*serror(i,k) + 0.5*sintegral(i,k) + 0*sderivative(i,k); % old tuning parameters
+        speeddiff(i,k+1) = 10*serror(i,k) + 0.5*sintegral(i,k+1) + 0*sderivative(i,k); % old tuning parameters
 %         speeddiff(i,k+1) = 100*serror(i,k) + 50*sintegral(i,k) + 0*sderivative(i,k); % old tuning parameters
 %         speeddiff(i,k+1) = 8;
 
@@ -369,6 +378,7 @@ for k = 1:N
 
     end % end of i'th ship
 end
+toc
 save('simdata.mat')
 %% Plot the results
 t = 0:ts:es*ts-ts;

@@ -36,12 +36,19 @@ h2 = plot([x(1,1,k),x(1,2,k),x(1,3,k),x(1,4,k),x(1,1,k)],[x(2,1,k),x(2,2,k),x(2,
 hcircc = plot(pvl(1,1),pvl(1,2),'b*');
 % hir = zeros(no_boats,1); % figure handle for pir
 % legend([h1;h2;h3;h4],'track','formation','pij','pir')
+
+% set(findobj(gca, 'Type', 'Line'), 'LineWidth', 2);
 xlabel('Easting [m]');
 ylabel('Northing [m]');
 title('Plot of the NED frame');
 grid on
 axis equal
-for k = 800:1:k
+
+start = 2500;
+stop = es;
+nFrames = stop-start;
+mov(1:nFrames) = struct('cdata',[], 'colormap',[]);
+for k = start:1:stop
     tic
     
 %     pi0(3,1) = cos(k*0.005)*24;
@@ -53,13 +60,13 @@ for k = 800:1:k
     delete(h)
     delete(h2)
     h2 = plot([x(1,1,k),x(1,2,k),x(1,3,k),x(1,4,k)],[x(2,1,k),x(2,2,k),x(2,3,k),x(2,4,k)],'r--');
-    delete(hir)
+%     delete(hir)
     delete(hcirc)
     delete(hcircc)
     for i = 1:no_boats
-        hold on
-        hir(i) = plot([pij(i,1,k);pir(i,1,k+1)],[pij(i,2,k);pir(i,2,k+1)],'r.-');
-        
+%         hold on
+%         hir(i) = plot([pij(i,1,k);pir(i,1,k+1)],[pij(i,2,k);pir(i,2,k+1)],'r.-');
+%         
         hold on
         ship(x(1,i,k),x(2,i,k),x(7,i,k),shipcolor(i,:));
         
@@ -67,9 +74,7 @@ for k = 800:1:k
         Rz = [cos(psif(k)) -sin(psif(k));
               sin(psif(k))  cos(psif(k))];
         pi0rotated = pi0(i,:)*Rz';
-        hcirc(i) = circle( pvl(k-1,1)+pi0rotated(1), pvl(k-1,2)+pi0rotated(2), formradius);
-        
-
+        hcirc(i) = circle( pvl(k,1)+pi0rotated(1), pvl(k,2)+pi0rotated(2), formradius);
 
     %     out = reshape(pir(i,:,1:es), 2, []);
     %     plot3(out(1,1:es),out(2,1:es),'-g')
@@ -92,7 +97,9 @@ for k = 800:1:k
 
     title(['Plot of the NED frame. k=',num2str(k)]);
     drawnow('update')
-    pause(0.1)
+%     mov(k) = getframe(gcf);
+    pause(0.001)
 end
+% movie2avi(mov, 'myPeaks1.avi')
 
 text(mxdim,mydim,'The end','HorizontalAlignment','center','FontSize',80,'Interpreter','latex')
