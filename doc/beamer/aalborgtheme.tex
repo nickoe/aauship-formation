@@ -366,8 +366,9 @@ Estimate of performance in categories
   \item Obstacle avoidance
   \item Transients
   \item Scalability
-  \item Failure
+  \item Failure todo plot
 \end{itemize}
+indsaet fig 7.7
 \end{frame}
 
 \begin{frame}{Formation strategies}{The chosen}
@@ -434,14 +435,18 @@ Other strategies have briefly been analysed, like:
 \end{frame}
 
 \begin{frame}{Potential field}{Formation with potential field}
-Indsaet fig eller simulering
+replay video, helt fra start og rundt i sving og lidt lige igen. Formation = finger four.
 \end{frame}
 
 \begin{frame}{Potential field}{The implementation}
-Central algorithms
+Central algorithms before:
 \begin{itemize}
 \item wp\_gen
 \item pathgen(potfield)
+\end{itemize}
+Algorithm after:
+\begin{itemize}
+\item potfield todo, compare simulation
 \end{itemize}
 \end{frame}
 
@@ -481,23 +486,15 @@ Central algorithms
 \end{frame}
 
 \begin{frame}{Potential field}{Performance dependencies}
-  \begin{figure}
-    \includegraphics[width=0.65\textwidth]{img/pdfwobble16}
-    \caption{Reference change with 16 potfield checks}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{Potential field}{Performance dependencies}
-  \begin{figure}
-    \includegraphics[width=0.65\textwidth]{img/pdfwobble120}
-    \caption{Reference change with 120 potfield checks}
-  \end{figure}
+Obstacle avoidance plots
 \end{frame}
 
 \section{Conclusion}
 
 \begin{frame}{Conclusion}{Status}
 \begin{itemize}
+  \item Hardware upgrade
+  \item Upgrade to ROS
   \item Model of vessel
   \item Test of vessel
   \item Analysed strategies and framework
@@ -512,6 +509,8 @@ Central algorithms
 
 \begin{frame}{Further work}{What can be done in other ways}
 \begin{itemize}
+\item Implementation of the formation control strategy in ROS
+\item Communication topology
 \item Other controllers
 \item Extend model
 \item Fault detection and handling
