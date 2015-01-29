@@ -232,17 +232,19 @@ Implementation with ROS
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Modelling}{Estimation with standard GPS}
+\begin{frame}{Modelling}{Estimation with cheap GPS (low rate, low	resolution)}
   \begin{figure}
     {\tiny \includesvg[width=\textwidth]{intermediate-sensor-calculations-block}}
-	  \caption{\scriptsize Block diagram of the combined AHRS and KF estimator. Implemented with standard GPS.}
+	  \caption{\scriptsize Block diagram of the combined AHRS and KF
+		estimator. Implemented with cheap GPS only.}
   \end{figure}
 \end{frame}
 
-\begin{frame}{Modelling}{Estimation with RTK GPS}
+\begin{frame}{Modelling}{Estimation with expensive GPS (RTK)}
   \begin{figure}
-    {\tiny \includesvg[width=\textwidth]{intermediate-sensor-calculations-block}}
-    \caption{\scriptsize Block diagram of the combined AHRS and KF estimator. Implemented with RTK GPS.}
+    {\tiny \includesvg[width=\textwidth]{intermediate-sensor-calculations-block-rtk}}
+    \caption{\scriptsize Block diagram of the combined AHRS and KF
+		estimator. Implemented with RTK GPS only.}
   \end{figure}
 \end{frame}
 
