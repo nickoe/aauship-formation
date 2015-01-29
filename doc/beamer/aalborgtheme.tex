@@ -97,7 +97,7 @@
 \begin{frame}{Introduction}{Motivation}
   \begin{itemize}
     \item Port of Aalborg wants to be an intelligent harbour
-    \item Always updated bathymetry data from an ``automatic pilot''
+    \item Always updated bathymetry data for an ``automatic pilot''
     \item Currently mapped with a manned boat
     \begin{itemize}
       \item Previously using a single beam echo sounder
@@ -126,6 +126,7 @@
 \item Single beam / Multi beam
 \item Faster
 \item Easier detection
+\item Followers to a main leader, offset to shallow water
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -355,18 +356,6 @@ Several different strategies that have been into consideration
    \end{itemize}
 \end{frame}
 
-\begin{frame}{Formation strategies}{The chosen}
-The chosen strategy is:
-\begin{enumerate}
-  \item Potential field
-\end{enumerate}
-Other strategies have been analysed, like:
-\begin{itemize}
-\item Duckling formation
-\item Echelon formation
-\end{itemize}
-\end{frame}
-
 \begin{frame}{Formation strategies}{Why these}
 Estimate of performance in categories
 \begin{itemize}
@@ -376,6 +365,18 @@ Estimate of performance in categories
   \item Transients
   \item Scalability
   \item Failure
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Formation strategies}{The chosen}
+The chosen strategy is:
+\begin{enumerate}
+  \item Potential field
+\end{enumerate}
+Other strategies have briefly been analysed, like:
+\begin{itemize}
+\item Duckling formation
+\item Echelon formation
 \end{itemize}
 \end{frame}
 
