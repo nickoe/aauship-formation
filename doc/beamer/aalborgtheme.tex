@@ -404,39 +404,6 @@ Other strategies have briefly been analysed, like:
   \end{figure}
 \end{frame}
 
-\begin{frame}{Potential Field}{The algorithm}
-\begin{align}
-\mathbf{F}_{vl} &= K_{vl}(\mathbf{p}_{vl}^n-\mathbf{p}_i^n-[\mathbf{p}_{vl}^n-\mathbf{p}_{i0}^n])\\
-&= K_{vl}(\mathbf{d}_i-\mathbf{d}_{i0})
-\end{align}
-
-\begin{align}
-\mathbf{F}_{ij} &= K_{ij}(\mathbf{p}_{j}^n-\mathbf{p}_i^n-[\mathbf{p}_{j0}^n-\mathbf{p}_{i0}^n])\\
-&= K_{ij}(\mathbf{d}_{ij}-\mathbf{d}_{ij0})
-\end{align}
-
-\begin{align}
-    \mathbf{F}_{ca}^{ij}= 
-\begin{cases}
-    \left(
-    \frac{K_{ca}r}{||\mathbf{d}_{ij}||}-K_{ca}
-    \right)
-    \frac{\mathbf{d}_{ij}}{||\mathbf{d}_{ij}||}
-    ,& \text{for } ||\mathbf{d}_{ij}||<r\\
-    0,              & \text{otherwise}
-\end{cases}
-\end{align}
-
-\begin{align}
-    \mathbf{F}_{oa}^{ik}= 
-\begin{cases}
-    \left( \frac{K_{oa}}{||\mathbf{d}_{ki}||}-\frac{K_{oa}}{r}\right)
-    \frac{\mathbf{d}_{{ki}}}{||\mathbf{d}_{ki}||},& \text{for } ||\mathbf{d}_{ki}||<r\\
-    0,              & \text{otherwise}
-\end{cases}
-\end{align}
-\end{frame}
-
 \begin{frame}{Potential Field}{Formation with potential field}
 <Simulation video of the potential field in action>
 \texttt{media/v-formation-animation.ogv}
