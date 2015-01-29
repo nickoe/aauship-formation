@@ -34,6 +34,9 @@ end
 % initial
 h2 = plot([x(1,1,k),x(1,2,k),x(1,3,k),x(1,4,k),x(1,1,k)],[x(2,1,k),x(2,2,k),x(2,3,k),x(2,4,k),x(2,1,k)],'r--');
 hcircc = plot(pvl(1,1),pvl(1,2),'b*');
+circle(po(1,1),po(1,2),rsav*2)
+circle(po(2,1),po(2,2),rsav*2)
+
 % hir = zeros(no_boats,1); % figure handle for pir
 % legend([h1;h2;h3;h4],'track','formation','pij','pir')
 
@@ -44,7 +47,7 @@ title('Plot of the NED frame');
 grid on
 axis equal
 
-start = 2500;
+start = 2;
 stop = es;
 nFrames = stop-start;
 mov(1:nFrames) = struct('cdata',[], 'colormap',[]);

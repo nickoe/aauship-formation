@@ -206,13 +206,13 @@ po(3,1:2) = [-35,2]*1000;
 
 %% POTFIELD VARS END
 status = zeros(no_boats,N);
-% flag = 1;
+flag = 0;
 % nomialspeed = 2;
 % pvl(1,:) = [track(1,2), track(1,1)];
 psif = zeros(1,N);
 cte = zeros(no_boats,N);
 tic
-for k = 1:N-1
+for k = 1:N
 
 %     pi0(3,1) = cos(k*0.005)*24;
 %     pi0(3,2) = sin(k*0.005)*24;

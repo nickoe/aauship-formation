@@ -40,8 +40,8 @@ function [ Fvl, Fij, Fca, Foa ] = potfield( pi, pi0, pj, pj0, po, vl, Fmax, Kvl,
     % Force object avoidance (For at undgå stillestående objekter)
     for j = 1:size(po,1)
         dki(j,1:2) = po(j,1:2) - pi;
-        if norm(dki(j,1:2)) < rsav
-            Foa_tmp = (Koa/norm(dki(j,1:2))-Koa/rsav)*(dki(j,1:2)/norm(dki(j,1:2)));
+        if norm(dki(j,1:2)) < rsav*2
+            Foa_tmp = (Koa/norm(dki(j,1:2))-Koa/(rsav*2))*(dki(j,1:2)/norm(dki(j,1:2)));
         else
             Foa_tmp = [0,0];
         end
